@@ -1,0 +1,103 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+
+android {
+
+    compileSdkVersion 25
+    buildToolsVersion '24.0.1'
+    useLibrary 'org.apache.http.legacy'
+
+    signingConfigs {
+        release {
+            keyAlias 'qtin'
+            keyPassword 'qtin63479'
+            storeFile file('/Users/aslanxu/Desktop/toupai/sign/qtinsexy.jks')
+            storePassword 'qtin63479'
+        }
+        debug {
+            keyAlias 'qtin'
+            keyPassword 'qtin63479'
+            storeFile file('/Users/aslanxu/Desktop/toupai/sign/qtinsexy.jks')
+            storePassword 'qtin63479'
+        }
+    }
+
+    defaultConfig {
+        multiDexEnabled true
+
+        applicationId "com.qtin.sexyvc"
+        minSdkVersion 17
+        targetSdkVersion 25
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+        signingConfig signingConfigs.release
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "true"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
+    productFlavors {
+        wandoujia {}
+        baidu {}
+        c360 {}
+        uc {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile rootProject.ext.dependencies["junit"]
+    apt rootProject.ext.dependencies["dagger2-apt-compiler"]
+    provided rootProject.ext.dependencies["javax.annotation"]
+    apt rootProject.ext.dependencies["butterknife-apt"]
+    compile project(':arms')
+    compile rootProject.ext.dependencies["paginate"]
+    debugCompile rootProject.ext.dependencies["canary-debug"]
+    releaseCompile rootProject.ext.dependencies["canary-release"]
+    testCompile rootProject.ext.dependencies["canary-release"]
+    compile project(':Push')
+
+    //其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.7
+    //(注：从2.1.5开始要分开Bugly SDK和NDK的配置）
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    //compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    compile 'org.greenrobot:greendao:3.2.2' // add library
+    compile 'com.android.support:multidex:1.0.1'
+
+    //glide图像形状处理
+    compile 'jp.wasabeef:glide-transformations:2.0.0'
+}
