@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <Button
+        android:id="@+id/btnUserList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GitHub用户列表" />
+
+    <Button
+        android:id="@+id/btnRatingStar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RatingBar评分" />
+
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Refresh控件" />
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="七牛上传文件" />
+
+    <Button
+        android:id="@+id/btnShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="第三方分享" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="第三方登录" />
+
+    <Button
+        android:id="@+id/btnProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="加载框" />
+
+    <Button
+        android:id="@+id/btnAnim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="动画" />
+
+    <Button
+        android:id="@+id/btnBugly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="bugly测试" />
+</LinearLayout>

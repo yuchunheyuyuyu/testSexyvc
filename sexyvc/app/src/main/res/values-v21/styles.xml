@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="MyAppTheme" parent="AppTheme.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+
+        <!--<item name="android:statusBarColor">@color/accent_material_light</item>-->
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+</resources>

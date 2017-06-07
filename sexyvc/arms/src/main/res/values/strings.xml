@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">arms</string>
+    <color name="colorPrimaryDark">#f00</color>
+</resources>
