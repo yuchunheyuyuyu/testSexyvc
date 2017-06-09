@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:layout_marginBottom="14px"
+        android:layout_marginLeft="16px"
+        android:layout_marginRight="16px"
+        android:layout_marginTop="14px"
+        android:background="@drawable/search_shape_back"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_investor"
+            android:textColor="@color/black30"
+            android:textSize="28px" />
+
+    </LinearLayout>
+
+    <com.qtin.sexyvc.ui.widget.DropDownMenu
+        android:id="@+id/dropDownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:dddividerColor="@color/silver_two"
+        app:ddmaskColor="@color/silver_two"
+        app:ddmenuBackgroundColor="@color/white"
+        app:ddmenuMenuHeightPercent="0.5"
+        app:ddmenuSelectedIcon="@mipmap/drop_down_selected_icon"
+        app:ddmenuTextSize="13sp"
+        app:ddmenuUnselectedIcon="@mipmap/drop_down_unselected_icon"
+        app:ddtextSelectedColor="@color/drop_down_selected"
+        app:ddtextUnselectedColor="@color/drop_down_unselected"
+        app:ddunderlineColor="@color/gray" />
+
+</LinearLayout>

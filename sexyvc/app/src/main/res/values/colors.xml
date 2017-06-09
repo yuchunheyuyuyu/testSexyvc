@@ -16,6 +16,9 @@
     <color name="white_50">#80ffffff</color>
     <color name="dodger_blue">#41b3ff</color>
     <color name="black">#333333</color>
+    <color name="black90">#e6333333</color>
+    <color name="black50">#80333333</color>
+    <color name="black30">#4d333333</color>
     <color name="reddish_pink">#ff3255</color>
     <color name="barbie_pink">#ff3384</color>
     <color name="purpley">#7459dc</color>
@@ -27,6 +30,7 @@
     <color name="darkish_pink">#dc5e8f</color>
     <color name="slate">#3b4357</color>
     <color name="slate_50">#803b4357</color>
+    <color name="slate_10">#1a3b4357</color>
     <color name="silver">#e6e6e8</color>
 
 </resources>

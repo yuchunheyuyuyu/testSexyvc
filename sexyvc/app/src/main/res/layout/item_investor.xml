@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="40px"
+    android:paddingTop="36px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="144px"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="144px"
+            android:layout_height="match_parent"
+            android:src="@drawable/avatar_blank" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="40px"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="12px"
+                android:text="蒋舜"
+                android:textColor="@color/black90"
+                android:textSize="32px" />
+
+            <TextView
+                android:id="@+id/tvPosition"
+                android:layout_width="wrap_content"
+                android:layout_height="36px"
+                android:layout_marginTop="4px"
+                android:text="盈动资本 合伙人"
+                android:textColor="@color/black50"
+                android:textSize="24px" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16px"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+                    android:id="@+id/ratingScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32px"
+                    app:numStars="5"
+                    app:rating="2.3"
+                    app:starPadding="8px"
+                    app:starSize="32px" />
+
+                <TextView
+                    android:id="@+id/tvScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12px"
+                    android:text="7.2"
+                    android:textColor="@color/barbie_pink_two"
+                    android:textSize="32px" />
+
+                <TextView
+                    android:id="@+id/tvCommentNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8px"
+                    android:text="|  评论 8"
+                    android:textColor="@color/black50"
+                    android:textSize="20px" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/silver_two" />
+
+</LinearLayout>
