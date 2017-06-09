@@ -3,7 +3,6 @@ package com.qtin.sexyvc.ui.widget.tagview;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,23 +18,20 @@ public abstract class TagAdapter<T>
         mTagDatas = datas;
     }
 
-    public TagAdapter(T[] datas)
+    public TagAdapter(ArrayList<T> datas)
     {
-        mTagDatas = new ArrayList<T>(Arrays.asList(datas));
+        mTagDatas = datas;
     }
 
-    interface OnDataChangedListener
-    {
+    interface OnDataChangedListener{
         void onChanged();
     }
 
-    void setOnDataChangedListener(OnDataChangedListener listener)
-    {
+    void setOnDataChangedListener(OnDataChangedListener listener){
         mOnDataChangedListener = listener;
     }
 
-    public void setSelectedList(int... poses)
-    {
+    public void setSelectedList(int... poses){
         Set<Integer> set = new HashSet<>();
         for (int pos : poses)
         {
@@ -44,8 +40,7 @@ public abstract class TagAdapter<T>
         setSelectedList(set);
     }
 
-    public void setSelectedList(Set<Integer> set)
-    {
+    public void setSelectedList(Set<Integer> set){
         mCheckedPosList.clear();
         if (set != null)
             mCheckedPosList.addAll(set);
@@ -63,8 +58,7 @@ public abstract class TagAdapter<T>
         return mTagDatas == null ? 0 : mTagDatas.size();
     }
 
-    public void notifyDataChanged()
-    {   
+    public void notifyDataChanged(){
         if(mOnDataChangedListener != null)
             mOnDataChangedListener.onChanged();
     }
@@ -76,11 +70,7 @@ public abstract class TagAdapter<T>
 
     public abstract View getView(FlowLayout parent, int position, T t);
 
-    public boolean setSelected(int position, T t)
-    {
+    public boolean setSelected(int position, T t){
         return false;
     }
-
-
-
 }

@@ -48,12 +48,18 @@
     <style name="line_wide_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">14px</item>
-        <item name="android:background">@color/color_back</item>
+        <item name="android:background">@color/silver_two</item>
     </style>
 
     <style name="line_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/silver_two</item>
+    </style>
+
+    <style name="line_vertical_style">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/silver_two</item>
     </style>
 
