@@ -4,7 +4,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.contract.LoginContarct;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
-import com.qtin.sexyvc.mvp.model.entity.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.mvp.model.entity.LoginEntity;
 import com.qtin.sexyvc.mvp.model.entity.RegisterRequestEntity;
 

@@ -25,9 +25,14 @@
     <string name="my_setting">设置</string>
 
     <string name="search_investor">输入想要了解的投资人或机构</string>
-
+    <string name="search">搜索</string>
     <string name="comfirm">确定</string>
     <string name="reset">重置</string>
-
+    <string name="news">快讯 |</string>
+    <string name="more">更多</string>
+    <string name="week_investor">本周头牌</string>
+    <string name="last_comment">最新评论</string>
+    <string name="selected_comment">| 精选热评</string>
+    <string name="subject_string">专栏文章</string>
 
 </resources>

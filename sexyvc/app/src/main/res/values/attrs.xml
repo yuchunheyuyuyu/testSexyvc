@@ -45,4 +45,9 @@
         <attr name="clearRatingEnabled" format="boolean" />
     </declare-styleable>
 
+    <!--自动轮播的TextView-->
+    <declare-styleable name="auto3d">
+        <attr name="textSize" format="dimension" />
+    </declare-styleable>
+
 </resources>

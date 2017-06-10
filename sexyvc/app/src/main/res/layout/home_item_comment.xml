@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/moreCommentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="20dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/index_icon_comment" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/last_comment"
+            android:textColor="@color/slate"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/selected_comment"
+            android:textColor="@color/black30"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/more"
+            android:textColor="@color/black50"
+            android:textSize="10sp" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/arrow_disclosure" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tvCommentTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tag_shape_selector"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="4dp"
+            android:text="本地生活"
+            android:textColor="@color/black30"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="某 CEO 评论了"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="刘芹@晨兴资本"
+            android:textColor="@color/slate"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+        android:id="@+id/ratingScore"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        app:numStars="5"
+        app:rating="2.3"
+        app:starPadding="2dp"
+        app:starSize="10dp"
+        app:touchable="false" />
+
+    <TextView
+        android:id="@+id/tvComentContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6sp"
+        android:singleLine="true"
+        android:text="这投资人太逗了！特老实！哈哈"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
+    <View
+        android:id="@+id/marginLine"
+        style="@style/line_style"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="11dp" />
+
+    <View
+        android:id="@+id/wholeLine"
+        style="@style/line_style"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="11dp"
+        android:visibility="gone" />
+
+</LinearLayout>

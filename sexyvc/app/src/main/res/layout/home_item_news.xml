@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/news"
+            android:textColor="@color/slate"
+            android:textSize="14sp" />
+
+        <com.qtin.sexyvc.ui.widget.AutoTextView
+            android:id="@+id/autoTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:lineSpacingExtra="6sp"
+            android:text="蓝领招聘服务平台「我的打工网」获千万级美…"
+            android:textColor="@color/slate_70"
+            app:textSize="14sp"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View style="@style/line_style" />
+
+</LinearLayout>

@@ -1,10 +1,10 @@
 package com.qtin.sexyvc.ui.main.fragInvestor;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 /**
  * Created by ls on 17/6/9.
  */
-public class EfficiencyAdapter extends BaseAdapter {
+public class EfficiencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private ArrayList<FilterEntity> data;
@@ -28,13 +28,21 @@ public class EfficiencyAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return data == null ? 0 : data.size();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view=LayoutInflater.from(context).inflate(R.layout.item_filter_listview, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public Object getItem(int position) {
-        return data.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        FilterEntity entity = data.get(position);
+        ViewHolder holder= (ViewHolder) viewHolder;
+        if(position==data.size()-1){
+            holder.viewLine.setVisibility(View.INVISIBLE);
+        }else{
+            holder.viewLine.setVisibility(View.VISIBLE);
+        }
+        holder.tvName.setText(StringUtil.formatString(entity.getName()));
     }
 
     @Override
@@ -43,33 +51,18 @@ public class EfficiencyAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        FilterEntity entity = data.get(position);
-        ViewHolder holder=null;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_filter_listview, parent, false);
-            holder=new ViewHolder(convertView);
-            convertView.setTag(holder);
-        }else{
-            holder= (ViewHolder) convertView.getTag();
-        }
-        if(position==data.size()-1){
-            holder.viewLine.setVisibility(View.INVISIBLE);
-        }else{
-            holder.viewLine.setVisibility(View.VISIBLE);
-        }
-        holder.tvName.setText(StringUtil.formatString(entity.getName()));
-        return convertView;
+    public int getItemCount() {
+        return data==null?0:data.size();
     }
 
-    static class ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.tvName)
         TextView tvName;
         @BindView(R.id.viewLine)
         View viewLine;
 
         ViewHolder(View view) {
+            super(view);
             AutoUtils.autoSize(view);//适配
             ButterKnife.bind(this, view);
         }

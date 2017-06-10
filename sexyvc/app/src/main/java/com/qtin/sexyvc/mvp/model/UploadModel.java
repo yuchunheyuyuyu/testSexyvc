@@ -5,7 +5,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.contract.UploadContract;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
-import com.qtin.sexyvc.mvp.model.entity.BaseEntity;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.mvp.model.entity.QiniuTokenEntity;
 import javax.inject.Inject;
 import rx.Observable;

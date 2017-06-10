@@ -4,7 +4,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.mvp.contract.LoginContarct;
-import com.qtin.sexyvc.mvp.model.entity.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.mvp.model.entity.LoginEntity;
 import com.qtin.sexyvc.mvp.model.entity.RegisterRequestEntity;
 

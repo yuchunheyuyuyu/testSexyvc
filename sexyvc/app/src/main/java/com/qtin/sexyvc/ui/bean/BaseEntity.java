@@ -1,16 +1,14 @@
-package com.qtin.sexyvc.mvp.model.entity;
+package com.qtin.sexyvc.ui.bean;
 
 import com.qtin.sexyvc.mvp.model.api.Api;
-import java.util.ArrayList;
 
 /**
- * Created by ls on 17/3/7.
+ * Created by ls on 17/3/1.
  */
-
-public class BaseListEntity<T> {
+public class BaseEntity<T> {
     private String errCode;
     private String errMsg;
-    private ArrayList<T> items;
+    private T items;
 
     public String getErrCode() {
         return errCode;
@@ -28,11 +26,11 @@ public class BaseListEntity<T> {
         this.errMsg = errMsg;
     }
 
-    public ArrayList<T> getItems() {
+    public T getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<T> items) {
+    public void setItems(T items) {
         this.items = items;
     }
 

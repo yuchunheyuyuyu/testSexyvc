@@ -13,6 +13,8 @@
 
     <!--新版本的颜色-->
     <color name="white">#ffffff</color>
+    <color name="white0">#00ffffff</color>
+    <color name="white70">#b3ffffff</color>
     <color name="white_50">#80ffffff</color>
     <color name="dodger_blue">#41b3ff</color>
     <color name="black">#333333</color>
@@ -30,7 +32,30 @@
     <color name="darkish_pink">#dc5e8f</color>
     <color name="slate">#3b4357</color>
     <color name="slate_50">#803b4357</color>
+    <color name="slate_70">#b33b4357</color>
     <color name="slate_10">#1a3b4357</color>
     <color name="silver">#e6e6e8</color>
+<!-- 100% — FF
+    95% — F2
+    90% — E6
+    85% — D9
+    80% — CC
+    75% — BF
+    70% — B3
+    65% — A6
+    60% — 99
+    55% — 8C
+    50% — 80
+    45% — 73
+    40% — 66
+    35% — 59
+    30% — 4D
+    25% — 40
+    20% — 33
+    15% — 26
+    10% — 1A
+    5% — 0D
+    0% — 00  -->
+
 
 </resources>

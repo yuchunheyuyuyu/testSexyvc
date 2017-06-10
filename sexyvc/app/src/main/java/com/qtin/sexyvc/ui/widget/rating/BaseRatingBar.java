@@ -3,6 +3,8 @@ package com.qtin.sexyvc.ui.widget.rating;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +29,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private static final int MAX_CLICK_DISTANCE = 5;
     private static final int MAX_CLICK_DURATION = 200;
+
+    private static final String KEY_RATING = "key_rating";
+    private static final String KEY_DEFAULT = "key_default";
 
     private int mNumStars;
     private int mPadding = 0;
@@ -79,6 +84,28 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
         initRatingView();
         setRating(rating);
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(KEY_DEFAULT,super.onSaveInstanceState());
+        bundle.putFloat(KEY_RATING,mRating);
+
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if(state instanceof Bundle){
+            Bundle bundle= (Bundle) state;
+            mRating=bundle.getFloat(KEY_RATING);
+            setRating(mRating);
+            super.onRestoreInstanceState(bundle.getParcelable(KEY_DEFAULT));
+            return;
+        }
+
+        super.onRestoreInstanceState(state);
     }
 
     private void verifyParamsValue() {

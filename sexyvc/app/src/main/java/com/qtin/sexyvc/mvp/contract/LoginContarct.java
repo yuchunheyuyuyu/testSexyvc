@@ -2,7 +2,7 @@ package com.qtin.sexyvc.mvp.contract;
 
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
-import com.qtin.sexyvc.mvp.model.entity.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.mvp.model.entity.LoginEntity;
 import com.qtin.sexyvc.mvp.model.entity.RegisterRequestEntity;
 

@@ -7,9 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
+
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
@@ -21,9 +20,11 @@ import com.qtin.sexyvc.ui.widget.DropDownMenu;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -146,6 +147,8 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
                 return tv;
             }
         });
+
+
         popupViews.add(view);
     }
 
@@ -156,20 +159,11 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
             efficiencyData.add(new FilterEntity(efficiencyList[i],i));
         }
 
-        ListView efficiencyListView = new ListView(getActivity());
-        efficiencyListView.setDivider(null);
-        efficiencyListView.setDividerHeight(0);
-
+        RecyclerView efficiencyRecycle = new RecyclerView(getActivity());
+        efficiencyRecycle.setLayoutManager(new LinearLayoutManager(mActivity));
         EfficiencyAdapter adapter = new EfficiencyAdapter(getActivity(), efficiencyData);
-        efficiencyListView.setAdapter(adapter);
-
-        efficiencyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-        popupViews.add(efficiencyListView);
+        efficiencyRecycle.setAdapter(adapter);
+        popupViews.add(efficiencyRecycle);
     }
 
     private void configRecycleView() {

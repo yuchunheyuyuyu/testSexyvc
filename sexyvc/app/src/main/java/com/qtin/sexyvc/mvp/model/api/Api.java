@@ -10,4 +10,6 @@ public interface Api {
 
     String RequestSuccess = "0";
     String BASE_URL="http://192.168.0.55:8088/web/";
+
+    String IMAGE_URL="http://oli02rut3.bkt.clouddn.com/";
 }

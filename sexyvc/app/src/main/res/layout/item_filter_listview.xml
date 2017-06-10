@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="88px"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/white"
-    android:paddingLeft="32px">
+    android:paddingLeft="16dp">
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="match_parent"
-        android:layout_height="87px"
+        android:layout_height="44dp"
         android:gravity="center_vertical"
         android:text="综合评分"
         android:textColor="@color/black50"
-        android:textSize="28px" />
+        android:textSize="14sp" />
 
     <View
         android:id="@+id/viewLine"

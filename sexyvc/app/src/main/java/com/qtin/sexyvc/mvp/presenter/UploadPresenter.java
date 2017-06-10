@@ -10,7 +10,7 @@ import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.qtin.sexyvc.mvp.contract.UploadContract;
 import com.qtin.sexyvc.mvp.model.api.Api;
-import com.qtin.sexyvc.mvp.model.entity.BaseEntity;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.mvp.model.entity.QiniuTokenEntity;
 import org.json.JSONObject;
 import javax.inject.Inject;

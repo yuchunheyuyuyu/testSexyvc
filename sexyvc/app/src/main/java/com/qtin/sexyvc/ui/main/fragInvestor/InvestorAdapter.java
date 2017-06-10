@@ -41,7 +41,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         InvestorEntity entity=data.get(position);
         ViewHolder holder=(ViewHolder)viewHolder;
 
-        holder.ratingScore.setRating(3.2f);
+        holder.ratingScore.setRating((position+1)*0.5f);
 
         ArrayList<String> strings=new ArrayList<>();
         strings.add("种子轮 ~ D 轮及以后");
