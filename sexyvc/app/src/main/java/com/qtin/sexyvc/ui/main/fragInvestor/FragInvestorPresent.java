@@ -1,10 +1,16 @@
 package com.qtin.sexyvc.ui.main.fragInvestor;
 
 import android.app.Application;
+
+import com.google.gson.Gson;
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
+import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBackBean;
+import com.qtin.sexyvc.utils.LocalFileReader;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 /**
@@ -23,6 +29,16 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
+    }
+
+    public void getInvestorData(){
+        new LocalFileReader().readAssets(mRootView.getContext(), "InventorData.json", new LocalFileReader.ReadListener() {
+            @Override
+            public void complete(String result) {
+                InvestorBackBean investorBackBean=new Gson().fromJson(result,InvestorBackBean.class);
+                mRootView.dataCallback(investorBackBean.getItems().getList());
+            }
+        });
     }
 
     @Override

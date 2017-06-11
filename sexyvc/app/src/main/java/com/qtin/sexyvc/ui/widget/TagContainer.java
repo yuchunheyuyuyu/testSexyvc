@@ -45,6 +45,7 @@ public class TagContainer extends LinearLayout {
         if(values==null&&values.isEmpty()){
             setVisibility(View.GONE);
         }
+        hasUseWidth=0;
         for(int i=0;i<values.size();i++){
 
             if(values.get(i)==null||values.get(i).trim().length()==0){
@@ -66,10 +67,6 @@ public class TagContainer extends LinearLayout {
                 textView.setText(values.get(i));
                 textView.setBackground(getResources().getDrawable(R.drawable.tag_shape_selector));
                 addView(textView);
-            }else{
-                textView.setText("...");
-                addView(textView);
-                return;
             }
         }
     }

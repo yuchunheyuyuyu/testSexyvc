@@ -19,8 +19,8 @@
         <LinearLayout
             android:id="@+id/searchContainer"
             android:layout_width="match_parent"
-            android:layout_height="60px"
-            android:layout_marginBottom="14px"
+            android:layout_height="30dp"
+            android:layout_marginBottom="7dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="10dp"
@@ -42,7 +42,10 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <View style="@style/line_style" />
+        <View
+            android:id="@+id/homeLine"
+            android:background="@color/silver_two0"
+            style="@style/line_style" />
     </LinearLayout>
 
 </RelativeLayout>

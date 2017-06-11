@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -16,9 +15,7 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -53,11 +50,6 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         InvestorEntity entity = data.get(position);
-        if (position == data.size() - 1) {
-            holder.lineRight.setVisibility(View.VISIBLE);
-        } else {
-            holder.lineRight.setVisibility(View.GONE);
-        }
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
                 .url(CommonUtil.getAbsolutePath(entity.getInvestor_avatar()))
@@ -76,8 +68,6 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
 
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.lineLeft)
-        View lineLeft;
         @BindView(R.id.ivAvatar)
         ImageView ivAvatar;
         @BindView(R.id.tvInvestorName)
@@ -86,8 +76,6 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
         TextView tvFundName;
         @BindView(R.id.ratingScore)
         BaseRatingBar ratingScore;
-        @BindView(R.id.lineRight)
-        View lineRight;
 
         ViewHolder(View view) {
             super(view);

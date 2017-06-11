@@ -1,6 +1,8 @@
 package com.qtin.sexyvc.ui.main.fragInvestor;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,6 +58,8 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
 
 
     private ContentViewHolder contentViewHolder;
+    private ArrayList<InvestorEntity> data=new ArrayList<>();
+    private InvestorAdapter mAdapter;
 
 
     @Override
@@ -170,18 +174,17 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         contentViewHolder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                mPresenter.getInvestorData();
             }
         });
         contentViewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         contentViewHolder.recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        ArrayList<InvestorEntity> data=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            data.add(new InvestorEntity());
-        }
-        contentViewHolder.recyclerView.setAdapter(new InvestorAdapter(getActivity(),data));
+        mAdapter=new InvestorAdapter(mActivity,data);
+        contentViewHolder.recyclerView.setAdapter(mAdapter);
         initPaginate();
+        //获取数据
+        mPresenter.getInvestorData();
     }
 
     private void initPaginate(){
@@ -211,6 +214,29 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     @Override
     public void killMyself() {
 
+    }
+
+    @Override
+    public Context getContext() {
+        return mActivity;
+    }
+
+    //测试的时候使用
+    private Handler handler = new Handler();
+
+    @Override
+    public void dataCallback(ArrayList<InvestorEntity> list) {
+        data.clear();
+        if(list!=null&&!list.isEmpty()){
+            data.addAll(list);
+        }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                contentViewHolder.swipeRefreshLayout.setRefreshing(false);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @OnClick(R.id.searchContainer)

@@ -6,9 +6,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.jess.arms.utils.DeviceUtils;
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.widget.imageloader.ImageLoader;
+import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
+import com.qtin.sexyvc.common.CustomApplication;
+import com.qtin.sexyvc.ui.bean.CommentEntity;
+import com.qtin.sexyvc.ui.bean.SubjectEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemBannerEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemInvestorEntity;
@@ -16,8 +25,12 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.ItemNewsEntity;
 import com.qtin.sexyvc.ui.widget.AutoTextView;
 import com.qtin.sexyvc.ui.widget.BannerView;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.SpaceItemDecoration;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -34,10 +47,21 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private List<HomeInterface> data ;
+    private SpaceItemDecoration decoration;
+
+    private final CustomApplication mApplication;
+    private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
+
 
     public HomeAdapter(Context context, List<HomeInterface> data) {
         this.context = context;
         this.data = data;
+        int space= (int) DeviceUtils.dpToPixel(context,20);
+        decoration=new SpaceItemDecoration(space,1);
+
+        //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
+        mApplication = (CustomApplication) context.getApplicationContext();
+        mImageLoader = mApplication.getAppComponent().imageLoader();
     }
 
     @Override
@@ -74,16 +98,69 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }else if(holder instanceof InvestorHolder){
             dealInvestor((InvestorHolder)holder,position);
         }else if(holder instanceof CommentHolder){
-
+            dealComment((CommentHolder)holder,position);
         }else if(holder instanceof SubjectHolder){
-
+            dealSubject((SubjectHolder) holder,position);
         }
     }
 
+    private void dealSubject(SubjectHolder holder,int position){
+        SubjectEntity entity= (SubjectEntity) data.get(position);
+        if(entity.isFirst()){
+            holder.moreSubjectContainer.setVisibility(View.VISIBLE);
+        }else{
+            holder.moreSubjectContainer.setVisibility(View.GONE);
+        }
+
+        if(entity.isLast()){
+            holder.subjectLine.setVisibility(View.GONE);
+        }else{
+            holder.subjectLine.setVisibility(View.VISIBLE);
+        }
+        holder.tvSubjectTitle.setText(StringUtil.formatString(entity.getSubject_title()));
+        holder.tvSubjectAuther.setText(StringUtil.formatString(entity.getFromString()));
+
+        mImageLoader.loadImage(mApplication, GlideImageConfig
+                .builder()
+                .url(CommonUtil.getAbsolutePath(entity.getSubject_cover()))
+                .imageView(holder.ivSubjectCover)
+                .build());
+    }
+
+    private void dealComment(CommentHolder holder,int position){
+        CommentEntity entity= (CommentEntity) data.get(position);
+        if(entity.isFirst()){
+            holder.moreCommentContainer.setVisibility(View.VISIBLE);
+        }else{
+            holder.moreCommentContainer.setVisibility(View.GONE);
+        }
+
+        if(entity.isLast()){
+            holder.marginLine.setVisibility(View.GONE);
+            holder.wholeLine.setVisibility(View.VISIBLE);
+        }else{
+            holder.marginLine.setVisibility(View.VISIBLE);
+            holder.wholeLine.setVisibility(View.GONE);
+        }
+
+        holder.tvCommentTag.setText(StringUtil.formatString(entity.getTag()));
+        holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
+        holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
+        holder.ratingScore.setRating(entity.getComment_score());
+        holder.tvComentContent.setText(StringUtil.formatString(entity.getComment_title()));
+    }
+
+    /**
+     * 投资人
+     * @param holder
+     * @param position
+     */
     private void dealInvestor(InvestorHolder holder,int position){
         ItemInvestorEntity entity= (ItemInvestorEntity) data.get(position);
         holder.investorRecyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-        holder.investorRecyclerView.addItemDecoration(new SpaceItemDecoration);
+
+        holder.investorRecyclerView.removeItemDecoration(decoration);
+        holder.investorRecyclerView.addItemDecoration(decoration);
         HomeInvestorAdapter adapter=new HomeInvestorAdapter(context,entity.getList());
         holder.investorRecyclerView.setAdapter(adapter);
     }
@@ -167,6 +244,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView tvSubjectAuther;
         @BindView(R.id.subjectLine)
         View subjectLine;
+        @BindView(R.id.ivSubjectCover)
+        ImageView ivSubjectCover;
 
         SubjectHolder(View view) {
             super(view);
