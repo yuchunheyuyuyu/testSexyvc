@@ -37,6 +37,13 @@ import static com.jess.arms.base.AppManager.START_ACTIVITY;
 public class UiUtils {
     static public Toast mToast;
 
+    public static void showToastShort(Context context,String msg){
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+    }
+    public static void showToastLong(Context context,String msg){
+        Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+    }
+
     /**
      * 设置hint大小
      *

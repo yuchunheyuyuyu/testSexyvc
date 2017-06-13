@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.mvp.model.api.cache;
 
 import com.jess.arms.http.BaseCacheManager;
+import com.qtin.sexyvc.mvp.model.entity.DaoSession;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,6 +13,7 @@ import javax.inject.Singleton;
 @Singleton
 public class CacheManager implements BaseCacheManager {
     private CommonCache mCommonCache;
+    private DaoSession mDaoSession;
 
     /**
      * 如果需要添加Cache只需在构造方法中添加对应的Cache,
@@ -19,8 +21,13 @@ public class CacheManager implements BaseCacheManager {
      * @param commonCache
      */
     @Inject
-    public CacheManager(CommonCache commonCache) {
+    public CacheManager(CommonCache commonCache,DaoSession mDaoSession) {
         this.mCommonCache = commonCache;
+        this.mDaoSession=mDaoSession;
+    }
+
+    public DaoSession getDaoSession(){
+        return mDaoSession;
     }
 
     public CommonCache getCommonCache() {

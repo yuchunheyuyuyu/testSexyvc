@@ -6,15 +6,15 @@ import com.qtin.sexyvc.mvp.model.api.Api;
  * Created by ls on 17/3/1.
  */
 public class BaseEntity<T> {
-    private String errCode;
+    private int errCode;
     private String errMsg;
     private T items;
 
-    public String getErrCode() {
+    public int getErrCode() {
         return errCode;
     }
 
-    public void setErrCode(String errCode) {
+    public void setErrCode(int errCode) {
         this.errCode = errCode;
     }
 
@@ -39,7 +39,7 @@ public class BaseEntity<T> {
      * @return
      */
     public boolean isSuccess() {
-        if (errCode.equals(Api.RequestSuccess)) {
+        if (errCode==Api.RequestSuccess) {
             return true;
         } else {
             return false;

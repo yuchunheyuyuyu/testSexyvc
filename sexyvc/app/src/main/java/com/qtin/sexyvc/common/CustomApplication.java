@@ -46,7 +46,7 @@ public class CustomApplication extends BaseApplication {
 
     {
         PlatformConfig.setWeixin("wxdd991af9d0c9ddbe", "e957f59de5bbf4a3b584dd7891b21ecb");
-        PlatformConfig.setQQZone("1105945465", "D00TaWV5Hv7KUGTE");
+        PlatformConfig.setQQZone("1105726586", "yCie49iiNXUnjBAu");
         PlatformConfig.setSinaWeibo("3351202988", "c9efb278c7e754735b8a26daaddf2b47","http://sns.whalecloud.com");
     }
 
@@ -85,7 +85,7 @@ public class CustomApplication extends BaseApplication {
     }
 
     private void initDataBase(){
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc-db2");
         Database db =helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }
@@ -208,7 +208,7 @@ public class CustomApplication extends BaseApplication {
                     @Override
                     public void handleResponseError(Context context, Exception e) {
                         Timber.tag(TAG).w("------------>" + e.getMessage());
-                        UiUtils.SnackbarText("net error");
+                        UiUtils.SnackbarText(e.toString());
                     }
                 }).build();
     }

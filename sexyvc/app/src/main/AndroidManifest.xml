@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
 
-        <activity android:name=".ui.main.MainActivity"
+        <activity android:name=".ui.login.account.create.CreateActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,15 +34,52 @@
             </intent-filter>
         </activity>
 
+        <!--主页-->
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="portrait" />
+
         <!--登录-->
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.login.account.login.LoginActivity"
+            android:screenOrientation="portrait" />
+
+        <!--忘记密码-->
+        <activity
+            android:name=".ui.login.password.forget.ForgetActivity"
+            android:screenOrientation="portrait" />
+
+        <!--设置密码-->
+        <activity
+            android:name=".ui.login.password.set.SetPasswordActivity"
+            android:screenOrientation="portrait" />
+
+        <!--重置密码-->
+        <activity
+            android:name=".ui.login.password.reset.ResetPasswordActivity"
+            android:screenOrientation="portrait" />
+
+        <!--重置密码成功-->
+        <activity
+            android:name=".ui.login.password.reset.success.ResetSuccessActivity"
+            android:screenOrientation="portrait" />
+
+        <!--创建账号成功-->
+        <activity
+            android:name=".ui.login.account.create.success.CreateSuccessActivity"
+            android:screenOrientation="portrait" />
+
+        <!--绑定手机号-->
+        <activity
+            android:name=".ui.login.account.bind.BindActivity"
             android:screenOrientation="portrait" />
 
 
-        <!-- autolayout meta
-        将设计图的宽高配置后,配合AutoLauout控件使用,在设计图尺寸以外的其它尺寸手机上,也能达到和设计图一样的效果
-        -->
+
+
+
+
+
         <activity
             android:name=".mvp.test.user.UserActivity"
             android:screenOrientation="portrait" />
@@ -62,11 +99,6 @@
         <!--分享-->
         <activity
             android:name=".mvp.test.share.ShareActivity"
-            android:screenOrientation="portrait" />
-
-        <!--登录-->
-        <activity
-            android:name=".mvp.test.login.LoginActivity"
             android:screenOrientation="portrait" />
 
         <!--loading-->
@@ -150,7 +182,9 @@
             android:exported="false" />
 
         <!--####################### 友盟分享end ############################-->
-
+        <!-- autolayout meta
+       将设计图的宽高配置后,配合AutoLauout控件使用,在设计图尺寸以外的其它尺寸手机上,也能达到和设计图一样的效果
+       -->
         <meta-data
             android:name="design_width"
             android:value="750" />

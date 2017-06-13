@@ -27,7 +27,7 @@ android {
         multiDexEnabled true
 
         applicationId "com.qtin.sexyvc"
-        minSdkVersion 17
+        minSdkVersion 15
         targetSdkVersion 25
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]

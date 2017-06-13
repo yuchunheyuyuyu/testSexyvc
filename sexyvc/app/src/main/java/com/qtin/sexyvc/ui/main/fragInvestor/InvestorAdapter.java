@@ -58,7 +58,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
         holder.tvPosition.setText(StringUtil.formatString(entity.getFund_name()));
-        holder.tvCommentNum.setText("|  评论 "+entity.getCommentNum());
+        holder.tvCommentNum.setText(context.getResources().getString(R.string.investor_join_comment)+entity.getCommentNum());
         holder.tvScore.setText(""+entity.getInvestor_recommendation_number());
 
         mImageLoader.loadImage(mApplication, GlideImageConfig

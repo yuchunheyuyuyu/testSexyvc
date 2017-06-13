@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pale_grey_two"
     android:orientation="vertical"
-    android:background="@color/white"
     app:layout_auto_baseheight="width">
 
     <include layout="@layout/app_header" />
@@ -18,7 +18,90 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.jess.arms.widget.autolayout.AutoCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/card_elevation_margin"
+                android:layout_marginLeft="48px"
+                android:layout_marginRight="48px"
+                android:layout_marginTop="42px"
+                android:layout_marginBottom="20px"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="5dp"
+                app:contentPaddingBottom="48px"
+                app:contentPaddingLeft="54px"
+                app:contentPaddingRight="56px"
+                app:contentPaddingTop="48px">
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="144px">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="36px"
+                            android:src="@drawable/tag_approve_fc" />
+
+                        <ImageView
+                            android:layout_width="144px"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/avatar_blank" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8px"
+                        android:gravity="end"
+                        android:lineSpacingExtra="8sp"
+                        android:text="马帅东"
+                        android:textColor="@color/black90"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12px"
+                        android:gravity="center_horizontal"
+                        android:lineSpacingExtra="6sp"
+                        android:text="CEO"
+                        android:textColor="@color/black70"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8px"
+                        android:gravity="center_horizontal"
+                        android:lineSpacingExtra="6sp"
+                        android:text="上海掷地有声信息科技有限公司"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <View
+                        style="@style/line_style"
+                        android:layout_marginTop="30px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32px"
+                        android:lineSpacingExtra="6sp"
+                        android:text="她，誓要登上属于自己的舞台。枯燥重复的练习磨出足尖厚茧，磨砺面前，她选择坚持做自己。80 年来，我们从未停止对「制造更好汽车」的追求。"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+            </com.jess.arms.widget.autolayout.AutoCardView>
         </LinearLayout>
     </ScrollView>
 

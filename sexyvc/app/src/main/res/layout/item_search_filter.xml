@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:dddividerColor="@color/silver_two"
-        app:ddmaskColor="@color/silver_two"
+        app:ddmaskColor="#66000000"
         app:ddmenuBackgroundColor="@color/white"
         app:ddmenuMenuHeightPercent="0.5"
         app:ddmenuSelectedIcon="@drawable/arrow_up"

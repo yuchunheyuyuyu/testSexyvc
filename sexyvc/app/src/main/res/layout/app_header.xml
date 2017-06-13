@@ -15,22 +15,20 @@
         android:paddingLeft="15px"
         android:paddingRight="15px"
         android:paddingTop="30px"
-        android:src="@drawable/icon_go_back" />
+        android:src="@drawable/arrow_back" />
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
-        android:textSize="36px"
-        android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="设置" />
+        android:text="设置"
+        android:textColor="@color/slate"
+        android:textSize="32px" />
 
     <View
         android:id="@+id/viewLine"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/color_ccdae9"
-        android:layout_alignParentBottom="true"/>
+        style="@style/line_style"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.mvp.Presenter;
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.mvp.test.progress.LoadingDialog;
 import com.umeng.message.PushAgent;
 
@@ -54,5 +55,14 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     public void gotoActivity(Class<? extends Activity> activityClass){
         Intent intent=new Intent(this,activityClass);
         startActivity(intent);
+        overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
     }
+
+    public void gotoActivity(Class<? extends Activity> activityClass,Bundle bundle){
+        Intent intent=new Intent(this,activityClass);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
+    }
+
 }

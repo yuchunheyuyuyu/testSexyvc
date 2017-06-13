@@ -8,15 +8,15 @@ import java.util.ArrayList;
  */
 
 public class BaseListEntity<T> {
-    private String errCode;
+    private int errCode;
     private String errMsg;
     private ArrayList<T> items;
 
-    public String getErrCode() {
+    public int getErrCode() {
         return errCode;
     }
 
-    public void setErrCode(String errCode) {
+    public void setErrCode(int errCode) {
         this.errCode = errCode;
     }
 
@@ -41,7 +41,7 @@ public class BaseListEntity<T> {
      * @return
      */
     public boolean isSuccess() {
-        if (errCode.equals(Api.RequestSuccess)) {
+        if (errCode==Api.RequestSuccess) {
             return true;
         } else {
             return false;

@@ -14,7 +14,6 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
 import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
-import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
 
 import java.lang.reflect.Field;
@@ -67,7 +66,7 @@ public class MainActivity extends MyBaseActivity {
         //沉浸式状态栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        FragHome fragHome = new FragHome();
+        FragConcern fragHome = new FragConcern();
         FragInvestor fragProject = new FragInvestor();
         FragConcern fragConcern=new FragConcern();
         FragMine fragMine = new FragMine();

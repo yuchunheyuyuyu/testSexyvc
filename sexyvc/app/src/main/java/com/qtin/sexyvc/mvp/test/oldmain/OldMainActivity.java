@@ -2,6 +2,7 @@ package com.qtin.sexyvc.mvp.test.oldmain;
 
 import android.content.Intent;
 import android.view.View;
+
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -10,14 +11,15 @@ import com.qtin.sexyvc.di.module.MainModule;
 import com.qtin.sexyvc.mvp.contract.MainContract;
 import com.qtin.sexyvc.mvp.presenter.MainPresent;
 import com.qtin.sexyvc.mvp.test.anim.AnimActivity;
-import com.qtin.sexyvc.mvp.test.login.LoginActivity;
 import com.qtin.sexyvc.mvp.test.progress.ProgressActivity;
 import com.qtin.sexyvc.mvp.test.rating.RatingActivity;
 import com.qtin.sexyvc.mvp.test.refresh.RefreshActivity;
 import com.qtin.sexyvc.mvp.test.share.ShareActivity;
 import com.qtin.sexyvc.mvp.test.upload.UploadActivity;
 import com.qtin.sexyvc.mvp.test.user.UserActivity;
+import com.qtin.sexyvc.ui.login.account.login.LoginActivity;
 import com.tbruyelle.rxpermissions.RxPermissions;
+
 import butterknife.OnClick;
 
 /**
