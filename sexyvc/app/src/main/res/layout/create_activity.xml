@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey_two"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="336px"
+        android:layout_height="238px"
+        android:layout_marginTop="136px"
+        android:src="@drawable/logo" />
+
+    <com.jess.arms.widget.autolayout.AutoCardView
+        android:layout_width="540px"
+        android:layout_height="104px"
+        android:layout_margin="@dimen/card_elevation_margin"
+        android:layout_marginTop="96px"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="2dp"
+        app:contentPaddingLeft="60px">
+
+        <com.qtin.sexyvc.ui.widget.PhoneEditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_phone"
+            android:maxLength="13"
+            android:inputType="phone"
+            android:textColor="@color/slate"
+            android:textColorHint="@color/slate30"
+            android:textSize="14sp" />
+
+    </com.jess.arms.widget.autolayout.AutoCardView>
+
+    <com.jess.arms.widget.autolayout.AutoCardView
+        android:layout_width="540px"
+        android:layout_height="104px"
+        android:layout_margin="@dimen/card_elevation_margin"
+        android:layout_marginTop="30px"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="2dp"
+        app:contentPaddingLeft="60px">
+
+        <EditText
+            android:id="@+id/etVertifyCode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLength="6"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_vertify_code"
+            android:textColor="@color/slate"
+            android:textColorHint="@color/slate30"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|right"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="40px">
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="48px"
+                android:background="@color/silver_two" />
+
+            <TextView
+                android:id="@+id/tvGetVertify"
+                android:layout_width="144px"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:text="@string/get_vertify_code"
+                android:textColor="@color/vertify_code_color"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </com.jess.arms.widget.autolayout.AutoCardView>
+
+
+    <TextView
+        android:id="@+id/tvCreateAccount"
+        android:layout_width="580px"
+        android:layout_height="140px"
+        android:layout_marginTop="50px"
+        android:background="@drawable/btn_signup"
+        android:gravity="center"
+        android:text="@string/create_account"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12px"
+        android:text="@string/please_login"
+        android:textColor="@color/barbie_pink_two"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140px"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/wxLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="64px"
+                android:layout_height="64px"
+                android:src="@drawable/login_wechat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12px"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/wx_login"
+                android:textColor="@color/slate_50"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/qqLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="144px"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="64px"
+                android:layout_height="64px"
+                android:src="@drawable/login_qq" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12px"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/qq_login"
+                android:textColor="@color/slate_50"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

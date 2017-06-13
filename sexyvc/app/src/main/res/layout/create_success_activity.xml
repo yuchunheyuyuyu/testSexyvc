@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey_two"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="192px"
+        android:layout_height="192px"
+        android:layout_marginTop="136px"
+        android:src="@drawable/success" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32px"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/create_success"
+        android:textColor="@color/slate_70"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvContinueInfo"
+        android:layout_width="580px"
+        android:layout_height="140px"
+        android:layout_marginTop="66px"
+        android:background="@drawable/btn_signup"
+        android:gravity="center"
+        android:text="@string/continue_improve_info"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvLookAround"
+        android:layout_width="580px"
+        android:layout_height="140px"
+        android:background="@drawable/btn_normal"
+        android:gravity="center"
+        android:text="@string/look_around"
+        android:textColor="@color/barbie_pink_two"
+        android:textSize="16sp" />
+
+</LinearLayout>
