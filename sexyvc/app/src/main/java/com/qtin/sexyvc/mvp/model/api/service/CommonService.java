@@ -4,6 +4,7 @@ import com.qtin.sexyvc.mvp.model.entity.LoginEntity;
 import com.qtin.sexyvc.mvp.model.entity.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
@@ -52,7 +53,7 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("user/login")
     Observable<BaseEntity<UserEntity>> login(@Field("username")String username, @Field("account_type")int account_type,
-                    @Field("password")String password);
+                    @Field("password")String password,@Field("device_token")String device_token);
 
     /**
      * 获取验证码
@@ -73,5 +74,28 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("mobile/check")
-    Observable<CodeEntity> validateCode(@Field("mobile")String mobile, @Field("code_type")String code_type,@Field("code_value")String code_value);
+    Observable<BaseEntity<BindEntity>> validateCode(@Field("mobile")String mobile, @Field("code_type")String code_type, @Field("code_value")String code_value);
+
+    /**
+     * 绑定手机号
+     * @param token
+     * @param mobile
+     * @param password
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/bind")
+    Observable<CodeEntity> bindMobile(@Field("token")String token,@Field("mobile") String mobile,@Field("password") String password);
+
+    /**
+     * 重置密码
+     * @param code_value
+     * @param mobile
+     * @param password
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/forget")
+    Observable<CodeEntity> resetPassword(@Field("code_value")String code_value,@Field("mobile")String mobile,@Field("password")String password);
+
 }

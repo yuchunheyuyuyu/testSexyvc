@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -12,6 +13,7 @@ import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.login.account.create.success.CreateSuccessActivity;
 import com.qtin.sexyvc.ui.login.password.set.di.DaggerSetPasswordComponent;
 import com.qtin.sexyvc.ui.login.password.set.di.SetPasswordModule;
+import com.qtin.sexyvc.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +32,7 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
     EditText etSecondPassword;
 
     private String phoneStr;
+    private int type;//1：手机号，2：微信；3：QQ
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -63,8 +66,8 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
 
     @Override
     protected void initData() {
+        type=getIntent().getExtras().getInt("type");
         phoneStr=getIntent().getExtras().getString("phoneStr");
-
         tvPhone.setText(getFormatPhone(phoneStr));
     }
 
@@ -80,7 +83,7 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -104,17 +107,22 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
                 String pwd1=etFirstPassword.getText().toString();
                 String pwd2=etSecondPassword.getText().toString();
                 if(pwd1.equals(pwd2)){
-                    RegisterRequestEntity entity=new RegisterRequestEntity();
-                    // 1：手机号，2：微信；3：QQ
-                    entity.setAccount_type(1);
-                    entity.setAvatar("");
-                    entity.setGender(0);
-                    entity.setNickname("");
-                    entity.setPassword(pwd1);
-                    entity.setUsername(phoneStr);
-                    entity.setWxunionid("");
+                    if(type==1){
+                        RegisterRequestEntity entity=new RegisterRequestEntity();
+                        // 1：手机号，2：微信；3：QQ
+                        entity.setAccount_type(1);
+                        entity.setAvatar("");
+                        entity.setGender(0);
+                        entity.setNickname("");
+                        entity.setPassword(pwd1);
+                        entity.setUsername(phoneStr);
+                        entity.setWx_union_id("");
+                        entity.setDevice_token(customApplication.deviceToken);
 
-                    mPresenter.doRegister(entity);
+                        mPresenter.doRegister(entity);
+                    }else{
+                        mPresenter.bindMobile(phoneStr,pwd1);
+                    }
                 }
                 break;
         }
@@ -123,5 +131,10 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
     @Override
     public void rigisterSuccess() {
         gotoActivity(CreateSuccessActivity.class);
+    }
+
+    @Override
+    public void bindSuccess() {
+        gotoActivity(MainActivity.class);
     }
 }

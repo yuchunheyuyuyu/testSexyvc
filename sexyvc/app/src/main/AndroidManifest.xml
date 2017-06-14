@@ -74,9 +74,15 @@
             android:name=".ui.login.account.bind.BindActivity"
             android:screenOrientation="portrait" />
 
+        <!--个人信息-->
+        <activity
+            android:name=".ui.user.info.UserInfoActivity"
+            android:screenOrientation="portrait" />
 
-
-
+        <!--修改基本的个人信息-->
+        <activity
+            android:name=".ui.user.modify.ModifyActivity"
+            android:screenOrientation="portrait" />
 
 
 

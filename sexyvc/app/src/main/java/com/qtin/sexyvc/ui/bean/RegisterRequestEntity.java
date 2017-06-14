@@ -11,7 +11,7 @@ public class RegisterRequestEntity {
     private String nickname;
     private String avatar;
     private int gender;
-    private String wxunionid;
+    private String wx_union_id;
     private String device_token;
 
     public String getUsername() {
@@ -62,12 +62,12 @@ public class RegisterRequestEntity {
         this.gender = gender;
     }
 
-    public String getWxunionid() {
-        return wxunionid;
+    public String getWx_union_id() {
+        return wx_union_id;
     }
 
-    public void setWxunionid(String wxunionid) {
-        this.wxunionid = wxunionid;
+    public void setWx_union_id(String wx_union_id) {
+        this.wx_union_id = wx_union_id;
     }
 
     public String getDevice_token() {

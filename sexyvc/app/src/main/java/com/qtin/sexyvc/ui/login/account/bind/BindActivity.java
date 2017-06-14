@@ -1,16 +1,19 @@
 package com.qtin.sexyvc.ui.login.account.bind;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.login.account.bind.di.BindModule;
 import com.qtin.sexyvc.ui.login.account.bind.di.DaggerBindComponent;
+import com.qtin.sexyvc.ui.login.password.set.SetPasswordActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
 import butterknife.BindView;
@@ -31,6 +34,9 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
     EditText etVertifyCode;
     @BindView(R.id.tvGetVertify)
     TextView tvGetVertify;
+
+    private int type;
+    private String phoneStr;
 
     private static final int TOTAL_TIME=60;//倒计时总时间
     private int countDown=TOTAL_TIME;
@@ -69,6 +75,16 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
 
     @Override
     protected void initData() {
+        type=getIntent().getExtras().getInt("type");
+
+        if(type==2){
+            ivThird.setImageResource(R.drawable.login_wechat_on);
+            tvThird.setText(getResources().getString(R.string.wx_bind));
+        }else{
+            ivThird.setImageResource(R.drawable.login_qq_on);
+            tvThird.setText(getResources().getString(R.string.qq_bind));
+        }
+
         etPhone.setPhoneVertifyListener(new PhoneEditText.PhoneVertifyListener() {
             @Override
             public void isPhone(boolean isPhone) {
@@ -95,7 +111,7 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -119,11 +135,27 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
                 if(tvGetVertify.isSelected()){
                     tvGetVertify.setSelected(false);
                     mHandler.post(runnable);
+                    //获取验证码
+                    phoneStr=etPhone.getPhoneText();
+                    mPresenter.getVertifyCode(phoneStr);
                 }
                 break;
             case R.id.tvBind:
-                gotoActivity(MainActivity.class);
+                mPresenter.validateCode(phoneStr,etVertifyCode.getText().toString());
                 break;
         }
+    }
+
+    @Override
+    public void gotoSetPassword() {
+        Bundle bundle=new Bundle();
+        bundle.putInt("type",type);
+        bundle.putString("phoneStr",phoneStr);
+        gotoActivity(SetPasswordActivity.class,bundle);
+    }
+
+    @Override
+    public void notNeedSetPassword() {
+        gotoActivity(MainActivity.class);
     }
 }

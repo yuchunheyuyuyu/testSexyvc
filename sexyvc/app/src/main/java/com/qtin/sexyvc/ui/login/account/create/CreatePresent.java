@@ -6,7 +6,9 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
@@ -61,10 +63,10 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxUtils.<CodeEntity> bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                .compose(RxUtils.<BaseEntity<BindEntity>> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<BindEntity>>(mErrorHandler) {
                     @Override
-                    public void onNext(CodeEntity codeEntity) {
+                    public void onNext(BaseEntity<BindEntity> codeEntity) {
                         if(codeEntity.isSuccess()){
                             mRootView.validateSuccess();
                         }
@@ -72,7 +74,7 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                 });
     }
 
-    public void doRegister(RegisterRequestEntity entity){
+    public void doRegister(final RegisterRequestEntity entity){
         mModel.doRegister(entity)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
@@ -81,9 +83,18 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<UserEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<UserEntity> userEntityBaseEntity) {
-                        if(userEntityBaseEntity!=null&&userEntityBaseEntity.isSuccess()){
-                            mModel.saveUser(userEntityBaseEntity.getItems());
-                            //mRootView.rigisterSuccess();
+                        if(userEntityBaseEntity!=null){
+                            if(userEntityBaseEntity.isSuccess()&&userEntityBaseEntity.getItems()!=null){
+                                mModel.saveUser(userEntityBaseEntity.getItems());
+                                if(userEntityBaseEntity.getItems().getBind_mobile()==1){
+                                    mRootView.notNeedBind();
+                                }else{
+                                    mRootView.gotoBind(entity.getAccount_type()
+                                    );
+                                }
+                            }else{
+                                mRootView.showMessage(StringUtil.formatString(userEntityBaseEntity.getErrMsg()));
+                            }
                         }
                     }
                 });

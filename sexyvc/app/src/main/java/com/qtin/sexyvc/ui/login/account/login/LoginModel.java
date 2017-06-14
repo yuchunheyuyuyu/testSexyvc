@@ -25,8 +25,8 @@ public class LoginModel extends BaseModel<ServiceManager,CacheManager> implement
     }
 
     @Override
-    public Observable<BaseEntity<UserEntity>> login(String username, int account_type, String password) {
-        return mServiceManager.getCommonService().login(username,account_type,password);
+    public Observable<BaseEntity<UserEntity>> login(String username, int account_type, String password,String device_token) {
+        return mServiceManager.getCommonService().login(username,account_type,password,device_token);
     }
 
     @Override
@@ -35,6 +35,6 @@ public class LoginModel extends BaseModel<ServiceManager,CacheManager> implement
         if(list!=null&&!list.isEmpty()){
             mCacheManager.getDaoSession().getUserEntityDao().deleteAll();
         }
-        mCacheManager.getDaoSession().getUserEntityDao().save(entity);
+        mCacheManager.getDaoSession().getUserEntityDao().insert(entity);
     }
 }

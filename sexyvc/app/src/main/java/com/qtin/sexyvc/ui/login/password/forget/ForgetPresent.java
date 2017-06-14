@@ -5,10 +5,18 @@ import android.app.Application;
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxUtils;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.BindEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
 
 import javax.inject.Inject;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ls on 17/4/26.
@@ -26,6 +34,41 @@ public class ForgetPresent extends BasePresenter<ForgetContract.Model,ForgetCont
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
+    }
+
+    /**
+     * 获取验证码
+     */
+    public void getVertifyCode(String mobile){
+        mModel.getVertifyCode(mobile,"reset")
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<CodeEntity> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        if(codeEntity.isSuccess()){
+
+                        }
+                    }
+                });
+    }
+
+    public void validateCode(String mobile, String code_value){
+        mModel.validateCode(mobile,"reset",code_value)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<BaseEntity<BindEntity>> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<BindEntity>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<BindEntity> codeEntity) {
+                        if(codeEntity.isSuccess()){
+                            mRootView.validateSuccess();
+                        }
+                    }
+                });
     }
 
     @Override

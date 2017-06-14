@@ -5,9 +5,12 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,8 +29,11 @@ public class CreateModel extends BaseModel<ServiceManager,CacheManager> implemen
 
     @Override
     public void saveUser(UserEntity entity) {
-        mCacheManager.getDaoSession().getUserEntityDao().deleteAll();
-        mCacheManager.getDaoSession().getUserEntityDao().save(entity);
+        List<UserEntity> list=mCacheManager.getDaoSession().getUserEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            mCacheManager.getDaoSession().getUserEntityDao().deleteAll();
+        }
+        mCacheManager.getDaoSession().getUserEntityDao().insert(entity);
     }
 
     @Override
@@ -36,7 +42,7 @@ public class CreateModel extends BaseModel<ServiceManager,CacheManager> implemen
     }
 
     @Override
-    public Observable<CodeEntity> validateCode(String mobile, String code_type, String code_value) {
+    public Observable<BaseEntity<BindEntity>> validateCode(String mobile, String code_type, String code_value) {
         return mServiceManager.getCommonService().validateCode(mobile,code_type,code_value);
     }
 

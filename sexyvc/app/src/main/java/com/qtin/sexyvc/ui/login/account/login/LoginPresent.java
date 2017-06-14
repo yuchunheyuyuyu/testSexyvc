@@ -32,8 +32,8 @@ public class LoginPresent extends BasePresenter<LoginContract.Model,LoginContrac
         this.mApplication = mApplication;
     }
 
-    public void login(String username,String password){
-        mModel.login(username,1,password)
+    public void login(String username,String password,String device_token){
+        mModel.login(username,1,password,device_token)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,7 +41,8 @@ public class LoginPresent extends BasePresenter<LoginContract.Model,LoginContrac
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<UserEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<UserEntity> userEntityBaseEntity) {
-                        if(userEntityBaseEntity.isSuccess()){
+                        if(userEntityBaseEntity.isSuccess()&&userEntityBaseEntity.getItems()!=null){
+                            userEntityBaseEntity.getItems().setBind_mobile(1);
                             mModel.saveUser(userEntityBaseEntity.getItems());
                             mRootView.loginSuccess();
                         }

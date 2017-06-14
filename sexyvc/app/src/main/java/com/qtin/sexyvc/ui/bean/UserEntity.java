@@ -13,10 +13,11 @@ public class UserEntity {
     private long u_expire_time;
     private int bind_mobile;
 
-    @Generated(hash = 1511994072)
-    public UserEntity(String u_token, long u_expire_time) {
+    @Generated(hash = 880318459)
+    public UserEntity(String u_token, long u_expire_time, int bind_mobile) {
         this.u_token = u_token;
         this.u_expire_time = u_expire_time;
+        this.bind_mobile = bind_mobile;
     }
 
     @Generated(hash = 1433178141)

@@ -10,13 +10,15 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.main.fragmine.di.DaggerFragMineComponent;
 import com.qtin.sexyvc.ui.main.fragmine.di.FragmineModule;
+import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by ls on 17/4/14.
  */
-public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMineContract.View{
+public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMineContract.View {
 
     @BindView(R.id.ivLeft)
     ImageView ivLeft;
@@ -62,5 +64,10 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     @Override
     public void killMyself() {
 
+    }
+
+    @OnClick(R.id.cardViewInfo)
+    public void onClick() {
+        gotoActivity(UserInfoActivity.class);
     }
 }

@@ -24,6 +24,9 @@ public class ResetPasswordActivity extends MyBaseActivity<ResetPasswordPresent> 
     @BindView(R.id.etSecondPassword)
     EditText etSecondPassword;
 
+    private String phoneStr;
+    private String code_value;//验证码
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerResetPasswordComponent.builder().appComponent(appComponent).resetPasswordModule(new ResetPasswordModule(this)).build().inject(this);
@@ -41,7 +44,8 @@ public class ResetPasswordActivity extends MyBaseActivity<ResetPasswordPresent> 
 
     @Override
     protected void initData() {
-
+        phoneStr=getIntent().getExtras().getString("phoneStr");
+        code_value=getIntent().getExtras().getString("code_value");
     }
 
     @Override
@@ -76,8 +80,17 @@ public class ResetPasswordActivity extends MyBaseActivity<ResetPasswordPresent> 
                 finish();
                 break;
             case R.id.tvComplete:
-                gotoActivity(ResetSuccessActivity.class);
+                String pwd1=etFirstPassword.getText().toString();
+                String pwd2=etSecondPassword.getText().toString();
+                if(pwd1.equals(pwd2)){
+                    mPresenter.resetPassword(code_value,phoneStr,pwd1);
+                }
                 break;
         }
+    }
+
+    @Override
+    public void resetSuccess() {
+        gotoActivity(ResetSuccessActivity.class);
     }
 }

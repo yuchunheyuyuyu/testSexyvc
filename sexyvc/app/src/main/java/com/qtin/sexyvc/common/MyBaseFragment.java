@@ -1,7 +1,12 @@
 package com.qtin.sexyvc.common;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.mvp.Presenter;
+import com.qtin.sexyvc.R;
 import com.squareup.leakcanary.RefWatcher;
 
 /**
@@ -27,5 +32,18 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
             watcher.watch(this);
         }
         this.customApplication =null;
+    }
+
+    public void gotoActivity(Class<? extends Activity> activityClass){
+        Intent intent=new Intent(mActivity,activityClass);
+        startActivity(intent);
+        mActivity.overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
+    }
+
+    public void gotoActivity(Class<? extends Activity> activityClass,Bundle bundle){
+        Intent intent=new Intent(mActivity,activityClass);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        mActivity.overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
     }
 }

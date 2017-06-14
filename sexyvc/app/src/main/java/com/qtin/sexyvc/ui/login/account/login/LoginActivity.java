@@ -81,7 +81,7 @@ public class LoginActivity extends MyBaseActivity<LoginPresent> implements Login
             case R.id.tvLogin:
                 String username=etPhone.getPhoneText();
                 String password=etPassword.getText().toString();
-                mPresenter.login(username,password);
+                mPresenter.login(username,password,customApplication.deviceToken);
                 break;
             case R.id.tvForgetPassword:
                 gotoActivity(ForgetActivity.class);

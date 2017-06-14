@@ -7,24 +7,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
+import com.qtin.sexyvc.ui.login.account.bind.BindActivity;
 import com.qtin.sexyvc.ui.login.account.create.di.CreateModule;
 import com.qtin.sexyvc.ui.login.account.create.di.DaggerCreateComponent;
 import com.qtin.sexyvc.ui.login.account.login.LoginActivity;
 import com.qtin.sexyvc.ui.login.password.set.SetPasswordActivity;
+import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -78,6 +77,8 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     @Override
     protected void initData() {
+
+
         etPhone.setPhoneVertifyListener(new PhoneEditText.PhoneVertifyListener() {
             @Override
             public void isPhone(boolean isPhone) {
@@ -95,7 +96,6 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     @Override
     protected void onPause() {
         super.onPause();
-        //mHandler.removeCallbacks(runnable);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -165,8 +165,22 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     @Override
     public void validateSuccess() {
         Bundle bundle=new Bundle();
+        bundle.putInt("type",1);
         bundle.putString("phoneStr",etPhone.getPhoneText());
         gotoActivity(SetPasswordActivity.class,bundle);
+    }
+
+    @Override
+    public void gotoBind(int type) {
+        //2微信，3qq
+        Bundle bundle=new Bundle();
+        bundle.putInt("type",type);
+        gotoActivity(BindActivity.class,bundle);
+    }
+
+    @Override
+    public void notNeedBind() {
+        gotoActivity(MainActivity.class);
     }
 
     private UMAuthListener umAuthListener = new UMAuthListener() {
@@ -198,7 +212,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
                 entity.setAccount_type(3);
             } else if (platform == SHARE_MEDIA.WEIXIN) {
                 entity.setAccount_type(2);
-                entity.setWxunionid(data.get("unionid"));
+                entity.setWx_union_id(data.get("unionid"));
             }
 
             entity.setNickname(name);
@@ -210,7 +224,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
             } else {
                 entity.setGender(0);
             }
-            //mPresenter.thirdLogin(entity);
+            mPresenter.doRegister(entity);
         }
 
         @Override
@@ -223,4 +237,10 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
             Toast.makeText(getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 }

@@ -19,13 +19,14 @@
             android:orientation="vertical">
 
             <com.jess.arms.widget.autolayout.AutoCardView
+                android:id="@+id/cardViewInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_elevation_margin"
+                android:layout_marginBottom="46px"
                 android:layout_marginLeft="48px"
                 android:layout_marginRight="48px"
                 android:layout_marginTop="42px"
-                android:layout_marginBottom="20px"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="5dp"
@@ -83,7 +84,7 @@
                         android:gravity="center_horizontal"
                         android:lineSpacingExtra="6sp"
                         android:text="上海掷地有声信息科技有限公司"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black70"
                         android:textSize="14sp" />
 
                     <View
@@ -96,12 +97,118 @@
                         android:layout_marginTop="32px"
                         android:lineSpacingExtra="6sp"
                         android:text="她，誓要登上属于自己的舞台。枯燥重复的练习磨出足尖厚茧，磨砺面前，她选择坚持做自己。80 年来，我们从未停止对「制造更好汽车」的追求。"
-                        android:textColor="@color/black"
+                        android:textColor="@color/black50"
                         android:textSize="12sp" />
-
 
                 </LinearLayout>
             </com.jess.arms.widget.autolayout.AutoCardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="96px"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="56px"
+                    android:layout_height="56px"
+                    android:layout_marginLeft="32px"
+                    android:src="@drawable/icon_project" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30px"
+                    android:layout_weight="1"
+                    android:text="@string/my_project"
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="32px"
+                    android:layout_height="32px"
+                    android:layout_marginRight="32px"
+                    android:src="@drawable/arrow_disclosure_l" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/line_style"
+                android:layout_marginLeft="120px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="96px"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="56px"
+                    android:layout_height="56px"
+                    android:layout_marginLeft="32px">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/icon_message" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30px"
+                    android:layout_weight="1"
+                    android:text="@string/my_message"
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="32px"
+                    android:layout_height="32px"
+                    android:layout_marginRight="32px"
+                    android:src="@drawable/arrow_disclosure_l" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/line_style"
+                android:layout_marginLeft="120px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="96px"
+                android:layout_marginTop="48px"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="56px"
+                    android:layout_height="56px"
+                    android:layout_marginLeft="32px"
+                    android:src="@drawable/icon_setting" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30px"
+                    android:layout_weight="1"
+                    android:text="@string/setting"
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="32px"
+                    android:layout_height="32px"
+                    android:layout_marginRight="32px"
+                    android:src="@drawable/arrow_disclosure_l" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/line_style"
+                android:layout_marginLeft="120px" />
+
         </LinearLayout>
     </ScrollView>
 

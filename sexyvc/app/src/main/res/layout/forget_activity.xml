@@ -34,8 +34,8 @@
     </RelativeLayout>
 
 
-    <EditText
-        android:id="@+id/etFirstPassword"
+    <com.qtin.sexyvc.ui.widget.PhoneEditText
+        android:id="@+id/etPhone"
         android:layout_width="match_parent"
         android:layout_height="96px"
         android:layout_marginLeft="32px"
@@ -43,7 +43,8 @@
         android:background="@null"
         android:gravity="center_vertical"
         android:hint="@string/hint_input_phone"
-        android:inputType="textPassword"
+        android:inputType="phone"
+        android:maxLength="13"
         android:textColor="@color/slate"
         android:textColorHint="@color/slate30"
         android:textSize="14sp" />
@@ -58,18 +59,20 @@
         android:layout_marginLeft="32px">
 
         <EditText
-            android:id="@+id/etSecondPassword"
+            android:id="@+id/etVertify"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center_vertical"
             android:hint="@string/hint_input_vertify_code"
-            android:inputType="textPassword"
+            android:inputType="number"
+            android:maxLength="6"
             android:textColor="@color/slate"
             android:textColorHint="@color/slate30"
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tvGetVertify"
             android:layout_width="80dp"
             android:layout_height="24dp"
             android:layout_alignParentRight="true"

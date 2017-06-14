@@ -16,7 +16,7 @@ public interface LoginContract {
         void loginSuccess();
     }
     interface Model extends IModel{
-        Observable<BaseEntity<UserEntity>> login(String username,int account_type,String password);
+        Observable<BaseEntity<UserEntity>> login(String username,int account_type,String password,String device_token);
         void saveUser(UserEntity entity);
     }
 }

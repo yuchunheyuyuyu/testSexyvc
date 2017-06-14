@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey_two"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_header" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96px"
+        android:layout_marginTop="40px"
+        android:background="@color/white">
+
+        <View
+            android:id="@+id/topLine"
+            style="@style/line_style"
+            android:layout_alignParentTop="true" />
+
+        <View
+            android:id="@+id/BottomLine"
+            style="@style/line_style"
+            android:layout_alignParentBottom="true" />
+
+        <EditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/BottomLine"
+            android:layout_below="@+id/topLine"
+            android:background="@null"
+            android:textColorHint="@color/black30"
+            android:textColor="@color/black" />
+
+    </RelativeLayout>
+
+</LinearLayout>
