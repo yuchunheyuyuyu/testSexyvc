@@ -28,6 +28,12 @@
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:fitsSystemWindows">false</item>
     </style>
+
+    <style name="view_animation" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/in</item>
+        <item name="@android:windowExitAnimation">@anim/out</item>
+    </style>
+
     <!--其他页面的-->
     <style name="MainTheme" parent="MyAppTheme">
         <item name="android:windowBackground">@color/white</item>
@@ -47,7 +53,7 @@
 
     <style name="line_wide_style">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">14px</item>
+        <item name="android:layout_height">16px</item>
         <item name="android:background">@color/silver_two</item>
     </style>
 

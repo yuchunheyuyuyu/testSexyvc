@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000066"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvHint"
+            android:layout_width="match_parent"
+            android:layout_height="114px"
+            android:gravity="center"
+            android:text="请上传您的身份证明（如名片、工牌、邮箱截图等）"
+            android:textColor="#8f8e94"
+            android:textSize="26px" />
+
+        <View
+            android:id="@+id/lineHint"
+            style="@style/line_style" />
+
+        <TextView
+            android:id="@+id/btn_report"
+            android:layout_width="match_parent"
+            android:layout_height="114px"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/take_photo"
+            android:textColor="#0076ff"
+            android:textSize="40px" />
+
+        <View style="@style/line_style" />
+
+        <TextView
+            android:id="@+id/btn_error"
+            android:layout_width="match_parent"
+            android:layout_height="114px"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/from_album"
+            android:textColor="#0076ff"
+            android:textSize="40px" />
+
+        <View style="@style/line_wide_style" />
+
+        <TextView
+            android:id="@+id/cancleSelected"
+            android:layout_width="match_parent"
+            android:layout_height="114px"
+            android:background="@color/white"
+            android:text="@string/cancle"
+            android:gravity="center"
+            android:textColor="#0076ff"
+            android:textSize="40px" />
+    </LinearLayout>
+
+</LinearLayout>

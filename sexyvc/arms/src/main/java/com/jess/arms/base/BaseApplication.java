@@ -2,12 +2,16 @@ package com.jess.arms.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.jess.arms.di.component.DaggerBaseComponent;
 import com.jess.arms.di.module.AppModule;
 import com.jess.arms.di.module.ClientModule;
 import com.jess.arms.di.module.GlobeConfigModule;
 import com.jess.arms.di.module.ImageModule;
+import com.jess.arms.utils.DeviceUtils;
 
 import javax.inject.Inject;
 
@@ -31,11 +35,14 @@ public abstract class BaseApplication extends Application {
     @Inject
     protected AppManager mAppManager;
     protected final String TAG = this.getClass().getSimpleName();
+    // 屏幕宽高
+    public static Point screenSize;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        screenSize = getScreenWidthAndHeight();// 获取屏幕宽高
         mApplication = this;
         this.mAppModule = new AppModule(this);//提供application
         DaggerBaseComponent
@@ -95,6 +102,16 @@ public abstract class BaseApplication extends Application {
         return mAppManager;
     }
 
+    /**
+     * 得到屏幕宽高
+     *
+     * @return
+     */
+    protected Point getScreenWidthAndHeight() {
+        WindowManager manager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        return DeviceUtils.getDisplaySize(display);
+    }
 
     /**
      * 返回上下文

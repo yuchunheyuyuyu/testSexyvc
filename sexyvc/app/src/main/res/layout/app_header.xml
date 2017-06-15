@@ -27,6 +27,19 @@
         android:textColor="@color/slate"
         android:textSize="32px" />
 
+    <TextView
+        android:id="@+id/tvRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="16px"
+        android:text="@string/save"
+        android:textColor="@color/barbie_pink_two"
+        android:textSize="28px"
+        android:visibility="gone" />
+
+
     <View
         android:id="@+id/viewLine"
         style="@style/line_style"

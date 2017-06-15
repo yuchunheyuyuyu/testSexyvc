@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -20,7 +22,6 @@ import butterknife.OnClick;
  * Created by ls on 17/4/26.
  */
 public class LoginActivity extends MyBaseActivity<LoginPresent> implements LoginContract.View {
-
 
     @BindView(R.id.etPhone)
     PhoneEditText etPhone;
@@ -59,7 +60,7 @@ public class LoginActivity extends MyBaseActivity<LoginPresent> implements Login
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this, StringUtil.formatString(message));
     }
 
     @Override

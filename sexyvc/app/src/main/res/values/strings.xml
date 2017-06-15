@@ -3,6 +3,9 @@
 
     <string name="title_my_center">个人中心</string>
     <string name="title_user_info">个人信息</string>
+    <string name="title_email">邮箱</string>
+    <string name="title_nick">修改昵称</string>
+    <string name="title_introduce">编辑自我介绍</string>
 
     <string name="home_tab_home">首页</string>
     <string name="home_tab_investor">投资人</string>
@@ -75,9 +78,26 @@
     <string name="avatar">头像</string>
     <string name="nick">昵称</string>
     <string name="sex">性别</string>
+    <string name="sex_male">男</string>
+    <string name="sex_female">女</string>
     <string name="my_description">自我介绍</string>
     <string name="email">邮箱</string>
     <string name="position">机构职务</string>
     <string name="indentify">身份认证</string>
+    <string name="save">保存</string>
+    <string name="input_count">还可以输入 (%s) 字</string>
+    <string name="hint_introduce">用一段文字介绍自己</string>
+    <string name="input_email">输入邮箱</string>
+    <string name="input_email_alternate">输入备用邮箱</string>
+
+    <string name="nick_defalut">sexyvc用户</string>
+    <string name="position_defalut">担任职位</string>
+    <string name="compant_defalut">所在公司</string>
+    <string name="sex_defalut">男</string>
+    <string name="input_defalut">未填写</string>
+
+    <string name="take_photo">拍摄</string>
+    <string name="from_album">从相册选择</string>
+    <string name="cancle">取消</string>
 
 </resources>

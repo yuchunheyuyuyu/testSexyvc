@@ -11,7 +11,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -29,6 +32,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.List;
@@ -774,7 +778,75 @@ public class DeviceUtils {
             return false;
     }
 
+    /**
+     * 读取图片属性：旋转的角度
+     *
+     * @param path 图片绝对路径
+     * @return degree旋转的角度
+     */
 
+    public static int readPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
+
+    /**
+     * 回收垃圾 recycle
+     *
+     * @throws
+     */
+    public static void recycle(Bitmap bitmap) {
+        // 先判断是否已经回收
+        if (bitmap != null && !bitmap.isRecycled()) {
+            // 回收并且置为null
+            bitmap.recycle();
+            bitmap = null;
+        }
+        bitmap = null;
+        System.gc();
+    }
+
+    /**
+     * 旋转图片一定角度 rotaingImageView
+     *
+     * @return Bitmap
+     * @throws
+     */
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        // 旋转图片 动作
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return resizedBitmap;
+    }
+
+    public static Point getDisplaySize(final Display display) {
+        final Point point = new Point();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+        point.set(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        return point;
+    }
 }
 
 

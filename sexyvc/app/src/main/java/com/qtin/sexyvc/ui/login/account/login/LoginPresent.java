@@ -41,10 +41,16 @@ public class LoginPresent extends BasePresenter<LoginContract.Model,LoginContrac
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<UserEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<UserEntity> userEntityBaseEntity) {
-                        if(userEntityBaseEntity.isSuccess()&&userEntityBaseEntity.getItems()!=null){
-                            userEntityBaseEntity.getItems().setBind_mobile(1);
-                            mModel.saveUser(userEntityBaseEntity.getItems());
-                            mRootView.loginSuccess();
+                        if(userEntityBaseEntity!=null){
+                            if(userEntityBaseEntity.isSuccess()){
+                                if(userEntityBaseEntity.getItems()!=null){
+                                    userEntityBaseEntity.getItems().setBind_mobile(1);
+                                    mModel.saveUser(userEntityBaseEntity.getItems());
+                                    mRootView.loginSuccess();
+                                }
+                            }else{
+                                mRootView.showMessage(userEntityBaseEntity.getErrMsg());
+                            }
                         }
                     }
                 });

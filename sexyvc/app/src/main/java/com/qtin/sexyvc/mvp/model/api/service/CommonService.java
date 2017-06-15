@@ -1,13 +1,14 @@
 package com.qtin.sexyvc.mvp.model.api.service;
 
 import com.qtin.sexyvc.mvp.model.entity.LoginEntity;
-import com.qtin.sexyvc.mvp.model.entity.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -23,6 +24,11 @@ import rx.Observable;
  */
 public interface CommonService {
 
+    /**
+     * 旧版获取七牛token，可删除
+     * @param url
+     * @return
+     */
     @POST
     Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(@Url String url);
 
@@ -33,6 +39,15 @@ public interface CommonService {
      */
     @POST("user/register")
     Observable<BaseListEntity<LoginEntity>> register(@Body com.qtin.sexyvc.mvp.model.entity.RegisterRequestEntity entity);
+
+    /**
+     * 获取七牛token
+     * @param is_protected 是否是保密文件
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("qiniu/token")
+    Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(@Field("is_protected") int is_protected);
 
     /**
      * 注册
@@ -97,5 +112,74 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("user/forget")
     Observable<CodeEntity> resetPassword(@Field("code_value")String code_value,@Field("mobile")String mobile,@Field("password")String password);
+
+    /**
+     * 获取个人信息
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info")
+    Observable<BaseEntity<UserInfoEntity>> getUserInfo(@Field("token")String token);
+
+    /**
+     * 修改昵称
+     * @param token
+     * @param u_nickname
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info/edit")
+    Observable<CodeEntity> editNick(@Field("token")String token,@Field("u_nickname")String u_nickname);
+
+    /**
+     * 修改性别
+     * @param token
+     * @param u_gender
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info/edit")
+    Observable<CodeEntity> editSex(@Field("token")String token,@Field("u_gender")int u_gender);
+
+    /**
+     * 修改头像
+     * @param token
+     * @param u_avatar
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info/edit")
+    Observable<CodeEntity> editAvatar(@Field("token")String token,@Field("u_avatar")String u_avatar);
+
+    /**
+     * 修改个性签名
+     * @param token
+     * @param u_signature
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info/edit")
+    Observable<CodeEntity> editSignature(@Field("token")String token,@Field("u_signature")String u_signature);
+
+    /**
+     * 修改备用手机号
+     * @param token
+     * @param u_backup_phone
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info/edit")
+    Observable<CodeEntity> editMobile(@Field("token")String token,@Field("u_signature")String u_backup_phone);
+
+    /**
+     * 修改邮箱
+     * @param token
+     * @param u_email
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("user/info/edit")
+    Observable<CodeEntity> editEmail(@Field("token")String token,@Field("u_email")String u_email,@Field("u_backup_email")String u_backup_email);
 
 }
