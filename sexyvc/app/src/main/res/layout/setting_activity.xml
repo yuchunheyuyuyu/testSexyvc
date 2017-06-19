@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey_two"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="220px"
+                android:layout_marginTop="60px"
+                android:src="@drawable/setting_topimg" />
+
+            <TextView
+                android:id="@+id/tvVersionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8px"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="6sp"
+                android:text="Ver 1.0.0"
+                android:textColor="@color/slate_50"
+                android:textSize="24px" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56px"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:id="@+id/modifyPasswordContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32px"
+                    android:paddingRight="32px">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/modify_password"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+                </LinearLayout>
+
+                <View
+                    style="@style/line_style"
+                    android:layout_marginLeft="32px" />
+
+                <LinearLayout
+                    android:id="@+id/clearCacheContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32px"
+                    android:paddingRight="32px">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clear_cache"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvCacheSize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="0.12 M"
+                        android:textColor="@color/black50"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+                </LinearLayout>
+
+                <View
+                    style="@style/line_style"
+                    android:layout_marginLeft="32px" />
+
+                <LinearLayout
+                    android:id="@+id/aboutUsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="32px"
+                    android:paddingRight="32px">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/about_us"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40px"
+                android:orientation="vertical">
+
+                <View style="@style/line_style" />
+
+                <TextView
+                    android:id="@+id/tvLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="@string/logout"
+                    android:textColor="@color/reddish_pink"
+                    android:textSize="14sp" />
+
+                <View style="@style/line_style" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
