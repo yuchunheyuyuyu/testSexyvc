@@ -5,31 +5,23 @@ package com.qtin.sexyvc.ui.bean;
  * 筛选条件
  */
 public class FilterEntity {
-    private String name;
-    private int id;
+    private int key_id;
+    private String type_name;
 
-    public FilterEntity(String name, int id) {
-        this.name = name;
-        this.id = id;
+    public int getKey_id() {
+        return key_id;
     }
 
-    public FilterEntity() {
-
+    public void setKey_id(int key_id) {
+        this.key_id = key_id;
     }
 
-    public String getName() {
-        return name;
+    public String getType_name() {
+        return type_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

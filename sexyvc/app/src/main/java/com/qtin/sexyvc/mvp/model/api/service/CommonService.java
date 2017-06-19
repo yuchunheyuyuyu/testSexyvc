@@ -5,6 +5,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
@@ -46,15 +47,24 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("qiniu/token")
+    @POST("public/qiniu/token")
     Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(@Field("is_protected") int is_protected);
+
+    /**
+     * Type 列表
+     * @param type_key 投资行业 common_domain 投资阶段 common_stage
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("public/type/list")
+    Observable<BaseListEntity<FilterEntity>> getType(@Field("type_key") String type_key);
 
     /**
      * 注册
      * @param entity
      * @return
      */
-    @POST("user/register")
+    @POST("api/user/register")
     Observable<BaseEntity<UserEntity>> doRegister(@Body RegisterRequestEntity entity);
 
     /**
@@ -66,7 +76,7 @@ public interface CommonService {
      */
 
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("api/user/login")
     Observable<BaseEntity<UserEntity>> login(@Field("username")String username, @Field("account_type")int account_type,
                     @Field("password")String password,@Field("device_token")String device_token);
 
@@ -77,7 +87,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("mobile/code")
+    @POST("api/mobile/code")
     Observable<CodeEntity> getVertifyCode(@Field("mobile")String mobile, @Field("code_type")String code_type);
 
     /**
@@ -88,7 +98,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("mobile/check")
+    @POST("api/mobile/check")
     Observable<BaseEntity<BindEntity>> validateCode(@Field("mobile")String mobile, @Field("code_type")String code_type, @Field("code_value")String code_value);
 
     /**
@@ -99,7 +109,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/bind")
+    @POST("api/user/bind")
     Observable<CodeEntity> bindMobile(@Field("token")String token,@Field("mobile") String mobile,@Field("password") String password);
 
     /**
@@ -110,8 +120,19 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/forget")
+    @POST("api/user/forget")
     Observable<CodeEntity> resetPassword(@Field("code_value")String code_value,@Field("mobile")String mobile,@Field("password")String password);
+
+    /**
+     * 修改密码
+     * @param token
+     * @param old_password
+     * @param new_password
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/reset")
+    Observable<CodeEntity> modifyPassword(@Field("token")String token,@Field("old_password")String old_password,@Field("new_password")String new_password);
 
     /**
      * 获取个人信息
@@ -119,7 +140,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info")
+    @POST("api/user/info")
     Observable<BaseEntity<UserInfoEntity>> getUserInfo(@Field("token")String token);
 
     /**
@@ -129,7 +150,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info/edit")
+    @POST("api/user/info/edit")
     Observable<CodeEntity> editNick(@Field("token")String token,@Field("u_nickname")String u_nickname);
 
     /**
@@ -139,7 +160,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info/edit")
+    @POST("api/user/info/edit")
     Observable<CodeEntity> editSex(@Field("token")String token,@Field("u_gender")int u_gender);
 
     /**
@@ -149,7 +170,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info/edit")
+    @POST("api/user/info/edit")
     Observable<CodeEntity> editAvatar(@Field("token")String token,@Field("u_avatar")String u_avatar);
 
     /**
@@ -159,7 +180,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info/edit")
+    @POST("api/user/info/edit")
     Observable<CodeEntity> editSignature(@Field("token")String token,@Field("u_signature")String u_signature);
 
     /**
@@ -169,8 +190,8 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info/edit")
-    Observable<CodeEntity> editMobile(@Field("token")String token,@Field("u_signature")String u_backup_phone);
+    @POST("api/user/info/edit")
+    Observable<CodeEntity> editMobile(@Field("token")String token,@Field("u_backup_phone")String u_backup_phone);
 
     /**
      * 修改邮箱
@@ -179,7 +200,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("user/info/edit")
+    @POST("api/user/info/edit")
     Observable<CodeEntity> editEmail(@Field("token")String token,@Field("u_email")String u_email,@Field("u_backup_email")String u_backup_email);
 
 }

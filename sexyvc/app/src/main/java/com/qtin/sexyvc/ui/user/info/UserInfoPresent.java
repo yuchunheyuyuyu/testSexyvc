@@ -1,7 +1,6 @@
 package com.qtin.sexyvc.ui.user.info;
 
 import android.app.Application;
-
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -14,11 +13,8 @@ import com.qiniu.android.storage.UploadOptions;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
-
 import org.json.JSONObject;
-
 import javax.inject.Inject;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -74,7 +70,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 });
     }
 
-    public void editAvatar(String u_avatar) {
+    public void editAvatar(final String u_avatar) {
         mModel.editAvatar(mModel.getToken(), u_avatar)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -94,7 +90,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 .subscribe(new Observer<CodeEntity>() {
                     @Override
                     public void onCompleted() {
-
+                        mRootView.hideLoading();
                     }
 
                     @Override
@@ -104,7 +100,10 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
 
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-
+                        if(codeEntity.isSuccess()){
+                            mRootView.showMessage("头像修改成功");
+                            mRootView.editAvatarSuccess(u_avatar);
+                        }
                     }
                 });
     }
@@ -122,8 +121,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
                 //mRootView.showMessage("上传成功");
-
-
+                editAvatar(key);
             }
 
         }, uploadOptions);

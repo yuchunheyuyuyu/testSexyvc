@@ -8,16 +8,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.user.modify.di.DaggerModifyComponent;
 import com.qtin.sexyvc.ui.user.modify.di.ModifyModule;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
-
+import com.qtin.sexyvc.ui.widget.PhoneEditText;
+import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -44,14 +49,43 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     ClearableEditText etEmailAlternate;
     @BindView(R.id.emailContainer)
     LinearLayout emailContainer;
+    @BindView(R.id.tvPhone)
+    TextView tvPhone;
+    @BindView(R.id.etPhoneBackup)
+    PhoneEditText etPhoneBackup;
+    @BindView(R.id.phoneContainer)
+    LinearLayout phoneContainer;
     private String hint;
-    public static final int MODIFY_NICK = 0;
-    public static final int MODIFY_INTRODUCE = 1;
-    public static final int MODIFY_EMAIL = 2;
-    public static final String MODIFY_INTENT="modify_type";
+
+    public static final int MODIFY_NICK = 0x012;
+    public static final int MODIFY_INTRODUCE = 0x013;
+    public static final int MODIFY_EMAIL = 0x014;
+    public static final int MODIFY_PHONE = 0x015;
+    public static final int MODIFY_PROJECT_NAME = 0x016;
+    public static final int MODIFY_PROJECT_INTRODUCE = 0x017;
+
+    public static final String MODIFY_INTENT = "modify_type";
+    public static final String MODIFY_INTENT_VALUE1 = "modify_value1";
+    public static final String MODIFY_INTENT_VALUE2 = "modify_value2";
+
+
+    //带进来的值
+    private String value1;
+    private String value2;
 
     private int modifyType;
+    //输入框内的值
+    private String nick;
+    private String u_email;
+    private String u_backup_email;
+    private String u_signature;
+    private String u_phone;
+    private String u_backup_phone;
 
+    private int wordNumber=140;
+
+    private String project_name;
+    private String project_introduce;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -70,20 +104,55 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
 
     @Override
     protected void initData() {
-        modifyType=getIntent().getExtras().getInt(MODIFY_INTENT);
+        modifyType = getIntent().getExtras().getInt(MODIFY_INTENT);
 
         tvRight.setVisibility(View.VISIBLE);
-        if(modifyType==MODIFY_NICK){
-            etContent.setHint(getResources().getString(R.string.nick));
+        if (modifyType == MODIFY_NICK||modifyType==MODIFY_PROJECT_NAME) {
             singLineContainer.setVisibility(View.VISIBLE);
-            tvTitle.setText(getResources().getString(R.string.title_nick));
-        }else if(modifyType==MODIFY_EMAIL){
+            value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
+            String nick = StringUtil.formatString(value1);
+            etContent.setText(nick);
+            etContent.setSelection(nick.length());
+
+            if(modifyType == MODIFY_NICK){
+                etContent.setHint(getResources().getString(R.string.nick));
+                tvTitle.setText(getResources().getString(R.string.title_nick));
+            }else{
+                etContent.setHint(getResources().getString(R.string.project_name));
+                tvTitle.setText(getResources().getString(R.string.project_name));
+            }
+
+        } else if (modifyType == MODIFY_EMAIL) {
             emailContainer.setVisibility(View.VISIBLE);
+            value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
+            value2 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE2);
+
+            etEmail.setText(StringUtil.formatString(value1));
+            etEmail.setSelection(StringUtil.formatString(value1).length());
+
+            etEmailAlternate.setText(StringUtil.formatString(value2));
+            etEmailAlternate.setSelection(StringUtil.formatString(value2).length());
+
+
             tvTitle.setText(getResources().getString(R.string.title_email));
-        }else if(modifyType==MODIFY_INTRODUCE){
+        } else if (modifyType == MODIFY_INTRODUCE||modifyType==MODIFY_PROJECT_INTRODUCE) {
+            value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
+            etIntroduce.setText(StringUtil.formatString(value1));
+            etIntroduce.setSelection(StringUtil.formatString(value1).length());
+
             introduceContainer.setVisibility(View.VISIBLE);
-            tvTitle.setText(getResources().getString(R.string.title_introduce));
-            tvCountDown.setText(String.format(getResources().getString(R.string.input_count),""+140));
+
+            if(modifyType == MODIFY_INTRODUCE){
+                etIntroduce.setHint(getResources().getString(R.string.hint_introduce));
+                tvTitle.setText(getResources().getString(R.string.title_introduce));
+            }else{
+                wordNumber=200;
+                tvTitle.setText(getResources().getString(R.string.project_introduce));
+                etIntroduce.setHint(getResources().getString(R.string.hint_introduce_project));
+            }
+
+
+            tvCountDown.setText(String.format(getResources().getString(R.string.input_count), "" + (wordNumber - StringUtil.formatString(value1).length())));
 
             etIntroduce.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -98,30 +167,38 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    int last=140;
-                    if(s!=null&&s.toString()!=null){
-                        last=140-s.toString().length();
+                    int last = wordNumber;
+                    if (s != null && s.toString() != null) {
+                        last = wordNumber - s.toString().length();
                     }
-                    tvCountDown.setText(String.format(getResources().getString(R.string.input_count),""+last));
+                    tvCountDown.setText(String.format(getResources().getString(R.string.input_count), "" + last));
                 }
             });
+        } else if (modifyType == MODIFY_PHONE) {
+            tvTitle.setText(getResources().getString(R.string.title_phone));
+            phoneContainer.setVisibility(View.VISIBLE);
+            value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
+            value2 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE2);
 
+            tvPhone.setText(StringUtil.getFormatPhone(value1));
+            etPhoneBackup.setText(StringUtil.formatString(value2));
+            etPhoneBackup.setSelection(etPhoneBackup.getText().toString().length());
         }
     }
 
     @Override
     public void showLoading() {
-
+        showDialog("正在提交");
     }
 
     @Override
     public void hideLoading() {
-
+        dialogDismiss();
     }
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this, message);
     }
 
     @Override
@@ -141,7 +218,86 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 finish();
                 break;
             case R.id.tvRight:
+
+                if (modifyType == MODIFY_NICK) {
+                    nick = etContent.getText().toString();
+                    if (StringUtil.isBlank(nick)) {
+                        showMessage("昵称不能为空");
+                        return;
+                    }
+                    mPresenter.editNick(nick);
+                } else if (modifyType == MODIFY_EMAIL) {
+                    u_email = etEmail.getText().toString();
+                    u_backup_email = etEmailAlternate.getText().toString();
+
+                    if (!StringUtil.isEmail(u_email)) {
+                        showMessage("邮箱格式不合法");
+                        return;
+                    }
+                    mPresenter.editEmail(u_email, u_backup_email);
+
+                } else if (modifyType == MODIFY_INTRODUCE) {
+                    u_signature = etIntroduce.getText().toString();
+                    if (StringUtil.isBlank(u_signature)) {
+                        showMessage("自我介绍不能为空");
+                        return;
+                    }
+                    mPresenter.editSignature(u_signature);
+                }else if(modifyType==MODIFY_PHONE){
+                    u_phone=tvPhone.getText().toString();
+                    u_backup_phone=etPhoneBackup.getPhoneText();
+                    if(!etPhoneBackup.isMobileNO()){
+                        showMessage("手机格式不合法");
+                        return;
+                    }
+                    mPresenter.editPhone(u_backup_phone);
+                }else if((modifyType==MODIFY_PROJECT_NAME)){
+                    project_name=etContent.getText().toString();
+                    if (StringUtil.isBlank(project_name)) {
+                        showMessage("项目名称不能为空");
+                        return;
+                    }
+                    editSuccess();
+
+                }else if(modifyType==MODIFY_PROJECT_INTRODUCE){
+                    project_introduce=etIntroduce.getText().toString();
+                    if (StringUtil.isBlank(project_introduce)) {
+                        showMessage("项目介绍不能为空");
+                        return;
+                    }
+                    editSuccess();
+                }
                 break;
         }
+    }
+
+    @Override
+    public void editSuccess() {
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .delay(500, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Intent intent = new Intent();
+                        if (modifyType == MODIFY_NICK) {
+                            intent.putExtra(MODIFY_INTENT_VALUE1, nick);
+                        } else if (modifyType == MODIFY_EMAIL) {
+                            intent.putExtra(MODIFY_INTENT_VALUE1, u_email);
+                            intent.putExtra(MODIFY_INTENT_VALUE2, u_backup_email);
+                        } else if (modifyType == MODIFY_INTRODUCE) {
+                            intent.putExtra(MODIFY_INTENT_VALUE1, u_signature);
+                        }else if(modifyType == MODIFY_PHONE){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, u_phone);
+                            intent.putExtra(MODIFY_INTENT_VALUE2, u_backup_phone);
+                        }else if(modifyType==MODIFY_PROJECT_INTRODUCE){
+                            intent.putExtra(MODIFY_INTENT_VALUE1,project_introduce);
+                        }else if(modifyType==MODIFY_PROJECT_NAME){
+                            intent.putExtra(MODIFY_INTENT_VALUE1,project_name);
+                        }
+                        setResult(0, intent);
+                        finish();
+                    }
+                });
     }
 }

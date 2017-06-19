@@ -22,17 +22,17 @@
                 android:id="@+id/cardViewInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="46px"
-                android:layout_marginLeft="48px"
-                android:layout_marginRight="48px"
-                android:layout_marginTop="42px"
+                android:layout_marginBottom="23dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="21dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="5dp"
-                app:contentPaddingBottom="48px"
-                app:contentPaddingLeft="54px"
-                app:contentPaddingRight="56px"
-                app:contentPaddingTop="48px">
+                app:contentPaddingBottom="24dp"
+                app:contentPaddingLeft="28dp"
+                app:contentPaddingRight="28dp"
+                app:contentPaddingTop="24dp">
 
 
                 <LinearLayout
@@ -42,17 +42,17 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="144px">
+                        android:layout_height="72dp">
 
                         <ImageView
                             android:id="@+id/ivIdentity"
                             android:layout_width="wrap_content"
-                            android:layout_height="36px"
+                            android:layout_height="18dp"
                             android:src="@drawable/tag_approve_fc" />
 
                         <ImageView
                             android:id="@+id/ivAvatar"
-                            android:layout_width="144px"
+                            android:layout_width="72dp"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:src="@drawable/avatar_blank" />
@@ -62,7 +62,7 @@
                         android:id="@+id/tvName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8px"
+                        android:layout_marginTop="4dp"
                         android:gravity="end"
                         android:lineSpacingExtra="8sp"
                         android:text="@string/nick_defalut"
@@ -73,7 +73,7 @@
                         android:id="@+id/tvPosition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12px"
+                        android:layout_marginTop="6dp"
                         android:gravity="center_horizontal"
                         android:lineSpacingExtra="6sp"
                         android:text="@string/position_defalut"
@@ -84,7 +84,7 @@
                         android:id="@+id/tvCompany"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8px"
+                        android:layout_marginTop="4dp"
                         android:gravity="center_horizontal"
                         android:lineSpacingExtra="6sp"
                         android:text="@string/compant_defalut"
@@ -94,14 +94,14 @@
                     <View
                         android:id="@+id/lineIntroduce"
                         style="@style/line_style"
-                        android:layout_marginTop="30px"
+                        android:layout_marginTop="15dp"
                         android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvIntroduce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="32px"
+                        android:layout_marginTop="16dp"
                         android:lineSpacingExtra="6sp"
                         android:textColor="@color/black50"
                         android:textSize="12sp"
@@ -116,7 +116,7 @@
                 android:layout_height="96px"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="56px"
@@ -145,7 +145,7 @@
                 android:id="@+id/lineProject"
                 style="@style/line_style"
                 android:layout_marginLeft="120px"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/messageContainer"

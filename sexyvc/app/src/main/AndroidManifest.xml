@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
 
-        <activity android:name=".ui.login.account.create.CreateActivity"
+        <activity
+            android:name=".ui.login.account.create.CreateActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,6 +85,31 @@
             android:name=".ui.user.modify.ModifyActivity"
             android:screenOrientation="portrait" />
 
+        <!--设置-->
+        <activity
+            android:name=".ui.user.setting.SettingActivity"
+            android:screenOrientation="portrait" />
+
+        <!--修改密码-->
+        <activity
+            android:name=".ui.user.password.ModifyPasswordActivity"
+            android:screenOrientation="portrait" />
+
+        <!--我的项目-->
+        <activity
+            android:name=".ui.user.project.my.MyProjectActivity"
+            android:screenOrientation="portrait" />
+
+        <!--添加项目-->
+        <activity
+            android:name=".ui.user.project.add.AddProjectActivity"
+            android:screenOrientation="portrait" />
+
+        <!--消息通知-->
+        <activity
+            android:name=".ui.user.message.MessageActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity
@@ -130,12 +156,12 @@
 
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
-            android:value="c026a9f91e7c297668f59ea71ebe4168"/>
+            android:value="c026a9f91e7c297668f59ea71ebe4168" />
 
         <!--####################### 友盟分享start ############################-->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="585b850bf43e486b06000bd3"/>
+            android:value="585b850bf43e486b06000bd3" />
 
         <!--微信-->
         <activity

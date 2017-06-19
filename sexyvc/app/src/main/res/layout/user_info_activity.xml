@@ -70,17 +70,18 @@
                     android:paddingRight="32px">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/nick"
                         android:textColor="@color/black90"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+
                         android:gravity="end"
                         android:text="@string/nick_defalut"
                         android:textColor="@color/black50"
@@ -144,18 +145,21 @@
                     android:paddingRight="32px">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/my_description"
                         android:textColor="@color/black90"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvMyDescription"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
                         android:gravity="end"
+                        android:layout_marginLeft="32px"
+                        android:maxLines="1"
                         android:text="@string/input_defalut"
                         android:textColor="@color/black50"
                         android:textSize="14sp" />
@@ -190,17 +194,18 @@
                     android:paddingRight="32px">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/phone"
                         android:textColor="@color/black90"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvMobile"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+
                         android:gravity="end"
                         android:textColor="@color/black50"
                         android:textSize="14sp" />
@@ -226,17 +231,17 @@
                     android:paddingRight="32px">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/email"
                         android:textColor="@color/black90"
                         android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvEmail"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="end"
                         android:text="@string/input_defalut"
                         android:textColor="@color/black50"

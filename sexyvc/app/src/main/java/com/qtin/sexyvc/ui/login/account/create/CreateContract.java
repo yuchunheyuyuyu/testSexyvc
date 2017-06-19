@@ -24,5 +24,7 @@ public interface CreateContract {
         Observable<CodeEntity> getVertifyCode(String mobile,String code_type);
         Observable<BaseEntity<BindEntity>> validateCode(String mobile, String code_type, String code_value);
         Observable<BaseEntity<UserEntity>> doRegister(RegisterRequestEntity entity);
+
+        boolean isLogin();
     }
 }

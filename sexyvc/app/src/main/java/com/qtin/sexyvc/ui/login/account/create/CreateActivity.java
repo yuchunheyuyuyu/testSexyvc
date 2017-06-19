@@ -3,10 +3,12 @@ package com.qtin.sexyvc.ui.login.account.create;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -23,7 +25,9 @@ import com.qtin.sexyvc.ui.widget.PhoneEditText;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -78,6 +82,10 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     @Override
     protected void initData() {
 
+        if(mPresenter.isLogin()){
+            gotoActivity(MainActivity.class);
+            return;
+        }
 
         etPhone.setPhoneVertifyListener(new PhoneEditText.PhoneVertifyListener() {
             @Override
@@ -243,4 +251,14 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            UiUtils.exitApp();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

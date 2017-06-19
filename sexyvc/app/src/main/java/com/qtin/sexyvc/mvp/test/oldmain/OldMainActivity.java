@@ -2,7 +2,6 @@ package com.qtin.sexyvc.mvp.test.oldmain;
 
 import android.content.Intent;
 import android.view.View;
-
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -19,7 +18,6 @@ import com.qtin.sexyvc.mvp.test.upload.UploadActivity;
 import com.qtin.sexyvc.mvp.test.user.UserActivity;
 import com.qtin.sexyvc.ui.login.account.login.LoginActivity;
 import com.tbruyelle.rxpermissions.RxPermissions;
-
 import butterknife.OnClick;
 
 /**

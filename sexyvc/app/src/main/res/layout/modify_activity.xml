@@ -73,7 +73,6 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/tvCountDown"
             android:layout_below="@+id/topLine2"
-            android:maxLength="140"
             android:layout_marginBottom="22px"
             android:layout_marginLeft="32px"
             android:layout_marginRight="32px"
@@ -82,6 +81,7 @@
             android:gravity="top"
             android:hint="@string/hint_introduce"
             android:lineSpacingExtra="6sp"
+            android:maxLength="140"
             android:textColor="@color/black"
             android:textColorHint="@color/black30"
             android:textSize="14sp" />
@@ -108,7 +108,7 @@
             android:layout_marginRight="32px"
             android:background="@null"
             android:hint="@string/input_email"
-            android:inputType="textEmailSubject"
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textColorHint="@color/black30"
@@ -127,7 +127,7 @@
             android:layout_marginRight="32px"
             android:background="@null"
             android:hint="@string/input_email_alternate"
-            android:inputType="textEmailSubject"
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textColorHint="@color/black30"
@@ -135,6 +135,49 @@
 
         <View style="@style/line_style" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/phoneContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="44px"
+        android:orientation="vertical">
+
+        <View style="@style/line_style" />
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="match_parent"
+            android:layout_height="96px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="32px"
+            android:textColor="@color/black90"
+            android:textSize="28px" />
+
+        <View style="@style/line_style" />
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="40px" />
+
+        <com.qtin.sexyvc.ui.widget.PhoneEditText
+            android:id="@+id/etPhoneBackup"
+            android:layout_width="match_parent"
+            android:layout_height="96px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_backup_phone"
+            android:inputType="phone"
+            android:paddingLeft="32px"
+            android:paddingRight="32px"
+            android:textColor="@color/black90"
+            android:textColorHint="@color/black30"
+            android:textSize="28px" />
+
+        <View style="@style/line_style" />
 
     </LinearLayout>
 

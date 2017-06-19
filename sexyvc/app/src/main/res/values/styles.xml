@@ -13,13 +13,18 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/pale_grey_two</item>
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
     </style>
 
     <style name="MyAppTheme" parent="AppTheme.NoActionBar">
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="dialog_fade_animation" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="@android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
     <!--splash页面的-->

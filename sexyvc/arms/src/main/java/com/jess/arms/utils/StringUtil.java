@@ -155,4 +155,36 @@ public class StringUtil {
             return "";
         }
     }
+
+    /**
+     * 判断邮箱是否合法
+     * @param strEmail
+     * @return
+     */
+    /**
+     * 正则表达式：验证邮箱
+     */
+    public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+
+    public static boolean isEmail(String email) {
+        if(isBlank(email)){
+            return false;
+        }
+        return Pattern.matches(REGEX_EMAIL, email);
+    }
+
+    public static String getFormatPhone(String origin){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < origin.length(); i++) {
+            if (i != 3 && i != 8 && origin.charAt(i) == ' ') {
+                continue;
+            } else {
+                sb.append(origin.charAt(i));
+                if ((sb.length() == 4 || sb.length() == 9) && sb.charAt(sb.length() - 1) != ' ') {
+                    sb.insert(sb.length() - 1, ' ');
+                }
+            }
+        }
+        return sb.toString();
+    }
 }

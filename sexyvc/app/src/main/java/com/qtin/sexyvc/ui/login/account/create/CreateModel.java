@@ -50,4 +50,15 @@ public class CreateModel extends BaseModel<ServiceManager,CacheManager> implemen
     public Observable<BaseEntity<UserEntity>> doRegister(RegisterRequestEntity entity) {
         return mServiceManager.getCommonService().doRegister(entity);
     }
+
+    @Override
+    public boolean isLogin() {
+        List<UserEntity> list=mCacheManager.getDaoSession().getUserEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            if(list.get(0).getBind_mobile()==1){
+                return true;
+            }
+        }
+        return false;
+    }
 }

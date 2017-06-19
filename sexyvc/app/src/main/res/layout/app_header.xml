@@ -30,10 +30,12 @@
     <TextView
         android:id="@+id/tvRight"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:paddingRight="16px"
+        android:paddingLeft="20dp"
         android:text="@string/save"
         android:textColor="@color/barbie_pink_two"
         android:textSize="28px"

@@ -17,6 +17,9 @@ import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.main.fragmine.di.DaggerFragMineComponent;
 import com.qtin.sexyvc.ui.main.fragmine.di.FragmineModule;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
+import com.qtin.sexyvc.ui.user.message.MessageActivity;
+import com.qtin.sexyvc.ui.user.project.my.MyProjectActivity;
+import com.qtin.sexyvc.ui.user.setting.SettingActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -73,6 +76,11 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
         tvTitle.setText(getResources().getString(R.string.title_my_center));
         ivLeft.setVisibility(View.GONE);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mPresenter.getUserInfo();
     }
 
@@ -112,10 +120,13 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
                 }
                 break;
             case R.id.myProjectContainer:
+                gotoActivity(MyProjectActivity.class);
                 break;
             case R.id.messageContainer:
+                gotoActivity(MessageActivity.class);
                 break;
             case R.id.settingContainer:
+                gotoActivity(SettingActivity.class);
                 break;
         }
     }

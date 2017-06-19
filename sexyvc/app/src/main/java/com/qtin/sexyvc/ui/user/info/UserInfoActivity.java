@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -51,7 +50,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  */
 public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements UserInfoContract.View {
 
-
     @BindView(R.id.tvTitle)
     TextView tvTitle;
     @BindView(R.id.ivAvatar)
@@ -84,6 +82,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     private String cropedPhoto;
     // 拍照地址
     private String path;
+
+    private boolean isUpdateAvatar;//是上传头像还是上传验证
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -180,31 +180,42 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 finish();
                 break;
             case R.id.avatarContainer:
+                isUpdateAvatar=true;
                 showPhotoDialog(true);
                 break;
             case R.id.nickContainer:
                 Bundle nick=new Bundle();
                 nick.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_NICK);
-                gotoActivity(ModifyActivity.class,nick);
+                nick.putString(ModifyActivity.MODIFY_INTENT_VALUE1,userInfo.getU_nickname());
+                gotoActivityForResult(ModifyActivity.class,nick,ModifyActivity.MODIFY_NICK);
                 break;
             case R.id.sexContainer:
                 chooseSexDialog();
                 break;
             case R.id.descriptionContainer:
                 Bundle introduce=new Bundle();
+                introduce.putString(ModifyActivity.MODIFY_INTENT_VALUE1,userInfo.getU_signature());
                 introduce.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_INTRODUCE);
-                gotoActivity(ModifyActivity.class,introduce);
-                break;
+                gotoActivityForResult(ModifyActivity.class,introduce,ModifyActivity.MODIFY_INTRODUCE);
+               break;
             case R.id.mobileContainer:
+                Bundle mobile=new Bundle();
+                mobile.putString(ModifyActivity.MODIFY_INTENT_VALUE1,userInfo.getU_phone());
+                mobile.putString(ModifyActivity.MODIFY_INTENT_VALUE2,userInfo.getU_backup_phone());
+                mobile.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_PHONE);
+                gotoActivityForResult(ModifyActivity.class,mobile,ModifyActivity.MODIFY_PHONE);
                 break;
             case R.id.emailContainer:
                 Bundle email=new Bundle();
+                email.putString(ModifyActivity.MODIFY_INTENT_VALUE1,userInfo.getU_email());
+                email.putString(ModifyActivity.MODIFY_INTENT_VALUE2,userInfo.getU_backup_email());
                 email.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_EMAIL);
-                gotoActivity(ModifyActivity.class,email);
+                gotoActivityForResult(ModifyActivity.class,email,ModifyActivity.MODIFY_EMAIL);
                 break;
             case R.id.positionContainer:
                 break;
             case R.id.identifyContainer:
+                isUpdateAvatar=false;
                 showPhotoDialog(false);
                 break;
         }
@@ -316,6 +327,37 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case ModifyActivity.MODIFY_NICK:
+                if(data!=null){
+                    String nick=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
+                    userInfo.setU_nickname(nick);
+                    tvName.setText(nick);
+                }
+                break;
+            case ModifyActivity.MODIFY_INTRODUCE:
+                if(data!=null){
+                    String sign=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
+                    userInfo.setU_signature(sign);
+                    tvMyDescription.setText(sign);
+                }
+                break;
+            case ModifyActivity.MODIFY_EMAIL:
+                if(data!=null){
+                    String u_email=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
+                    String u_backup_email=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2));
+                    userInfo.setU_email(u_email);
+                    userInfo.setU_backup_email(u_backup_email);
+                    tvEmail.setText(u_email);
+                }
+                break;
+            case ModifyActivity.MODIFY_PHONE:
+                if(data!=null){
+                    String u_phone=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
+                    String u_backup_phone=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2));
+                    userInfo.setU_phone(u_phone);
+                    userInfo.setU_backup_phone(u_backup_phone);
+                }
+                break;
             case ALBUM_REQUEST_CODE:
                 try {
                     Uri selectedImage = data.getData();
@@ -365,8 +407,10 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
                 break;
             case CROP_REQUEST_CODE: // 裁剪
-                Bitmap bitmap = BitmapFactory.decodeFile(cropedPhoto);
-                ivAvatar.setImageBitmap(bitmap);
+                if(data!=null){
+                    mPresenter.getQiNiuToken(cropedPhoto);
+                }
+
                 break;
         }
     }
@@ -414,15 +458,17 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     @Override
     public void editAvatarSuccess(String avatar) {
-        //头像
-        mImageLoader.loadImage(customApplication, GlideImageConfig
-                .builder()
-                .errorPic(R.drawable.avatar_user_s)
-                .placeholder(R.drawable.avatar_user_s)
-                .url(CommonUtil.getAbsolutePath(avatar))
-                .transformation(new CropCircleTransformation(this))
-                .imageView(ivAvatar)
-                .build());
+        if(isUpdateAvatar){
+            //头像
+            mImageLoader.loadImage(customApplication, GlideImageConfig
+                    .builder()
+                    .errorPic(R.drawable.avatar_user_s)
+                    .placeholder(R.drawable.avatar_user_s)
+                    .url(CommonUtil.getAbsolutePath(avatar))
+                    .transformation(new CropCircleTransformation(this))
+                    .imageView(ivAvatar)
+                    .build());
+        }
     }
 
     @Override

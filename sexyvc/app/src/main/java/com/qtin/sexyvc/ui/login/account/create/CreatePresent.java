@@ -39,6 +39,10 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
         this.mApplication = mApplication;
     }
 
+    public boolean isLogin(){
+        return mModel.isLogin();
+    }
+
     /**
      * 获取验证码
      */

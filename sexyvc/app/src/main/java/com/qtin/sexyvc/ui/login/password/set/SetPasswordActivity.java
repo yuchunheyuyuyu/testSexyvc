@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -49,26 +50,13 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
         return R.layout.set_password_activity;
     }
 
-    private String getFormatPhone(String origin){
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < origin.length(); i++) {
-            if (i != 3 && i != 8 && origin.charAt(i) == ' ') {
-                continue;
-            } else {
-                sb.append(origin.charAt(i));
-                if ((sb.length() == 4 || sb.length() == 9) && sb.charAt(sb.length() - 1) != ' ') {
-                    sb.insert(sb.length() - 1, ' ');
-                }
-            }
-        }
-        return sb.toString();
-    }
+
 
     @Override
     protected void initData() {
         type=getIntent().getExtras().getInt("type");
         phoneStr=getIntent().getExtras().getString("phoneStr");
-        tvPhone.setText(getFormatPhone(phoneStr));
+        tvPhone.setText(StringUtil.getFormatPhone(phoneStr));
     }
 
     @Override

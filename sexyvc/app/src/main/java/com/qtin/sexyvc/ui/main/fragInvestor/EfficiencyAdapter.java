@@ -42,7 +42,7 @@ public class EfficiencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }else{
             holder.viewLine.setVisibility(View.VISIBLE);
         }
-        holder.tvName.setText(StringUtil.formatString(entity.getName()));
+        holder.tvName.setText(StringUtil.formatString(entity.getType_name()));
     }
 
     @Override

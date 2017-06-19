@@ -3,21 +3,21 @@ package com.qtin.sexyvc.ui.main;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
 import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
+import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
-
 import java.lang.reflect.Field;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -45,6 +45,7 @@ public class MainActivity extends MyBaseActivity {
 
     private MyBaseFragment[] frags;
     private int currentIndex, clickIndex;
+    private long exitTime = 0;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -66,7 +67,7 @@ public class MainActivity extends MyBaseActivity {
         //沉浸式状态栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        FragConcern fragHome = new FragConcern();
+        FragHome fragHome = new FragHome();
         FragInvestor fragProject = new FragInvestor();
         FragConcern fragConcern=new FragConcern();
         FragMine fragMine = new FragMine();
@@ -220,5 +221,19 @@ public class MainActivity extends MyBaseActivity {
                 t.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            if((System.currentTimeMillis()-exitTime) > 2000){
+                UiUtils.SnackbarText(getResources().getString(R.string.exit_warn));
+                exitTime = System.currentTimeMillis();
+            } else {
+                UiUtils.exitApp();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
