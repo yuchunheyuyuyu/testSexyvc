@@ -11,6 +11,7 @@
     <string name="title_modify_password">修改密码</string>
     <string name="title_add_project">添加项目</string>
     <string name="title_my_project">我的项目</string>
+    <string name="title_frag_concern">关注</string>
 
     <string name="dealing">处理中...</string>
 
@@ -135,4 +136,17 @@
 
     <string name="message">消息</string>
     <string name="notice">通知</string>
+    <string name="edit">编辑</string>
+    <string name="has_concern">已关注</string>
+    <string name="commnet">评价</string>
+    <string name="road_comment">路演评价</string>
+    <string name="professional_qualities">专业素养</string>
+    <string name="feedback_speed">反馈速度</string>
+    <string name="road_efficiency">路演效率</string>
+    <string name="experience_share">经验分享</string>
+    <string name="contact_information">联系方式</string>
+
+    <string name="telephone">电话</string>
+    <string name="we_chat">微信</string>
+    <string name="remarks">备注</string>
 </resources>

@@ -2,8 +2,11 @@ package com.qtin.sexyvc.ui.user.message.message;
 
 import android.content.Intent;
 
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.ui.user.message.message.di.DaggerMessageFragComponent;
+import com.qtin.sexyvc.ui.user.message.message.di.MessageFragModule;
 
 /**
  * Created by ls on 17/4/26.
@@ -12,12 +15,12 @@ import com.qtin.sexyvc.common.MyBaseFragment;
 public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements MessageFragContract.View {
     @Override
     protected void setupFragmentComponent(AppComponent appComponent) {
-
+        DaggerMessageFragComponent.builder().appComponent(appComponent).messageFragModule(new MessageFragModule(this)).build().inject(this);
     }
 
     @Override
     protected int setContentViewId() {
-        return 0;
+        return R.layout.message_frag;
     }
 
     @Override

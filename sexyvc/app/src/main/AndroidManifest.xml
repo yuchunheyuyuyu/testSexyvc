@@ -110,6 +110,15 @@
             android:name=".ui.user.message.MessageActivity"
             android:screenOrientation="portrait" />
 
+        <!--关注列表-->
+        <activity
+            android:name=".ui.concern.list.ConcernListActivity"
+            android:screenOrientation="portrait" />
+
+        <!--关注详情-->
+        <activity
+            android:name=".ui.concern.detail.ConcernDetailActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity

@@ -2,7 +2,7 @@ package com.qtin.sexyvc.ui.user.message.notice.di;
 
 import com.jess.arms.di.scope.FragmentScope;
 import com.qtin.sexyvc.common.AppComponent;
-import com.qtin.sexyvc.ui.user.message.notice.NoticeFragFrag;
+import com.qtin.sexyvc.ui.user.message.notice.NoticeFrag;
 
 import dagger.Component;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @FragmentScope
 @Component(modules = NoticeFragModule.class,dependencies = AppComponent.class)
 public interface NoticeFragComponent {
-    void inject(NoticeFragFrag demoFrag);
+    void inject(NoticeFrag demoFrag);
 }

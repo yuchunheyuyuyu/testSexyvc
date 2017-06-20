@@ -82,6 +82,12 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.activity_enter_from_left,R.anim.activity_exit_to_right);
+    }
+
     /**
      * 是否清除缓存框
      */
