@@ -6,22 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
-import com.qtin.sexyvc.ui.widget.DeviceUtils;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.widget.TagContainer;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -36,8 +32,13 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ArrayList<InvestorEntity> data;
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
+    private OnItemClickListener itemClickListener;
 
-    public InvestorAdapter(Context context,ArrayList<InvestorEntity> data) {
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public InvestorAdapter(Context context, ArrayList<InvestorEntity> data) {
         this.context=context;
         this.data = data;
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
@@ -52,14 +53,14 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         InvestorEntity entity=data.get(position);
         ViewHolder holder=(ViewHolder)viewHolder;
 
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
         holder.tvPosition.setText(StringUtil.formatString(entity.getFund_name()));
-        holder.tvCommentNum.setText(context.getResources().getString(R.string.investor_join_comment)+entity.getCommentNum());
-        holder.tvScore.setText(""+entity.getInvestor_recommendation_number());
+        holder.tvCommentNum.setText(context.getResources().getString(R.string.investor_join_comment)+entity.getComment_number());
+        holder.tvScore.setText(""+entity.getScore());
 
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
@@ -69,14 +70,22 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .build());
 
         //评分
-        holder.ratingScore.setRating(entity.getInvestor_recommendation_number());
+        holder.ratingScore.setRating(entity.getScore());
         //标签
-        TagContainer tagContainer=new TagContainer(context);
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        tagContainer.setLayoutParams(params);
-        holder.tagLinearLayout.removeAllViews();
-        holder.tagLinearLayout.addView(tagContainer);
-        tagContainer.setStringValue(entity.getTagList(), (int) (DeviceUtils.getScreenSize(context).x- com.jess.arms.utils.DeviceUtils.dpToPixel(context,20)));
+        holder.tagContainer.setStringValue(entity.getTags());
+        if(entity.getU_id()>0){
+            holder.ivAnthStatus.setVisibility(View.VISIBLE);
+        }else{
+            holder.ivAnthStatus.setVisibility(View.INVISIBLE);
+        }
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(itemClickListener!=null){
+                    itemClickListener.onClickItem(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -95,13 +104,17 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         BaseRatingBar ratingScore;
         @BindView(R.id.tvScore)
         TextView tvScore;
-        @BindView(R.id.tagLinearLayout)
-        LinearLayout tagLinearLayout;
+        @BindView(R.id.tagContainer)
+        TagContainer tagContainer;
         @BindView(R.id.ivAvatar)
         ImageView ivAvatar;
+        @BindView(R.id.ivAnthStatus)
+        ImageView ivAnthStatus;
+        View view;
 
         ViewHolder(View view) {
             super(view);
+            this.view=view;
             ButterKnife.bind(this, view);
         }
     }

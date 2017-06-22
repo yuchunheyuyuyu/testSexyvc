@@ -2,15 +2,17 @@ package com.qtin.sexyvc.ui.main.fragInvestor;
 
 import android.app.Application;
 
-import com.google.gson.Gson;
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
-import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBackBean;
-import com.qtin.sexyvc.utils.LocalFileReader;
+import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -18,6 +20,7 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -38,14 +41,67 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
         this.mApplication = mApplication;
     }
 
-    public void getInvestorData(){
-        new LocalFileReader().readAssets(mRootView.getContext(), "InventorData.json", new LocalFileReader.ReadListener() {
-            @Override
-            public void complete(String result) {
-                InvestorBackBean investorBackBean=new Gson().fromJson(result,InvestorBackBean.class);
-                mRootView.dataCallback(investorBackBean.getItems().getList());
-            }
-        });
+    public void changeGroup(Long investor_id, ArrayList<Long> group_ids){
+        mModel.changeGroup(mModel.getToken(),investor_id,group_ids)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();//显示上拉刷新的进度条
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();//隐藏上拉刷新的进度条
+                    }
+                })
+                .compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity baseEntity) {
+                        mRootView.showMessage(baseEntity.getErrMsg());
+                    }
+                });
+    }
+
+    public void getInvestorData(final  int page,int page_size){
+
+        mModel.querySelectedInvestor(mModel.getToken(),page,page_size)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        if (page==1)
+                            mRootView.showLoading();//显示上拉刷新的进度条
+                        else
+                            mRootView.startLoadMore();//显示下拉加载更多的进度条
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        if (page==1)
+                            mRootView.hideLoading();//隐藏上拉刷新的进度条
+                        else
+                            mRootView.endLoadMore();//隐藏下拉加载更多的进度条
+                    }
+                })
+                .compose(RxUtils.<BaseEntity<InvestorBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<InvestorBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<InvestorBean> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.querySuccess(baseEntity.getItems());
+                        }else{
+                            mRootView.showMessage(baseEntity.getErrMsg());
+                        }
+                    }
+                });
     }
 
     public void getType(String type_key, final int type){

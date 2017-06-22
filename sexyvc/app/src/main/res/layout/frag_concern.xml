@@ -44,7 +44,7 @@
             android:text="@string/edit"
             android:textColor="@color/barbie_pink_two"
             android:textSize="28px"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 

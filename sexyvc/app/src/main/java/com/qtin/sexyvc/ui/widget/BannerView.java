@@ -18,14 +18,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.BannerEntity;
-
+import com.qtin.sexyvc.utils.CommonUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +134,7 @@ public class BannerView extends FrameLayout {
             mImageLoader=application.getAppComponent().imageLoader();
             mImageLoader.loadImage(application, GlideImageConfig
                     .builder()
-                    .url(StringUtil.formatString(data.get(i).getImg_url()))
+                    .url(CommonUtil.getAbsolutePath(data.get(i).getImg_url()))
                     .imageView(iv)
                     .build());
 
@@ -213,7 +211,7 @@ public class BannerView extends FrameLayout {
         mIndicatorContainer.removeAllViews();
         for(int i=0;i<count;i++){
             View view=new View(context);
-            view.setBackground(getResources().getDrawable(R.drawable.indicator_selector));
+            view.setBackgroundResource(R.drawable.indicator_selector);
             if(i==0){
                 view.setSelected(true);
                 LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(dpTpPx(indicator_selected_width),dpTpPx(indicator_height));

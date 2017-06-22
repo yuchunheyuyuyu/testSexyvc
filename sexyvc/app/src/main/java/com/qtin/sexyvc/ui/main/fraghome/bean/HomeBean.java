@@ -1,54 +1,61 @@
 package com.qtin.sexyvc.ui.main.fraghome.bean;
 
+import com.qtin.sexyvc.ui.bean.BannerEntity;
+import com.qtin.sexyvc.ui.bean.CommentEntity;
+import com.qtin.sexyvc.ui.bean.InvestorEntity;
+import com.qtin.sexyvc.ui.bean.SubjectEntity;
+import java.util.ArrayList;
+
 /**
  * Created by ls on 17/6/10.
  */
 
 public class HomeBean {
 
-    private BannerBean banner;
-    private NewsBean news;
-    private InvestorBean inventors;
-    private CommentBean comment;
-    private SubjectBean subjects;
+    private ArrayList<BannerEntity> banners;
+    private ArrayList<NewsBean> flashes;
+    private ArrayList<InvestorEntity> investors;
+    private ArrayList<CommentEntity> comments;
 
-    public BannerBean getBanner() {
-        return banner;
+    private ArrayList<SubjectEntity> subjects;
+
+    public ArrayList<BannerEntity> getBanners() {
+        return banners;
     }
 
-    public void setBanner(BannerBean banner) {
-        this.banner = banner;
+    public void setBanners(ArrayList<BannerEntity> banners) {
+        this.banners = banners;
     }
 
-    public NewsBean getNews() {
-        return news;
+    public ArrayList<NewsBean> getFlashes() {
+        return flashes;
     }
 
-    public void setNews(NewsBean news) {
-        this.news = news;
+    public void setFlashes(ArrayList<NewsBean> flashes) {
+        this.flashes = flashes;
     }
 
-    public InvestorBean getInventors() {
-        return inventors;
+    public ArrayList<InvestorEntity> getInvestors() {
+        return investors;
     }
 
-    public void setInventors(InvestorBean inventors) {
-        this.inventors = inventors;
+    public void setInvestors(ArrayList<InvestorEntity> investors) {
+        this.investors = investors;
     }
 
-    public CommentBean getComment() {
-        return comment;
+    public ArrayList<CommentEntity> getComments() {
+        return comments;
     }
 
-    public void setComment(CommentBean comment) {
-        this.comment = comment;
+    public void setComments(ArrayList<CommentEntity> comments) {
+        this.comments = comments;
     }
 
-    public SubjectBean getSubjects() {
+    public ArrayList<SubjectEntity> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(SubjectBean subjects) {
+    public void setSubjects(ArrayList<SubjectEntity> subjects) {
         this.subjects = subjects;
     }
 }

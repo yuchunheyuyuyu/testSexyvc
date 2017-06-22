@@ -28,6 +28,7 @@ import com.umeng.socialize.UMShareAPI;
 import org.greenrobot.greendao.database.Database;
 
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErroListener;
+import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -196,9 +197,20 @@ public class CustomApplication extends BaseApplication {
                     @Override
                     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
                         //如果需要再请求服务器之前做一些操作,则重新返回一个做过操作的的requeat如增加header,不做操作则返回request
-
-                        //return chain.request().newBuilder().header("token", tokenId)
-//                .build();
+                        if (request.method().equals("POST")) {
+                            if (request.body() instanceof FormBody) {
+                                FormBody.Builder bodyBuilder = new FormBody.Builder();
+                                FormBody formBody = (FormBody) request.body();
+                                //把原来的参数添加到新的构造器，（因为没找到直接添加，所以就new新的）
+                                for (int i = 0; i < formBody.size(); i++) {
+                                    bodyBuilder.addEncoded(formBody.encodedName(i), formBody.encodedValue(i));
+                                }
+                                //formBody=bodyBuilder.addEncoded("token","5643e5031a98de846f1d2bd4d01955f6").build();
+                                formBody=bodyBuilder.build();
+                                request=request.newBuilder().post(formBody).build();
+                                return request;
+                            }
+                        }
                         return request;
                     }
                 })

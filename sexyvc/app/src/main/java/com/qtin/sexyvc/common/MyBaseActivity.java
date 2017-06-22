@@ -12,14 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.mvp.Presenter;
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.mvp.test.progress.LoadingDialog;
 import com.umeng.message.PushAgent;
 import com.zhy.autolayout.utils.AutoUtils;
-
 /**
  * Created by jess on 8/5/16 13:13
  * contact with jess.yan.effort@gmail.com
@@ -28,6 +30,8 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     protected CustomApplication customApplication;
     private LoadingDialog loadingDialog;
     private Dialog twoButtondialog;
+    private Dialog inputDialog;
+    private Dialog selectPhotoDialog;
     @Override
     protected void ComponentInject() {
         customApplication = (CustomApplication) getApplication();
@@ -138,5 +142,125 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     public static interface TwoButtonListerner {
         void leftClick();
         void rightClick();
+    }
+
+    protected void showBottomDialog(String secondColor,String first,String second,String cancle,final SelecteListerner listerner) {
+
+        View view = View.inflate(this, R.layout.select_photo_dialog, null);
+        AutoUtils.autoSize(view);
+        view.findViewById(R.id.tvHint).setVisibility(View.GONE);
+        view.findViewById(R.id.lineHint).setVisibility(View.GONE);
+
+        TextView btn_report = (TextView) view.findViewById(R.id.btn_report);
+        TextView btn_error = (TextView) view.findViewById(R.id.btn_error);
+        TextView cancleSelected = (TextView) view.findViewById(R.id.cancleSelected);
+
+        btn_report.setText(StringUtil.formatString(first));
+        btn_error.setText(StringUtil.formatString(second));
+        try{
+            if(!StringUtil.isBlank(secondColor)){
+                btn_error.setTextColor(Color.parseColor(secondColor));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        cancleSelected.setText(StringUtil.formatString(cancle));
+
+        btn_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onFirstClick();
+            }
+        });
+        btn_error.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onSecondClick();
+            }
+        });
+        cancleSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onCancle();
+            }
+        });
+        selectPhotoDialog = new Dialog(this);
+        selectPhotoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        selectPhotoDialog.setContentView(view);
+        Window regionWindow = selectPhotoDialog.getWindow();
+        regionWindow.setGravity(Gravity.BOTTOM);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.view_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        selectPhotoDialog.setCanceledOnTouchOutside(true);
+        selectPhotoDialog.show();
+    }
+
+    protected void showInputDialog(String title, String warn,String stringLeft, String stringRight, final InputListerner listerner) {
+
+        View view = View.inflate(this, R.layout.input_dialog, null);
+        TextView tvTitle= (TextView) view.findViewById(R.id.tvTitle);
+        TextView tvWarn=(TextView) view.findViewById(R.id.tvWarn);
+        Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
+        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        final EditText etContent= (EditText) view.findViewById(R.id.etContent);
+
+        tvTitle.setText(title);
+        btnLeft.setText(warn);
+        btnLeft.setText(stringLeft);
+        btnRight.setText(stringRight);
+
+
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.cancle();
+            }
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(StringUtil.isBlank(etContent.getText().toString())){
+                    UiUtils.showToastShort(MyBaseActivity.this,"组名不能为空");
+                    return;
+                }
+                listerner.onComfirm(etContent.getText().toString());
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        inputDialog = new Dialog(this);
+        inputDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        inputDialog.setContentView(view);
+        Window regionWindow = inputDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        inputDialog.setCanceledOnTouchOutside(true);
+        inputDialog.show();
+    }
+
+    protected void dismissInputDialog(){
+        if(inputDialog!=null&&inputDialog.isShowing()){
+            inputDialog.dismiss();
+        }
+    }
+
+    protected void dismissBottomDialog(){
+        if(selectPhotoDialog!=null&&selectPhotoDialog.isShowing()){
+            selectPhotoDialog.dismiss();
+        }
+    }
+    public static interface SelecteListerner {
+        void onFirstClick();
+        void onSecondClick();
+        void onCancle();
+    }
+    public static interface InputListerner {
+        void onComfirm(String content);
+        void cancle();
     }
 }

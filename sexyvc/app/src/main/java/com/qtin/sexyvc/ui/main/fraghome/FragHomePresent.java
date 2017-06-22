@@ -1,22 +1,26 @@
 package com.qtin.sexyvc.ui.main.fraghome;
 
 import android.app.Application;
-import com.google.gson.Gson;
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.RxUtils;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CommentEntity;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
-import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBackBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemBannerEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemInvestorEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemNewsEntity;
-import com.qtin.sexyvc.utils.LocalFileReader;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ls on 17/4/26.
@@ -36,58 +40,76 @@ public class FragHomePresent extends BasePresenter<FragHomeContract.Model,FragHo
         this.mApplication = mApplication;
     }
 
-    public void getHomeData(){
-        new LocalFileReader().readAssets(mRootView.getContext(), "homeData.json", new LocalFileReader.ReadListener() {
-            @Override
-            public void complete(String result) {
-
-                HomeBackBean homeBackBean=new Gson().fromJson(result,HomeBackBean.class);
-                //数据处理过程
-                HomeBean homeBean=homeBackBean.getItems();
-
-                //banner
-                ArrayList<HomeInterface> data=new ArrayList<HomeInterface>();
-                ItemBannerEntity itemBannerEntity=new ItemBannerEntity();
-                itemBannerEntity.setList(homeBean.getBanner().getList());
-                data.add(itemBannerEntity);
-
-                //快讯
-                ItemNewsEntity itemNewsEntity=new ItemNewsEntity();
-                itemNewsEntity.setList(homeBean.getNews().getList());
-                data.add(itemNewsEntity);
-
-                //投资人
-                ItemInvestorEntity itemInvestorEntity=new ItemInvestorEntity();
-                itemInvestorEntity.setList(homeBean.getInventors().getList());
-                data.add(itemInvestorEntity);
-
-                //评论
-                ArrayList<CommentEntity> commentList=homeBean.getComment().getList();
-                for(int i=0;i<commentList.size();i++){
-                    if(i==0){
-                        commentList.get(i).setFirst(true);
+    public void query(){
+        mModel.queryHome()
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();//显示上拉刷新的进度条
                     }
-                    if(i==commentList.size()-1){
-                        commentList.get(i).setLast(true);
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();//隐藏上拉刷新的进度条
                     }
-                }
-                data.addAll(commentList);
+                })
+                .compose(RxUtils.<BaseEntity<HomeBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<HomeBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<HomeBean> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            //数据处理过程
+                            HomeBean homeBean=baseEntity.getItems();
+                            //banner
+                            ArrayList<HomeInterface> data=new ArrayList<HomeInterface>();
+                            ItemBannerEntity itemBannerEntity=new ItemBannerEntity();
+                            itemBannerEntity.setList(homeBean.getBanners());
+                            data.add(itemBannerEntity);
 
-                //专题
-                ArrayList<SubjectEntity> subjectList=homeBean.getSubjects().getList();
-                for(int i=0;i<subjectList.size();i++){
-                    if(i==0){
-                        subjectList.get(i).setFirst(true);
+                            //快讯
+                            ItemNewsEntity itemNewsEntity=new ItemNewsEntity();
+                            itemNewsEntity.setList(homeBean.getFlashes());
+                            data.add(itemNewsEntity);
+
+                            //投资人
+                            ItemInvestorEntity itemInvestorEntity=new ItemInvestorEntity();
+                            itemInvestorEntity.setList(homeBean.getInvestors());
+                            data.add(itemInvestorEntity);
+
+                            //评论
+                            ArrayList<CommentEntity> commentList=homeBean.getComments();
+                            for(int i=0;i<commentList.size();i++){
+                                if(i==0){
+                                    commentList.get(i).setFirst(true);
+                                }
+                                if(i==commentList.size()-1){
+                                    commentList.get(i).setLast(true);
+                                }
+                            }
+                            data.addAll(commentList);
+
+                            //专题
+                            ArrayList<SubjectEntity> subjectList=homeBean.getSubjects();
+                            for(int i=0;i<subjectList.size();i++){
+                                if(i==0){
+                                    subjectList.get(i).setFirst(true);
+                                }
+                                if(i==subjectList.size()-1){
+                                    subjectList.get(i).setLast(true);
+                                }
+                            }
+                            data.addAll(subjectList);
+                            //
+                            mRootView.dataCallback(data);
+                        }else{
+                            mRootView.showMessage(baseEntity.getErrMsg());
+                        }
                     }
-                    if(i==subjectList.size()-1){
-                        subjectList.get(i).setLast(true);
-                    }
-                }
-                data.addAll(subjectList);
-                //
-                mRootView.dataCallback(data);
-            }
-        });
+                });
     }
 
     @Override

@@ -14,7 +14,7 @@
     </item>
 
     <item android:id="@android:id/secondaryProgress">
-        <clip >
+        <!--<clip >
             <shape >
                 <corners android:radius="5dp" />
                 <gradient
@@ -22,19 +22,17 @@
                     android:endColor="#ff3385"
                     android:startColor="#ff5858" />
             </shape>
-        </clip>
+        </clip>-->
+
+        <scale android:scaleWidth="100%"
+            android:drawable="@drawable/custom_progressbar_foreground" />
     </item>
 
     <item android:id="@android:id/progress">
-        <clip >
-            <shape >
-                <corners android:radius="2dp" />
-                <gradient
-                    android:angle="180"
-                    android:endColor="#ff3385"
-                    android:startColor="#ff5858" />
-            </shape>
-        </clip>
+
+        <scale android:scaleWidth="100%"
+            android:drawable="@drawable/custom_progressbar_foreground" />
+
     </item>
 
 </layer-list>

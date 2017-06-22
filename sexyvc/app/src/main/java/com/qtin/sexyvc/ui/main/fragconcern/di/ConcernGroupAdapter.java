@@ -1,7 +1,6 @@
 package com.qtin.sexyvc.ui.main.fragconcern.di;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,12 @@ import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.ConcernGroupEntity;
-import com.qtin.sexyvc.ui.concern.list.ConcernListActivity;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
+import com.qtin.sexyvc.ui.bean.OnLongItemClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -26,6 +28,16 @@ public class ConcernGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private ArrayList<ConcernGroupEntity> data;
     private MyBaseActivity activity;
+    private OnLongItemClickListener longItemClickListener;
+    private OnItemClickListener itemClickListener;
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public void setLongItemClickListener(OnLongItemClickListener longItemClickListener) {
+        this.longItemClickListener = longItemClickListener;
+    }
 
     public ConcernGroupAdapter(Context context, ArrayList<ConcernGroupEntity> data) {
         this.context = context;
@@ -50,15 +62,23 @@ public class ConcernGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.marginLine.setVisibility(View.VISIBLE);
             holder.wholeLine.setVisibility(View.GONE);
         }
-        holder.tvName.setText(StringUtil.formatString(entity.getName()));
-        holder.tvNumber.setText(""+entity.getNumber());
+        holder.tvName.setText(StringUtil.formatString(entity.getGroup_name()));
+        holder.tvNumber.setText(""+entity.getMember_count());
         holder.container.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                Bundle bundle=new Bundle();
-                bundle.putString("name",data.get(position).getName());
-                activity.gotoActivity(ConcernListActivity.class,bundle);
+                itemClickListener.onClickItem(position);
+            }
+        });
+        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(longItemClickListener!=null){
+                    longItemClickListener.onLongClickItem(position);
+                    return true;
+                }
+                return false;
             }
         });
     }

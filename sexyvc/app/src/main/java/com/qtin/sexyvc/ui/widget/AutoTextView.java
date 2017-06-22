@@ -17,6 +17,8 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import com.qtin.sexyvc.R;
+import com.qtin.sexyvc.ui.main.fraghome.bean.NewsBean;
+
 import java.util.ArrayList;
 
 public class AutoTextView extends TextSwitcher implements
@@ -29,7 +31,7 @@ public class AutoTextView extends TextSwitcher implements
 	
 	private Rotate3dAnimation mInDown;
 	private Rotate3dAnimation mOutDown;
-	private ArrayList<String> news;
+	private ArrayList<NewsBean> news;
 	private int mCurrentIndex;
 	private final int DURATING_TIME=3000;
 	private final int INTERVAL_TIME=3000;
@@ -43,7 +45,7 @@ public class AutoTextView extends TextSwitcher implements
 		@Override
 		public void run() {
 			int index=mCurrentIndex%news.size();
-			setText(news.get(index));
+			setText(news.get(index).getContent());
 			previous();
 			mCurrentIndex++;
 			handler.postDelayed(this,INTERVAL_TIME);
@@ -51,7 +53,7 @@ public class AutoTextView extends TextSwitcher implements
 	};
 
 
-	public void setDate(ArrayList<String> strings){
+	public void setDate(ArrayList<NewsBean> strings){
 		if(strings==null||strings.isEmpty()){
 			return;
 		}

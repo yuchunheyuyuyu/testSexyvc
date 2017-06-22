@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -15,7 +16,9 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -57,8 +60,13 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
                 .imageView(holder.ivAvatar)
                 .build());
         holder.tvInvestorName.setText(StringUtil.formatString(entity.getInvestor_name()));
-        holder.tvFundName.setText(StringUtil.formatString(entity.getInvestor_title()));
-        holder.ratingScore.setRating(entity.getInvestor_recommendation_number());
+        holder.tvFundName.setText(StringUtil.formatString(entity.getFund_name()));
+        holder.ratingScore.setRating(entity.getScore());
+        if(entity.getU_id()>0){
+            holder.ivAnthStatus.setVisibility(View.VISIBLE);
+        }else{
+            holder.ivAnthStatus.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -70,6 +78,8 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
     static class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.ivAvatar)
         ImageView ivAvatar;
+        @BindView(R.id.ivAnthStatus)
+        ImageView ivAnthStatus;
         @BindView(R.id.tvInvestorName)
         TextView tvInvestorName;
         @BindView(R.id.tvFundName)

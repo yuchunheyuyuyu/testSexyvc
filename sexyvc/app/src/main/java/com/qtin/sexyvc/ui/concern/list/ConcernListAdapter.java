@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.ConcernListEntity;
 import com.qtin.sexyvc.ui.concern.detail.ConcernDetailActivity;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,27 +36,49 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.person_item, parent, false);
-        return new ViewHolder(view);
+        View view = null;
+        if (viewType == 0) {
+            view = LayoutInflater.from(context).inflate(R.layout.person_item, parent, false);
+            return new ItemHolder(view);
+        } else {
+            view = LayoutInflater.from(context).inflate(R.layout.item_local_search, parent, false);
+            return new HistoryHolder(view);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return data.get(position).getViewType();
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        ViewHolder holder= (ViewHolder) viewHolder;
-        if(position==data.size()-1){
-            holder.wholeLine.setVisibility(View.VISIBLE);
-            holder.marginLine.setVisibility(View.GONE);
-        }else{
-            holder.wholeLine.setVisibility(View.GONE);
-            holder.marginLine.setVisibility(View.VISIBLE);
-        }
 
-        holder.clickContainer.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                activity.gotoActivity(ConcernDetailActivity.class);
+        if(viewHolder instanceof ItemHolder){
+            ItemHolder holder = (ItemHolder) viewHolder;
+            if (position == data.size() - 1) {
+                holder.wholeLine.setVisibility(View.VISIBLE);
+                holder.marginLine.setVisibility(View.GONE);
+            } else {
+                holder.wholeLine.setVisibility(View.GONE);
+                holder.marginLine.setVisibility(View.VISIBLE);
             }
-        });
+
+            holder.clickContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.gotoActivity(ConcernDetailActivity.class);
+                }
+            });
+        }else{
+            HistoryHolder holder= (HistoryHolder) viewHolder;
+            holder.tvClearHistory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -61,7 +86,7 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return data == null ? 0 : data.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ItemHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivAvatar)
         ImageView ivAvatar;
         @BindView(R.id.tvName)
@@ -74,8 +99,21 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         View wholeLine;
         @BindView(R.id.clickContainer)
         View clickContainer;
+        @BindView(R.id.ivAnthStatus)
+        ImageView ivAnthStatus;
 
-        ViewHolder(View view) {
+        ItemHolder(View view) {
+            super(view);
+            AutoUtils.auto(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class HistoryHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tvClearHistory)
+        TextView tvClearHistory;
+
+        HistoryHolder(View view) {
             super(view);
             AutoUtils.auto(view);
             ButterKnife.bind(this, view);

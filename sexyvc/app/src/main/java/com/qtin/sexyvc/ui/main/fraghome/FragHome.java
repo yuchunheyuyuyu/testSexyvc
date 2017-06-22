@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.jess.arms.utils.DeviceUtils;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
@@ -20,6 +21,9 @@ import com.qtin.sexyvc.ui.main.fraghome.di.FragHomeModule;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import java.util.ArrayList;
 import butterknife.BindView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/14.
@@ -57,13 +61,13 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.getHomeData();
+                mPresenter.query();
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mAdapter = new HomeAdapter(mActivity, data);
         recyclerView.setAdapter(mAdapter);
-        mPresenter.getHomeData();
+        mPresenter.query();
 
         maxDistance= (int)DeviceUtils.dpToPixel(mActivity,140);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -100,17 +104,24 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
 
     @Override
     public void showLoading() {
-
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(mActivity,message);
     }
 
     @Override

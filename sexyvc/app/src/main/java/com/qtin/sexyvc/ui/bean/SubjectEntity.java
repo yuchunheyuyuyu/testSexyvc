@@ -7,10 +7,35 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
  * Created by ls on 17/6/10.
  */
 public class SubjectEntity implements HomeInterface{
-    private String subject_id;
-    private String subject_cover;
-    private String subject_title;
-    private String fromString;
+
+    private String title;
+    private String img_url;
+    private String source;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
 
     private boolean isFirst;//自定义字段，是否是第一条专题
     private boolean isLast;//自定义字段，是否是最后一条
@@ -31,37 +56,7 @@ public class SubjectEntity implements HomeInterface{
         isLast = last;
     }
 
-    public String getSubject_id() {
-        return subject_id;
-    }
 
-    public void setSubject_id(String subject_id) {
-        this.subject_id = subject_id;
-    }
-
-    public String getSubject_cover() {
-        return subject_cover;
-    }
-
-    public void setSubject_cover(String subject_cover) {
-        this.subject_cover = subject_cover;
-    }
-
-    public String getSubject_title() {
-        return subject_title;
-    }
-
-    public void setSubject_title(String subject_title) {
-        this.subject_title = subject_title;
-    }
-
-    public String getFromString() {
-        return fromString;
-    }
-
-    public void setFromString(String fromString) {
-        this.fromString = fromString;
-    }
 
     @Override
     public int getType() {

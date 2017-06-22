@@ -5,8 +5,20 @@ package com.qtin.sexyvc.ui.bean;
  */
 
 public class BannerEntity {
-    private String img_url="https://i3.hoopchina.com.cn/blogfile/201706/05/BbsImg149664059651141_863x575.jpg?x-oss-process=image/resize,w_800/format,jpg";
-    private int action_value;
+
+    private String title;
+    private String img_url;
+    private String link_url;
+    private String action_type;
+    private String action_value;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getImg_url() {
         return img_url;
@@ -16,11 +28,27 @@ public class BannerEntity {
         this.img_url = img_url;
     }
 
-    public int getAction_value() {
+    public String getLink_url() {
+        return link_url;
+    }
+
+    public void setLink_url(String link_url) {
+        this.link_url = link_url;
+    }
+
+    public String getAction_type() {
+        return action_type;
+    }
+
+    public void setAction_type(String action_type) {
+        this.action_type = action_type;
+    }
+
+    public String getAction_value() {
         return action_value;
     }
 
-    public void setAction_value(int action_value) {
+    public void setAction_value(String action_value) {
         this.action_value = action_value;
     }
 }

@@ -55,6 +55,14 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         this(context, null);
     }
 
+    public void setmNumStars(int mNumStars) {
+        this.mNumStars = mNumStars;
+    }
+
+    public void setStarSize(int starSize) {
+        this.starSize = starSize;
+    }
+
     /* Call by xml layout */
     public BaseRatingBar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);

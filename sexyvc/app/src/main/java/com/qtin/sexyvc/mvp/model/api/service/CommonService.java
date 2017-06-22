@@ -5,11 +5,18 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.flash.bean.FlashBean;
+import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
+
+import java.util.ArrayList;
 
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -203,4 +210,85 @@ public interface CommonService {
     @POST("api/user/info/edit")
     Observable<CodeEntity> editEmail(@Field("token")String token,@Field("u_email")String u_email,@Field("u_backup_email")String u_backup_email);
 
+    /**
+     * 投资人分组
+     * @param token
+     * @param page
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/group")
+    Observable<BaseEntity<GroupEntity>> queryInvestorGroup(@Field("token")String token,@Field("investor_id")long investor_id,@Field("page")int page,@Field("page_size")int page_size);
+
+    /**
+     * 创建投资人分组
+     * @param token
+     * @param group_name
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/group/add")
+    Observable<BaseEntity<CreateGroupEntity>> addInvestorGroup(@Field("token")String token,@Field("group_name")String group_name);
+
+    /**
+     * 编辑投资人分组
+     * @param token
+     * @param group_id
+     * @param group_name
+     * @param status
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/group/edit")
+    Observable<CodeEntity> updateInvestorGroup(@Field("token")String token,@Field("group_id")long group_id,@Field("group_name")String group_name,@Field("status")int status);
+
+    /**
+     * 投资人分组详情
+     * @param token
+     * @param group_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/group/detail")
+    Observable<CodeEntity> queryGroupDetail(@Field("token")String token,@Field("group_id")long group_id);
+
+    /**
+     * 首页信息
+     * @return
+     */
+    @POST("api/page/index")
+    Observable<BaseEntity<HomeBean>> queryHome();
+
+    /**
+     * 投资人列表页
+     * @param token
+     * @param page
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/investor/list")
+    Observable<BaseEntity<InvestorBean>> querySelectedInvestor(@Field("token")String token,@Field("page")int page,@Field("page_size")int page_size);
+
+    /**
+     * 设置投资人分组
+     * @param token
+     * @param investor_id
+     * @param group_ids
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/change/group")
+    Observable<CodeEntity> changeGroup(@Field("token")String token,@Field("investor_id")Long investor_id,@Field("group_ids") ArrayList<Long> group_ids);
+
+    /**
+     * 快讯列表页
+     * @param flash_id
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/flash")
+    Observable<BaseEntity<FlashBean>> queryFlashList(@Field("flash_id")long flash_id,@Field("page_size")int page_size);
 }

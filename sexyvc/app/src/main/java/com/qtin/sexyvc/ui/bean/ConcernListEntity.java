@@ -5,4 +5,13 @@ package com.qtin.sexyvc.ui.bean;
  */
 
 public class ConcernListEntity {
+    private int viewType;//是不是上面搜索历史那一栏
+
+    public int getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
 }

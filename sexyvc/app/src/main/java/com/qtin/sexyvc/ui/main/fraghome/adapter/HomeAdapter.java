@@ -16,8 +16,10 @@ import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
+import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEntity;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
+import com.qtin.sexyvc.ui.flash.FlashActivity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemBannerEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemInvestorEntity;
@@ -95,6 +97,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }else if(holder instanceof NewsHolder){
             ItemNewsEntity entity= (ItemNewsEntity) data.get(position);
             ((NewsHolder) holder).autoTextView.setDate(entity.getList());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyBaseActivity activity= (MyBaseActivity) context;
+                    activity.gotoActivity(FlashActivity.class);
+                }
+            });
+
         }else if(holder instanceof InvestorHolder){
             dealInvestor((InvestorHolder)holder,position);
         }else if(holder instanceof CommentHolder){
@@ -117,12 +127,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }else{
             holder.subjectLine.setVisibility(View.VISIBLE);
         }
-        holder.tvSubjectTitle.setText(StringUtil.formatString(entity.getSubject_title()));
-        holder.tvSubjectAuther.setText(StringUtil.formatString(entity.getFromString()));
+        holder.tvSubjectTitle.setText(StringUtil.formatString(entity.getTitle()));
+        holder.tvSubjectAuther.setText(StringUtil.formatString(entity.getSource()));
 
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .url(CommonUtil.getAbsolutePath(entity.getSubject_cover()))
+                .url(CommonUtil.getAbsolutePath(entity.getImg_url()))
                 .imageView(holder.ivSubjectCover)
                 .build());
     }
@@ -143,11 +153,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.wholeLine.setVisibility(View.GONE);
         }
 
-        holder.tvCommentTag.setText(StringUtil.formatString(entity.getTag()));
+        holder.tvCommentTag.setText(StringUtil.formatString(entity.getDomain_name()));
         holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
         holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
-        holder.ratingScore.setRating(entity.getComment_score());
-        holder.tvComentContent.setText(StringUtil.formatString(entity.getComment_title()));
+        holder.ratingScore.invalidate();
+        holder.ratingScore.setRating(entity.getScore());
+        holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
     }
 
     /**

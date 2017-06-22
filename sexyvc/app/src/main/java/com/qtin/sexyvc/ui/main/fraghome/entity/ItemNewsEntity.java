@@ -1,7 +1,7 @@
 package com.qtin.sexyvc.ui.main.fraghome.entity;
 
 import com.qtin.sexyvc.ui.main.fraghome.adapter.HomeAdapter;
-
+import com.qtin.sexyvc.ui.main.fraghome.bean.NewsBean;
 import java.util.ArrayList;
 
 /**
@@ -9,13 +9,14 @@ import java.util.ArrayList;
  */
 public class ItemNewsEntity implements HomeInterface {
 
-    private ArrayList<String> list;
+    private ArrayList<NewsBean> list;
 
-    public ArrayList<String> getList() {
+
+    public ArrayList<NewsBean> getList() {
         return list;
     }
 
-    public void setList(ArrayList<String> list) {
+    public void setList(ArrayList<NewsBean> list) {
         this.list = list;
     }
 
