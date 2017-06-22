@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="82px"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="32px"
+    android:paddingRight="16px">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/search_history"
+        android:textColor="@color/slate"
+        android:textSize="24px" />
+
+    <TextView
+        android:id="@+id/tvClearHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:lineSpacingExtra="6sp"
+        android:paddingLeft="16px"
+        android:paddingRight="16px"
+        android:text="@string/clear"
+        android:textColor="@color/slate"
+        android:textSize="24px" />
+</LinearLayout>
