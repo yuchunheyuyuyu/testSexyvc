@@ -38,7 +38,6 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
     private ArrayList<FlashEntity> data=new ArrayList<>();
 
     private boolean hasLoadedAllItems;
-
     private Paginate mPaginate;
     private boolean isLoadingMore;
 
@@ -71,6 +70,7 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
         recyclerView.setAdapter(mAdapter);
 
         initPaginate();
+        mPresenter.query(0,true);
     }
 
     private void initPaginate() {

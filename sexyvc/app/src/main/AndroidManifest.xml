@@ -112,22 +112,22 @@
 
         <!--关注列表-->
         <activity
-            android:name=".ui.concern.list.ConcernListActivity"
+            android:name=".ui.follow.list.ConcernListActivity"
             android:screenOrientation="portrait" />
 
         <!--关注详情-->
         <activity
-            android:name=".ui.concern.detail.ConcernDetailActivity"
+            android:name=".ui.follow.detail.ConcernDetailActivity"
             android:screenOrientation="portrait" />
 
         <!--搜索关注的人-->
         <activity
-            android:name=".ui.concern.search.ConcernSearchActivity"
+            android:name=".ui.follow.search.ConcernSearchActivity"
             android:screenOrientation="portrait" />
 
         <!--设置分组-->
         <activity
-            android:name=".ui.concern.set.SetGroupActivity"
+            android:name=".ui.follow.set.SetGroupActivity"
             android:screenOrientation="portrait" />
 
         <!--实时快讯-->
@@ -135,7 +135,15 @@
             android:name=".ui.flash.FlashActivity"
             android:screenOrientation="portrait" />
 
+        <!--专题列表-->
+        <activity
+            android:name=".ui.subject.list.SubjectListActivity"
+            android:screenOrientation="portrait" />
 
+        <!--专题详情-->
+        <activity
+            android:name=".ui.subject.detail.SubjectDetailActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".mvp.test.user.UserActivity"

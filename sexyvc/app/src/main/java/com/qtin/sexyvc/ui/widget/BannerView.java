@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
@@ -40,10 +42,14 @@ public class BannerView extends FrameLayout {
     private List<View> views=new ArrayList<>();//每一页的内容
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
+    private TextView tvTitle;
+
     private final int indicator_unselect_width=4;
     private final int indicator_selected_width=20;
     private final int indicator_height=4;
     private int mCurrentPage;
+
+    private boolean isContainText;//是否包含文字描述
 
     private static final String KEY_INDEX = "key_index";
     private static final String KEY_DEFAULT = "key_default";
@@ -74,6 +80,20 @@ public class BannerView extends FrameLayout {
         mViewPager.setLayoutParams(params);
         addView(mViewPager);
 
+        if(isContainText){
+            tvTitle=new TextView(context);
+            tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+            tvTitle.setBackgroundResource(R.color.banner_text_back);
+            tvTitle.setTextColor(context.getResources().getColor(R.color.white90));
+            tvTitle.setPadding(dpTpPx(16),dpTpPx(8),dpTpPx(16),dpTpPx(20));
+
+            LayoutParams tvParams=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            tvParams.gravity=Gravity.BOTTOM;
+            tvTitle.setLayoutParams(tvParams);
+
+            addView(tvTitle);
+        }
+
         //添加indicator外部的容器
         LayoutParams p=new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mIndicatorContainer=new LinearLayout(context);
@@ -87,6 +107,7 @@ public class BannerView extends FrameLayout {
     private void initXml( Context context, AttributeSet attrs,int defStyleAttr){
         TypedArray array=context.obtainStyledAttributes(attrs, R.styleable.BannerView,defStyleAttr,0);
         indicatorMarginBottom=array.getDimensionPixelSize(R.styleable.BannerView_indicator_margin_bottom,defalutIndicatorMarginBottom);
+        isContainText=array.getBoolean(R.styleable.BannerView_is_container_title,false);
         array.recycle();
     }
 
@@ -122,11 +143,16 @@ public class BannerView extends FrameLayout {
         setMeasuredDimension(widthSize,heightSize);
     }
 
-    public void setData(ArrayList<BannerEntity> data){
+    public void setData(final ArrayList<BannerEntity> data){
         views.clear();
         if(data==null||data.isEmpty()){
             return;
         }
+        if(isContainText){
+            tvTitle.setText(data.get(0).getTitle());
+        }
+
+
         for(int i=0;i<data.size();i++){
             ImageView iv=new ImageView(context);
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -174,6 +200,10 @@ public class BannerView extends FrameLayout {
             @Override
             public void onPageSelected(int position) {
                 mCurrentPage=position;
+                if(isContainText){
+                    tvTitle.setText(data.get(position).getTitle());
+                }
+
                 int childNum=mIndicatorContainer.getChildCount();
                 if(childNum>0){
                     for(int i=0;i<childNum;i++){

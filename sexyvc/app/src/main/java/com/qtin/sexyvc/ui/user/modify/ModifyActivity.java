@@ -89,6 +89,9 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     private String value1;
     private String value2;
 
+    //联系人id,用于编辑联系人
+    private long contact_id;
+
     private int modifyType;
     //输入框内的值
     private String nick;
@@ -102,6 +105,14 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
 
     private String project_name;
     private String project_introduce;
+
+    private String contact_phone;//投资人电话
+    private String contact_backup_phone;//投资人电话
+
+    private String contact_email;
+    private String contact_backup_email;
+    private String contact_wechat;
+    private String contact_remark;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -124,7 +135,14 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
 
         tvRight.setVisibility(View.VISIBLE);
 
+        //编辑联系人需要contact_id
+        if(modifyType==MODIFY_CONCERN_TELPHONE||modifyType==MODIFY_CONCERN_EMAIL||
+                modifyType==MODIFY_CONCERN_WECAHT||modifyType==MODIFY_CONCERN_REMARK){
+            contact_id=getIntent().getExtras().getLong("contact_id");
+        }
+
         if (modifyType == MODIFY_CONCERN_TELPHONE) {
+
             phoneContainer2.setVisibility(View.VISIBLE);
             value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
             value2 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE2);
@@ -304,13 +322,48 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     }
                     editSuccess();
                 } else if (modifyType == MODIFY_CONCERN_TELPHONE) {
+                    contact_phone = etPhone2.getPhoneText();
+                    contact_backup_phone = etPhoneBackup2.getPhoneText();
+                    if (!etPhone2.isMobileNO()) {
+                        showMessage("手机格式不合法");
+                        return;
+                    }
+
+                    if (!etPhoneBackup2.isMobileNO()) {
+                        showMessage("备用手机格式不合法");
+                        return;
+                    }
+                    mPresenter.editContactPhone(contact_id,contact_phone,contact_backup_phone);
 
                 } else if (modifyType == MODIFY_CONCERN_EMAIL) {
+                    contact_email = etEmail.getText().toString();
+                    contact_backup_email = etEmailAlternate.getText().toString();
+
+                    if (!StringUtil.isEmail(contact_email)) {
+                        showMessage("邮箱格式不合法");
+                        return;
+                    }
+                    if (!StringUtil.isEmail(contact_backup_email)) {
+                        showMessage("邮箱格式不合法");
+                        return;
+                    }
+                    mPresenter.editContactEmail(contact_id,contact_email, contact_backup_email);
 
                 } else if (modifyType == MODIFY_CONCERN_WECAHT) {
+                    contact_wechat = etContent.getText().toString();
+                    if (StringUtil.isBlank(contact_wechat)) {
+                        showMessage("微信不能为空");
+                        return;
+                    }
+                    mPresenter.editContactWechat(contact_id,contact_wechat);
 
                 } else if (modifyType == MODIFY_CONCERN_REMARK) {
-
+                    contact_remark = etIntroduce.getText().toString();
+                    if (StringUtil.isBlank(contact_remark)) {
+                        showMessage("备注内容不能为空");
+                        return;
+                    }
+                    mPresenter.editContactRemark(contact_id,contact_remark);
                 }
                 break;
         }
@@ -335,10 +388,22 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         } else if (modifyType == MODIFY_PHONE) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, u_phone);
                             intent.putExtra(MODIFY_INTENT_VALUE2, u_backup_phone);
+
                         } else if (modifyType == MODIFY_PROJECT_INTRODUCE) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, project_introduce);
                         } else if (modifyType == MODIFY_PROJECT_NAME) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, project_name);
+
+                        }else if(modifyType==MODIFY_CONCERN_TELPHONE){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, contact_phone);
+                            intent.putExtra(MODIFY_INTENT_VALUE2, contact_backup_phone);
+                        }else if(modifyType==MODIFY_CONCERN_EMAIL){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, contact_email);
+                            intent.putExtra(MODIFY_INTENT_VALUE2, contact_backup_email);
+                        }else if(modifyType==MODIFY_CONCERN_WECAHT){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, contact_wechat);
+                        }else if(modifyType==MODIFY_CONCERN_REMARK){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, contact_remark);
                         }
                         setResult(0, intent);
                         finish();

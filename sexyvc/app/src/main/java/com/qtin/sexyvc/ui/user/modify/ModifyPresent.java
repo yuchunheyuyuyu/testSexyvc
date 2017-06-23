@@ -139,6 +139,114 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 });
     }
 
+    public void editContactPhone(long contact_id,String phone,String backup_phone){
+        mModel.editContactPhone(mModel.getToken(),contact_id,phone,backup_phone)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.editSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void editContactEmail(long contact_id,String email,String backup_email){
+        mModel.editContactEmail(mModel.getToken(),contact_id,email,backup_email)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.editSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void editContactWechat(long contact_id,String wechat){
+        mModel.editContactWechat(mModel.getToken(),contact_id,wechat)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.editSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void editContactRemark(long contact_id,String remark){
+        mModel.editContactemark(mModel.getToken(),contact_id,remark)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.editSuccess();
+                        }
+                    }
+                });
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

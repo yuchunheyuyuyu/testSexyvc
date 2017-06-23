@@ -19,6 +19,7 @@ import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.DaggerFragInvestorComponent;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.FragInvestorModule;
+import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.widget.DropDownMenu;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
@@ -181,11 +182,15 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         mAdapter.setItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
+                FollowRequest entity=new FollowRequest();
+
                 ArrayList<Long> group_ids=new ArrayList<Long>();
-                group_ids.add(3L);
-                group_ids.add(4L);
-                group_ids.add(6L);
-                mPresenter.changeGroup(data.get(position).getInvestor_id(),group_ids);
+                ArrayList<Long> investor_ids=new ArrayList<Long>();
+                investor_ids.add(data.get(position).getInvestor_id());
+
+                entity.setGroup_ids(group_ids);
+                entity.setInvestor_ids(investor_ids);
+                mPresenter.followInvestor(entity);
             }
         });
         initPaginate();

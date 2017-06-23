@@ -10,10 +10,12 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.request.FollowRequest;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
@@ -47,7 +49,7 @@ public class FragInvestorModel extends BaseModel<ServiceManager,CacheManager> im
     }
 
     @Override
-    public Observable<CodeEntity> changeGroup(String token, Long investor_id, ArrayList<Long> group_ids) {
-        return mServiceManager.getCommonService().changeGroup(token,investor_id,group_ids);
+    public Observable<CodeEntity> followInvestor(FollowRequest entity) {
+        return mServiceManager.getCommonService().followInvestor(entity);
     }
 }

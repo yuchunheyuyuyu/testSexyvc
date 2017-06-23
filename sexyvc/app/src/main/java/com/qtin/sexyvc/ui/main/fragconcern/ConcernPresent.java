@@ -1,17 +1,18 @@
 package com.qtin.sexyvc.ui.main.fragconcern;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
-import com.qtin.sexyvc.ui.bean.ConcernGroupEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
-import java.util.ArrayList;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -100,14 +101,14 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        //mRootView.showLoading();
+                        mRootView.startRefresh();
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        //mRootView.hideLoading();
+                        mRootView.endRefresh();
                     }
                 }).compose(RxUtils.<BaseEntity<GroupEntity>>bindToLifecycle(mRootView))
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<GroupEntity>>(mErrorHandler) {
@@ -116,17 +117,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
                         if(baseEntity.isSuccess()){
                             GroupEntity groupEntity=baseEntity.getItems();
                             if(groupEntity!=null){
-                                ArrayList<ConcernGroupEntity> list=groupEntity.getList();
-                                if(list==null){
-                                    list=new ArrayList<ConcernGroupEntity>();
-                                }
-
-                                ConcernGroupEntity entity=new ConcernGroupEntity();
-                                entity.setGroup_name("全部关注");
-                                entity.setMember_count(groupEntity.getContact_count());
-                                list.add(0,entity);
-
-                                mRootView.querySuccess(list);
+                                mRootView.querySuccess(groupEntity);
                             }
                         }else{
                             mRootView.showMessage(baseEntity.getErrMsg());

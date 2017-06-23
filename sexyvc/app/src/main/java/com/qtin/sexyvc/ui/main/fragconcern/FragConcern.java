@@ -2,29 +2,31 @@ package com.qtin.sexyvc.ui.main.fragconcern;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.bean.ConcernGroupEntity;
+import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.bean.OnLongItemClickListener;
-import com.qtin.sexyvc.ui.concern.list.ConcernListActivity;
-import com.qtin.sexyvc.ui.concern.search.ConcernSearchActivity;
+import com.qtin.sexyvc.ui.follow.list.ConcernListActivity;
+import com.qtin.sexyvc.ui.follow.search.ConcernSearchActivity;
 import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernGroupAdapter;
 import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernModule;
 import com.qtin.sexyvc.ui.main.fragconcern.di.DaggerConcernComponent;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -36,11 +38,13 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     TextView tvEdit;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private ConcernGroupAdapter adapter;
-    private ArrayList<ConcernGroupEntity> data=new ArrayList<>();
-    private int page=1;
-    private int page_size=Integer.MAX_VALUE;
+    private ArrayList<ConcernGroupEntity> data = new ArrayList<>();
+    private int page = 1;
+    private int page_size = Integer.MAX_VALUE;
 
     @Override
     protected void setupFragmentComponent(AppComponent appComponent) {
@@ -56,27 +60,35 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     protected void init() {
         initView();
         //获取数据
-        mPresenter.query(page,page_size);
+        mPresenter.query(page, page_size);
     }
 
-    private void initView(){
+    private void initView() {
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.query(page, page_size);
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        adapter=new ConcernGroupAdapter(mActivity,data);
+        adapter = new ConcernGroupAdapter(mActivity, data);
 
         adapter.setItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                Bundle bundle=new Bundle();
-                bundle.putString("group_name",data.get(position).getGroup_name());
-                bundle.putLong("group_id",data.get(position).getGroup_id());
-                gotoActivity(ConcernListActivity.class,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString("group_name", data.get(position).getGroup_name());
+                bundle.putLong("group_id", data.get(position).getGroup_id());
+                gotoActivity(ConcernListActivity.class, bundle);
             }
         });
         adapter.setLongItemClickListener(new OnLongItemClickListener() {
             @Override
             public void onLongClickItem(final int position) {
 
-                if(position==0){
+                if (position == 0) {
                     return;
                 }
 
@@ -93,8 +105,8 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                                             @Override
                                             public void onComfirm(String content) {
                                                 dismissInputDialog();
-                                                ConcernGroupEntity group=data.get(position);
-                                                mPresenter.edit(position,group.getGroup_id(),content,1);
+                                                ConcernGroupEntity group = data.get(position);
+                                                mPresenter.edit(position, group.getGroup_id(), content, 1);
                                             }
 
                                             @Override
@@ -122,8 +134,8 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
         recyclerView.setHasFixedSize(true);
     }
 
-    private void deleteGroup(final int position){
-        String title=String.format(getResources().getString(R.string.comfirm_delete_group),data.get(position).getGroup_name());
+    private void deleteGroup(final int position) {
+        String title = String.format(getResources().getString(R.string.comfirm_delete_group), data.get(position).getGroup_name());
 
         showTwoButtonDialog(title, getResources().getString(R.string.cancle)
                 , getResources().getString(R.string.comfirm), new TwoButtonListerner() {
@@ -136,13 +148,13 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                     public void rightClick() {
                         dismissTwoButtonDialog();
                         ConcernGroupEntity group = data.get(position);
-                        mPresenter.edit(position,group.getGroup_id(),group.getGroup_name(),0);
+                        mPresenter.edit(position, group.getGroup_id(), group.getGroup_name(), 0);
                     }
                 });
     }
 
-    private void showInput(String title, String warn,String stringLeft, String stringRight,InputListerner listerner){
-        showInputDialog(title, warn, stringLeft, stringRight,listerner);
+    private void showInput(String title, String warn, String stringLeft, String stringRight, InputListerner listerner) {
+        showInputDialog(title, warn, stringLeft, stringRight, listerner);
     }
 
     @Override
@@ -200,8 +212,21 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
 
 
     @Override
-    public void querySuccess(ArrayList<ConcernGroupEntity> data) {
-        this.data.addAll(data);
+    public void querySuccess(GroupEntity groupEntity) {
+
+        if(page==1){
+            data.clear();
+
+            ConcernGroupEntity entity=new ConcernGroupEntity();
+            entity.setGroup_name("全部关注");
+            entity.setMember_count(groupEntity.getContact_count());
+
+            data.add(0,entity);
+        }
+        ArrayList<ConcernGroupEntity>list=groupEntity.getList();
+        if(list!=null){
+            data.addAll(list);
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -212,18 +237,35 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     }
 
     @Override
-    public void editSuccess(int position,String group_name) {
-        ConcernGroupEntity group=data.get(position);
+    public void editSuccess(int position, String group_name) {
+        ConcernGroupEntity group = data.get(position);
         group.setGroup_name(group_name);
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void addSuccess(long group_id,String group_name) {
-        ConcernGroupEntity group=new ConcernGroupEntity();
+    public void addSuccess(long group_id, String group_name) {
+        ConcernGroupEntity group = new ConcernGroupEntity();
         group.setGroup_id(group_id);
         group.setGroup_name(group_name);
         data.add(group);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void startRefresh() {
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+    }
+
+    @Override
+    public void endRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.main.fragInvestor;
 
 import android.content.Context;
+
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
@@ -8,6 +9,8 @@ import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.request.FollowRequest;
+
 import java.util.ArrayList;
 import rx.Observable;
 /**
@@ -28,7 +31,6 @@ public interface FragInvestorContract {
         String getToken();
         Observable<BaseListEntity<FilterEntity>> getType(String type_key);
         Observable<BaseEntity<InvestorBean>> querySelectedInvestor(String token,int page,int page_size);
-
-        Observable<CodeEntity> changeGroup(String token,Long investor_id, ArrayList<Long> group_ids);
+        Observable<CodeEntity> followInvestor(FollowRequest entity);
     }
 }

@@ -11,6 +11,15 @@ public class SubjectEntity implements HomeInterface{
     private String title;
     private String img_url;
     private String source;
+    private long subject_id;
+
+    public long getSubject_id() {
+        return subject_id;
+    }
+
+    public void setSubject_id(long subject_id) {
+        this.subject_id = subject_id;
+    }
 
     public String getTitle() {
         return title;

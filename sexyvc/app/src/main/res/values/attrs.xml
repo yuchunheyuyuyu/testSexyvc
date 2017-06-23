@@ -18,6 +18,7 @@
     <!--banner封装-->
     <declare-styleable name="BannerView">
         <attr name="indicator_margin_bottom" format="dimension"/>
+        <attr name="is_container_title" format="boolean"/>
     </declare-styleable>
 
 

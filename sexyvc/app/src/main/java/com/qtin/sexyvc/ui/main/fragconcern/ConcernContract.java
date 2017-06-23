@@ -4,10 +4,9 @@ import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
-import com.qtin.sexyvc.ui.bean.ConcernGroupEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
-import java.util.ArrayList;
+
 import rx.Observable;
 
 /**
@@ -16,10 +15,13 @@ import rx.Observable;
 
 public interface ConcernContract {
     interface View extends BaseView{
-        void querySuccess(ArrayList<ConcernGroupEntity> data);
+        void querySuccess(GroupEntity groupEntity);
         void deleteSuccess(int position);
         void editSuccess(int position,String group_name);
         void addSuccess(long group_id,String group_name);
+
+        void startRefresh();
+        void endRefresh();
     }
     interface Model extends IModel{
         String getToken();

@@ -11,8 +11,7 @@ import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
-
-import java.util.ArrayList;
+import com.qtin.sexyvc.ui.request.FollowRequest;
 
 import javax.inject.Inject;
 
@@ -41,8 +40,9 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
         this.mApplication = mApplication;
     }
 
-    public void changeGroup(Long investor_id, ArrayList<Long> group_ids){
-        mModel.changeGroup(mModel.getToken(),investor_id,group_ids)
+    public void followInvestor(FollowRequest entity){
+        entity.setToken(mModel.getToken());
+        mModel.followInvestor(entity)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {

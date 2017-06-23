@@ -73,7 +73,7 @@
                 android:lineSpacingExtra="6sp"
                 android:maxLines="2"
                 android:text="孙宏斌进入乐视后，贾跃亭更难的一百天"
-                android:textColor="@color/black"
+                android:textColor="@color/black90"
                 android:textSize="16sp" />
 
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.flash.bean.FlashEntity;
 import com.qtin.sexyvc.ui.widget.ExpandableTextView;
+import com.qtin.sexyvc.utils.DateUtil;
 
 import java.util.ArrayList;
 
@@ -49,8 +50,10 @@ public class FlashAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
         }
         holder.tvContent.setTag(position);
+
+
         Integer state = mPositionsAndStates.get(position);
-        ((ViewHolder) viewHolder).tvContent.updateForRecyclerView(entity.getContent(), etvWidth, state== null ? 0 : state);//第一次getview时肯定为etvWidth为0
+        holder.tvContent.updateForRecyclerView(entity.getContent(), etvWidth, state== null ? 0 : state);//第一次getview时肯定为etvWidth为0
         holder.tvContent.setExpandListener(new ExpandableTextView.OnExpandListener() {
             @Override
             public void onExpand(ExpandableTextView view) {
@@ -68,6 +71,25 @@ public class FlashAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }
         });
+
+        holder.tvTime.setText(DateUtil.getTime(entity.getCreate_time()));
+
+        String currentDate=DateUtil.getDate(entity.getCreate_time());
+        if(position==0){
+            holder.tvDate.setVisibility(View.VISIBLE);
+            holder.tvDate.setText(currentDate);
+        }else{
+            String lastDate=DateUtil.getDate(data.get(position-1).getCreate_time());
+            if(currentDate.equals(lastDate)){
+                holder.tvDate.setVisibility(View.GONE);
+            }else{
+                holder.tvDate.setVisibility(View.VISIBLE);
+                holder.tvDate.setText(currentDate);
+            }
+        }
+
+
+        holder.tvDate.setText(currentDate);
     }
 
     @Override

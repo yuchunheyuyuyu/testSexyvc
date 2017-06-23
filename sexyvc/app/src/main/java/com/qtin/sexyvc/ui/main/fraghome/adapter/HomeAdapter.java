@@ -24,6 +24,7 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemBannerEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemInvestorEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemNewsEntity;
+import com.qtin.sexyvc.ui.subject.list.SubjectListActivity;
 import com.qtin.sexyvc.ui.widget.AutoTextView;
 import com.qtin.sexyvc.ui.widget.BannerView;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
@@ -54,13 +55,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
+    private MyBaseActivity activity;
+
 
     public HomeAdapter(Context context, List<HomeInterface> data) {
         this.context = context;
         this.data = data;
         int space= (int) DeviceUtils.dpToPixel(context,20);
         decoration=new SpaceItemDecoration(space,1);
-
+        activity= (MyBaseActivity) context;
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
         mApplication = (CustomApplication) context.getApplicationContext();
         mImageLoader = mApplication.getAppComponent().imageLoader();
@@ -100,7 +103,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyBaseActivity activity= (MyBaseActivity) context;
                     activity.gotoActivity(FlashActivity.class);
                 }
             });
@@ -135,6 +137,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .url(CommonUtil.getAbsolutePath(entity.getImg_url()))
                 .imageView(holder.ivSubjectCover)
                 .build());
+
+        holder.moreSubjectContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.gotoActivity(SubjectListActivity.class);
+            }
+        });
     }
 
     private void dealComment(CommentHolder holder,int position){

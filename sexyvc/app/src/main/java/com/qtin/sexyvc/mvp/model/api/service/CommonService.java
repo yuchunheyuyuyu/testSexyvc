@@ -5,6 +5,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
@@ -15,8 +16,9 @@ import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
-
-import java.util.ArrayList;
+import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
+import com.qtin.sexyvc.ui.request.FollowRequest;
+import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -251,7 +253,7 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/group/detail")
-    Observable<CodeEntity> queryGroupDetail(@Field("token")String token,@Field("group_id")long group_id);
+    Observable<BaseEntity<ConcernEntity>> queryGroupDetail(@Field("token")String token, @Field("group_id")long group_id, @Field("page")int page, @Field("page_size")int page_size);
 
     /**
      * 首页信息
@@ -272,15 +274,18 @@ public interface CommonService {
     Observable<BaseEntity<InvestorBean>> querySelectedInvestor(@Field("token")String token,@Field("page")int page,@Field("page_size")int page_size);
 
     /**
-     * 设置投资人分组
-     * @param token
-     * @param investor_id
-     * @param group_ids
+     * 关注投资人
      * @return
      */
-    @FormUrlEncoded
+    @POST("api/user/contact/investor/import")
+    Observable<CodeEntity> followInvestor(@Body FollowRequest entity);
+
+    /**
+     * 设置投资人分组
+     * @return
+     */
     @POST("api/user/contact/investor/change/group")
-    Observable<CodeEntity> changeGroup(@Field("token")String token,@Field("investor_id")Long investor_id,@Field("group_ids") ArrayList<Long> group_ids);
+    Observable<CodeEntity> changeGroup(@Body ChangeGroupRequest request);
 
     /**
      * 快讯列表页
@@ -291,4 +296,62 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/page/flash")
     Observable<BaseEntity<FlashBean>> queryFlashList(@Field("flash_id")long flash_id,@Field("page_size")int page_size);
+
+    /**
+     * 编辑联系人手机号码
+     * @param token
+     * @param contact_id
+     * @param phone
+     * @param backup_phone
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/edit")
+    Observable<CodeEntity> editContactPhone(@Field("token")String token,@Field("contact_id")long contact_id,@Field("phone")String phone,@Field("backup_phone")String backup_phone);
+
+    /**
+     * 编辑联系人邮箱
+     * @param token
+     * @param contact_id
+     * @param email
+     * @param backup_email
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/edit")
+    Observable<CodeEntity> editContactEmail(@Field("token")String token,@Field("contact_id")long contact_id,@Field("email")String email,@Field("backup_email")String backup_email);
+
+    /**
+     * 编辑联系人微信号
+     * @param token
+     * @param contact_id
+     * @param wechat
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/edit")
+    Observable<CodeEntity> editContactWechat(@Field("token")String token,@Field("contact_id")long contact_id,@Field("wechat")String wechat);
+
+    /**
+     * 编辑联系人备注
+     * @param token
+     * @param contact_id
+     * @param remark
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/edit")
+    Observable<CodeEntity> editContactemark(@Field("token")String token,@Field("contact_id")long contact_id,@Field("remark")String remark);
+
+    /**
+     * 专题列表页
+     * @param subject_id
+     * @param page_size
+     * @param need_banner
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/subject")
+    Observable<BaseEntity<SubjectBean>> querySubjectList(@Field("subject_id")long subject_id,@Field("page_size")int page_size,@Field("need_banner")int need_banner);
 }
+

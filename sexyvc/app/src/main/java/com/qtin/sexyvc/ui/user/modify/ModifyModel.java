@@ -49,4 +49,24 @@ public class ModifyModel extends BaseModel<ServiceManager,CacheManager> implemen
     public Observable<CodeEntity> editMobile(String token, String u_backup_phone) {
         return mServiceManager.getCommonService().editMobile(token,u_backup_phone);
     }
+
+    @Override
+    public Observable<CodeEntity> editContactPhone(String token, long contact_id, String phone, String backup_phone) {
+        return mServiceManager.getCommonService().editContactPhone(token,contact_id,phone,backup_phone);
+    }
+
+    @Override
+    public Observable<CodeEntity> editContactEmail(String token, long contact_id, String email, String backup_email) {
+        return mServiceManager.getCommonService().editContactEmail(token,contact_id,email,backup_email);
+    }
+
+    @Override
+    public Observable<CodeEntity> editContactWechat(String token, long contact_id, String wechat) {
+        return mServiceManager.getCommonService().editContactWechat(token,contact_id,wechat);
+    }
+
+    @Override
+    public Observable<CodeEntity> editContactemark(String token, long contact_id, String remark) {
+        return mServiceManager.getCommonService().editContactemark(token,contact_id,remark);
+    }
 }
