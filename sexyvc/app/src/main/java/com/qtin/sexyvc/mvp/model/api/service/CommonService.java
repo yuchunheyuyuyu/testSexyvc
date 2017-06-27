@@ -11,6 +11,7 @@ import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
+import com.qtin.sexyvc.ui.bean.ReplyIdBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
@@ -18,6 +19,7 @@ import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
+import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 
 import retrofit2.http.Body;
@@ -353,5 +355,45 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/page/subject")
     Observable<BaseEntity<SubjectBean>> querySubjectList(@Field("subject_id")long subject_id,@Field("page_size")int page_size,@Field("need_banner")int need_banner);
+
+    /**
+     * 专题详情页
+     * @param token
+     * @param subject_id
+     * @param page_size
+     * @param reply_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/subject/detail")
+    Observable<BaseEntity<DetailBean>> querySubjectDetail(@Field("token")String token,@Field("subject_id")long subject_id,
+                                                          @Field("page_size")int page_size,@Field("reply_id")long reply_id);
+
+    /**
+     * 回复
+     * @param token
+     * @param object_type 对象类型 1：评论；2：专题
+     * @param object_id 对象ID
+     * @param reply_id 回复评论ID
+     * @param reply_content 回复内容
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/action/reply")
+    Observable<BaseEntity<ReplyIdBean>> reply(@Field("token")String token,@Field("object_type")int object_type,@Field("object_id")long object_id,
+                                              @Field("reply_id")long reply_id,@Field("reply_content")String reply_content);
+
+    /**
+     * 点赞
+     * @param token
+     * @param object_type 对象类型 1：评论；2：专题；3：回复
+     * @param object_id 对象ID
+     * @param handle_type 操作类型 1 ：新增赞；0：取消赞
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/action/praise")
+    Observable<CodeEntity> praise(@Field("token")String token,@Field("object_type")int object_type,
+                                  @Field("object_id")long object_id,@Field("handle_type")int handle_type);
 }
 

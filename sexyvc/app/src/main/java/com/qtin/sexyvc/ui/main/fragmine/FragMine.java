@@ -134,6 +134,8 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     @Override
     public void requestSuccess(UserInfoEntity entity) {
         this.userInfo=entity;
+        customApplication.nick=StringUtil.isBlank(entity.getU_nickname())?getResources().getString(R.string.nick_defalut):entity.getU_nickname();
+        customApplication.avatar=entity.getU_avatar();
         //昵称
         tvName.setText(StringUtil.isBlank(entity.getU_nickname())?getResources().getString(R.string.nick_defalut):entity.getU_nickname());
         //自我介绍

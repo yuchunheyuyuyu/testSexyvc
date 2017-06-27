@@ -8,7 +8,7 @@ import com.qtin.sexyvc.mvp.model.api.Api;
 
 public class CommonUtil {
     public static boolean isAbsolutePath(String path){
-        return path==null?false:path.startsWith("http:");
+        return path==null?false:(path.startsWith("http:")||path.startsWith("https:"));
     }
 
     public static String getAbsolutePath(String path){

@@ -69,7 +69,7 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
         recyclerView.setAdapter(mAdapter);
         mPresenter.query();
 
-        maxDistance= (int)DeviceUtils.dpToPixel(mActivity,140);
+        maxDistance= (int)DeviceUtils.dpToPixel(mActivity,40);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

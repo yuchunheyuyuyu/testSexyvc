@@ -42,6 +42,9 @@ public class CustomApplication extends BaseApplication {
 
     private DaoSession daoSession;
 
+    public static String nick;
+    public static String avatar;
+
     private AppComponent mAppComponent;
     private RefWatcher mRefWatcher;//leakCanary观察器
 

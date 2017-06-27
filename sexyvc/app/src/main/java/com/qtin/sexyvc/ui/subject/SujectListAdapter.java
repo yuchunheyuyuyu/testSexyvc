@@ -13,11 +13,13 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBannerEntity;
 import com.qtin.sexyvc.ui.subject.bean.SubjectListEntity;
 import com.qtin.sexyvc.ui.subject.bean.SubjectListInterface;
 import com.qtin.sexyvc.ui.widget.BannerView;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.DateUtil;
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +34,11 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static final int ITEM_BANNER = 0;
     public static final int ITEM_NORMAL = 1;
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
@@ -59,7 +66,7 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         if(viewHolder instanceof BannerHolder){
             BannerHolder holder= (BannerHolder) viewHolder;
             SubjectBannerEntity bannerEntity= (SubjectBannerEntity) data.get(position);
@@ -80,10 +87,25 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(onItemClickListener!=null){
+                        onItemClickListener.onClickItem(position);
+                    }
                 }
             });
-
+            long lastStamp=0;
+            if(position>0){
+                SubjectListInterface last=data.get(position-1);
+                if(last instanceof SubjectListEntity){
+                    lastStamp=((SubjectListEntity)last).getCreate_time();
+                }
+            }
+            //和上一条是同一天
+            if(DateUtil.isNeedShow(entity.getCreate_time(),lastStamp)){
+                holder.tvDate.setVisibility(View.GONE);
+            }else{
+                holder.tvDate.setVisibility(View.VISIBLE);
+                holder.tvDate.setText("| "+DateUtil.getDateExpression(entity.getCreate_time()));
+            }
         }
     }
 

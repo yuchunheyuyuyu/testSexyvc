@@ -175,6 +175,6 @@
     <string name="to_expand_hint">展开</string>
     <string name="to_shrink_hint">收起</string>
     <string name="etv_ellipsisHint">...</string>
-
+    <string name="send_reply">发送</string>
 
 </resources>

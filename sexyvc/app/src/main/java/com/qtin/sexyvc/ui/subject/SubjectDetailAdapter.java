@@ -1,0 +1,214 @@
+package com.qtin.sexyvc.ui.subject;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.widget.imageloader.ImageLoader;
+import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
+import com.qtin.sexyvc.R;
+import com.qtin.sexyvc.common.CustomApplication;
+import com.qtin.sexyvc.ui.bean.SubjectDetailClickListener;
+import com.qtin.sexyvc.ui.bean.TagEntity;
+import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
+import com.qtin.sexyvc.ui.subject.bean.SubjectDetailInterface;
+import com.qtin.sexyvc.ui.subject.bean.SubjectReplyEntity;
+import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
+import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
+import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.DateUtil;
+import com.zhy.autolayout.utils.AutoUtils;
+import java.util.ArrayList;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+/**
+ * Created by ls on 17/6/27.
+ */
+public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static int TYPE_WEB_CONTENT = 0;
+    public static int TYPE_REPLY = 1;
+
+    private final CustomApplication mApplication;
+    private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
+
+    private Context context;
+    private ArrayList<SubjectDetailInterface> data;
+    private SubjectDetailClickListener clickListener;
+
+    public void setClickListener(SubjectDetailClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public SubjectDetailAdapter(Context context, ArrayList<SubjectDetailInterface> data) {
+        this.context = context;
+        this.data = data;
+        //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
+        mApplication = (CustomApplication) context.getApplicationContext();
+        mImageLoader = mApplication.getAppComponent().imageLoader();
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = null;
+        if (viewType == TYPE_WEB_CONTENT) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_subject_detail_web, parent, false);
+            return new WebHolder(view);
+        } else if (viewType == TYPE_REPLY) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_subject_detail_reply, parent, false);
+            return new CommentHolder(view);
+        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof WebHolder) {
+            SubjectContentEntity subjectDetailEntity = (SubjectContentEntity) data.get(position);
+            final WebHolder webHolder= (WebHolder) holder;
+            webHolder.webViewContent.loadData(CommonUtil.getHtmlData(subjectDetailEntity.getContent()), "text/html; charset=UTF-8", "utf-8");
+            webHolder.itemView.requestFocus();
+
+            TagAdapter tagAdapter=new TagAdapter<TagEntity>(subjectDetailEntity.getTags()) {
+                @Override
+                public View getView(FlowLayout parent, int position, TagEntity o) {
+                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview3,webHolder.flowLayout, false);
+                    tv.setText(o.getTag_name());
+                    return tv;
+                }
+            };
+            webHolder.flowLayout.setMaxSelectCount(0);
+            webHolder.flowLayout.setAdapter(tagAdapter);
+
+            if(subjectDetailEntity.getWhether_praise()==0){
+                webHolder.ivPraise.setSelected(false);
+            }else{
+                webHolder.ivPraise.setSelected(true);
+            }
+            webHolder.ivPraise.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(clickListener!=null){
+                        clickListener.onClickDetailPraise(-1);
+                    }
+                }
+            });
+
+
+        } else if (holder instanceof CommentHolder) {
+            CommentHolder commentHolder = (CommentHolder) holder;
+            final SubjectReplyEntity entity = (SubjectReplyEntity) data.get(position);
+
+            if (entity.getWhether_praise() == 0) {
+                commentHolder.ivPraise.setSelected(false);
+            } else {
+                commentHolder.ivPraise.setSelected(true);
+            }
+            commentHolder.tvContent.setText(StringUtil.formatString(entity.getReply_content()));
+            commentHolder.tvNick.setText(StringUtil.formatString(entity.getU_nickname()));
+            commentHolder.tvPraiseNum.setText("" + entity.getLike());
+
+            commentHolder.tvTime.setText(DateUtil.getLongDate(entity.getCreate_time()));
+
+            mImageLoader.loadImage(mApplication, GlideImageConfig
+                    .builder()
+                    .placeholder(R.drawable.avatar_blank)
+                    .errorPic(R.drawable.avatar_blank)
+                    .transformation(new CropCircleTransformation(context))
+                    .url(CommonUtil.getAbsolutePath(entity.getU_avatar()))
+                    .imageView(commentHolder.ivAvatar)
+                    .build());
+
+            commentHolder.ivPraise.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(clickListener!=null){
+                        clickListener.onClickItemPraise(position);
+                    }
+                }
+            });
+            commentHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(clickListener!=null){
+                        clickListener.onClickItemReply(position);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return data.get(position).getType();
+    }
+
+    @Override
+    public int getItemCount() {
+        return data == null ? 0 : data.size();
+    }
+
+    static class WebHolder extends RecyclerView.ViewHolder {
+        WebView webViewContent;
+        @BindView(R.id.web_view_container)
+        FrameLayout webViewContainer;
+        @BindView(R.id.flowLayout)
+        TagFlowLayout flowLayout;
+        @BindView(R.id.tvPraiseNum)
+        TextView tvPraiseNum;
+        @BindView(R.id.ivPraise)
+        ImageView ivPraise;
+
+        WebHolder(View view) {
+            super(view);
+            AutoUtils.auto(view);
+            ButterKnife.bind(this, view);
+
+            //创建webView
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            webViewContent = new WebView(view.getContext());
+            webViewContent.setLayoutParams(lp);
+            //webViewContent.setFocusable(false);
+            webViewContainer.addView(webViewContent);
+            initWebView(webViewContent);
+
+            view.requestFocus();
+        }
+
+        private void initWebView(WebView webView) {
+            WebSettings mSetting = webView.getSettings();
+            mSetting.setJavaScriptEnabled(true);
+        }
+    }
+
+    static class CommentHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivAvatar)
+        ImageView ivAvatar;
+        @BindView(R.id.tvNick)
+        TextView tvNick;
+        @BindView(R.id.tvTime)
+        TextView tvTime;
+        @BindView(R.id.tvPraiseNum)
+        TextView tvPraiseNum;
+        @BindView(R.id.ivPraise)
+        ImageView ivPraise;
+        @BindView(R.id.tvContent)
+        TextView tvContent;
+
+        CommentHolder(View view) {
+            super(view);
+            AutoUtils.auto(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+}

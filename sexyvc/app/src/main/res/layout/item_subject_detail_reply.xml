@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="32px">
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:src="@drawable/avatar_blank" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24px"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tvNick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6sp"
+                android:text="一萌逼逼的用户名"
+                android:textColor="@color/black90"
+                android:textSize="24px" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16px"
+                android:layout_weight="1"
+                android:text="4 小时前"
+                android:textColor="@color/black50"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/tvPraiseNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="14px"
+                android:gravity="end"
+                android:text="3"
+                android:textColor="@color/black30"
+                android:textSize="24px" />
+
+            <ImageView
+                android:id="@+id/ivPraise"
+                android:layout_width="30px"
+                android:layout_height="30px"
+                android:src="@drawable/good_selector" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="6sp"
+            android:layout_marginTop="14px"
+            android:text="超市买刀砍了人，责任就是超市的？这逻辑，好好反思一下自己的双重标准不是更好？"
+            android:textColor="@color/black70"
+            android:textSize="24px" />
+    </LinearLayout>
+
+</LinearLayout>
