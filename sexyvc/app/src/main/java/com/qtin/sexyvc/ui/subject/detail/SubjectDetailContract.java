@@ -5,6 +5,7 @@ import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import rx.Observable;
 
@@ -27,5 +28,6 @@ public interface SubjectDetailContract {
         Observable<BaseEntity<DetailBean>> querySubjectDetail(String token,long subject_id,int page_size,long reply_id);
         Observable<BaseEntity<ReplyIdBean>> reply(String token,int object_type,long object_id,long reply_id,String reply_content);
         Observable<CodeEntity> praise(String token,int object_type,long object_id,int handle_type);
+        UserInfoEntity getUserInfo();
     }
 }

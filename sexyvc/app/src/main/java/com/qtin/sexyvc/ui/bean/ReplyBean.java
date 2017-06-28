@@ -1,11 +1,11 @@
-package com.qtin.sexyvc.ui.subject.bean;
+package com.qtin.sexyvc.ui.bean;
 
-import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 
 /**
  * Created by ls on 17/6/27.
  */
-public class SubjectReplyEntity implements SubjectDetailInterface{
+public class ReplyBean implements DataTypeInterface {
     private long reply_id;
     private String reply_content;
     private long parent_id;
@@ -13,7 +13,7 @@ public class SubjectReplyEntity implements SubjectDetailInterface{
 
     private String u_nickname;
     private int like;
-    private int whether_praise;
+    private int has_praise;
     private long create_time;
 
     public long getCreate_time() {
@@ -72,17 +72,17 @@ public class SubjectReplyEntity implements SubjectDetailInterface{
         this.like = like;
     }
 
-    public int getWhether_praise() {
-        return whether_praise;
+    public int getHas_praise() {
+        return has_praise;
     }
 
-    public void setWhether_praise(int whether_praise) {
-        this.whether_praise = whether_praise;
+    public void setHas_praise(int has_praise) {
+        this.has_praise = has_praise;
     }
 
     @Override
     public int getType() {
-        return SubjectDetailAdapter.TYPE_REPLY;
+        return DataTypeInterface.TYPE_COMMENT;
     }
 }
 /**

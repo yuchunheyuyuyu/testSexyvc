@@ -1,5 +1,7 @@
 package com.qtin.sexyvc.ui.subject.bean;
 
+import com.qtin.sexyvc.ui.bean.RepliesBean;
+
 /**
  * Created by ls on 17/6/27.
  */

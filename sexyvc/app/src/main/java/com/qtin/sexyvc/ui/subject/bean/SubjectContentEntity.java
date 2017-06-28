@@ -1,7 +1,6 @@
 package com.qtin.sexyvc.ui.subject.bean;
 
 import com.qtin.sexyvc.ui.bean.TagEntity;
-import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
 
 import java.util.ArrayList;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
  * Created by ls on 17/6/27.
  */
 
-public class SubjectContentEntity implements SubjectDetailInterface{
+public class SubjectContentEntity implements DataTypeInterface {
     private long subject_id;
     private String title;
     private String img_url;
@@ -21,7 +20,7 @@ public class SubjectContentEntity implements SubjectDetailInterface{
 
     private int reply_count;
     private int praise_count;
-    private int whether_praise;
+    private int has_praise;
 
     public long getSubject_id() {
         return subject_id;
@@ -95,17 +94,17 @@ public class SubjectContentEntity implements SubjectDetailInterface{
         this.praise_count = praise_count;
     }
 
-    public int getWhether_praise() {
-        return whether_praise;
+    public int getHas_praise() {
+        return has_praise;
     }
 
-    public void setWhether_praise(int whether_praise) {
-        this.whether_praise = whether_praise;
+    public void setHas_praise(int has_praise) {
+        this.has_praise = has_praise;
     }
 
     @Override
     public int getType() {
-        return SubjectDetailAdapter.TYPE_WEB_CONTENT;
+        return DataTypeInterface.TYPE_CONTENT;
     }
 }
 /**

@@ -3,11 +3,18 @@ package com.qtin.sexyvc.ui.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by ls on 17/6/15.
  */
-
+@Entity
 public class UserInfoEntity implements Parcelable {
+    @Id
+    private long id;
+
     private String u_nickname;
     private int u_gender;
     private String u_avatar;
@@ -21,6 +28,14 @@ public class UserInfoEntity implements Parcelable {
     //private String u_auth_state;
     //private String u_auth_type;//0未填写，1投资人，2创始人，3FA
 
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getU_nickname() {
         return u_nickname;
@@ -115,6 +130,20 @@ public class UserInfoEntity implements Parcelable {
         this.u_email = in.readString();
         this.u_backup_phone = in.readString();
         this.u_backup_email = in.readString();
+    }
+
+    @Generated(hash = 754649758)
+    public UserInfoEntity(long id, String u_nickname, int u_gender, String u_avatar, String u_signature, String u_phone, String u_email,
+            String u_backup_phone, String u_backup_email) {
+        this.id = id;
+        this.u_nickname = u_nickname;
+        this.u_gender = u_gender;
+        this.u_avatar = u_avatar;
+        this.u_signature = u_signature;
+        this.u_phone = u_phone;
+        this.u_email = u_email;
+        this.u_backup_phone = u_backup_phone;
+        this.u_backup_email = u_backup_email;
     }
 
     public static final Creator<UserInfoEntity> CREATOR = new Creator<UserInfoEntity>() {

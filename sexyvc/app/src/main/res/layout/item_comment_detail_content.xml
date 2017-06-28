@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="2dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="18dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvCommentTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/tag_shape_selector"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="4dp"
+            android:text="本地生活"
+            android:textColor="@color/black30"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:text="某 CEO 评论了"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+
+        <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+            android:id="@+id/ratingScore"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            app:numStars="5"
+            app:rating="2.3"
+            app:starPadding="2dp"
+            app:starSize="10dp"
+            app:touchable="false" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="6sp"
+        android:text="沟通效率很高推动性也很强的投资经理，是我喜欢的类型"
+        android:textColor="@color/black90"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="6sp"
+        android:text="很直接，反应很快，不先入为主，为创业者着想，很喜欢与这类投资人交流。聊的过程中他比较认真快速的记录，而且很明显是提前看过BP，因为项目的很多细节他都记住了，给人感觉比较舒服，现在提前认真看BP的投资人好少，基本就是临时提前看或者当场看，更不会认真去看。虽然最后没有跟创新工场合作，但是他也给了我不少建议，有收获。"
+        android:textColor="@color/black70"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lineSpacingExtra="6sp"
+            android:text="昨天"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/tvPraiseNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:lineSpacingExtra="6sp"
+            android:text="3"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ivPraise"
+            android:layout_width="24dp"
+            android:layout_height="40dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/good_selector" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/additionalContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp">
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCommentCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="13dp"
+        android:lineSpacingExtra="6sp"
+        android:text="4 条回复"
+        android:textColor="@color/slate"
+        android:textSize="12sp" />
+
+</LinearLayout>

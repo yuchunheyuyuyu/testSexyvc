@@ -1,9 +1,9 @@
-package com.qtin.sexyvc.ui.main.fragmine;
+package com.qtin.sexyvc.ui.main;
 
 import android.app.Application;
 
 import com.jess.arms.base.AppManager;
-import com.jess.arms.di.scope.FragmentScope;
+import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.jess.arms.utils.StringUtil;
@@ -21,21 +21,20 @@ import rx.schedulers.Schedulers;
 /**
  * Created by ls on 17/4/26.
  */
-@FragmentScope
-public class FragMinePresent extends BasePresenter<FragMineContract.Model,FragMineContract.View> {
+@ActivityScope
+public class MainPresent extends BasePresenter<MainContract.Model,MainContract.View> {
     private RxErrorHandler mErrorHandler;
     private AppManager mAppManager;
     private Application mApplication;
 
     @Inject
-    public FragMinePresent(FragMineContract.Model model, FragMineContract.View rootView,
-                           RxErrorHandler mErrorHandler, AppManager mAppManager, Application mApplication) {
+    public MainPresent(MainContract.Model model, MainContract.View rootView, RxErrorHandler mErrorHandler,
+                       AppManager mAppManager, Application mApplication) {
         super(model, rootView);
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
     }
-
     public void getUserInfo(){
         mModel.getUserInfo(mModel.getToken())
                 .subscribeOn(Schedulers.io())
@@ -48,8 +47,8 @@ public class FragMinePresent extends BasePresenter<FragMineContract.Model,FragMi
                         if(baseEntity!=null){
                             if(baseEntity.isSuccess()){
                                 if(baseEntity.getItems()!=null){
-                                    mRootView.requestSuccess(baseEntity.getItems());
                                     mModel.saveUsrInfo(baseEntity.getItems());
+                                    
                                 }
                             }else{
                                 mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));

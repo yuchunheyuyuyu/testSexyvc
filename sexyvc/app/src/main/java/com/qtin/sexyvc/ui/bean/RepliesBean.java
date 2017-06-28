@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.subject.bean;
+package com.qtin.sexyvc.ui.bean;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class RepliesBean {
     private int total;
-    private ArrayList<SubjectReplyEntity> list;
+    private ArrayList<ReplyBean> list;
 
     public int getTotal() {
         return total;
@@ -18,11 +18,11 @@ public class RepliesBean {
         this.total = total;
     }
 
-    public ArrayList<SubjectReplyEntity> getList() {
+    public ArrayList<ReplyBean> getList() {
         return list;
     }
 
-    public void setList(ArrayList<SubjectReplyEntity> list) {
+    public void setList(ArrayList<ReplyBean> list) {
         this.list = list;
     }
 }

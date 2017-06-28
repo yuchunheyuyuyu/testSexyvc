@@ -15,11 +15,11 @@ import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
-import com.qtin.sexyvc.ui.bean.SubjectDetailClickListener;
+import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
-import com.qtin.sexyvc.ui.subject.bean.SubjectDetailInterface;
-import com.qtin.sexyvc.ui.subject.bean.SubjectReplyEntity;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
@@ -36,21 +36,18 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  */
 public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static int TYPE_WEB_CONTENT = 0;
-    public static int TYPE_REPLY = 1;
-
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
     private Context context;
-    private ArrayList<SubjectDetailInterface> data;
-    private SubjectDetailClickListener clickListener;
+    private ArrayList<DataTypeInterface> data;
+    private DetailClickListener clickListener;
 
-    public void setClickListener(SubjectDetailClickListener clickListener) {
+    public void setClickListener(DetailClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
-    public SubjectDetailAdapter(Context context, ArrayList<SubjectDetailInterface> data) {
+    public SubjectDetailAdapter(Context context, ArrayList<DataTypeInterface> data) {
         this.context = context;
         this.data = data;
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
@@ -61,11 +58,11 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-        if (viewType == TYPE_WEB_CONTENT) {
+        if (viewType == DataTypeInterface.TYPE_CONTENT) {
             view = LayoutInflater.from(context).inflate(R.layout.item_subject_detail_web, parent, false);
             return new WebHolder(view);
-        } else if (viewType == TYPE_REPLY) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_subject_detail_reply, parent, false);
+        } else if (viewType == DataTypeInterface.TYPE_COMMENT) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_reply, parent, false);
             return new CommentHolder(view);
         }
         return null;
@@ -87,10 +84,11 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                     return tv;
                 }
             };
+            webHolder.tvPraiseNum.setText(""+subjectDetailEntity.getPraise_count());
             webHolder.flowLayout.setMaxSelectCount(0);
             webHolder.flowLayout.setAdapter(tagAdapter);
 
-            if(subjectDetailEntity.getWhether_praise()==0){
+            if(subjectDetailEntity.getHas_praise()==0){
                 webHolder.ivPraise.setSelected(false);
             }else{
                 webHolder.ivPraise.setSelected(true);
@@ -107,9 +105,9 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         } else if (holder instanceof CommentHolder) {
             CommentHolder commentHolder = (CommentHolder) holder;
-            final SubjectReplyEntity entity = (SubjectReplyEntity) data.get(position);
+            final ReplyBean entity = (ReplyBean) data.get(position);
 
-            if (entity.getWhether_praise() == 0) {
+            if (entity.getHas_praise() == 0) {
                 commentHolder.ivPraise.setSelected(false);
             } else {
                 commentHolder.ivPraise.setSelected(true);
@@ -118,7 +116,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             commentHolder.tvNick.setText(StringUtil.formatString(entity.getU_nickname()));
             commentHolder.tvPraiseNum.setText("" + entity.getLike());
 
-            commentHolder.tvTime.setText(DateUtil.getLongDate(entity.getCreate_time()));
+            commentHolder.tvTime.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
 
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()

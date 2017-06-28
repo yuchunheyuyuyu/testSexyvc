@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -55,33 +56,64 @@ public class DateUtil {
         }
     }
 
-    public static String getCommentDate(long timestamp){
-        StringBuffer sb = new StringBuffer();
-        long time = System.currentTimeMillis() - (timestamp*1000);
-        long mill = (long) Math.ceil(time /1000);//秒前
+    /**设置每个阶段时间*/
+    private static final int seconds_of_1minute = 60;
+    private static final int seconds_of_1hour = 60 * 60;
+    private static final int seconds_of_1day = 24 * 60 * 60;
+    private static final int seconds_of_2day = seconds_of_1day*2;
+    private static final int seconds_of_30days = seconds_of_1day * 30;
+    private static final int seconds_of_1year = seconds_of_30days * 12;
 
-        long minute = (long) (time/60/1000.0f);// 分钟前
-        long hour = (long) (time/60/60/1000.0f);// 小时
-        long day = (long)(time/24/60/60/1000.0f);// 天前
-        long year=(long) (time/365/24/60/60/1000.0f);// 年
+    /**
+     * 格式化时间
+     * @return
+     */
+    public static String getSpecialDate(long timestamp){
 
-        if(year>0){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日",Locale.getDefault());
-            sb.append(format.format(new Date(timestamp*1000)));
-        }else if (day>0) {
-            if(day==1){
-                sb.append("昨天");
-            }else{
-                SimpleDateFormat format = new SimpleDateFormat("MM月dd日",Locale.getDefault());
-                sb.append(format.format(new Date(timestamp*1000)));
-            }
-        } else if (hour> 0) {
-                sb.append(hour + "小时前");
-        } else if (minute> 0) {
-            sb.append(minute + "分钟前");
-        } else {
-            sb.append("刚刚");
+        long between=System.currentTimeMillis()/1000- timestamp;
+
+        if (between < seconds_of_1minute) {
+            return "刚刚";
         }
-        return sb.toString();
+        if (between < seconds_of_1hour) {
+            return between / seconds_of_1minute + "分钟前";
+        }
+        if (between < seconds_of_1day) {
+            return between / seconds_of_1hour + "小时前";
+        }
+
+        if(!isSameYear(timestamp,System.currentTimeMillis())){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日",Locale.getDefault());
+            return format.format(new Date(timestamp*1000));
+        }
+
+        if (between < seconds_of_2day) {
+            return "昨天";
+        }
+
+        if (between < seconds_of_1year) {
+            SimpleDateFormat format = new SimpleDateFormat("MM月dd日",Locale.getDefault());
+            return format.format(new Date(timestamp*1000));
+        }
+        return "";
+    }
+
+    /**
+     * 判断是不是在一年
+     * @param timestamp1 毫秒
+     * @param timestamp2 毫秒
+     * @return
+     */
+    private static boolean isSameYear(long timestamp1, long timestamp2) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(new Date(timestamp1));
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(new Date(timestamp2));
+
+        boolean isSameYear = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+        boolean isSameMonth = isSameYear&& cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+        boolean isSameDate = isSameMonth&& cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+
+        return isSameYear;
     }
 }

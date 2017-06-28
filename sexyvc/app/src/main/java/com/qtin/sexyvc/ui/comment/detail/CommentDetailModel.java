@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.subject.detail;
+package com.qtin.sexyvc.ui.comment.detail;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
@@ -9,7 +9,7 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
-import com.qtin.sexyvc.ui.subject.bean.DetailBean;
+import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 
 import java.util.List;
 
@@ -21,10 +21,10 @@ import rx.Observable;
  * Created by ls on 17/4/26.
  */
 @ActivityScope
-public class SubjectDetailModel extends BaseModel<ServiceManager,CacheManager> implements SubjectDetailContract.Model {
+public class CommentDetailModel extends BaseModel<ServiceManager,CacheManager> implements CommentDetailContract.Model {
 
     @Inject
-    public SubjectDetailModel(ServiceManager serviceManager, CacheManager cacheManager) {
+    public CommentDetailModel(ServiceManager serviceManager, CacheManager cacheManager) {
         super(serviceManager, cacheManager);
     }
 
@@ -35,11 +35,6 @@ public class SubjectDetailModel extends BaseModel<ServiceManager,CacheManager> i
             return list.get(0).getU_token();
         }
         return "";
-    }
-
-    @Override
-    public Observable<BaseEntity<DetailBean>> querySubjectDetail(String token, long subject_id, int page_size, long reply_id) {
-        return mServiceManager.getCommonService().querySubjectDetail(token,subject_id,page_size,reply_id);
     }
 
     @Override
@@ -59,5 +54,10 @@ public class SubjectDetailModel extends BaseModel<ServiceManager,CacheManager> i
             return list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public Observable<BaseEntity<CommentBean>> queryCommentDetail(String token, long comment_id, int page_size, long reply_id) {
+        return mServiceManager.getCommonService().queryCommentDetail(token,comment_id,page_size,reply_id);
     }
 }

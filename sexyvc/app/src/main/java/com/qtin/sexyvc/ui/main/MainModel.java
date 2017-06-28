@@ -1,25 +1,37 @@
-package com.qtin.sexyvc.ui.main.fragmine;
+package com.qtin.sexyvc.ui.main;
 
-import com.jess.arms.di.scope.FragmentScope;
+import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
- * Created by ls on 17/4/25.
+ * Created by ls on 17/4/26.
  */
-@FragmentScope
-public class FragMineModel extends BaseModel<ServiceManager,CacheManager> implements FragMineContract.Model{
+@ActivityScope
+public class MainModel extends BaseModel<ServiceManager,CacheManager> implements MainContract.Model {
 
     @Inject
-    public FragMineModel(ServiceManager serviceManager, CacheManager cacheManager) {
+    public MainModel(ServiceManager serviceManager, CacheManager cacheManager) {
         super(serviceManager, cacheManager);
+    }
+
+    @Override
+    public void saveUsrInfo(UserInfoEntity entity) {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
+        }
+        mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
 
     @Override
@@ -34,14 +46,5 @@ public class FragMineModel extends BaseModel<ServiceManager,CacheManager> implem
             return list.get(0).getU_token();
         }
         return "";
-    }
-
-    @Override
-    public void saveUsrInfo(UserInfoEntity entity) {
-        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
-        if(list!=null&&!list.isEmpty()){
-            mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
-        }
-        mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
 }

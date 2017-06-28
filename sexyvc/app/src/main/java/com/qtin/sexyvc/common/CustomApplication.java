@@ -41,10 +41,6 @@ import timber.log.Timber;
 public class CustomApplication extends BaseApplication {
 
     private DaoSession daoSession;
-
-    public static String nick;
-    public static String avatar;
-
     private AppComponent mAppComponent;
     private RefWatcher mRefWatcher;//leakCanary观察器
 
@@ -89,7 +85,7 @@ public class CustomApplication extends BaseApplication {
     }
 
     private void initDataBase(){
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc2-db");
         Database db =helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }

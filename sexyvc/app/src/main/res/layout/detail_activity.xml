@@ -60,17 +60,19 @@
         android:id="@+id/actionContainer"
         android:layout_width="match_parent"
         android:layout_height="96px"
+        android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
         <View style="@style/line_style" />
 
         <TextView
+            android:id="@+id/tvFooter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="32px"
             android:gravity="center_vertical"
-            android:text="说说你的看法吧……"
+            android:text="@string/express_your_idea"
             android:textColor="@color/black30"
             android:textSize="24px" />
     </LinearLayout>

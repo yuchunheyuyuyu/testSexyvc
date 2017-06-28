@@ -73,6 +73,7 @@
             android:paddingBottom="4dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
+            android:layout_marginRight="5dp"
             android:paddingTop="4dp"
             android:text="本地生活"
             android:textColor="@color/black30"
@@ -82,7 +83,6 @@
             android:id="@+id/tvFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:text="某 CEO 评论了"
             android:textColor="@color/black50"
             android:textSize="12sp" />

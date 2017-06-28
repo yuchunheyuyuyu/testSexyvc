@@ -23,14 +23,13 @@ import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
-import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
-import com.qtin.sexyvc.ui.bean.SubjectDetailClickListener;
+import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
-import com.qtin.sexyvc.ui.subject.bean.SubjectDetailInterface;
-import com.qtin.sexyvc.ui.subject.bean.SubjectReplyEntity;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.subject.detail.di.DaggerSubjectDetailComponent;
 import com.qtin.sexyvc.ui.subject.detail.di.SubjectDetailModule;
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     private boolean isLoadingMore;
 
     private SubjectDetailAdapter mAdapter;
-    private ArrayList<SubjectDetailInterface> data = new ArrayList<>();
+    private ArrayList<DataTypeInterface> data = new ArrayList<>();
     private long reply_id;
 
     private EditText etInputComment;
@@ -78,7 +77,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     @Override
     protected int setContentViewId() {
-        return R.layout.subject_detail_activity;
+        return R.layout.detail_activity;
     }
 
     @Override
@@ -95,17 +94,17 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new SubjectDetailAdapter(this, data);
-        mAdapter.setClickListener(new SubjectDetailClickListener() {
+        mAdapter.setClickListener(new DetailClickListener() {
             @Override
             public void onClickDetailPraise(int position) {
                 int handle_type = 0;
                 SubjectContentEntity subjectDetailEntity = (SubjectContentEntity) data.get(0);
-                if (subjectDetailEntity.getWhether_praise() == 0) {
+                if (subjectDetailEntity.getHas_praise() == 0) {
                     handle_type = 1;
                 } else {
                     handle_type = 0;
                 }
-                praise(position, handle_type);
+                praise(position, 2, subject_id, handle_type);
             }
 
             @Override
@@ -116,19 +115,19 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             @Override
             public void onClickItemPraise(int position) {
                 int handle_type = 0;
-                SubjectReplyEntity entity = (SubjectReplyEntity) data.get(position);
-                if (entity.getWhether_praise() == 0) {
+                ReplyBean entity = (ReplyBean) data.get(position);
+                if (entity.getHas_praise() == 0) {
                     handle_type = 1;
                 } else {
                     handle_type = 0;
                 }
-                praise(position, handle_type);
+                praise(position, 3, entity.getReply_id(), handle_type);
             }
 
             @Override
             public void onClickItemReply(int position) {
-                SubjectReplyEntity entity = (SubjectReplyEntity) data.get(position);
-                showReplyDialog(position,entity.getReply_id());
+                ReplyBean entity = (ReplyBean) data.get(position);
+                showReplyDialog(position, entity.getReply_id(),"回复@"+entity.getU_nickname());
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -204,7 +203,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             case R.id.ivShare:
                 break;
             case R.id.actionContainer:
-                showReplyDialog(-1,0);
+                showReplyDialog(-1, 0,"评论");
                 break;
         }
     }
@@ -228,10 +227,10 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             }
         }
         if (detailBean.getReplies() != null) {
-            ArrayList<SubjectReplyEntity> list = detailBean.getReplies().getList();
+            ArrayList<ReplyBean> list = detailBean.getReplies().getList();
             if (list != null && !list.isEmpty()) {
                 data.addAll(list);
-                reply_id = list.get(list.size() - 1).getReply_id();
+                this.reply_id = list.get(list.size() - 1).getReply_id();
             }
         }
 
@@ -247,8 +246,8 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         mPresenter.reply(position, subject_id, reply_id, reply_content);
     }
 
-    public void praise(int position, int handle_type) {
-        mPresenter.praise(position, subject_id, handle_type);
+    public void praise(int position, int object_type, long object_id, int handle_type) {
+        mPresenter.praise(position, object_type, object_id, handle_type);
     }
 
 
@@ -256,20 +255,21 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     public void praiseSuccess(int position) {
         if (position == -1) {
             SubjectContentEntity subjectDetailEntity = (SubjectContentEntity) data.get(0);
-            if (subjectDetailEntity.getWhether_praise() == 0) {
-                subjectDetailEntity.setWhether_praise(1);
+            if (subjectDetailEntity.getHas_praise() == 0) {
+
+                subjectDetailEntity.setHas_praise(1);
                 subjectDetailEntity.setPraise_count(subjectDetailEntity.getPraise_count() + 1);
             } else {
-                subjectDetailEntity.setWhether_praise(0);
+                subjectDetailEntity.setHas_praise(0);
                 subjectDetailEntity.setPraise_count(subjectDetailEntity.getPraise_count() - 1);
             }
         } else {
-            SubjectReplyEntity entity = (SubjectReplyEntity) data.get(position);
-            if (entity.getWhether_praise() == 0) {
-                entity.setWhether_praise(1);
+            ReplyBean entity = (ReplyBean) data.get(position);
+            if (entity.getHas_praise() == 0) {
+                entity.setHas_praise(1);
                 entity.setLike(entity.getLike() + 1);
             } else {
-                entity.setWhether_praise(0);
+                entity.setHas_praise(0);
                 entity.setLike(entity.getLike() - 1);
             }
         }
@@ -279,23 +279,30 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     @Override
     public void replySuccess(int position, long reply_id, String content) {
 
-        SubjectReplyEntity entity = new SubjectReplyEntity();
+        if (replyDialog != null && replyDialog.isShowing()) {
+            replyDialog.dismiss();
+        }
+
+        ReplyBean entity = new ReplyBean();
         entity.setLike(0);
-        entity.setReply_content(content);
-        entity.setWhether_praise(0);
+        entity.setHas_praise(0);
         entity.setCreate_time(System.currentTimeMillis() / 1000);
         entity.setReply_id(reply_id);
-        entity.setU_nickname(CustomApplication.nick);
-        entity.setU_avatar(CustomApplication.avatar);
+        if (mPresenter.getUserInfo() != null) {
+            entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
+            entity.setU_avatar(mPresenter.getUserInfo().getU_avatar());
+        }
         if (position == -1) {
             entity.setParent_id(0);
+            entity.setReply_content(content);
         } else {
-            SubjectReplyEntity replyEntity = (SubjectReplyEntity) data.get(position);
+            ReplyBean replyEntity = (ReplyBean) data.get(position);
             entity.setParent_id(replyEntity.getReply_id());
+            entity.setReply_content("@" + replyEntity.getU_nickname() + ":" + content);
         }
         data.add(1, entity);
         mAdapter.notifyDataSetChanged();
-        if(replyDialog!=null&&replyDialog.isShowing()){
+        if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
         }
     }
@@ -310,9 +317,10 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         dialogDismiss();
     }
 
-    public void showReplyDialog(final int position, final long reply_id) {
+    public void showReplyDialog(final int position, final long reply_id,String hint) {
         View view = LayoutInflater.from(this).inflate(R.layout.reply_dialog, null);
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
+        etInputComment.setHint(hint);
         View tvPublishComment = view.findViewById(R.id.tvPublishComment);
 
         tvPublishComment.setOnClickListener(new View.OnClickListener() {

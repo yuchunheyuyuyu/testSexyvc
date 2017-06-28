@@ -177,4 +177,14 @@
     <string name="etv_ellipsisHint">...</string>
     <string name="send_reply">发送</string>
 
+    <string name="express_your_idea">说说你的看法吧……</string>
+
+    <string name="comment_new">最新评论</string>
+    <string name="comment_selected">精选热评</string>
+
+    <string name="reply_comment">回复评论</string>
+    <string name="has_no_comment">还没有人评论，来抢沙发吧</string>
+    <string name="reply_count">条回复</string>
+    <string name="additional">追评：</string>
+
 </resources>

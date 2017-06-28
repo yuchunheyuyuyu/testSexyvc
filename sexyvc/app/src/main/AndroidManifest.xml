@@ -145,6 +145,18 @@
             android:name=".ui.subject.detail.SubjectDetailActivity"
             android:screenOrientation="portrait" />
 
+        <!--评论列表-->
+        <activity
+            android:name=".ui.comment.list.CommentActivity"
+            android:screenOrientation="portrait" />
+
+        <!--评论详情-->
+        <activity
+            android:name=".ui.comment.detail.CommentDetailActivity"
+            android:screenOrientation="portrait" />
+
+
+
         <activity
             android:name=".mvp.test.user.UserActivity"
             android:screenOrientation="portrait" />

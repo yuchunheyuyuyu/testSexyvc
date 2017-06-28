@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.main.fraghome.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,11 +20,14 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEntity;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
+import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
+import com.qtin.sexyvc.ui.comment.list.CommentActivity;
 import com.qtin.sexyvc.ui.flash.FlashActivity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemBannerEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemInvestorEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemNewsEntity;
+import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.ui.subject.list.SubjectListActivity;
 import com.qtin.sexyvc.ui.widget.AutoTextView;
 import com.qtin.sexyvc.ui.widget.BannerView;
@@ -117,7 +121,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void dealSubject(SubjectHolder holder,int position){
-        SubjectEntity entity= (SubjectEntity) data.get(position);
+        final SubjectEntity entity= (SubjectEntity) data.get(position);
         if(entity.isFirst()){
             holder.moreSubjectContainer.setVisibility(View.VISIBLE);
         }else{
@@ -144,10 +148,19 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 activity.gotoActivity(SubjectListActivity.class);
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("subject_id", entity.getSubject_id());
+                bundle.putString("title", entity.getTitle());
+                activity.gotoActivity(SubjectDetailActivity.class, bundle);
+            }
+        });
     }
 
     private void dealComment(CommentHolder holder,int position){
-        CommentEntity entity= (CommentEntity) data.get(position);
+        final CommentEntity entity= (CommentEntity) data.get(position);
         if(entity.isFirst()){
             holder.moreCommentContainer.setVisibility(View.VISIBLE);
         }else{
@@ -161,13 +174,32 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.marginLine.setVisibility(View.VISIBLE);
             holder.wholeLine.setVisibility(View.GONE);
         }
+        if(StringUtil.isBlank(entity.getDomain_name())){
+            holder.tvCommentTag.setVisibility(View.GONE);
+        }else{
+            holder.tvCommentTag.setVisibility(View.VISIBLE);
+            holder.tvCommentTag.setText(entity.getDomain_name());
+        }
 
-        holder.tvCommentTag.setText(StringUtil.formatString(entity.getDomain_name()));
         holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
         holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
         holder.ratingScore.invalidate();
         holder.ratingScore.setRating(entity.getScore());
         holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
+        holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.gotoActivity(CommentActivity.class);
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putLong("comment_id",entity.getComment_id());
+                activity.gotoActivity(CommentDetailActivity.class,bundle);
+            }
+        });
     }
 
     /**

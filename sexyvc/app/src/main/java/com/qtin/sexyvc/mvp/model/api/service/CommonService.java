@@ -14,6 +14,7 @@ import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
@@ -395,5 +396,18 @@ public interface CommonService {
     @POST("api/action/praise")
     Observable<CodeEntity> praise(@Field("token")String token,@Field("object_type")int object_type,
                                   @Field("object_id")long object_id,@Field("handle_type")int handle_type);
+
+    /**
+     * 评论详情页
+     * @param token
+     * @param comment_id
+     * @param page_size
+     * @param reply_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/comment/detail")
+    Observable<BaseEntity<CommentBean>> queryCommentDetail(@Field("token")String token,@Field("comment_id")long comment_id,
+                                                           @Field("page_size")int page_size,@Field("reply_id")long reply_id);
 }
 

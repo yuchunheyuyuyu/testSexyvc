@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
@@ -13,6 +14,8 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
+import com.qtin.sexyvc.ui.main.di.MainModule;
 import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
 import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
 import com.qtin.sexyvc.ui.main.fraghome.FragHome;
@@ -24,7 +27,7 @@ import butterknife.OnClick;
 /**
  * Created by ls on 17/4/14.
  */
-public class MainActivity extends MyBaseActivity {
+public class MainActivity extends MyBaseActivity<MainPresent> implements MainContract.View{
 
     @BindView(R.id.ivTab1)
     ImageView ivTab1;
@@ -49,7 +52,7 @@ public class MainActivity extends MyBaseActivity {
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
-
+        DaggerMainComponent.builder().appComponent(appComponent).mainModule(new MainModule(this)).build().inject(this);
     }
 
     @Override
@@ -77,6 +80,7 @@ public class MainActivity extends MyBaseActivity {
 
         ivTab1.setSelected(true);
         tvTab1.setSelected(true);
+        mPresenter.getUserInfo();
     }
 
 
@@ -235,5 +239,30 @@ public class MainActivity extends MyBaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void launchActivity(Intent intent) {
+
+    }
+
+    @Override
+    public void killMyself() {
+
     }
 }

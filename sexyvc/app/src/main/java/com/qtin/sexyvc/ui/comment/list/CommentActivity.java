@@ -1,34 +1,34 @@
-package com.qtin.sexyvc.ui.user.message;
+package com.qtin.sexyvc.ui.comment.list;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
-import com.qtin.sexyvc.ui.user.message.message.MessageFrag;
-import com.qtin.sexyvc.ui.user.message.notice.NoticeFrag;
+import com.qtin.sexyvc.ui.comment.list.frag.CommentLastFrag;
+import com.qtin.sexyvc.ui.user.message.MyViewPagerAdapter;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
  * Created by ls on 17/6/16.
  */
-public class MessageActivity extends MyBaseActivity {
+public class CommentActivity extends MyBaseActivity {
 
-
-    @BindView(R.id.tvMessage)
-    TextView tvMessage;
-    @BindView(R.id.lineMessage)
-    View lineMessage;
-    @BindView(R.id.tvNotice)
-    TextView tvNotice;
-    @BindView(R.id.lineNotice)
-    View lineNotice;
-    @BindView(R.id.tvRight)
-    TextView tvRight;
+    @BindView(R.id.tvComentNew)
+    TextView tvComentNew;
+    @BindView(R.id.lineNew)
+    View lineNew;
+    @BindView(R.id.tvCommentSelected)
+    TextView tvCommentSelected;
+    @BindView(R.id.lineSelected)
+    View lineSelected;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
@@ -44,18 +44,17 @@ public class MessageActivity extends MyBaseActivity {
 
     @Override
     protected int setContentViewId() {
-        return R.layout.message_activity;
+        return R.layout.comment_list_activity;
     }
 
     @Override
     protected void initData() {
-
-        tvMessage.setSelected(true);
-        lineMessage.setVisibility(View.VISIBLE);
+        tvComentNew.setSelected(true);
+        lineNew.setSelected(true);
 
         ArrayList<Fragment> frags=new ArrayList<>();
-        frags.add(new MessageFrag());
-        frags.add(new NoticeFrag());
+        frags.add(new CommentLastFrag());
+        frags.add(new CommentLastFrag());
         MyViewPagerAdapter adapter=new MyViewPagerAdapter(getSupportFragmentManager(),frags);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -67,15 +66,15 @@ public class MessageActivity extends MyBaseActivity {
             @Override
             public void onPageSelected(int position) {
                 if(position==0){
-                    tvMessage.setSelected(true);
-                    lineMessage.setVisibility(View.VISIBLE);
-                    tvNotice.setSelected(false);
-                    lineNotice.setVisibility(View.INVISIBLE);
+                    tvComentNew.setSelected(true);
+                    lineNew.setVisibility(View.VISIBLE);
+                    tvCommentSelected.setSelected(false);
+                    lineSelected.setVisibility(View.INVISIBLE);
                 }else{
-                    tvMessage.setSelected(false);
-                    lineMessage.setVisibility(View.INVISIBLE);
-                    tvNotice.setSelected(true);
-                    lineNotice.setVisibility(View.VISIBLE);
+                    tvComentNew.setSelected(false);
+                    lineNew.setVisibility(View.INVISIBLE);
+                    tvCommentSelected.setSelected(true);
+                    lineSelected.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -84,21 +83,18 @@ public class MessageActivity extends MyBaseActivity {
 
             }
         });
-
     }
 
-    @OnClick({R.id.ivLeft, R.id.tvRight,R.id.tvMessage,R.id.tvNotice})
+    @OnClick({R.id.ivLeft, R.id.tvComentNew, R.id.tvCommentSelected})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
                 finish();
                 break;
-            case R.id.tvRight:
-                break;
-            case R.id.tvMessage:
+            case R.id.tvComentNew:
                 viewPager.setCurrentItem(0);
                 break;
-            case R.id.tvNotice:
+            case R.id.tvCommentSelected:
                 viewPager.setCurrentItem(1);
                 break;
         }

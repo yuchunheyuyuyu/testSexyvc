@@ -8,6 +8,7 @@ import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -34,6 +35,10 @@ public class SubjectDetailPresent extends BasePresenter<SubjectDetailContract.Mo
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
     }
+
+    public UserInfoEntity getUserInfo(){
+        return mModel.getUserInfo();
+    };
 
     public void query(long subject_id,final long reply_id){
         mModel.querySubjectDetail(mModel.getToken(),subject_id,15,reply_id)
@@ -98,8 +103,8 @@ public class SubjectDetailPresent extends BasePresenter<SubjectDetailContract.Mo
                 });
     }
 
-    public void praise(final int position, long object_id, int handle_type){
-        mModel.praise(mModel.getToken(),2,object_id,handle_type)
+    public void praise(final int position,int object_type, long object_id, int handle_type){
+        mModel.praise(mModel.getToken(),object_type,object_id,handle_type)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override
