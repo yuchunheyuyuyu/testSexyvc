@@ -20,10 +20,11 @@ public interface CommentDetailContract {
         void replySuccess(int position,long reply_id,String content);
         void dialogWaitLoading();
         void dialogWaitDismiss();
-        void querySuccess(CommentBean commentBean);
+        void querySuccess(long reply_id,CommentBean commentBean);
         void startLoadMore();
         void endLoadMore();
     }
+
     interface Model extends IModel{
         String getToken();
         Observable<BaseEntity<ReplyIdBean>> reply(String token, int object_type, long object_id, long reply_id, String reply_content);

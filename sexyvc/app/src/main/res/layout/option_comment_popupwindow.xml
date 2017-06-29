@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black70">
+
+    <ImageView
+        android:id="@+id/ivBackGround"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
+
+
+    <RelativeLayout
+        android:id="@+id/switchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivRoadComment"
+            android:layout_width="88dp"
+            android:visibility="gone"
+            android:layout_height="88dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="122dp"
+            android:layout_marginLeft="66dp"
+            android:src="@drawable/plus_chat" />
+
+        <ImageView
+            android:id="@+id/ivEditComment"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="122dp"
+            android:layout_marginRight="66dp"
+            android:src="@drawable/plus_comment" />
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/ivChoose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:padding="6dp"
+        android:src="@drawable/tab_comment_plus" />
+
+
+    <TextView
+        android:id="@+id/tvRoadComment"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="88dp"
+        android:layout_marginLeft="78dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/edit_road_comment"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvEditComment"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="88dp"
+        android:layout_marginRight="78dp"
+        android:gravity="center"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/edit_comment"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+
+    <TextView
+        android:id="@+id/tvChooseTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="250dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/choose_switch_comment"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>

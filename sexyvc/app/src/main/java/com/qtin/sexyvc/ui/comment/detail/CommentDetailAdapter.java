@@ -24,10 +24,10 @@ import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentContentBean;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.ui.widget.DeviceUtils;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.DateUtil;
-import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
 
@@ -107,7 +107,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                     TextView tvContent=new TextView(context);
                     tvContent.setTextColor(context.getResources().getColor(R.color.black70));
                     tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                    //tvContent.setLineSpacing();
+                    tvContent.setLineSpacing(DeviceUtils.sp2px(context,6),1);
 
                     SpannableStringBuilder stringBuilder=new SpannableStringBuilder();
                     stringBuilder.append(context.getResources().getString(R.string.additional));
@@ -118,7 +118,10 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                     //时间
                     TextView tvTime=new TextView(context);
-
+                    tvTime.setTextColor(context.getResources().getColor(R.color.black30));
+                    tvTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    tvTime.setPadding(0,DeviceUtils.dip2px(context,10),0,0);
+                    tvTime.setText(DateUtil.getSpecialDate(a.getCreate_time()));
                 }
 
             }
@@ -133,10 +136,10 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
             holder.tvPraiseNum.setText(""+bean.getPraise_count());
 
-            //holder.tvFrom.setText(StringUtil.formatString(bean.getInvestor_name()));
+            holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
             holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
-            //holder.tvDate.setText(DateUtil.getSpecialDate(bean.getc));
+            holder.tvDate.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
             if(bean.getReply_count()>0){
                 holder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_comment));
             }else{
@@ -147,7 +150,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onClick(View v) {
                     if(clickListener!=null){
-                        clickListener.onClickDetailPraise(0);
+                        clickListener.onClickDetailPraise(-1);
                     }
                 }
             });
@@ -244,7 +247,6 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         ReplyHolder(View view) {
             super(view);
-            AutoUtils.auto(view);
             ButterKnife.bind(this, view);
         }
     }

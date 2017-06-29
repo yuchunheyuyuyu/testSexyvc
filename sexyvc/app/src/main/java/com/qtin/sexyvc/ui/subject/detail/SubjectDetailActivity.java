@@ -32,6 +32,8 @@ import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.subject.detail.di.DaggerSubjectDetailComponent;
 import com.qtin.sexyvc.ui.subject.detail.di.SubjectDetailModule;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,6 +67,8 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     private EditText etInputComment;
     private Dialog replyDialog;
 
+    private final static long DEFALUT_REPLY_ID=0;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerSubjectDetailComponent.builder().appComponent(appComponent).subjectDetailModule(new SubjectDetailModule(this)).build().inject(this);
@@ -89,7 +93,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(subject_id, 0);
+                mPresenter.query(subject_id, DEFALUT_REPLY_ID);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,7 +108,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 } else {
                     handle_type = 0;
                 }
-                praise(position, 2, subject_id, handle_type);
+                mPresenter.praise(position, ConstantUtil.OBJECT_TYPE_SUBJECT, subject_id, handle_type);
             }
 
             @Override
@@ -121,7 +125,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 } else {
                     handle_type = 0;
                 }
-                praise(position, 3, entity.getReply_id(), handle_type);
+                mPresenter.praise(position, ConstantUtil.OBJECT_TYPE_REPLY, entity.getReply_id(), handle_type);
             }
 
             @Override
@@ -133,7 +137,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         recyclerView.setAdapter(mAdapter);
         initPaginate();
 
-        mPresenter.query(subject_id, 0);
+        mPresenter.query(subject_id, DEFALUT_REPLY_ID);
     }
 
     private void initPaginate() {
@@ -191,7 +195,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     @Override
     public void killMyself() {
-
+        finish();
     }
 
     @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer})
@@ -203,7 +207,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             case R.id.ivShare:
                 break;
             case R.id.actionContainer:
-                showReplyDialog(-1, 0,"评论");
+                showReplyDialog(-1, DEFALUT_REPLY_ID,"评论");
                 break;
         }
     }
@@ -220,7 +224,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     @Override
     public void querySuccess(long reply_id, DetailBean detailBean) {
-        if (reply_id == 0) {
+        if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
             if (detailBean.getDetail() != null) {
                 data.add(detailBean.getDetail());
@@ -241,15 +245,6 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         }
         mAdapter.notifyDataSetChanged();
     }
-
-    public void reply(int position, long reply_id, String reply_content) {
-        mPresenter.reply(position, subject_id, reply_id, reply_content);
-    }
-
-    public void praise(int position, int object_type, long object_id, int handle_type) {
-        mPresenter.praise(position, object_type, object_id, handle_type);
-    }
-
 
     @Override
     public void praiseSuccess(int position) {
@@ -331,7 +326,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                reply(position, reply_id, content);
+                mPresenter.reply(position,subject_id, reply_id, content);
             }
         });
         replyDialog = new Dialog(this);

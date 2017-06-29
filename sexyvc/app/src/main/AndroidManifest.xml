@@ -155,6 +155,17 @@
             android:name=".ui.comment.detail.CommentDetailActivity"
             android:screenOrientation="portrait" />
 
+        <!--近期浏览+最近关注-->
+        <activity
+            android:name=".ui.add.CommentObjectActivity"
+            android:screenOrientation="portrait" />
+
+        <!--选择评论的方式-->
+        <activity
+            android:name=".ui.choose.ChooseActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:screenOrientation="portrait" />
+
 
 
         <activity

@@ -10,23 +10,25 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
-import com.qtin.sexyvc.ui.bean.TagEntity;
-import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
-import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
+import com.qtin.sexyvc.ui.bean.TagEntity;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.DateUtil;
-import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -169,7 +171,6 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         WebHolder(View view) {
             super(view);
-            AutoUtils.auto(view);
             ButterKnife.bind(this, view);
 
             //创建webView
@@ -205,7 +206,6 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         CommentHolder(View view) {
             super(view);
-            AutoUtils.auto(view);
             ButterKnife.bind(this, view);
         }
     }

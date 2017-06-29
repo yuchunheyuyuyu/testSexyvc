@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class CommentContentBean implements DataTypeInterface{
 
+    private String u_nickname;
     private String u_avatar;
     private String type_name;
     private long type_id;
@@ -28,6 +29,23 @@ public class CommentContentBean implements DataTypeInterface{
 
     private int praise_count;
     private int has_praise;
+    private long create_time;
+
+    public String getU_nickname() {
+        return u_nickname;
+    }
+
+    public void setU_nickname(String u_nickname) {
+        this.u_nickname = u_nickname;
+    }
+
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
+    }
 
     private ArrayList<AdditionalBean> additional;
 

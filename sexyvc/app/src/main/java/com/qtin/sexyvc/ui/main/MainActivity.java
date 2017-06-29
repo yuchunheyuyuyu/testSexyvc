@@ -14,6 +14,8 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.popupwindow.ChoosePopupwindow;
+import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
 import com.qtin.sexyvc.ui.main.di.MainModule;
 import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
@@ -49,6 +51,8 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
     private MyBaseFragment[] frags;
     private int currentIndex, clickIndex;
     private long exitTime = 0;
+
+    private ChoosePopupwindow popupwindow;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -104,7 +108,22 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                 gotoFrag();
                 break;
             case R.id.ivCenter:
+                if(popupwindow==null){
+                    popupwindow=new ChoosePopupwindow(new ChoosePopupwindow.OnChooseListener() {
+                        @Override
+                        public void onChooseLoad() {
+                            popupwindow.dismiss();
+                            gotoActivity(CommentObjectActivity.class);
+                        }
 
+                        @Override
+                        public void onChooseEdit() {
+                            popupwindow.dismiss();
+                            gotoActivity(CommentObjectActivity.class);
+                        }
+                    });
+                }
+                popupwindow.show(this);
                 break;
         }
     }

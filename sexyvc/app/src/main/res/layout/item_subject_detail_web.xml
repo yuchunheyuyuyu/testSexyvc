@@ -17,10 +17,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="13dp"
+        android:paddingBottom="3dp"
         android:paddingLeft="16dp"
-        android:paddingRight="13dp"
-        android:paddingTop="13dp">
+        android:paddingTop="3dp">
 
         <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
             android:id="@+id/flowLayout"
@@ -32,7 +31,6 @@
             android:id="@+id/tvPraiseNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="14px"
             android:gravity="end"
             android:text="3"
             android:textColor="@color/black30"
@@ -40,8 +38,12 @@
 
         <ImageView
             android:id="@+id/ivPraise"
-            android:layout_width="30px"
-            android:layout_height="30px"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="13dp"
+            android:paddingTop="10dp"
             android:src="@drawable/good_selector" />
 
     </LinearLayout>

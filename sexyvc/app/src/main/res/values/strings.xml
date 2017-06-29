@@ -15,6 +15,7 @@
     <string name="title_set_group">设置分组</string>
     <string name="title_flash">实时快讯</string>
     <string name="title_subject_list">专栏</string>
+    <string name="title_comment_detail">对%s的评论</string>
 
     <string name="dealing">处理中...</string>
 
@@ -186,5 +187,14 @@
     <string name="has_no_comment">还没有人评论，来抢沙发吧</string>
     <string name="reply_count">条回复</string>
     <string name="additional">追评：</string>
+
+    <string name="edit_road_comment">路演评价</string>
+    <string name="edit_comment">撰写评论</string>
+    <string name="choose_switch_comment">您要添加哪方面的评价？</string>
+
+    <string name="last_browse">近期浏览</string>
+    <string name="last_follow">最近关注</string>
+
+
 
 </resources>
