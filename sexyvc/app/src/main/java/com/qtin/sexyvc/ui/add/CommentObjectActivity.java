@@ -35,6 +35,8 @@ public class CommentObjectActivity extends MyBaseActivity {
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
+    private int type;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
 
@@ -52,6 +54,8 @@ public class CommentObjectActivity extends MyBaseActivity {
 
     @Override
     protected void initData() {
+        type=getIntent().getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
+
         tvTab1.setSelected(true);
         line1.setSelected(true);
 

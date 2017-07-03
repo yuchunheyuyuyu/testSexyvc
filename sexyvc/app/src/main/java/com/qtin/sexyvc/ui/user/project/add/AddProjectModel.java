@@ -4,12 +4,14 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
-import com.qtin.sexyvc.ui.bean.BaseListEntity;
-import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 
 import javax.inject.Inject;
 
+import io.rx_cache.DynamicKey;
+import io.rx_cache.Reply;
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by ls on 17/4/26.
@@ -23,7 +25,14 @@ public class AddProjectModel extends BaseModel<ServiceManager,CacheManager> impl
     }
 
     @Override
-    public Observable<BaseListEntity<FilterEntity>> getType(String type_key) {
-        return mServiceManager.getCommonService().getType(type_key);
+    public Observable<Typebean> getType(String type_key) {
+        Observable<Typebean> types=mServiceManager.getCommonService().getType(type_key);
+        return mCacheManager.getCommonCache().getType(types,new DynamicKey(type_key))
+                .flatMap(new Func1<Reply<Typebean>, Observable<Typebean>>() {
+                    @Override
+                    public Observable<Typebean> call(Reply<Typebean> typebeanReply) {
+                        return Observable.just(typebeanReply.getData());
+                    }
+                });
     }
 }

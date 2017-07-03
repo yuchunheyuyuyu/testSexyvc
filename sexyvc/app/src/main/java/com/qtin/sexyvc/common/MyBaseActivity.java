@@ -85,6 +85,11 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
     }
+    protected void gotoActivityForResult(Class<? extends Activity> activityClass, int requestCode) {
+        Intent intent = new Intent(this, activityClass);
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
+    }
 
     @Override
     public void finish() {

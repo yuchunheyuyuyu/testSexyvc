@@ -5,8 +5,7 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
-import com.qtin.sexyvc.ui.bean.BaseListEntity;
-import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -37,10 +36,10 @@ public class AddProjectPresent extends BasePresenter<AddProjectContract.Model,Ad
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxUtils.<BaseListEntity<FilterEntity>> bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseListEntity<FilterEntity>>(mErrorHandler) {
+                .compose(RxUtils.<Typebean> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<Typebean>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseListEntity<FilterEntity> baseEntity) {
+                    public void onNext(Typebean baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.requestTypeBack(type,baseEntity.getItems());
                         }

@@ -106,12 +106,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.qtin.sexyvc.ui.widget.TagContainer
-        android:id="@+id/tagContainer"
+    <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
+        android:id="@+id/flowLayout"
         android:layout_width="match_parent"
         android:layout_height="18dp"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp" />
 
     <View
         android:layout_width="match_parent"

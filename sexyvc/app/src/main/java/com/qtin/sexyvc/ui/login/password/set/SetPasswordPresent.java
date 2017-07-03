@@ -63,10 +63,12 @@ public class SetPasswordPresent extends BasePresenter<SetPasswordContract.Model,
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<UserEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<UserEntity> userEntityBaseEntity) {
-                        if(userEntityBaseEntity!=null&&userEntityBaseEntity.isSuccess()){
+                        if(userEntityBaseEntity.isSuccess()){
 
                             mModel.saveUser(userEntityBaseEntity.getItems());
                             mRootView.rigisterSuccess();
+                        }else{
+                            mRootView.showMessage(userEntityBaseEntity.getErrMsg());
                         }
                     }
                 });

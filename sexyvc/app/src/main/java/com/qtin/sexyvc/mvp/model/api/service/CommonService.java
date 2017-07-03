@@ -7,15 +7,16 @@ import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
-import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
+import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
@@ -69,7 +70,7 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("public/type/list")
-    Observable<BaseListEntity<FilterEntity>> getType(@Field("type_key") String type_key);
+    Observable<Typebean> getType(@Field("type_key") String type_key);
 
     /**
      * 注册
@@ -273,7 +274,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/investor/list")
+    @POST("api/page/investor/list")
     Observable<BaseEntity<InvestorBean>> querySelectedInvestor(@Field("token")String token,@Field("page")int page,@Field("page_size")int page_size);
 
     /**
@@ -409,5 +410,16 @@ public interface CommonService {
     @POST("api/page/comment/detail")
     Observable<BaseEntity<CommentBean>> queryCommentDetail(@Field("token")String token,@Field("comment_id")long comment_id,
                                                            @Field("page_size")int page_size,@Field("reply_id")long reply_id);
+
+    /**
+     * 投资人详情页
+     * @param token
+     * @param investor_id
+     * @param comment_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/investor/detail")
+    Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,@Field("investor_id")long investor_id,@Field("comment_id")long comment_id);
 }
 

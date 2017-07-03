@@ -1,5 +1,8 @@
 package com.qtin.sexyvc.mvp.model.api.cache;
 
+import com.qtin.sexyvc.mvp.model.entity.User;
+import com.qtin.sexyvc.ui.bean.Typebean;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +10,6 @@ import io.rx_cache.DynamicKey;
 import io.rx_cache.EvictProvider;
 import io.rx_cache.LifeCache;
 import io.rx_cache.Reply;
-import com.qtin.sexyvc.mvp.model.entity.User;
 import rx.Observable;
 
 /**
@@ -20,5 +22,8 @@ public interface CommonCache {
 
     @LifeCache(duration = 2, timeUnit = TimeUnit.MINUTES)
     Observable<Reply<List<User>>> getUsers(Observable<List<User>> oUsers, DynamicKey idLastUserQueried, EvictProvider evictProvider);
+
+    @LifeCache(duration = 7, timeUnit = TimeUnit.DAYS)
+    Observable<Reply<Typebean>> getType(Observable<Typebean> types, DynamicKey type_key);
 
 }

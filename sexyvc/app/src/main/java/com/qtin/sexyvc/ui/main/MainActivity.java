@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -16,13 +17,17 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.popupwindow.ChoosePopupwindow;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
+import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
 import com.qtin.sexyvc.ui.main.di.MainModule;
 import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
 import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
 import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.lang.reflect.Field;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -53,6 +58,8 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
     private long exitTime = 0;
 
     private ChoosePopupwindow popupwindow;
+
+    private static final int REQUEST_CODE_SELECTED_TYPE=0x223;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -108,7 +115,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                 gotoFrag();
                 break;
             case R.id.ivCenter:
-                if(popupwindow==null){
+               /** if(popupwindow==null){
                     popupwindow=new ChoosePopupwindow(new ChoosePopupwindow.OnChooseListener() {
                         @Override
                         public void onChooseLoad() {
@@ -123,7 +130,25 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                         }
                     });
                 }
-                popupwindow.show(this);
+                popupwindow.show(this);*/
+                gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode){
+            case REQUEST_CODE_SELECTED_TYPE:
+                if(data!=null){
+                    int type=data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
+                    if(type!=ConstantUtil.COMMENT_TYPE_NONE){
+                        Bundle bundle=new Bundle();
+                        bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,type);
+                        gotoActivity(CommentObjectActivity.class,bundle);
+                    }
+                }
                 break;
         }
     }

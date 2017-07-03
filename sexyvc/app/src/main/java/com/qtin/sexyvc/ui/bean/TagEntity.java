@@ -9,6 +9,16 @@ public class TagEntity {
     private long tag_id;
     private String tag_name;
 
+    public TagEntity(long tag_id, String tag_name) {
+        this.tag_id = tag_id;
+        this.tag_name = tag_name;
+    }
+
+    public TagEntity() {
+
+    }
+
+
     public int getTag_count() {
         return tag_count;
     }

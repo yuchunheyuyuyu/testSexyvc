@@ -7,11 +7,8 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
-import com.qtin.sexyvc.ui.bean.BaseListEntity;
-import com.qtin.sexyvc.ui.bean.CodeEntity;
-import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
-import com.qtin.sexyvc.ui.request.FollowRequest;
 
 import javax.inject.Inject;
 
@@ -40,32 +37,7 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
         this.mApplication = mApplication;
     }
 
-    public void followInvestor(FollowRequest entity){
-        entity.setToken(mModel.getToken());
-        mModel.followInvestor(entity)
-                .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        mRootView.showLoading();//显示上拉刷新的进度条
-                    }
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate(new Action0() {
-                    @Override
-                    public void call() {
-                        mRootView.hideLoading();//隐藏上拉刷新的进度条
-                    }
-                })
-                .compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
-                    @Override
-                    public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
-                    }
-                });
-    }
+
 
     public void getInvestorData(final  int page,int page_size){
 
@@ -109,10 +81,10 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxUtils.<BaseListEntity<FilterEntity>> bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseListEntity<FilterEntity>>(mErrorHandler) {
+                .compose(RxUtils.<Typebean> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<Typebean>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseListEntity<FilterEntity> baseEntity) {
+                    public void onNext(Typebean baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.requestTypeBack(type,baseEntity.getItems());
                         }

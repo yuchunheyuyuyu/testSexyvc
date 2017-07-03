@@ -14,8 +14,11 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
-import com.qtin.sexyvc.ui.widget.TagContainer;
+import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
+import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
+import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -64,6 +67,8 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
+                .placeholder(R.drawable.avatar_blank)
+                .errorPic(R.drawable.avatar_blank)
                 .url(CommonUtil.getAbsolutePath(entity.getInvestor_avatar()))
                 .transformation(new CropCircleTransformation(context))
                 .imageView(holder.ivAvatar)
@@ -72,7 +77,22 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //评分
         holder.ratingScore.setRating(entity.getScore());
         //标签
-        holder.tagContainer.setStringValue(entity.getTags());
+
+        if(entity.getTags()==null||entity.getTags().isEmpty()){
+            holder.tagContainer.setVisibility(View.GONE);
+        }else{
+            holder.tagContainer.setVisibility(View.VISIBLE);
+            TagAdapter tagAdapter = new TagAdapter<TagEntity>(entity.getTags()) {
+                @Override
+                public View getView(FlowLayout parent, int position, TagEntity o) {
+                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview4, parent, false);
+                    tv.setText(o.getTag_name());
+                    return tv;
+                }
+            };
+            holder.tagContainer.setAdapter(tagAdapter);
+        }
+
         if(entity.getU_id()>0){
             holder.ivAnthStatus.setVisibility(View.VISIBLE);
         }else{
@@ -104,8 +124,8 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         BaseRatingBar ratingScore;
         @BindView(R.id.tvScore)
         TextView tvScore;
-        @BindView(R.id.tagContainer)
-        TagContainer tagContainer;
+        @BindView(R.id.flowLayout)
+        TagFlowLayout tagContainer;
         @BindView(R.id.ivAvatar)
         ImageView ivAvatar;
         @BindView(R.id.ivAnthStatus)

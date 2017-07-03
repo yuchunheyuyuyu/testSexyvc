@@ -3,6 +3,7 @@ package com.jess.arms.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
@@ -285,4 +286,17 @@ public class FastBlur {
         Log.w("test", "cost " + (System.currentTimeMillis() - startMs) + "ms");
         return overlay;
     }
+
+    public static Bitmap createColorBitmap(String rgb, int width, int height) {
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        int color = Color.parseColor(rgb);
+        bmp.eraseColor(color);
+        return bmp;
+    }
+
+    public static Bitmap getBlurByColor(String rgb){
+        Bitmap origin=createColorBitmap(rgb,30,30);
+        return doBlur(origin,80,true);
+    }
+
 }

@@ -7,6 +7,15 @@ package com.qtin.sexyvc.ui.bean;
 public class FilterEntity {
     private int key_id;
     private String type_name;
+    private long type_id;
+
+    public long getType_id() {
+        return type_id;
+    }
+
+    public void setType_id(long type_id) {
+        this.type_id = type_id;
+    }
 
     public int getKey_id() {
         return key_id;

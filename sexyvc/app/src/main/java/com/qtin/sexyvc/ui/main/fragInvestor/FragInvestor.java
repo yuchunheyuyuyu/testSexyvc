@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.main.fragInvestor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -16,17 +18,21 @@ import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.DaggerFragInvestorComponent;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.FragInvestorModule;
-import com.qtin.sexyvc.ui.request.FollowRequest;
+import com.qtin.sexyvc.ui.search.SearchActivity;
 import com.qtin.sexyvc.ui.widget.DropDownMenu;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,6 +45,10 @@ import rx.functions.Action1;
  */
 public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements FragInvestorContract.View {
 
+    @BindView(R.id.tvChangeHint)
+    TextView tvChangeHint;
+    @BindView(R.id.tvChange)
+    TextView tvChange;
     private List<View> popupViews = new ArrayList<>();
     @BindView(R.id.dropDownMenu)
     DropDownMenu dropDownMenu;
@@ -58,12 +68,14 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     private EfficiencyAdapter ratingAdapter;
     private boolean hasLoadedAllItems;
 
-    private int page=1;
-    private int page_size=15;
+    private int page = 1;
+    private int page_size = 15;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private ArrayList<InvestorEntity> data = new ArrayList<>();
     private InvestorAdapter mAdapter;
+
+    private int searchType=ConstantUtil.TYPE_INVESTOR;
 
     @Override
     protected void setupFragmentComponent(AppComponent appComponent) {
@@ -171,8 +183,8 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         contentViewHolder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page=1;
-                mPresenter.getInvestorData(page,page_size);
+                page = 1;
+                mPresenter.getInvestorData(page, page_size);
             }
         });
         contentViewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -182,20 +194,21 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         mAdapter.setItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                FollowRequest entity=new FollowRequest();
-
-                ArrayList<Long> group_ids=new ArrayList<Long>();
-                ArrayList<Long> investor_ids=new ArrayList<Long>();
+                /**FollowRequest entity = new FollowRequest();
+                ArrayList<Long> group_ids = new ArrayList<Long>();
+                ArrayList<Long> investor_ids = new ArrayList<Long>();
                 investor_ids.add(data.get(position).getInvestor_id());
 
                 entity.setGroup_ids(group_ids);
-                entity.setInvestor_ids(investor_ids);
-                mPresenter.followInvestor(entity);
+                entity.setInvestor_ids(investor_ids);*/
+                Bundle bundle=new Bundle();
+                bundle.putLong("investor_id",data.get(position).getInvestor_id());
+                gotoActivity(InvestorDetailActivity.class,bundle);
             }
         });
         initPaginate();
         //获取数据
-        mPresenter.getInvestorData(page,page_size);
+        mPresenter.getInvestorData(page, page_size);
     }
 
     private void initPaginate() {
@@ -204,7 +217,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
                 @Override
                 public void onLoadMore() {
                     page++;
-                    mPresenter.getInvestorData(page,page_size);
+                    mPresenter.getInvestorData(page, page_size);
                 }
 
                 @Override
@@ -285,33 +298,51 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
 
     @Override
     public void startLoadMore() {
-        isLoadingMore=true;
+        isLoadingMore = true;
     }
 
     @Override
     public void endLoadMore() {
-        isLoadingMore=false;
+        isLoadingMore = false;
     }
 
     @Override
     public void querySuccess(InvestorBean bean) {
-        if(page==1){
+        if (page == 1) {
             data.clear();
         }
-        if(bean.getList()!=null){
+        if (bean.getList() != null) {
             data.addAll(bean.getList());
         }
-        if(bean.getTotal()>data.size()){
-            hasLoadedAllItems=false;
-        }else{
-            hasLoadedAllItems=true;
+        if (bean.getTotal() > data.size()) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
         }
         mAdapter.notifyDataSetChanged();
     }
 
-    @OnClick(R.id.searchContainer)
-    public void onClick() {
+    @OnClick({R.id.changeContainer, R.id.searchContainer})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.changeContainer:
+                if (searchType == ConstantUtil.TYPE_FUND) {
+                    searchType = ConstantUtil.TYPE_INVESTOR;
+                    tvChange.setText(getResources().getString(R.string.investor));
+                    tvChangeHint.setText(getResources().getString(R.string.hint_search_investor));
+                } else {
+                    searchType = ConstantUtil.TYPE_FUND;
+                    tvChange.setText(getResources().getString(R.string.fund));
+                    tvChangeHint.setText(getResources().getString(R.string.hint_search_fund));
+                }
 
+                break;
+            case R.id.searchContainer:
+                Bundle bundle=new Bundle();
+                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,searchType);
+                gotoActivity(SearchActivity.class,bundle);
+                break;
+        }
     }
 
     static class ContentViewHolder {

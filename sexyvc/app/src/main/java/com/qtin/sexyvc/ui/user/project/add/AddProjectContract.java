@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
-import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 
 import java.util.ArrayList;
 
@@ -23,6 +23,6 @@ public interface AddProjectContract {
     }
     interface Model extends IModel{
         //这里写Model中公开的方法，在present调用
-        Observable<BaseListEntity<FilterEntity>> getType(String type_key);
+        Observable<Typebean> getType(String type_key);
     }
 }

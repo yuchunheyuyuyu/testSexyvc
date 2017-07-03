@@ -163,7 +163,17 @@
         <!--选择评论的方式-->
         <activity
             android:name=".ui.choose.ChooseActivity"
-            android:theme="@android:style/Theme.Translucent"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait" />
+
+        <!--搜索投资人或者投资机构-->
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:screenOrientation="portrait" />
+
+        <!--投资人详情-->
+        <activity
+            android:name=".ui.investor.InvestorDetailActivity"
             android:screenOrientation="portrait" />
 
 

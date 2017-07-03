@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:src="@drawable/arrow_back" />
+
+
+        <LinearLayout
+            android:id="@+id/changeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="8dp"
+            android:paddingLeft="12dp"
+            android:background="@drawable/search_shape"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvChange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/investor"
+                android:textColor="@color/barbie_pink_two"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="9dp"
+                android:src="@drawable/change_pink" />
+
+            <EditText
+                android:id="@+id/tvChangeHint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="8dp"
+                android:background="@null"
+                android:hint="@string/hint_search_investor"
+                android:maxLines="1"
+                android:textColor="@color/black30"
+                android:textColorHint="@color/black30"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <com.qtin.sexyvc.ui.widget.DropDownMenu
+        android:id="@+id/dropDownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:dddividerColor="@color/silver_two"
+        app:ddmaskColor="#66000000"
+        app:ddmenuBackgroundColor="@color/white"
+        app:ddmenuMenuHeightPercent="0.5"
+        app:ddmenuSelectedIcon="@drawable/arrow_up"
+        app:ddmenuTextSize="14sp"
+        app:ddmenuUnselectedIcon="@drawable/arrow_down"
+        app:ddtextSelectedColor="@color/black90"
+        app:ddtextUnselectedColor="@color/black50"
+        app:ddunderlineColor="@color/silver_two" />
+
+</LinearLayout>
