@@ -7,7 +7,6 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
-import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 
 import javax.inject.Inject;
@@ -76,21 +75,6 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
                 });
     }
 
-    public void getType(String type_key, final int type){
-        mModel.getType(type_key)
-                .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3,2))
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxUtils.<Typebean> bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<Typebean>(mErrorHandler) {
-                    @Override
-                    public void onNext(Typebean baseEntity) {
-                        if(baseEntity.isSuccess()){
-                            mRootView.requestTypeBack(type,baseEntity.getItems());
-                        }
-                    }
-                });
-    }
 
     @Override
     public void onDestroy() {

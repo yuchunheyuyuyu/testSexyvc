@@ -166,14 +166,24 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:screenOrientation="portrait" />
 
-        <!--搜索投资人或者投资机构-->
+        <!--搜索投资人或者投资机构动作页-->
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".ui.search.action.SearchActionActivity"
+            android:screenOrientation="portrait" />
+
+        <!--搜索投资人或者投资机构结果-->
+        <activity
+            android:name=".ui.search.result.SearchResultActivity"
             android:screenOrientation="portrait" />
 
         <!--投资人详情-->
         <activity
             android:name=".ui.investor.InvestorDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <!--机构详情-->
+        <activity
+            android:name=".ui.fund.detail.FundDetailActivity"
             android:screenOrientation="portrait" />
 
 

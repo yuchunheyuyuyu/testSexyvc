@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:focusableInTouchMode="true"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <ImageView
         android:layout_width="match_parent"
@@ -167,9 +169,253 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <View
-        style="@style/line_style"
-        android:layout_below="@+id/flowLayout"
-        android:layout_marginTop="24dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/flowLayout"
+        android:orientation="vertical">
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="17dp"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/road_comment"
+            android:textColor="@color/black90"
+            android:textSize="16sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="27dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/professional_qualities"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbProfessionalQualities"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/feedback_speed"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbFeedbackSpeed"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="33dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/road_efficiency"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbRoadEfficiency"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/experience_share"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbExperienceShare"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/base_info"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvIntroduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="6sp"
+            android:text="吴世春先生，现任宁波梅花天使投资管理有限公司创始合伙人"
+            android:textColor="@color/black70"
+            android:textSize="14sp" />
+
+        <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
+            android:id="@+id/domainFlowLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/positionContainer"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="12dp" />
+
+        <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
+            android:id="@+id/stageFlowLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/positionContainer"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="12dp" />
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/investor_case"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCaseNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="更多 (25个)"
+                android:textColor="@color/black50"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivArrowCase"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewCase"
+            android:layout_width="match_parent"
+            android:layout_height="134dp"
+            android:scrollbars="vertical" />
+
+        <View style="@style/line_style" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/comment_investor"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCommentNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="更多 (25个)"
+                android:textColor="@color/black50"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivArrowComment"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 </RelativeLayout>

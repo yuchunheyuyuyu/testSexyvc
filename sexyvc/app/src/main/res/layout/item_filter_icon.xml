@@ -11,13 +11,14 @@
         android:id="@+id/ivIcon"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginRight="16dp"
         android:src="@drawable/icon_industry_tags" />
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:background="@drawable/tag_shape_50_5"
         android:orientation="vertical"
         android:paddingBottom="2dp"

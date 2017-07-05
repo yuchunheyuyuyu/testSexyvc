@@ -1,21 +1,22 @@
 package com.qtin.sexyvc.ui.investor;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.jess.arms.utils.DeviceUtils;
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
-import com.qtin.sexyvc.ui.investor.bean.ItemCaseBean;
-import com.qtin.sexyvc.ui.investor.bean.ItemBaseBean;
-import com.qtin.sexyvc.ui.investor.bean.ItemTagBean;
 import com.qtin.sexyvc.ui.investor.di.DaggerInvestorDetailComponent;
 import com.qtin.sexyvc.ui.investor.di.InvestorDetailModule;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
@@ -50,6 +51,9 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     private InvestorDetailAdapter mAdapter;
     private ArrayList<DataTypeInterface> data=new ArrayList<>();
 
+    private int mDistance;//滚动的距离
+    private int maxDistance;//监测最大的
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerInvestorDetailComponent.builder().appComponent(appComponent).investorDetailModule(new InvestorDetailModule(this)).build().inject(this);
@@ -79,6 +83,38 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         recyclerView.setAdapter(mAdapter);
 
         mPresenter.query(investor_id,0);
+
+        maxDistance= (int) DeviceUtils.dpToPixel(this,122);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                mDistance+=dy;
+                float percent=mDistance*1f/maxDistance>1?1:mDistance*1f/maxDistance;
+
+                int alpha = (int) (percent * 255);
+                Log.e("透明度","=======透明度====="+percent);
+                //整个背景
+                int argb = Color.argb(alpha, 255, 255, 255);
+                headContainer.setBackgroundColor(argb);
+                //间隔线
+                int lineColor=Color.argb(alpha,224,224,226);
+                headerLine.setBackgroundColor(lineColor);
+                //标题
+                int titleColor=Color.argb(alpha,59,67,87);
+                tvTitle.setTextColor(titleColor);
+
+                //返回键
+                if(mDistance==0){
+                    ivLeft.setSelected(false);
+                    ivLeft.setAlpha(255);
+                }else{
+                    ivLeft.setSelected(true);
+                    ivLeft.setAlpha(alpha);
+                }
+            }
+        });
     }
 
     @Override
@@ -127,30 +163,25 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     @Override
     public void querySuccess(CallBackBean backBean) {
         data.clear();
+        if(backBean.getInvestor()!=null){
+            data.add(backBean.getInvestor());
+            tvTitle.setText(StringUtil.formatString(backBean.getInvestor().getInvestor_name()));
+        }
 
-        data.add(backBean.getInvestor());
-        //路演
-        data.add(backBean.getInvestor().getRoad_show());
-        //基本信息
-        ItemBaseBean introBean=new ItemBaseBean();
-        introBean.setInvestor_intro(backBean.getInvestor().getInvestor_intro());
-        data.add(introBean);
-        //行业标签
-        ItemTagBean tagBean=new ItemTagBean();
-        tagBean.setDomain_list(backBean.getInvestor().getDomain_list());
-        tagBean.setStage_list(backBean.getInvestor().getStage_list());
-        data.add(tagBean);
-        //案例
-        ItemCaseBean caseBean=new ItemCaseBean();
-        caseBean.setCase_list(backBean.getInvestor().getCase_list());
-        caseBean.setCase_number(backBean.getInvestor().getCase_number());
-        caseBean.setComment_number(backBean.getInvestor().getComment_number());
-        data.add(caseBean);
 
         if(backBean.getComments()!=null&&backBean.getComments().getList()!=null){
             data.addAll(backBean.getComments().getList());
         }
         mAdapter.notifyDataSetChanged();
-
+       /** Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .delay(200, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        recyclerView.setMinimumHeight(0);
+                    }
+                });
+        */
     }
 }

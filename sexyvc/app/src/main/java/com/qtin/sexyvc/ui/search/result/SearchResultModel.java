@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.search;
+package com.qtin.sexyvc.ui.search.result;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
@@ -17,10 +17,10 @@ import rx.functions.Func1;
  * Created by ls on 17/4/26.
  */
 @ActivityScope
-public class SearchModel extends BaseModel<ServiceManager,CacheManager> implements SearchContract.Model {
+public class SearchResultModel extends BaseModel<ServiceManager,CacheManager> implements SearchResultContract.Model {
 
     @Inject
-    public SearchModel(ServiceManager serviceManager, CacheManager cacheManager) {
+    public SearchResultModel(ServiceManager serviceManager, CacheManager cacheManager) {
         super(serviceManager, cacheManager);
     }
 

@@ -52,10 +52,11 @@
                 android:id="@+id/tvChangeHint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:imeOptions="actionSearch"
                 android:layout_marginRight="8dp"
                 android:background="@null"
                 android:hint="@string/hint_search_investor"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/black30"
                 android:textColorHint="@color/black30"
                 android:textSize="14sp" />

@@ -41,6 +41,7 @@
 
     <string name="hint_search_investor">输入想要了解的投资人</string>
     <string name="hint_search_fund">输入想要了解的投资机构</string>
+    <string name="hint_search_investor_fund">输入想要了解的投资人或投资机构</string>
 
     <string name="search">搜索</string>
     <string name="comfirm">确定</string>
@@ -205,5 +206,8 @@
     <string name="comment_investor">点评投资人</string>
     <string name="format_more_case">更多 (%s个)</string>
     <string name="format_more_commnet">更多 (%s条)</string>
+
+    <string name="no_data">暂无数据</string>
+
 
 </resources>

@@ -68,11 +68,16 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:id="@+id/footLine"
+        style="@style/line_style"
+        android:layout_above="@+id/footer" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/footer">
+        android:layout_above="@+id/footLine">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -107,7 +112,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="大爷的"
             android:textColor="@color/slate"
             android:textSize="16dp" />
 

@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.search;
+package com.qtin.sexyvc.ui.search.result;
 
 import android.content.Context;
 
@@ -14,7 +14,7 @@ import rx.Observable;
  * Created by ls on 17/4/26.
  */
 
-public interface SearchContract {
+public interface SearchResultContract {
     interface View extends BaseView{
         //这里写view中公开出去的方法，供present调用
         Context getContext();

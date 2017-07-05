@@ -1,12 +1,10 @@
 package com.qtin.sexyvc.ui.investor.bean;
 
-import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-
 /**
  * Created by ls on 17/7/3.
  */
 
-public class RoadShowBean implements DataTypeInterface{
+public class RoadShowBean {
     private RoadShowItemBean professional;
     private RoadShowItemBean efficiency;
     private RoadShowItemBean feedback;
@@ -43,11 +41,5 @@ public class RoadShowBean implements DataTypeInterface{
     public void setExperience(RoadShowItemBean experience) {
         this.experience = experience;
     }
-
-    @Override
-    public int getType() {
-        return DataTypeInterface.TYPE_ROAD;
-    }
-
 
 }

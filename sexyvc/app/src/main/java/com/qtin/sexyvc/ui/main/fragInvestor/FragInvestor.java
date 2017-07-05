@@ -7,34 +7,22 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
-import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.DaggerFragInvestorComponent;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.FragInvestorModule;
-import com.qtin.sexyvc.ui.search.SearchActivity;
-import com.qtin.sexyvc.ui.widget.DropDownMenu;
-import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
-import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
-import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -45,37 +33,19 @@ import rx.functions.Action1;
  */
 public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements FragInvestorContract.View {
 
-    @BindView(R.id.tvChangeHint)
-    TextView tvChangeHint;
-    @BindView(R.id.tvChange)
-    TextView tvChange;
-    private List<View> popupViews = new ArrayList<>();
-    @BindView(R.id.dropDownMenu)
-    DropDownMenu dropDownMenu;
-    private String headers[] = {"评分", "行业", "轮次"};
-    private ArrayList<FilterEntity> efficiencyData = new ArrayList<>();
-    private ArrayList<FilterEntity> industryData = new ArrayList<>();
-    private ArrayList<FilterEntity> turnData = new ArrayList<>();
-
-    private ContentViewHolder contentViewHolder;
-
-    public static final int TYPE_DOMAIN = 0x001;//行业
-    public static final int TYPE_STAGE = 0x002;//阶段
-    public static final int TYPE_RATE = 0x003;//评分
-
-    private TagAdapter domainAdapter;
-    private TagAdapter stageAdapter;
-    private EfficiencyAdapter ratingAdapter;
-    private boolean hasLoadedAllItems;
-
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     private int page = 1;
     private int page_size = 15;
     private Paginate mPaginate;
     private boolean isLoadingMore;
+    private boolean hasLoadedAllItems;
     private ArrayList<InvestorEntity> data = new ArrayList<>();
     private InvestorAdapter mAdapter;
 
-    private int searchType=ConstantUtil.TYPE_INVESTOR;
+    private int searchType = ConstantUtil.TYPE_INVESTOR;
 
     @Override
     protected void setupFragmentComponent(AppComponent appComponent) {
@@ -84,7 +54,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
 
     @Override
     protected int setContentViewId() {
-        return R.layout.item_search_filter;
+        return R.layout.frag_investor;
     }
 
     @Override
@@ -93,117 +63,34 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     }
 
     private void initView() {
-        View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.swipe_recycleview, null);
-        contentViewHolder = new ContentViewHolder(contentView);
         configRecycleView();
-        addEfficiency();//路演效率
-        addIndustry();//行业筛选条件
-        addTurn();//轮次
-        dropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
-
-        //获取投资行业
-        mPresenter.getType("common_domain", TYPE_DOMAIN);
-        //获取投资阶段
-        mPresenter.getType("common_stage", TYPE_STAGE);
-        //获取投资阶段
-        mPresenter.getType("common_stage", TYPE_RATE);
-    }
-
-    private void addIndustry() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.filter_flow, null);
-        final TagFlowLayout flowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
-
-        view.findViewById(R.id.tvResetFilter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        view.findViewById(R.id.tvComfirmFilter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        domainAdapter = new TagAdapter<FilterEntity>(industryData) {
-            @Override
-            public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.item_filter_textview, flowLayout, false);
-                tv.setText(o.getType_name());
-                return tv;
-            }
-        };
-        flowLayout.setAdapter(domainAdapter);
-
-        popupViews.add(view);
-    }
-
-    private void addTurn() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.filter_flow, null);
-        final TagFlowLayout flowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
-
-        view.findViewById(R.id.tvResetFilter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        view.findViewById(R.id.tvComfirmFilter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        stageAdapter = new TagAdapter<FilterEntity>(turnData) {
-            @Override
-            public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.item_filter_textview, flowLayout, false);
-                tv.setText(o.getType_name());
-                return tv;
-            }
-        };
-
-        flowLayout.setAdapter(stageAdapter);
-        popupViews.add(view);
-    }
-
-
-    private void addEfficiency() {
-
-        RecyclerView efficiencyRecycle = new RecyclerView(getActivity());
-        efficiencyRecycle.setLayoutManager(new LinearLayoutManager(mActivity));
-        ratingAdapter = new EfficiencyAdapter(getActivity(), efficiencyData);
-        efficiencyRecycle.setAdapter(ratingAdapter);
-        popupViews.add(efficiencyRecycle);
     }
 
     private void configRecycleView() {
-        contentViewHolder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 page = 1;
                 mPresenter.getInvestorData(page, page_size);
             }
         });
-        contentViewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        contentViewHolder.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new InvestorAdapter(mRootView.getContext(), data);
-        contentViewHolder.recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);
         mAdapter.setItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
                 /**FollowRequest entity = new FollowRequest();
-                ArrayList<Long> group_ids = new ArrayList<Long>();
-                ArrayList<Long> investor_ids = new ArrayList<Long>();
-                investor_ids.add(data.get(position).getInvestor_id());
+                 ArrayList<Long> group_ids = new ArrayList<Long>();
+                 ArrayList<Long> investor_ids = new ArrayList<Long>();
+                 investor_ids.add(data.get(position).getInvestor_id());
 
-                entity.setGroup_ids(group_ids);
-                entity.setInvestor_ids(investor_ids);*/
-                Bundle bundle=new Bundle();
-                bundle.putLong("investor_id",data.get(position).getInvestor_id());
-                gotoActivity(InvestorDetailActivity.class,bundle);
+                 entity.setGroup_ids(group_ids);
+                 entity.setInvestor_ids(investor_ids);*/
+                Bundle bundle = new Bundle();
+                bundle.putLong("investor_id", data.get(position).getInvestor_id());
+                gotoActivity(InvestorDetailActivity.class, bundle);
             }
         });
         initPaginate();
@@ -231,7 +118,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
                 }
             };
 
-            mPaginate = Paginate.with(contentViewHolder.recyclerView, callbacks)
+            mPaginate = Paginate.with(recyclerView, callbacks)
                     .setLoadingTriggerThreshold(0)
                     .build();
             mPaginate.setHasMoreDataToLoad(false);
@@ -245,14 +132,14 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        contentViewHolder.swipeRefreshLayout.setRefreshing(true);
+                        swipeRefreshLayout.setRefreshing(true);
                     }
                 });
     }
 
     @Override
     public void hideLoading() {
-        contentViewHolder.swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -273,27 +160,6 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     @Override
     public Context getContext() {
         return mActivity;
-    }
-
-    @Override
-    public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
-        switch (type) {
-            case TYPE_DOMAIN:
-                industryData.clear();
-                industryData.addAll(list);
-                domainAdapter.notifyDataChanged();
-                break;
-            case TYPE_STAGE:
-                turnData.clear();
-                turnData.addAll(list);
-                stageAdapter.notifyDataChanged();
-                break;
-            case TYPE_RATE:
-                efficiencyData.clear();
-                efficiencyData.addAll(list);
-                ratingAdapter.notifyDataSetChanged();
-                break;
-        }
     }
 
     @Override
@@ -322,37 +188,8 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         mAdapter.notifyDataSetChanged();
     }
 
-    @OnClick({R.id.changeContainer, R.id.searchContainer})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.changeContainer:
-                if (searchType == ConstantUtil.TYPE_FUND) {
-                    searchType = ConstantUtil.TYPE_INVESTOR;
-                    tvChange.setText(getResources().getString(R.string.investor));
-                    tvChangeHint.setText(getResources().getString(R.string.hint_search_investor));
-                } else {
-                    searchType = ConstantUtil.TYPE_FUND;
-                    tvChange.setText(getResources().getString(R.string.fund));
-                    tvChangeHint.setText(getResources().getString(R.string.hint_search_fund));
-                }
+    @OnClick(R.id.searchContainer)
+    public void onClick() {
 
-                break;
-            case R.id.searchContainer:
-                Bundle bundle=new Bundle();
-                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,searchType);
-                gotoActivity(SearchActivity.class,bundle);
-                break;
-        }
-    }
-
-    static class ContentViewHolder {
-        @BindView(R.id.recyclerView)
-        RecyclerView recyclerView;
-        @BindView(R.id.swipeRefreshLayout)
-        SwipeRefreshLayout swipeRefreshLayout;
-
-        ContentViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
     }
 }

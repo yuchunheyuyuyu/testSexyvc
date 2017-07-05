@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.search;
+package com.qtin.sexyvc.ui.search.result;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -21,16 +22,18 @@ import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.main.fragInvestor.EfficiencyAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.InvestorAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
-import com.qtin.sexyvc.ui.search.di.DaggerSearchComponent;
-import com.qtin.sexyvc.ui.search.di.SearchModule;
+import com.qtin.sexyvc.ui.search.result.di.DaggerSearchResultComponent;
+import com.qtin.sexyvc.ui.search.result.di.SearchResultModule;
 import com.qtin.sexyvc.ui.widget.DropDownMenu;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -41,7 +44,7 @@ import rx.functions.Action1;
 /**
  * Created by ls on 17/4/26.
  */
-public class SearchActivity extends MyBaseActivity<SearchPresent> implements SearchContract.View {
+public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> implements SearchResultContract.View {
 
 
     @BindView(R.id.tvChange)
@@ -78,7 +81,7 @@ public class SearchActivity extends MyBaseActivity<SearchPresent> implements Sea
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
-        DaggerSearchComponent.builder().appComponent(appComponent).searchModule(new SearchModule(this)).build().inject(this);
+        DaggerSearchResultComponent.builder().appComponent(appComponent).searchResultModule(new SearchResultModule(this)).build().inject(this);
     }
 
     @Override
@@ -214,7 +217,7 @@ public class SearchActivity extends MyBaseActivity<SearchPresent> implements Sea
         domainAdapter = new TagAdapter<FilterEntity>(industryData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(SearchActivity.this).inflate(R.layout.item_filter_textview, flowLayout, false);
+                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, flowLayout, false);
                 tv.setText(o.getType_name());
                 return tv;
             }
@@ -244,7 +247,7 @@ public class SearchActivity extends MyBaseActivity<SearchPresent> implements Sea
         stageAdapter = new TagAdapter<FilterEntity>(turnData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(SearchActivity.this).inflate(R.layout.item_filter_textview, flowLayout, false);
+                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, flowLayout, false);
                 tv.setText(o.getType_name());
                 return tv;
             }

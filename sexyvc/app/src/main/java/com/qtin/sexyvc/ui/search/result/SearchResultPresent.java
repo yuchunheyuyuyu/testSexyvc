@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.search;
+package com.qtin.sexyvc.ui.search.result;
 
 import android.app.Application;
 import com.jess.arms.base.AppManager;
@@ -17,14 +17,14 @@ import rx.schedulers.Schedulers;
  * Created by ls on 17/4/26.
  */
 @ActivityScope
-public class SearchPresent extends BasePresenter<SearchContract.Model,SearchContract.View> {
+public class SearchResultPresent extends BasePresenter<SearchResultContract.Model,SearchResultContract.View> {
     private RxErrorHandler mErrorHandler;
     private AppManager mAppManager;
     private Application mApplication;
 
     @Inject
-    public SearchPresent(SearchContract.Model model, SearchContract.View rootView, RxErrorHandler mErrorHandler,
-                         AppManager mAppManager, Application mApplication) {
+    public SearchResultPresent(SearchResultContract.Model model, SearchResultContract.View rootView, RxErrorHandler mErrorHandler,
+                               AppManager mAppManager, Application mApplication) {
         super(model, rootView);
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;

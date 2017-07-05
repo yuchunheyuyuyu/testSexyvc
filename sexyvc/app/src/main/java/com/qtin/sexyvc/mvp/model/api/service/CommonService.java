@@ -6,6 +6,7 @@ import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
+import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
@@ -420,6 +421,17 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/investor/detail")
-    Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,@Field("investor_id")long investor_id,@Field("comment_id")long comment_id);
+    Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,@Field("investor_id")long investor_id,
+                                                             @Field("comment_id")long comment_id);
+
+    /**
+     * 68. 我的投资人——投资人详情
+     * @param token
+     * @param contact_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/detail")
+    Observable<BaseEntity<ContactBean>> queryContactDetail(@Field("token")String token,@Field("contact_id")long contact_id);
 }
 
