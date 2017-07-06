@@ -10,13 +10,13 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
+        android:padding="1px"
         android:background="@drawable/case_back">
 
         <ImageView
             android:id="@+id/ivLogo"
             android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:padding="1px"
             android:scaleType="fitCenter"
             android:src="@drawable/logo_blank" />
     </FrameLayout>
@@ -28,6 +28,8 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:lineSpacingExtra="6sp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="HYPEREA…"
         android:textColor="@color/black90"
         android:textSize="12sp" />

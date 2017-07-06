@@ -18,6 +18,8 @@ import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.DaggerFragInvestorComponent;
 import com.qtin.sexyvc.ui.main.fragInvestor.di.FragInvestorModule;
+import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
-    private ArrayList<InvestorEntity> data = new ArrayList<>();
+    private ArrayList<DataTypeInterface> data = new ArrayList<>();
     private InvestorAdapter mAdapter;
 
     private int searchType = ConstantUtil.TYPE_INVESTOR;
@@ -88,9 +90,11 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
 
                  entity.setGroup_ids(group_ids);
                  entity.setInvestor_ids(investor_ids);*/
-                Bundle bundle = new Bundle();
-                bundle.putLong("investor_id", data.get(position).getInvestor_id());
-                gotoActivity(InvestorDetailActivity.class, bundle);
+                if(data.get(position) instanceof InvestorEntity){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("investor_id", ((InvestorEntity)data.get(position)).getInvestor_id());
+                    gotoActivity(InvestorDetailActivity.class, bundle);
+                }
             }
         });
         initPaginate();
@@ -190,6 +194,10 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
 
     @OnClick(R.id.searchContainer)
     public void onClick() {
-
+        Bundle bundle=new Bundle();
+        bundle.putString(ConstantUtil.KEY_WORD_INTENT,"");
+        bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT,false);
+        bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
+        gotoActivity(SearchActionActivity.class,bundle);
     }
 }

@@ -1,12 +1,14 @@
 package com.qtin.sexyvc.ui.bean;
 
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+
 import java.util.ArrayList;
 
 /**
  * Created by ls on 17/6/9.
  */
 
-public class InvestorEntity{
+public class InvestorEntity implements DataTypeInterface{
 
     private long investor_id;
     private String investor_name;
@@ -98,5 +100,10 @@ public class InvestorEntity{
 
     public void setScore(float score) {
         this.score = score;
+    }
+
+    @Override
+    public int getType() {
+        return DataTypeInterface.TYPE_INVESTOR;
     }
 }

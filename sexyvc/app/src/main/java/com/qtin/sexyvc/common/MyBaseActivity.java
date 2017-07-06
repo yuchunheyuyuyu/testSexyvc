@@ -72,6 +72,27 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
     }
 
+    public void gotoActivityFade(Class<? extends Activity> activityClass,Bundle bundle){
+        Intent intent=new Intent(this,activityClass);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+    }
+
+    public void gotoActivityFade(Class<? extends Activity> activityClass){
+        Intent intent=new Intent(this,activityClass);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+    }
+
+    protected void gotoActivityFadeForResult(Class<? extends Activity> activityClass, Bundle bundle,int requestCode) {
+        Intent intent = new Intent(this, activityClass);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+    }
+
+
     public void gotoActivity(Class<? extends Activity> activityClass,Bundle bundle){
         Intent intent=new Intent(this,activityClass);
         intent.putExtras(bundle);
@@ -94,7 +115,13 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.activity_enter_from_left,R.anim.activity_exit_to_right);
+        if(isNeedFinishAnim()){
+            overridePendingTransition(R.anim.activity_enter_from_left,R.anim.activity_exit_to_right);
+        }
+    }
+
+    protected boolean isNeedFinishAnim(){
+        return true;
     }
 
     /**

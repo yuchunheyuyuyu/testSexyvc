@@ -5,6 +5,9 @@ package com.qtin.sexyvc.utils;
  */
 
 public class ConstantUtil {
+    //默认id
+    public static final long DEFALUT_ID=0;
+
     //对象类型 1：评论；2：专题；3：回复
     public static final int OBJECT_TYPE_COMMENT=1;
     public static final int OBJECT_TYPE_SUBJECT=2;
@@ -24,4 +27,9 @@ public class ConstantUtil {
     public static final String TYPE_INVESTOR_FUND_INTENT="TYPE_INVESTOR_FUND_INTENT";
     public static final int TYPE_INVESTOR=1;
     public static final int TYPE_FUND=2;
+
+    //关键字
+    public static final String KEY_WORD_INTENT="key_word";
+    //是forResult还是直接进入界面
+    public static final String INTENT_IS_FOR_RESULT="INTENT_IS_FOR_RESULT";
 }

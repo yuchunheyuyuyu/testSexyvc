@@ -4,8 +4,13 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.request.InvestorRequest;
+
 import java.util.List;
 import javax.inject.Inject;
 import io.rx_cache.DynamicKey;
@@ -43,5 +48,15 @@ public class SearchResultModel extends BaseModel<ServiceManager,CacheManager> im
                         return Observable.just(typebeanReply.getData());
                     }
                 });
+    }
+
+    @Override
+    public Observable<BaseEntity<FundBackEntity>> queryFunds(InvestorRequest request) {
+        return mServiceManager.getCommonService().queryFunds(request);
+    }
+
+    @Override
+    public Observable<BaseEntity<InvestorBean>> queryInvestors(InvestorRequest request) {
+        return mServiceManager.getCommonService().queryInvestors(request);
     }
 }

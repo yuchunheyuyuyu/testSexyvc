@@ -5,13 +5,14 @@ import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowBean;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import java.util.ArrayList;
 
 /**
  * Created by ls on 17/7/5.
  */
 
-public class FundDetailBean {
+public class FundDetailBean implements DataTypeInterface{
     private long fund_id;
     private String fund_name;
     private String fund_intro;
@@ -140,6 +141,11 @@ public class FundDetailBean {
 
     public void setTags(ArrayList<TagEntity> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public int getType() {
+        return DataTypeInterface.TYPE_CONTENT;
     }
 }
 /**

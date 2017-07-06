@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="16dp">
+
+    <LinearLayout
+        android:id="@+id/localContainer"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/search_history"
+            android:textColor="@color/slate"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvClearHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:lineSpacingExtra="6sp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/clear"
+            android:textColor="@color/slate"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvWord"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginRight="16dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="1"
+        android:text="示例文字"
+        android:textColor="@color/black50"
+        android:textSize="14sp" />
+
+    <View style="@style/line_style" />
+</LinearLayout>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="117dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/investor_detail_top" />
+
+    <FrameLayout
+        android:id="@+id/avatarContainer"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="68dp"
+        android:background="@drawable/logo_fund_back"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/logo_blank" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/avatarContainer"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="8sp"
+        android:text="KPCB凯鹏华盈"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/locationContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_location" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6sp"
+            android:maxLines="1"
+            android:text="上海"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="110dp"
+        app:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/tvRateNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="0sp"
+                android:text="233 人"
+                android:textColor="@color/black30"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="0sp"
+                android:text="7.0"
+                android:textColor="@color/barbie_pink_two"
+                android:textSize="28sp" />
+
+            <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+                android:id="@+id/ratingScore"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                app:numStars="5"
+                app:rating="2.3"
+                app:starPadding="2dp"
+                app:starSize="10dp"
+                app:touchable="false" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/locationContainer"
+        android:orientation="vertical">
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="17dp"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/road_comment"
+            android:textColor="@color/black90"
+            android:textSize="16sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="27dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/professional_qualities"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbProfessionalQualities"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/feedback_speed"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbFeedbackSpeed"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="33dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/road_efficiency"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbRoadEfficiency"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/experience_share"
+                    android:textColor="@color/black70"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbExperienceShare"
+                    style="@style/ProgressBar_Mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:progress="20" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/base_info"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvIntroduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="6sp"
+            android:text="吴世春先生，现任宁波梅花天使投资管理有限公司创始合伙人"
+            android:textColor="@color/black70"
+            android:textSize="14sp" />
+
+        <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
+            android:id="@+id/domainFlowLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="12dp" />
+
+        <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
+            android:id="@+id/stageFlowLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="12dp" />
+
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/investor"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvInvestorNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="更多 (25个)"
+                android:textColor="@color/black50"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivInvestorCase"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewInvestor"
+            android:layout_width="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_height="160dp"
+            android:scrollbars="vertical" />
+
+        <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
+            android:id="@+id/flowLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="6dp" />
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/investor_case"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCaseNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="更多 (25个)"
+                android:textColor="@color/black50"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivArrowCase"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewCase"
+            android:layout_width="match_parent"
+            android:layout_height="134dp"
+            android:scrollbars="vertical" />
+
+        <View style="@style/line_style" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/comment_investor"
+                android:textColor="@color/black90"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCommentNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="更多 (25个)"
+                android:textColor="@color/black50"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivArrowComment"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -5,6 +5,7 @@ import android.app.Application;
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
+import com.qtin.sexyvc.ui.bean.KeyWordBean;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,18 @@ public class SearchActionPresent extends BasePresenter<SearchActionContract.Mode
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
+    }
+
+    public void getKeys(){
+        mRootView.querySuccess(mModel.getKeys());
+    }
+
+    public void insertKeys(KeyWordBean bean){
+        mModel.insertKey(bean);
+    }
+
+    public void delete(){
+        mModel.delete();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.investor;
+package com.qtin.sexyvc.ui.fund.detail;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -18,29 +18,29 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
-import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
+import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBean;
+import com.qtin.sexyvc.ui.investor.CaseAdapter;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
-import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
+import com.qtin.sexyvc.ui.main.fraghome.adapter.HomeInvestorAdapter;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
-
+import com.qtin.sexyvc.utils.SpaceItemDecoration;
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
- * Created by ls on 17/7/3.
+ * Created by ls on 17/7/6.
  */
 
-public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private ArrayList<DataTypeInterface> data;
@@ -48,27 +48,24 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private MyBaseActivity activity;
 
-    public InvestorDetailAdapter(Context context, ArrayList<DataTypeInterface> data) {
+    private SpaceItemDecoration decoration;
+
+    public FundDetailAdapter(Context context, ArrayList<DataTypeInterface> data) {
         this.context = context;
         this.data = data;
         activity = (MyBaseActivity) context;
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
         mApplication = (CustomApplication) context.getApplicationContext();
         mImageLoader = mApplication.getAppComponent().imageLoader();
+
+        int space= (int) DeviceUtils.dpToPixel(context,20);
+        decoration=new SpaceItemDecoration(space,1);
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = null;
-        if (viewType == DataTypeInterface.TYPE_CONTENT) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_investor_top, parent, false);
-            return new ContentHolder(view);
-        } else if (viewType == DataTypeInterface.TYPE_COMMENT) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_investor_comment, parent, false);
-            return new CommentHolder(view);
-        }
-        return null;
+    @Override
+    public int getItemViewType(int position) {
+        return data.get(position).getType();
     }
 
     @Override
@@ -77,24 +74,31 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return data.get(position).getType();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = null;
+        if (viewType == DataTypeInterface.TYPE_CONTENT) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_fund_top, parent, false);
+            return new ContentHolder(view);
+        } else {
+            view = LayoutInflater.from(context).inflate(R.layout.item_fund_comment, parent, false);
+            return new CommentHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (viewHolder instanceof ContentHolder) {
-            ContentHolder holder = (ContentHolder) viewHolder;
-            InvestorBean bean = (InvestorBean) data.get(position);
-            dealContent(bean, holder);
-        } else if (viewHolder instanceof CommentHolder) {
-            CommentHolder holder = (CommentHolder) viewHolder;
-            CommentBean bean = (CommentBean) data.get(position);
-            dealComment(bean, holder);
+        if(viewHolder instanceof ContentHolder){
+            ContentHolder holder= (ContentHolder) viewHolder;
+            FundDetailBean bean= (FundDetailBean) data.get(position);
+            dealContent(bean,holder);
+        }else{
+            CommentHolder holder= (CommentHolder) viewHolder;
+            CommentBean bean= (CommentBean) data.get(position);
+            dealComment(bean,holder);
         }
     }
 
-    private void dealComment(final CommentBean bean, CommentHolder holder) {
+    private void dealComment(final CommentBean bean,CommentHolder holder){
         holder.ratingScore.setRating(bean.getScore());
         if(StringUtil.isBlank(bean.getDomain_name())){
             holder.tvCommentTag.setVisibility(View.GONE);
@@ -102,6 +106,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.tvCommentTag.setVisibility(View.VISIBLE);
             holder.tvCommentTag.setText(bean.getDomain_name());
         }
+        holder.tvTo.setText(StringUtil.formatString(bean.getInvestor_name()));
         holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
         holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
         holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
@@ -116,42 +121,22 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         });
     }
 
-    private void dealContent(InvestorBean bean, final ContentHolder holder) {
+    private void dealContent(FundDetailBean bean,ContentHolder holder){
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .placeholder(R.drawable.avatar_blank)
-                .errorPic(R.drawable.avatar_blank)
-                .transformation(new CropCircleTransformation(context))
-                .url(CommonUtil.getAbsolutePath(bean.getInvestor_avatar()))
-                .imageView(holder.ivAvatar)
+                .transformation(new RoundedCornersTransformation(context,0,0))
+                .placeholder(R.drawable.logo_blank)
+                .errorPic(R.drawable.logo_blank)
+                .url(CommonUtil.getAbsolutePath(bean.getFund_logo()))
+                .imageView(holder.ivLogo)
                 .build());
 
-        holder.tvName.setText(StringUtil.formatString(bean.getInvestor_name()));
+        holder.tvName.setText(StringUtil.formatString(bean.getFund_name()));
+        holder.ratingScore.setRating(bean.getScore());
+        holder.tvRating.setText(""+bean.getScore());
+        //holder.tvRateNum.setText(+"人");
+        //holder.tvLocation.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.get));
 
-        holder.tvCompany.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.getFund_name()));
-        holder.tvPosition.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.getInvestor_title()));
-        //标签
-        if (bean.getTags() == null || bean.getTags().isEmpty()) {
-            holder.flowLayout.setVisibility(View.GONE);
-        } else {
-            holder.flowLayout.setVisibility(View.VISIBLE);
-            TagAdapter tagAdapter = new TagAdapter<TagEntity>(bean.getTags()) {
-                @Override
-                public View getView(FlowLayout parent, int position, TagEntity o) {
-                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview5, parent, false);
-                    tv.setText(o.getTag_name());
-                    return tv;
-                }
-            };
-            holder.flowLayout.setAdapter(tagAdapter);
-        }
-
-        holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context,bean.getInvestor_intro()));
-
-        //评分
-        holder.tvRateNum.setText(bean.getComment_number() + " 人");
-        //holder.tvRating.setText();
-        //holder.ratingScore.setRating();
         //路演评价
         if (bean.getRoad_show() != null) {
             holder.pbProfessionalQualities.setProgress(countRoadPercent(bean.getRoad_show().getProfessional()));
@@ -164,7 +149,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.pbFeedbackSpeed.setProgress(0);
             holder.pbExperienceShare.setProgress(0);
         }
-
+        //基本介绍
+        holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context,bean.getFund_intro()));
         //行业标签
         if (bean.getDomain_list() == null || bean.getDomain_list().isEmpty()) {
             holder.domainFlowLayout.setVisibility(View.GONE);
@@ -211,6 +197,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             };
             holder.stageFlowLayout.setAdapter(tagAdapter);
         }
+
         //投资案例
         if (bean.getCase_number() == 0) {
             holder.ivArrowCase.setVisibility(View.GONE);
@@ -239,6 +226,13 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             String commentFormat = context.getResources().getString(R.string.format_more_commnet);
             holder.tvCommentNum.setText(String.format(commentFormat, "" + bean.getComment_number()));
         }
+
+        //投资人列表
+        holder.recyclerViewInvestor.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
+        holder.recyclerViewInvestor.removeItemDecoration(decoration);
+        holder.recyclerViewInvestor.addItemDecoration(decoration);
+        HomeInvestorAdapter adapter=new HomeInvestorAdapter(context,bean.getInvestor_list());
+        holder.recyclerViewInvestor.setAdapter(adapter);
     }
 
     private int countRoadPercent(RoadShowItemBean itemBean) {
@@ -253,40 +247,13 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return 0;
     }
 
-
-    static class CommentHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvCommentTag)
-        TextView tvCommentTag;
-        @BindView(R.id.tvFrom)
-        TextView tvFrom;
-        @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
-        @BindView(R.id.tvTitle)
-        TextView tvTitle;
-        @BindView(R.id.tvContent)
-        TextView tvContent;
-        @BindView(R.id.lineBottom)
-        View lineBottom;
-
-        CommentHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
     static class ContentHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivAvatar)
-        ImageView ivAvatar;
-        @BindView(R.id.ivAnthStatus)
-        ImageView ivAnthStatus;
+        @BindView(R.id.ivLogo)
+        ImageView ivLogo;
         @BindView(R.id.tvName)
         TextView tvName;
-        @BindView(R.id.tvCompany)
-        TextView tvCompany;
-        @BindView(R.id.tvPosition)
-        TextView tvPosition;
-        @BindView(R.id.flowLayout)
-        TagFlowLayout flowLayout;
+        @BindView(R.id.tvLocation)
+        TextView tvLocation;
         @BindView(R.id.tvRateNum)
         TextView tvRateNum;
         @BindView(R.id.tvRating)
@@ -307,18 +274,48 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TagFlowLayout domainFlowLayout;
         @BindView(R.id.stageFlowLayout)
         TagFlowLayout stageFlowLayout;
+        @BindView(R.id.tvInvestorNum)
+        TextView tvInvestorNum;
+        @BindView(R.id.ivInvestorCase)
+        ImageView ivInvestorCase;
+        @BindView(R.id.recyclerViewInvestor)
+        RecyclerView recyclerViewInvestor;
+        @BindView(R.id.flowLayout)
+        TagFlowLayout flowLayout;
         @BindView(R.id.tvCaseNum)
         TextView tvCaseNum;
+        @BindView(R.id.ivArrowCase)
+        ImageView ivArrowCase;
         @BindView(R.id.recyclerViewCase)
         RecyclerView recyclerViewCase;
         @BindView(R.id.tvCommentNum)
         TextView tvCommentNum;
-        @BindView(R.id.ivArrowCase)
-        ImageView ivArrowCase;
         @BindView(R.id.ivArrowComment)
         ImageView ivArrowComment;
 
         ContentHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class CommentHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tvCommentTag)
+        TextView tvCommentTag;
+        @BindView(R.id.tvFrom)
+        TextView tvFrom;
+        @BindView(R.id.tvTo)
+        TextView tvTo;
+        @BindView(R.id.ratingScore)
+        BaseRatingBar ratingScore;
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
+        @BindView(R.id.tvContent)
+        TextView tvContent;
+        @BindView(R.id.lineBottom)
+        View lineBottom;
+
+        CommentHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

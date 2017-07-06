@@ -1,12 +1,14 @@
 package com.qtin.sexyvc.ui.search.result;
 
 import android.content.Context;
-
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.request.InvestorRequest;
 import java.util.ArrayList;
 import rx.Observable;
 
@@ -21,7 +23,9 @@ public interface SearchResultContract {
         void requestTypeBack(int type,ArrayList<FilterEntity> list);
         void startLoadMore();
         void endLoadMore();
-        void querySuccess(InvestorBean bean);
+
+        void queryFundSuccess(FundBackEntity backEntity);
+        void queryInvestorSuccess(InvestorBean bean);
     }
     interface Model extends IModel{
 
@@ -29,5 +33,7 @@ public interface SearchResultContract {
         String getToken();
         Observable<Typebean> getType(String type_key);
 
+        Observable<BaseEntity<FundBackEntity>> queryFunds(InvestorRequest request);
+        Observable<BaseEntity<InvestorBean>> queryInvestors(InvestorRequest request);
     }
 }

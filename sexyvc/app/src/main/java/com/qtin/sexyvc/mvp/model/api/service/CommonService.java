@@ -8,6 +8,7 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
+import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
@@ -17,11 +18,13 @@ import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
+import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
+import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 
@@ -433,5 +436,31 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/contact/investor/detail")
     Observable<BaseEntity<ContactBean>> queryContactDetail(@Field("token")String token,@Field("contact_id")long contact_id);
+
+    /**
+     * 投资机构详情
+     * @param token
+     * @param fund_id
+     * @param comment_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/fund/detail")
+    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,@Field("fund_id")long fund_id,@Field("comment_id")long comment_id);
+
+    /**
+     * 搜索投资机构
+     * @return
+     */
+    @POST("api/page/fund/list")
+    Observable<BaseEntity<FundBackEntity>> queryFunds(@Body InvestorRequest request);
+
+    /**
+     * 搜索投资人
+     * @return
+     */
+    @POST("api/page/investor/list")
+    Observable<BaseEntity<InvestorBean>> queryInvestors(@Body InvestorRequest request);
+
 }
 

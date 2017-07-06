@@ -48,11 +48,12 @@
                 android:layout_marginRight="9dp"
                 android:src="@drawable/change_pink" />
 
-            <EditText
+            <TextView
                 android:id="@+id/tvChangeHint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:imeOptions="actionSearch"
+                android:gravity="center_vertical"
                 android:layout_marginRight="8dp"
                 android:background="@null"
                 android:hint="@string/hint_search_investor"

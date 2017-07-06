@@ -2,44 +2,40 @@ package com.qtin.sexyvc.ui.search.result;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
-import com.qtin.sexyvc.ui.bean.InvestorEntity;
+import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.main.fragInvestor.EfficiencyAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.InvestorAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.request.InvestorRequest;
+import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.search.result.di.DaggerSearchResultComponent;
 import com.qtin.sexyvc.ui.search.result.di.SearchResultModule;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.DropDownMenu;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -50,7 +46,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     @BindView(R.id.tvChange)
     TextView tvChange;
     @BindView(R.id.tvChangeHint)
-    EditText tvChangeHint;
+    TextView tvChangeHint;
     @BindView(R.id.dropDownMenu)
     DropDownMenu dropDownMenu;
 
@@ -59,6 +55,9 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     private ArrayList<FilterEntity> efficiencyData = new ArrayList<>();
     private ArrayList<FilterEntity> industryData = new ArrayList<>();
     private ArrayList<FilterEntity> turnData = new ArrayList<>();
+
+    private TagFlowLayout domainFlowLayout;
+    private TagFlowLayout stageFlowLayout;
 
     public static final int TYPE_DOMAIN = 0x001;//行业
     public static final int TYPE_STAGE = 0x002;//阶段
@@ -70,14 +69,17 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     private boolean hasLoadedAllItems;
 
     private int page = 1;
-    private int page_size = 15;
+    private final int page_size = 15;
     private Paginate mPaginate;
     private boolean isLoadingMore;
-    private ArrayList<InvestorEntity> data = new ArrayList<>();
+    private ArrayList<DataTypeInterface> data = new ArrayList<>();
     private InvestorAdapter mAdapter;
 
     private int searchType;
     private ContentViewHolder contentViewHolder;
+    private String keyWord;
+
+    private static final int REQUEST_CODE_SEARCH=0x001;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -97,8 +99,16 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     @Override
     protected void initData() {
         searchType=getIntent().getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
+        keyWord=getIntent().getExtras().getString(ConstantUtil.KEY_WORD_INTENT);
+        tvChangeHint.setText(keyWord);
 
-        View contentView = LayoutInflater.from(this).inflate(R.layout.swipe_recycleview, null);
+        if(searchType==ConstantUtil.TYPE_FUND){
+            tvChange.setText(getResources().getString(R.string.fund));
+        }else{
+            tvChange.setText(getResources().getString(R.string.investor));
+        }
+
+        View contentView = LayoutInflater.from(this).inflate(R.layout.recycleview, null);
         contentViewHolder = new ContentViewHolder(contentView);
         configRecycleView();
         addEfficiency();//路演效率
@@ -112,23 +122,33 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         mPresenter.getType("common_stage", TYPE_STAGE);
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_RATE);
+
+        search();
+    }
+
+    private void search(){
+        InvestorRequest request=new InvestorRequest();
+        request.setPage(page);
+        request.setPage_size(page_size);
+        request.setDomains(new ArrayList<Long>());
+        request.setStages(new ArrayList<Long>());
+        request.setKeyword(keyWord);
+        request.setSort(0);
+        if(searchType==ConstantUtil.TYPE_FUND){
+            mPresenter.queryFunds(request);
+        }else{
+            mPresenter.queryInvestors(request);
+        }
     }
 
     @Override
     public void showLoading() {
-        Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        contentViewHolder.swipeRefreshLayout.setRefreshing(true);
-                    }
-                });
+
     }
 
     @Override
     public void hideLoading() {
-        contentViewHolder.swipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override
@@ -153,6 +173,35 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 finish();
                 break;
             case R.id.changeContainer:
+                Bundle bundle=new Bundle();
+                bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT,true);
+                bundle.putString(ConstantUtil.KEY_WORD_INTENT,keyWord);
+                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,searchType);
+                gotoActivityFadeForResult(SearchActionActivity.class,bundle,REQUEST_CODE_SEARCH);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            return;
+        }
+        switch(requestCode){
+            case REQUEST_CODE_SEARCH:
+                searchType=data.getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
+                keyWord=data.getExtras().getString(ConstantUtil.KEY_WORD_INTENT);
+                tvChangeHint.setText(keyWord);
+
+                domainAdapter.setSelectedList();
+
+
+                if(searchType==ConstantUtil.TYPE_FUND){
+                    tvChange.setText(getResources().getString(R.string.fund));
+                }else{
+                    tvChange.setText(getResources().getString(R.string.investor));
+                }
                 break;
         }
     }
@@ -185,26 +234,53 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
 
     @Override
     public void startLoadMore() {
-
+        isLoadingMore=true;
     }
 
     @Override
     public void endLoadMore() {
-
+        isLoadingMore=false;
     }
 
     @Override
-    public void querySuccess(InvestorBean bean) {
-
+    public void queryFundSuccess(FundBackEntity bean) {
+        if (page == 1) {
+            data.clear();
+        }
+        if (bean.getList() != null) {
+            data.addAll(bean.getList());
+        }
+        if (bean.getTotal() > data.size()) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
+        }
+        mAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void queryInvestorSuccess(InvestorBean bean) {
+        if (page == 1) {
+            data.clear();
+        }
+        if (bean.getList() != null) {
+            data.addAll(bean.getList());
+        }
+        if (bean.getTotal() > data.size()) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
     private void addIndustry() {
         View view = LayoutInflater.from(this).inflate(R.layout.filter_flow, null);
-        final TagFlowLayout flowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
-
+        domainFlowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
         view.findViewById(R.id.tvResetFilter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                domainAdapter.setSelectedList();
             }
         });
 
@@ -217,24 +293,23 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         domainAdapter = new TagAdapter<FilterEntity>(industryData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, flowLayout, false);
+                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, domainFlowLayout, false);
                 tv.setText(o.getType_name());
                 return tv;
             }
         };
-        flowLayout.setAdapter(domainAdapter);
-
+        domainFlowLayout.setAdapter(domainAdapter);
         popupViews.add(view);
     }
 
     private void addTurn() {
         View view = LayoutInflater.from(this).inflate(R.layout.filter_flow, null);
-        final TagFlowLayout flowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
+        stageFlowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
 
         view.findViewById(R.id.tvResetFilter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                stageAdapter.setSelectedList();
             }
         });
 
@@ -247,13 +322,13 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         stageAdapter = new TagAdapter<FilterEntity>(turnData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, flowLayout, false);
+                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, stageFlowLayout, false);
                 tv.setText(o.getType_name());
                 return tv;
             }
         };
 
-        flowLayout.setAdapter(stageAdapter);
+        stageFlowLayout.setAdapter(stageAdapter);
         popupViews.add(view);
     }
 
@@ -268,13 +343,6 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     }
 
     private void configRecycleView() {
-        contentViewHolder.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                //mPresenter.getInvestorData(page, page_size);
-            }
-        });
         contentViewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         contentViewHolder.recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new InvestorAdapter(this, data);
@@ -320,8 +388,6 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     static class ContentViewHolder {
         @BindView(R.id.recyclerView)
         RecyclerView recyclerView;
-        @BindView(R.id.swipeRefreshLayout)
-        SwipeRefreshLayout swipeRefreshLayout;
 
         ContentViewHolder(View view) {
             ButterKnife.bind(this, view);

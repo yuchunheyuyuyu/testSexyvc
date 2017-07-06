@@ -20,6 +20,7 @@ import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.investor.di.DaggerInvestorDetailComponent;
 import com.qtin.sexyvc.ui.investor.di.InvestorDetailModule;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,14 +76,14 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(investor_id,0);
+                mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter=new InvestorDetailAdapter(this,data);
         recyclerView.setAdapter(mAdapter);
 
-        mPresenter.query(investor_id,0);
+        mPresenter.query(investor_id,ConstantUtil.DEFALUT_ID);
 
         maxDistance= (int) DeviceUtils.dpToPixel(this,122);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -173,15 +174,5 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
             data.addAll(backBean.getComments().getList());
         }
         mAdapter.notifyDataSetChanged();
-       /** Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .delay(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        recyclerView.setMinimumHeight(0);
-                    }
-                });
-        */
     }
 }
