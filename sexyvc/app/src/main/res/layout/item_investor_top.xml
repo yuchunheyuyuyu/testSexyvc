@@ -340,6 +340,7 @@
             android:layout_marginTop="24dp" />
 
         <LinearLayout
+            android:id="@+id/caseContainer"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:gravity="center_vertical"
@@ -383,6 +384,7 @@
         <View style="@style/line_style" />
 
         <LinearLayout
+            android:id="@+id/commentContainer"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:gravity="center_vertical"

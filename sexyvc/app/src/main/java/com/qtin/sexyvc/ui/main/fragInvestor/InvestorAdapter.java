@@ -118,6 +118,15 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .url(CommonUtil.getAbsolutePath(entity.getFund_logo()))
                 .imageView(holder.ivLogo)
                 .build());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener != null) {
+                    itemClickListener.onClickItem(position);
+                }
+            }
+        });
     }
 
 

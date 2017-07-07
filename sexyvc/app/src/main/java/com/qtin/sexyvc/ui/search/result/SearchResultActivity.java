@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -16,7 +17,11 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
+import com.qtin.sexyvc.ui.bean.FundEntity;
+import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
+import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fragInvestor.EfficiencyAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.InvestorAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
@@ -30,9 +35,13 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -130,8 +139,29 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         InvestorRequest request=new InvestorRequest();
         request.setPage(page);
         request.setPage_size(page_size);
-        request.setDomains(new ArrayList<Long>());
-        request.setStages(new ArrayList<Long>());
+
+        //行业
+        ArrayList<Long> domains=new ArrayList<>();
+        Set<Integer> domainsSet=domainFlowLayout.getSelectedList();
+        if(domainsSet!=null&&!domainsSet.isEmpty()){
+            Iterator<Integer> it=domainsSet.iterator();
+            while (it.hasNext()){
+                domains.add(industryData.get(it.next()).getType_id());
+            }
+        }
+
+        //阶段
+        ArrayList<Long> stages=new ArrayList<>();
+        Set<Integer> stageSet=stageFlowLayout.getSelectedList();
+        if(stageSet!=null&&!stageSet.isEmpty()){
+            Iterator<Integer> it=stageSet.iterator();
+            while (it.hasNext()){
+                stages.add(turnData.get(it.next()).getType_id());
+            }
+        }
+
+        request.setDomains(domains);
+        request.setStages(stages);
         request.setKeyword(keyWord);
         request.setSort(0);
         if(searchType==ConstantUtil.TYPE_FUND){
@@ -202,6 +232,12 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 }else{
                     tvChange.setText(getResources().getString(R.string.investor));
                 }
+                //重新进入到页面的处理
+                domainAdapter.setSelectedList();
+                stageAdapter.setSelectedList();
+                page=1;
+                search();
+
                 break;
         }
     }
@@ -287,7 +323,9 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         view.findViewById(R.id.tvComfirmFilter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dropDownMenu.closeMenu();
+                page=1;
+                search();
             }
         });
         domainAdapter = new TagAdapter<FilterEntity>(industryData) {
@@ -316,7 +354,9 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         view.findViewById(R.id.tvComfirmFilter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dropDownMenu.closeMenu();
+                page=1;
+                search();
             }
         });
         stageAdapter = new TagAdapter<FilterEntity>(turnData) {
@@ -350,12 +390,19 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         mAdapter.setItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
+                if(data.get(position) instanceof InvestorEntity){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("investor_id", ((InvestorEntity)data.get(position)).getInvestor_id());
+                    gotoActivity(InvestorDetailActivity.class, bundle);
 
+                }else if(data.get(position) instanceof FundEntity){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("fund_id", ((FundEntity)data.get(position)).getFund_id());
+                    gotoActivity(FundDetailActivity.class, bundle);
+                }
             }
         });
         initPaginate();
-        //获取数据
-        //mPresenter.getInvestorData(page, page_size);
     }
 
     private void initPaginate() {
@@ -364,7 +411,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 @Override
                 public void onLoadMore() {
                     page++;
-                    //mPresenter.getInvestorData(page, page_size);
+                    search();
                 }
 
                 @Override

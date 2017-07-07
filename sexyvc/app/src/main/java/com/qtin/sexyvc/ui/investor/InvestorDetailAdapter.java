@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,20 +18,25 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.CaseBean;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
 import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
+import com.qtin.sexyvc.ui.more.MoreCaseActivity;
+import com.qtin.sexyvc.ui.more.comment.MoreCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,9 +102,9 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
         holder.ratingScore.setRating(bean.getScore());
-        if(StringUtil.isBlank(bean.getDomain_name())){
+        if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.tvCommentTag.setVisibility(View.VISIBLE);
             holder.tvCommentTag.setText(bean.getDomain_name());
         }
@@ -109,14 +115,14 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle=new Bundle();
-                bundle.putLong("comment_id",bean.getComment_id());
-                activity.gotoActivity(CommentDetailActivity.class,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putLong("comment_id", bean.getComment_id());
+                activity.gotoActivity(CommentDetailActivity.class, bundle);
             }
         });
     }
 
-    private void dealContent(InvestorBean bean, final ContentHolder holder) {
+    private void dealContent(final InvestorBean bean, final ContentHolder holder) {
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
                 .placeholder(R.drawable.avatar_blank)
@@ -128,8 +134,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         holder.tvName.setText(StringUtil.formatString(bean.getInvestor_name()));
 
-        holder.tvCompany.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.getFund_name()));
-        holder.tvPosition.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.getInvestor_title()));
+        holder.tvCompany.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context, bean.getFund_name()));
+        holder.tvPosition.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context, bean.getInvestor_title()));
         //标签
         if (bean.getTags() == null || bean.getTags().isEmpty()) {
             holder.flowLayout.setVisibility(View.GONE);
@@ -146,7 +152,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.flowLayout.setAdapter(tagAdapter);
         }
 
-        holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context,bean.getInvestor_intro()));
+        holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context, bean.getInvestor_intro()));
 
         //评分
         holder.tvRateNum.setText(bean.getComment_number() + " 人");
@@ -225,19 +231,46 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         } else {
             holder.recyclerViewCase.setVisibility(View.VISIBLE);
             holder.recyclerViewCase.clearFocus();
-            CaseAdapter caseAdapter = new CaseAdapter(context, bean.getCase_list());
+
+            List<CaseBean> tem= bean.getCase_list().size()>4? bean.getCase_list().subList(0, 4) :bean.getCase_list();
+            ArrayList<CaseBean> cases=new ArrayList<CaseBean>();
+            cases.addAll(tem);
+            CaseAdapter caseAdapter = new CaseAdapter(context, cases);
+
             holder.recyclerViewCase.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
             holder.recyclerViewCase.setAdapter(caseAdapter);
-        }
 
+            holder.caseContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putParcelableArrayList(ConstantUtil.INTENT_PARCELABLE_ARRAY,bean.getCase_list());
+                    String format=context.getResources().getString(R.string.who_case);
+                    String title=String.format(format,StringUtil.formatString(bean.getInvestor_name()));
+                    bundle.putString(ConstantUtil.INTENT_TITLE,title);
+                    activity.gotoActivity(MoreCaseActivity.class,bundle);
+                }
+            });
+        }
         //评论
-        if(bean.getComment_number()==0){
+        if (bean.getComment_number() == 0) {
             holder.ivArrowComment.setVisibility(View.GONE);
             holder.tvCommentNum.setText(context.getResources().getString(R.string.no_data));
-        }else{
+        } else {
             holder.ivArrowComment.setVisibility(View.VISIBLE);
             String commentFormat = context.getResources().getString(R.string.format_more_commnet);
             holder.tvCommentNum.setText(String.format(commentFormat, "" + bean.getComment_number()));
+
+            holder.commentContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
+                    bundle.putLong(ConstantUtil.INTENT_ID,bean.getInvestor_id());
+                    bundle.putString(ConstantUtil.INTENT_TITLE,bean.getInvestor_name());
+                    activity.gotoActivity(MoreCommentActivity.class,bundle);
+                }
+            });
         }
     }
 
@@ -317,6 +350,10 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ImageView ivArrowCase;
         @BindView(R.id.ivArrowComment)
         ImageView ivArrowComment;
+        @BindView(R.id.caseContainer)
+        LinearLayout caseContainer;
+        @BindView(R.id.commentContainer)
+        LinearLayout commentContainer;
 
         ContentHolder(View view) {
             super(view);

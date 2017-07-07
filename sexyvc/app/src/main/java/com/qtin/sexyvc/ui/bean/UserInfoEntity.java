@@ -2,9 +2,7 @@ package com.qtin.sexyvc.ui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -12,8 +10,8 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class UserInfoEntity implements Parcelable {
-    @Id
-    private long id;
+
+    private String  token;
 
     private String u_nickname;
     private int u_gender;
@@ -25,16 +23,18 @@ public class UserInfoEntity implements Parcelable {
     private String u_backup_phone;
     private String u_backup_email;
 
-    //private String u_auth_state;
-    //private String u_auth_type;//0未填写，1投资人，2创始人，3FA
+    private String u_company;
+    private String u_title;
 
+    private int u_auth_state;
+    private int u_auth_type;//0未填写，1投资人，2创始人，3FA
 
-    public long getId() {
-        return id;
+    public String getToken() {
+        return token;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getU_nickname() {
@@ -101,6 +101,38 @@ public class UserInfoEntity implements Parcelable {
         this.u_backup_email = u_backup_email;
     }
 
+    public String getU_company() {
+        return u_company;
+    }
+
+    public void setU_company(String u_company) {
+        this.u_company = u_company;
+    }
+
+    public String getU_title() {
+        return u_title;
+    }
+
+    public void setU_title(String u_title) {
+        this.u_title = u_title;
+    }
+
+    public int getU_auth_state() {
+        return u_auth_state;
+    }
+
+    public void setU_auth_state(int u_auth_state) {
+        this.u_auth_state = u_auth_state;
+    }
+
+    public int getU_auth_type() {
+        return u_auth_type;
+    }
+
+    public void setU_auth_type(int u_auth_type) {
+        this.u_auth_type = u_auth_type;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -108,6 +140,7 @@ public class UserInfoEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.token);
         dest.writeString(this.u_nickname);
         dest.writeInt(this.u_gender);
         dest.writeString(this.u_avatar);
@@ -116,12 +149,17 @@ public class UserInfoEntity implements Parcelable {
         dest.writeString(this.u_email);
         dest.writeString(this.u_backup_phone);
         dest.writeString(this.u_backup_email);
+        dest.writeString(this.u_company);
+        dest.writeString(this.u_title);
+        dest.writeInt(this.u_auth_state);
+        dest.writeInt(this.u_auth_type);
     }
 
     public UserInfoEntity() {
     }
 
     protected UserInfoEntity(Parcel in) {
+        this.token = in.readString();
         this.u_nickname = in.readString();
         this.u_gender = in.readInt();
         this.u_avatar = in.readString();
@@ -130,12 +168,16 @@ public class UserInfoEntity implements Parcelable {
         this.u_email = in.readString();
         this.u_backup_phone = in.readString();
         this.u_backup_email = in.readString();
+        this.u_company = in.readString();
+        this.u_title = in.readString();
+        this.u_auth_state = in.readInt();
+        this.u_auth_type = in.readInt();
     }
 
-    @Generated(hash = 754649758)
-    public UserInfoEntity(long id, String u_nickname, int u_gender, String u_avatar, String u_signature, String u_phone, String u_email,
-            String u_backup_phone, String u_backup_email) {
-        this.id = id;
+    @Generated(hash = 1678964386)
+    public UserInfoEntity(String token, String u_nickname, int u_gender, String u_avatar, String u_signature, String u_phone, String u_email,
+            String u_backup_phone, String u_backup_email, String u_company, String u_title, int u_auth_state, int u_auth_type) {
+        this.token = token;
         this.u_nickname = u_nickname;
         this.u_gender = u_gender;
         this.u_avatar = u_avatar;
@@ -144,9 +186,13 @@ public class UserInfoEntity implements Parcelable {
         this.u_email = u_email;
         this.u_backup_phone = u_backup_phone;
         this.u_backup_email = u_backup_email;
+        this.u_company = u_company;
+        this.u_title = u_title;
+        this.u_auth_state = u_auth_state;
+        this.u_auth_type = u_auth_type;
     }
 
-    public static final Creator<UserInfoEntity> CREATOR = new Creator<UserInfoEntity>() {
+    public static final Parcelable.Creator<UserInfoEntity> CREATOR = new Parcelable.Creator<UserInfoEntity>() {
         @Override
         public UserInfoEntity createFromParcel(Parcel source) {
             return new UserInfoEntity(source);

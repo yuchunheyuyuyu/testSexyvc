@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:focusableInTouchMode="true"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:focusableInTouchMode="true">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="117dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:src="@drawable/investor_detail_top" />
+        android:src="@drawable/investor_detail_top_2" />
 
     <FrameLayout
         android:id="@+id/avatarContainer"
@@ -36,9 +36,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/avatarContainer"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="130dp"
         android:layout_marginTop="12dp"
         android:lineSpacingExtra="8sp"
-        android:text="KPCB凯鹏华盈"
+        android:text="KPCB凯鹏华盈KPCB凯鹏华盈KPCB凯鹏华盈KPCB凯鹏华盈"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
@@ -70,19 +71,21 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-
-
+    <View
+        android:id="@+id/baseLine"
+        style="@style/line_style"
+        android:layout_below="@+id/locationContainer"
+        android:layout_marginTop="24dp" />
 
 
     <android.support.v7.widget.CardView
         android:layout_width="90dp"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/baseLine"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="24dp"
-        android:layout_marginTop="110dp"
         app:cardElevation="5dp">
 
         <LinearLayout
@@ -132,12 +135,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/locationContainer"
+        android:layout_below="@+id/baseLine"
         android:orientation="vertical">
-
-        <View
-            style="@style/line_style"
-            android:layout_marginTop="24dp" />
 
 
         <TextView
@@ -298,6 +297,7 @@
             android:layout_marginTop="24dp" />
 
         <LinearLayout
+            android:id="@+id/investorContainer"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:gravity="center_vertical"
@@ -325,7 +325,7 @@
                 android:textSize="12sp" />
 
             <ImageView
-                android:id="@+id/ivInvestorCase"
+                android:id="@+id/ivArrowInvestor"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/arrow_disclosure_l" />
@@ -335,23 +335,30 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewInvestor"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
             android:layout_height="160dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="4dp"
             android:scrollbars="vertical" />
 
         <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
             android:id="@+id/flowLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="6dp" />
+            android:layout_marginRight="16dp" />
 
         <View
+            android:id="@+id/investorLine1"
             style="@style/line_style"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="18dp" />
+
+        <View
+            android:id="@+id/investorLine2"
+            style="@style/line_style" />
 
         <LinearLayout
+            android:id="@+id/caseContainer"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:gravity="center_vertical"
@@ -395,6 +402,7 @@
         <View style="@style/line_style" />
 
         <LinearLayout
+            android:id="@+id/commentContainer"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:gravity="center_vertical"

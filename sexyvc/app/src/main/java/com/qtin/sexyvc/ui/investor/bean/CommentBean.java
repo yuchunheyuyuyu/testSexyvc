@@ -1,12 +1,15 @@
 package com.qtin.sexyvc.ui.investor.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 
 /**
  * Created by ls on 17/7/3.
  */
 
-public class CommentBean implements DataTypeInterface{
+public class CommentBean implements DataTypeInterface, Parcelable {
 
     private String domain_name;
     private long domain_id;
@@ -123,6 +126,57 @@ public class CommentBean implements DataTypeInterface{
     public int getType() {
         return DataTypeInterface.TYPE_COMMENT;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.domain_name);
+        dest.writeLong(this.domain_id);
+        dest.writeString(this.u_nickname);
+        dest.writeLong(this.comment_id);
+        dest.writeString(this.title);
+        dest.writeString(this.content);
+        dest.writeLong(this.fund_id);
+        dest.writeString(this.fund_name);
+        dest.writeLong(this.investor_id);
+        dest.writeString(this.investor_name);
+        dest.writeFloat(this.score);
+        dest.writeInt(this.has_praise);
+    }
+
+    public CommentBean() {
+    }
+
+    protected CommentBean(Parcel in) {
+        this.domain_name = in.readString();
+        this.domain_id = in.readLong();
+        this.u_nickname = in.readString();
+        this.comment_id = in.readLong();
+        this.title = in.readString();
+        this.content = in.readString();
+        this.fund_id = in.readLong();
+        this.fund_name = in.readString();
+        this.investor_id = in.readLong();
+        this.investor_name = in.readString();
+        this.score = in.readFloat();
+        this.has_praise = in.readInt();
+    }
+
+    public static final Parcelable.Creator<CommentBean> CREATOR = new Parcelable.Creator<CommentBean>() {
+        @Override
+        public CommentBean createFromParcel(Parcel source) {
+            return new CommentBean(source);
+        }
+
+        @Override
+        public CommentBean[] newArray(int size) {
+            return new CommentBean[size];
+        }
+    };
 }
 /**
 

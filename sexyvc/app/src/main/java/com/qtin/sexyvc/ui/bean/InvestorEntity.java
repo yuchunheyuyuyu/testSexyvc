@@ -1,5 +1,8 @@
 package com.qtin.sexyvc.ui.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ import java.util.ArrayList;
  * Created by ls on 17/6/9.
  */
 
-public class InvestorEntity implements DataTypeInterface{
+public class InvestorEntity implements DataTypeInterface, Parcelable {
 
     private long investor_id;
     private String investor_name;
@@ -19,6 +22,15 @@ public class InvestorEntity implements DataTypeInterface{
     private long u_id;
     private long comment_number;
     private long fund_id;
+    private String investor_title;
+
+    public String getInvestor_title() {
+        return investor_title;
+    }
+
+    public void setInvestor_title(String investor_title) {
+        this.investor_title = investor_title;
+    }
 
     private ArrayList<TagEntity> tags;
 
@@ -106,4 +118,54 @@ public class InvestorEntity implements DataTypeInterface{
     public int getType() {
         return DataTypeInterface.TYPE_INVESTOR;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.investor_id);
+        dest.writeString(this.investor_name);
+        dest.writeString(this.investor_avatar);
+        dest.writeString(this.fund_name);
+        dest.writeString(this.title);
+        dest.writeFloat(this.score);
+        dest.writeLong(this.u_id);
+        dest.writeLong(this.comment_number);
+        dest.writeLong(this.fund_id);
+        dest.writeString(this.investor_title);
+        dest.writeList(this.tags);
+    }
+
+    public InvestorEntity() {
+    }
+
+    protected InvestorEntity(Parcel in) {
+        this.investor_id = in.readLong();
+        this.investor_name = in.readString();
+        this.investor_avatar = in.readString();
+        this.fund_name = in.readString();
+        this.title = in.readString();
+        this.score = in.readFloat();
+        this.u_id = in.readLong();
+        this.comment_number = in.readLong();
+        this.fund_id = in.readLong();
+        this.investor_title = in.readString();
+        this.tags = new ArrayList<TagEntity>();
+        in.readList(this.tags, TagEntity.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<InvestorEntity> CREATOR = new Parcelable.Creator<InvestorEntity>() {
+        @Override
+        public InvestorEntity createFromParcel(Parcel source) {
+            return new InvestorEntity(source);
+        }
+
+        @Override
+        public InvestorEntity[] newArray(int size) {
+            return new InvestorEntity[size];
+        }
+    };
 }

@@ -32,4 +32,23 @@ public class ConstantUtil {
     public static final String KEY_WORD_INTENT="key_word";
     //是forResult还是直接进入界面
     public static final String INTENT_IS_FOR_RESULT="INTENT_IS_FOR_RESULT";
+
+    //id
+    public static final String INTENT_ID="id";
+    //title
+    public static final String INTENT_TITLE="title";
+    //ParcelableArray
+    public static final String INTENT_PARCELABLE_ARRAY="ParcelableArray";
+
+    //认证状态
+    public static final int AUTH_STATE_SUBMIT=0;
+    public static final int AUTH_STATE_PASS=1;
+    public static final int AUTH_STATE_FAIL=2;
+
+    //身份
+    public static final int AUTH_TYPE_UNKNOWN=0;
+    public static final int AUTH_TYPE_FOUNDER=1;
+    public static final int AUTH_TYPE_INVESTOR=2;
+    public static final int AUTH_TYPE_FA=3;
+
 }

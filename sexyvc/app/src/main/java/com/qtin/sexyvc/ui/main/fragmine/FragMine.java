@@ -21,6 +21,8 @@ import com.qtin.sexyvc.ui.user.message.MessageActivity;
 import com.qtin.sexyvc.ui.user.project.my.MyProjectActivity;
 import com.qtin.sexyvc.ui.user.setting.SettingActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -146,6 +148,35 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
             tvIntroduce.setText(entity.getU_signature());
         }
         //公司及职位，身份认证，暂无
+        if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_PASS){
+            if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
+                ivIdentity.setImageResource(R.drawable.tag_approve_fc);
+            }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_INVESTOR){
+                ivIdentity.setImageResource(R.drawable.tag_approve_vc);
+            }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FA){
+                ivIdentity.setImageResource(R.drawable.tag_approve_fa);
+            }
+        }else{
+            ivIdentity.setImageResource(R.drawable.approve_not_done);
+        }
+
+        if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
+            myProjectContainer.setVisibility(View.VISIBLE);
+        }else{
+            myProjectContainer.setVisibility(View.GONE);
+        }
+
+        if(StringUtil.isBlank(entity.getU_company())){
+            tvCompany.setText(getResources().getString(R.string.compant_defalut));
+        }else{
+            tvCompany.setText(entity.getU_company());
+        }
+
+        if(StringUtil.isBlank(entity.getU_title())){
+            tvPosition.setText(getResources().getString(R.string.position_defalut));
+        }else{
+            tvPosition.setText(entity.getU_title());
+        }
 
         //头像
         mImageLoader.loadImage(customApplication, GlideImageConfig

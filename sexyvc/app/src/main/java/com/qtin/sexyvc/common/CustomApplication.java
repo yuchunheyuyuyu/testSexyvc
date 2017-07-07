@@ -85,7 +85,7 @@ public class CustomApplication extends BaseApplication {
     }
 
     private void initDataBase(){
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc4-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc6-db");
         Database db =helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }

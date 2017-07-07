@@ -186,6 +186,21 @@
             android:name=".ui.fund.detail.FundDetailActivity"
             android:screenOrientation="portrait" />
 
+        <!--更多评论-->
+        <activity
+            android:name=".ui.more.comment.MoreCommentActivity"
+            android:screenOrientation="portrait" />
+
+        <!--更多案例-->
+        <activity
+            android:name=".ui.more.MoreCaseActivity"
+            android:screenOrientation="portrait" />
+
+        <!--更多投资人-->
+        <activity
+            android:name=".ui.more.MoreInvestorActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity
