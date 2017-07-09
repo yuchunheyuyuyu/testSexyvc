@@ -25,8 +25,10 @@ import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -179,6 +181,19 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/info/edit")
     Observable<CodeEntity> editSex(@Field("token")String token,@Field("u_gender")int u_gender);
+
+    /**
+     * 修改机构职位
+     * @param token
+     * @param u_auth_type
+     * @param u_company
+     * @param u_title
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/info/edit")
+    Observable<CodeEntity> editPosition(@Field("token")String token,@Field("u_auth_type")int u_auth_type,
+                                        @Field("u_company")String u_company,@Field("u_title")String u_title);
 
     /**
      * 修改头像
@@ -462,5 +477,39 @@ public interface CommonService {
     @POST("api/page/investor/list")
     Observable<BaseEntity<InvestorBean>> queryInvestors(@Body InvestorRequest request);
 
+    /**
+     * 73. 用户——提交认证
+     * @param token
+     * @param img_url
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/auth")
+    Observable<CodeEntity> uploadVertifyPhoto(@Field("token")String token,@Field("img_url")String img_url);
+
+    /**
+     * 新建项目
+     * @param request
+     * @return
+     */
+    @POST("api/project/info/add")
+    Observable<CodeEntity> createProject(@Body ProjectBean request);
+
+    /**
+     * 编辑项目
+     * @param request
+     * @return
+     */
+    @POST("api/project/info/edit")
+    Observable<CodeEntity> editProject(@Body ProjectBean request);
+
+    /**
+     * 我的项目
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/project/personal")
+    Observable<BaseEntity<ProjectEntity>> queryMyProject(@Field("token")String token);
 }
 

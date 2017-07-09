@@ -70,14 +70,14 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 });
     }
 
-    public void editAvatar(final String u_avatar) {
-        mModel.editAvatar(mModel.getToken(), u_avatar)
+    public void uploadVertifyPhoto(final String img_url) {
+        mModel.uploadVertifyPhoto(mModel.getToken(), img_url)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.showLoading();
+                        //mRootView.showLoading();
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,6 +101,44 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                     @Override
                     public void onNext(CodeEntity codeEntity) {
                         if(codeEntity.isSuccess()){
+                            mRootView.showMessage("上传成功");
+                            mRootView.uploadSuccess(img_url);
+                        }
+                    }
+                });
+    }
+
+    public void editAvatar(final String u_avatar) {
+        mModel.editAvatar(mModel.getToken(), u_avatar)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new Observer<CodeEntity>() {
+                    @Override
+                    public void onCompleted() {
+                        mRootView.hideLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.hideLoading();
+                    }
+
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        if(codeEntity.isSuccess()){
                             mRootView.showMessage("头像修改成功");
                             mRootView.editAvatarSuccess(u_avatar);
                         }
@@ -108,7 +146,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 });
     }
 
-    public void upload(String path, String token) {
+    public void upload(String path, String token,final boolean isUpdateAvatar) {
         String key = mModel.getToken()+System.currentTimeMillis() + ".png";
         UploadOptions uploadOptions = new UploadOptions(null, null, false,
                 new UpProgressHandler() {
@@ -120,17 +158,26 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
         uploadManager.put(path, key, token, new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
-                //mRootView.showMessage("上传成功");
-                editAvatar(key);
+                if(isUpdateAvatar){
+                    editAvatar(key);
+                }else{
+                    uploadVertifyPhoto(key);
+                }
             }
 
         }, uploadOptions);
     }
 
-    public void getQiNiuToken(final String path){
+    public void getQiNiuToken(final String path,final boolean isUpdateAvatar){
         mModel.getQiniuToken(0)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxUtils.<BaseEntity<QiniuTokenEntity>> bindToLifecycle(mRootView))
                 .subscribe(new Observer<BaseEntity<QiniuTokenEntity>>() {
@@ -147,7 +194,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                     @Override
                     public void onNext(BaseEntity<QiniuTokenEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
-                            upload(path,baseEntity.getItems().getQiniu_token());
+                            upload(path,baseEntity.getItems().getQiniu_token(),isUpdateAvatar);
                         }
                     }
                 });

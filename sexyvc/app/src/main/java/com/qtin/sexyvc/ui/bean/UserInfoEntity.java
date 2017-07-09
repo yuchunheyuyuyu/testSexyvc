@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -13,6 +14,9 @@ public class UserInfoEntity implements Parcelable {
 
     private String  token;
 
+    private int has_project;
+
+    private String business_card;
     private String u_nickname;
     private int u_gender;
     private String u_avatar;
@@ -35,6 +39,22 @@ public class UserInfoEntity implements Parcelable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getHas_project() {
+        return has_project;
+    }
+
+    public void setHas_project(int has_project) {
+        this.has_project = has_project;
+    }
+
+    public String getBusiness_card() {
+        return business_card;
+    }
+
+    public void setBusiness_card(String business_card) {
+        this.business_card = business_card;
     }
 
     public String getU_nickname() {
@@ -141,6 +161,8 @@ public class UserInfoEntity implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.token);
+        dest.writeInt(this.has_project);
+        dest.writeString(this.business_card);
         dest.writeString(this.u_nickname);
         dest.writeInt(this.u_gender);
         dest.writeString(this.u_avatar);
@@ -160,6 +182,8 @@ public class UserInfoEntity implements Parcelable {
 
     protected UserInfoEntity(Parcel in) {
         this.token = in.readString();
+        this.has_project = in.readInt();
+        this.business_card = in.readString();
         this.u_nickname = in.readString();
         this.u_gender = in.readInt();
         this.u_avatar = in.readString();
@@ -174,10 +198,13 @@ public class UserInfoEntity implements Parcelable {
         this.u_auth_type = in.readInt();
     }
 
-    @Generated(hash = 1678964386)
-    public UserInfoEntity(String token, String u_nickname, int u_gender, String u_avatar, String u_signature, String u_phone, String u_email,
-            String u_backup_phone, String u_backup_email, String u_company, String u_title, int u_auth_state, int u_auth_type) {
+    @Generated(hash = 1654280294)
+    public UserInfoEntity(String token, int has_project, String business_card, String u_nickname, int u_gender, String u_avatar, String u_signature,
+            String u_phone, String u_email, String u_backup_phone, String u_backup_email, String u_company, String u_title, int u_auth_state,
+            int u_auth_type) {
         this.token = token;
+        this.has_project = has_project;
+        this.business_card = business_card;
         this.u_nickname = u_nickname;
         this.u_gender = u_gender;
         this.u_avatar = u_avatar;

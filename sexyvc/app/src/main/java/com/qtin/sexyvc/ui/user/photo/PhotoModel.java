@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.user.info;
+package com.qtin.sexyvc.ui.user.photo;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
@@ -19,32 +19,18 @@ import rx.Observable;
  * Created by ls on 17/4/26.
  */
 @ActivityScope
-public class UserInfoModel extends BaseModel<ServiceManager,CacheManager> implements UserInfoContract.Model {
+public class PhotoModel extends BaseModel<ServiceManager,CacheManager> implements PhotoContract.Model {
 
     @Inject
-    public UserInfoModel(ServiceManager serviceManager, CacheManager cacheManager) {
+    public PhotoModel(ServiceManager serviceManager, CacheManager cacheManager) {
         super(serviceManager, cacheManager);
-    }
-
-    @Override
-    public Observable<CodeEntity> editAvatar(String token, String u_avatar) {
-        return mServiceManager.getCommonService().editAvatar(token,u_avatar);
-    }
-
-    @Override
-    public Observable<CodeEntity> editSex(String token, int u_gender) {
-        return mServiceManager.getCommonService().editSex(token,u_gender);
-    }
-
-    @Override
-    public Observable<CodeEntity> uploadVertifyPhoto(String token, String img_url) {
-        return mServiceManager.getCommonService().uploadVertifyPhoto(token,img_url);
     }
 
     @Override
     public Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(int is_protected) {
         return mServiceManager.getCommonService().getQiniuToken(is_protected);
     }
+
     @Override
     public String getToken() {
         List<UserEntity> list=mCacheManager.getDaoSession().getUserEntityDao().queryBuilder().build().list();
@@ -52,5 +38,10 @@ public class UserInfoModel extends BaseModel<ServiceManager,CacheManager> implem
             return list.get(0).getU_token();
         }
         return "";
+    }
+
+    @Override
+    public Observable<CodeEntity> uploadVertifyPhoto(String token, String img_url) {
+        return mServiceManager.getCommonService().uploadVertifyPhoto(token,img_url);
     }
 }

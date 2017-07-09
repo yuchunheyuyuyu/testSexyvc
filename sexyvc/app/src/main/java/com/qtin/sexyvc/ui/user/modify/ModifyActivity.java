@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -18,9 +17,7 @@ import com.qtin.sexyvc.ui.user.modify.di.DaggerModifyComponent;
 import com.qtin.sexyvc.ui.user.modify.di.ModifyModule;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
-
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -64,12 +61,20 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     PhoneEditText etPhoneBackup2;
     @BindView(R.id.phoneContainer2)
     LinearLayout phoneContainer2;
+    @BindView(R.id.etCompany)
+    ClearableEditText etCompany;
+    @BindView(R.id.etTitle)
+    ClearableEditText etTitle;
+    @BindView(R.id.positionContainer)
+    LinearLayout positionContainer;
     private String hint;
     //来源于个人中心
     public static final int MODIFY_NICK = 0x012;
     public static final int MODIFY_INTRODUCE = 0x013;
     public static final int MODIFY_EMAIL = 0x014;
     public static final int MODIFY_PHONE = 0x015;
+    public static final int MODIFY_POSITION = 0x020;
+
     //来源于添加项目
     public static final int MODIFY_PROJECT_NAME = 0x016;
     public static final int MODIFY_PROJECT_INTRODUCE = 0x017;
@@ -80,9 +85,11 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     public static final int MODIFY_CONCERN_WECAHT = 0x01a;
     public static final int MODIFY_CONCERN_REMARK = 0x01b;
 
+
     public static final String MODIFY_INTENT = "modify_type";
     public static final String MODIFY_INTENT_VALUE1 = "modify_value1";
     public static final String MODIFY_INTENT_VALUE2 = "modify_value2";
+    public static final String MODIFY_INTENT_VALUE3 = "modify_value3";
 
 
     //带进来的值
@@ -114,6 +121,9 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     private String contact_wechat;
     private String contact_remark;
 
+    private String u_company;
+    private String u_title;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerModifyComponent.builder().appComponent(appComponent).modifyModule(new ModifyModule(this)).build().inject(this);
@@ -136,12 +146,23 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
         tvRight.setVisibility(View.VISIBLE);
 
         //编辑联系人需要contact_id
-        if(modifyType==MODIFY_CONCERN_TELPHONE||modifyType==MODIFY_CONCERN_EMAIL||
-                modifyType==MODIFY_CONCERN_WECAHT||modifyType==MODIFY_CONCERN_REMARK){
-            contact_id=getIntent().getExtras().getLong("contact_id");
+        if (modifyType == MODIFY_CONCERN_TELPHONE || modifyType == MODIFY_CONCERN_EMAIL ||
+                modifyType == MODIFY_CONCERN_WECAHT || modifyType == MODIFY_CONCERN_REMARK) {
+            contact_id = getIntent().getExtras().getLong("contact_id");
         }
 
-        if (modifyType == MODIFY_CONCERN_TELPHONE) {
+        if (modifyType == MODIFY_POSITION) {
+            positionContainer.setVisibility(View.VISIBLE);
+            value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
+            value2 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE2);
+            etCompany.setText(StringUtil.formatString(value1));
+            etCompany.setSelection(StringUtil.formatString(value1).length());
+            etTitle.setText(StringUtil.formatString(value2));
+            etTitle.setSelection(StringUtil.formatString(value2).length());
+
+            tvRight.setText(getResources().getString(R.string.comfirm));
+            tvTitle.setText(getResources().getString(R.string.title_institution));
+        } else if (modifyType == MODIFY_CONCERN_TELPHONE) {
 
             phoneContainer2.setVisibility(View.VISIBLE);
             value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
@@ -168,6 +189,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             } else if (modifyType == MODIFY_PROJECT_NAME) {
                 etContent.setHint(getResources().getString(R.string.project_name));
                 tvTitle.setText(getResources().getString(R.string.project_name));
+                tvRight.setText(getResources().getString(R.string.comfirm));
             } else if (modifyType == MODIFY_CONCERN_WECAHT) {
                 etContent.setHint(getResources().getString(R.string.we_chat));
                 tvTitle.setText(getResources().getString(R.string.we_chat));
@@ -198,6 +220,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 tvTitle.setText(getResources().getString(R.string.title_introduce));
             } else if (modifyType == MODIFY_PROJECT_INTRODUCE) {
                 wordNumber = 200;
+                tvRight.setText(getResources().getString(R.string.comfirm));
                 tvTitle.setText(getResources().getString(R.string.project_introduce));
                 etIntroduce.setHint(getResources().getString(R.string.hint_introduce_project));
             } else if (modifyType == MODIFY_CONCERN_REMARK) {
@@ -274,7 +297,21 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 break;
             case R.id.tvRight:
 
-                if (modifyType == MODIFY_NICK) {
+                if(modifyType==MODIFY_POSITION){
+                    u_company=etCompany.getText().toString();
+                    u_title=etTitle.getText().toString();
+                    if (StringUtil.isBlank(u_company)) {
+                        showMessage("机构不能为空");
+                        return;
+                    }
+
+                    if (StringUtil.isBlank(u_title)) {
+                        showMessage("职务不能为空");
+                        return;
+                    }
+                    editSuccess();
+
+                }else if (modifyType == MODIFY_NICK) {
                     nick = etContent.getText().toString();
                     if (StringUtil.isBlank(nick)) {
                         showMessage("昵称不能为空");
@@ -333,7 +370,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         showMessage("备用手机格式不合法");
                         return;
                     }
-                    mPresenter.editContactPhone(contact_id,contact_phone,contact_backup_phone);
+                    mPresenter.editContactPhone(contact_id, contact_phone, contact_backup_phone);
 
                 } else if (modifyType == MODIFY_CONCERN_EMAIL) {
                     contact_email = etEmail.getText().toString();
@@ -347,7 +384,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         showMessage("邮箱格式不合法");
                         return;
                     }
-                    mPresenter.editContactEmail(contact_id,contact_email, contact_backup_email);
+                    mPresenter.editContactEmail(contact_id, contact_email, contact_backup_email);
 
                 } else if (modifyType == MODIFY_CONCERN_WECAHT) {
                     contact_wechat = etContent.getText().toString();
@@ -355,7 +392,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         showMessage("微信不能为空");
                         return;
                     }
-                    mPresenter.editContactWechat(contact_id,contact_wechat);
+                    mPresenter.editContactWechat(contact_id, contact_wechat);
 
                 } else if (modifyType == MODIFY_CONCERN_REMARK) {
                     contact_remark = etIntroduce.getText().toString();
@@ -363,7 +400,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         showMessage("备注内容不能为空");
                         return;
                     }
-                    mPresenter.editContactRemark(contact_id,contact_remark);
+                    mPresenter.editContactRemark(contact_id, contact_remark);
                 }
                 break;
         }
@@ -394,16 +431,19 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         } else if (modifyType == MODIFY_PROJECT_NAME) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, project_name);
 
-                        }else if(modifyType==MODIFY_CONCERN_TELPHONE){
+                        } else if (modifyType == MODIFY_CONCERN_TELPHONE) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, contact_phone);
                             intent.putExtra(MODIFY_INTENT_VALUE2, contact_backup_phone);
-                        }else if(modifyType==MODIFY_CONCERN_EMAIL){
+                        } else if (modifyType == MODIFY_CONCERN_EMAIL) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, contact_email);
                             intent.putExtra(MODIFY_INTENT_VALUE2, contact_backup_email);
-                        }else if(modifyType==MODIFY_CONCERN_WECAHT){
+                        } else if (modifyType == MODIFY_CONCERN_WECAHT) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, contact_wechat);
-                        }else if(modifyType==MODIFY_CONCERN_REMARK){
+                        } else if (modifyType == MODIFY_CONCERN_REMARK) {
                             intent.putExtra(MODIFY_INTENT_VALUE1, contact_remark);
+                        }else if(modifyType==MODIFY_POSITION){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, u_company);
+                            intent.putExtra(MODIFY_INTENT_VALUE2, u_title);
                         }
                         setResult(0, intent);
                         finish();

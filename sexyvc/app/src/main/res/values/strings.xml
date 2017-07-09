@@ -10,12 +10,16 @@
     <string name="title_setting">设置</string>
     <string name="title_modify_password">修改密码</string>
     <string name="title_add_project">添加项目</string>
+    <string name="title_edit_project">编辑项目</string>
     <string name="title_my_project">我的项目</string>
     <string name="title_frag_concern">关注</string>
     <string name="title_set_group">设置分组</string>
     <string name="title_flash">实时快讯</string>
     <string name="title_subject_list">专栏</string>
     <string name="title_comment_detail">对%s的评论</string>
+    <string name="title_position">身份</string>
+    <string name="title_vertify_position">身份认证</string>
+    <string name="title_institution">机构职务</string>
 
     <string name="dealing">处理中...</string>
 
@@ -104,11 +108,15 @@
     <string name="input_email">输入邮箱</string>
     <string name="input_email_alternate">输入备用邮箱</string>
 
+    <string name="input_institution">输入机构</string>
+    <string name="input_position">输入职务</string>
+
     <string name="nick_defalut">sexyvc用户</string>
     <string name="position_defalut">担任职位</string>
     <string name="compant_defalut">所在公司</string>
     <string name="sex_defalut">男</string>
     <string name="input_defalut">未填写</string>
+    <string name="not_fill">未填写</string>
 
     <string name="take_photo">拍摄</string>
     <string name="from_album">从相册选择</string>
@@ -127,6 +135,9 @@
     <string name="old_password">旧密码</string>
     <string name="new_password">新密码</string>
     <string name="comfirm_password">确认密码</string>
+
+    <string name="auth_type">身份类型</string>
+    <string name="auth_position">机构职务</string>
 
     <string name="project_name">项目名称</string>
     <string name="project_introduce">一句话简介</string>
@@ -215,5 +226,10 @@
 
     <string name="format_fund">收录投资人 %1$d | 评论 %2$d</string>
 
+    <string name="auth_type_founder">创始人</string>
+    <string name="auth_type_investor">投资人</string>
+    <string name="auth_type_fa">投资顾问</string>
+    <string name="auth_type_other">其他</string>
+    <string name="upload">上传</string>
 
 </resources>

@@ -4,11 +4,11 @@ import android.content.Context;
 
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.Typebean;
-
 import java.util.ArrayList;
-
 import rx.Observable;
 
 /**
@@ -20,9 +20,12 @@ public interface AddProjectContract {
         //这里写view中公开出去的方法，供present调用
         Context getContext();
         void requestTypeBack(int type,ArrayList<FilterEntity> list);
+        void onSuccess(ProjectBean bean);
     }
     interface Model extends IModel{
         //这里写Model中公开的方法，在present调用
         Observable<Typebean> getType(String type_key);
+        Observable<CodeEntity> createProject(ProjectBean request);
+        Observable<CodeEntity> editProject(ProjectBean request);
     }
 }

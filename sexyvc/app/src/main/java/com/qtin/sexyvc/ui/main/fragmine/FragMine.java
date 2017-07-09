@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -18,6 +19,7 @@ import com.qtin.sexyvc.ui.main.fragmine.di.DaggerFragMineComponent;
 import com.qtin.sexyvc.ui.main.fragmine.di.FragmineModule;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.user.message.MessageActivity;
+import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.ui.user.project.my.MyProjectActivity;
 import com.qtin.sexyvc.ui.user.setting.SettingActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
@@ -122,7 +124,15 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
                 }
                 break;
             case R.id.myProjectContainer:
-                gotoActivity(MyProjectActivity.class);
+                if(userInfo!=null){
+                    if(userInfo.getHas_project()==0){
+                        Bundle bundle=new Bundle();
+                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                        gotoActivity(AddProjectActivity.class);
+                    }else{
+                        gotoActivity(MyProjectActivity.class);
+                    }
+                }
                 break;
             case R.id.messageContainer:
                 gotoActivity(MessageActivity.class);
@@ -162,8 +172,10 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
         if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
             myProjectContainer.setVisibility(View.VISIBLE);
+            lineProject.setVisibility(View.VISIBLE);
         }else{
             myProjectContainer.setVisibility(View.GONE);
+            lineProject.setVisibility(View.GONE);
         }
 
         if(StringUtil.isBlank(entity.getU_company())){

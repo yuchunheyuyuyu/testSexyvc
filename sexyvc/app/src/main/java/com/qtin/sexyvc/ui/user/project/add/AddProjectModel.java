@@ -4,6 +4,8 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.Typebean;
 
 import javax.inject.Inject;
@@ -34,5 +36,15 @@ public class AddProjectModel extends BaseModel<ServiceManager,CacheManager> impl
                         return Observable.just(typebeanReply.getData());
                     }
                 });
+    }
+
+    @Override
+    public Observable<CodeEntity> createProject(ProjectBean request) {
+        return mServiceManager.getCommonService().createProject(request);
+    }
+
+    @Override
+    public Observable<CodeEntity> editProject(ProjectBean request) {
+        return mServiceManager.getCommonService().editProject(request);
     }
 }

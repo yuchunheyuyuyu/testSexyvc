@@ -31,7 +31,10 @@ import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.user.info.di.DaggerUserInfoComponent;
 import com.qtin.sexyvc.ui.user.info.di.UserInfoModule;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
+import com.qtin.sexyvc.ui.user.photo.PhotoActivity;
+import com.qtin.sexyvc.ui.user.position.PositionActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.io.File;
@@ -145,17 +148,35 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         //邮箱
         tvEmail.setText(StringUtil.isBlank(entity.getU_email())?
                 getResources().getString(R.string.input_defalut):entity.getU_email());
-
+        //设置职位
+        setPosition(entity.getU_company(),entity.getU_title());
+        //设置认证状态
+        if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_PASS){
+            if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
+                ivIdentity.setImageResource(R.drawable.tag_approve_fc);
+            }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_INVESTOR){
+                ivIdentity.setImageResource(R.drawable.tag_approve_vc);
+            }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FA){
+                ivIdentity.setImageResource(R.drawable.tag_approve_fa);
+            }else{
+                //暂时缺"其他"图片
+                ivIdentity.setImageResource(R.drawable.login_qq_on);
+            }
+        }else if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_COMMITING){
+            ivIdentity.setImageResource(R.drawable.approve_reviewing);
+        }else {
+            ivIdentity.setImageResource(R.drawable.approve_not_done_red);
+        }
     }
 
     @Override
     public void showLoading() {
-
+        showDialog("正在提交");
     }
 
     @Override
     public void hideLoading() {
-
+        dialogDismiss();
     }
 
     @Override
@@ -175,6 +196,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     @OnClick({R.id.ivLeft, R.id.avatarContainer, R.id.nickContainer, R.id.sexContainer, R.id.descriptionContainer, R.id.mobileContainer, R.id.emailContainer, R.id.positionContainer, R.id.identifyContainer})
     public void onClick(View view) {
+        if(userInfo==null){
+            return;
+        }
         switch (view.getId()) {
             case R.id.ivLeft:
                 finish();
@@ -213,10 +237,21 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 gotoActivityForResult(ModifyActivity.class,email,ModifyActivity.MODIFY_EMAIL);
                 break;
             case R.id.positionContainer:
+                Bundle position=new Bundle();
+                position.putString("u_company",userInfo.getU_company());
+                position.putString("u_title",userInfo.getU_title());
+                position.putInt("u_auth_type",userInfo.getU_auth_type());
+                gotoActivityForResult(PositionActivity.class,position,ModifyActivity.MODIFY_POSITION);
                 break;
             case R.id.identifyContainer:
-                isUpdateAvatar=false;
-                showPhotoDialog(false);
+                if(StringUtil.isBlank(userInfo.getBusiness_card())){
+                    isUpdateAvatar=false;
+                    showPhotoDialog(false);
+                }else{
+                    Bundle identify=new Bundle();
+                    identify.putString(ConstantUtil.INTENT_URL,userInfo.getBusiness_card());
+                    gotoActivityForResult(PhotoActivity.class,identify,ConstantUtil.UPLOAD_VERTIFY_PHOTO_REQUEST_CODE);
+                }
                 break;
         }
     }
@@ -323,10 +358,46 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         selectPhotoDialog.show();
     }
 
+    private void setPosition(String u_company,String u_title){
+        String position="";
+        if(StringUtil.isBlank(u_title)&&StringUtil.isBlank(u_company)){
+            position=getResources().getString(R.string.not_fill);
+        }else{
+            position=""+u_company+" "+u_title;
+        }
+        tvPosition.setText(position);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case ConstantUtil.UPLOAD_VERTIFY_PHOTO_REQUEST_CODE:
+                if(data!=null){
+                    String url=data.getExtras().getString(ConstantUtil.INTENT_URL);
+                    userInfo.setBusiness_card(url);
+                    userInfo.setU_auth_state(ConstantUtil.AUTH_STATE_COMMITING);
+                    ivIdentity.setImageResource(R.drawable.approve_reviewing);
+                }
+                break;
+            case ModifyActivity.MODIFY_POSITION:
+                if(data!=null){
+                    /**
+                     *
+                     *  intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE1, u_auth_type);
+                     intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE2, u_company);
+                     intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE3, u_title);
+                     */
+                    int u_auth_type=data.getExtras().getInt(ModifyActivity.MODIFY_INTENT_VALUE1);
+                    String u_company=data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2);
+                    String u_title=data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE3);
+
+                    userInfo.setU_auth_type(u_auth_type);
+                    userInfo.setU_company(u_company);
+                    userInfo.setU_title(u_title);
+                    setPosition(u_company,u_title);
+                }
+                break;
             case ModifyActivity.MODIFY_NICK:
                 if(data!=null){
                     String nick=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
@@ -408,7 +479,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 break;
             case CROP_REQUEST_CODE: // 裁剪
                 if(data!=null){
-                    mPresenter.getQiNiuToken(cropedPhoto);
+                    mPresenter.getQiNiuToken(cropedPhoto,isUpdateAvatar);
                 }
 
                 break;
@@ -458,17 +529,15 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     @Override
     public void editAvatarSuccess(String avatar) {
-        if(isUpdateAvatar){
-            //头像
-            mImageLoader.loadImage(customApplication, GlideImageConfig
-                    .builder()
-                    .errorPic(R.drawable.avatar_user_s)
-                    .placeholder(R.drawable.avatar_user_s)
-                    .url(CommonUtil.getAbsolutePath(avatar))
-                    .transformation(new CropCircleTransformation(this))
-                    .imageView(ivAvatar)
-                    .build());
-        }
+        //头像
+        mImageLoader.loadImage(customApplication, GlideImageConfig
+                .builder()
+                .errorPic(R.drawable.avatar_user_s)
+                .placeholder(R.drawable.avatar_user_s)
+                .url(CommonUtil.getAbsolutePath(avatar))
+                .transformation(new CropCircleTransformation(this))
+                .imageView(ivAvatar)
+                .build());
     }
 
     @Override
@@ -478,5 +547,12 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         }else{
             tvSex.setText(getResources().getString(R.string.sex_male));
         }
+    }
+
+    @Override
+    public void uploadSuccess(String url) {
+        userInfo.setBusiness_card(url);
+        userInfo.setU_auth_state(ConstantUtil.AUTH_STATE_COMMITING);
+        ivIdentity.setImageResource(R.drawable.approve_reviewing);
     }
 }

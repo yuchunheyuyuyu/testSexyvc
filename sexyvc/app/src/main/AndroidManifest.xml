@@ -201,6 +201,15 @@
             android:name=".ui.more.MoreInvestorActivity"
             android:screenOrientation="portrait" />
 
+        <!--机构职务-->
+        <activity
+            android:name=".ui.user.position.PositionActivity"
+            android:screenOrientation="portrait" />
+
+        <!--身份认证图片-->
+        <activity
+            android:name=".ui.user.photo.PhotoActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity

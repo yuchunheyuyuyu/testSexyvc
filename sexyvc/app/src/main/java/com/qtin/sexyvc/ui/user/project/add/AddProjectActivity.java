@@ -29,11 +29,13 @@ import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.jess.arms.utils.UploadPhotoUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
 import com.qtin.sexyvc.ui.user.project.add.di.AddProjectModule;
 import com.qtin.sexyvc.ui.user.project.add.di.DaggerAddProjectComponent;
@@ -41,6 +43,7 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CashierInputFilter;
+import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.io.File;
@@ -49,7 +52,9 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,8 +81,6 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
     @BindView(R.id.tvFinance)
     TextView tvFinance;
 
-    private String name;
-    private String introduce;
 
     private Dialog domainDialog;
     private ArrayList<FilterEntity> domainData = new ArrayList<>();
@@ -98,6 +101,12 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
     // 拍照地址
     private String path;
 
+    private boolean isEdit;//是否是编辑
+    private ProjectBean projectBean;
+
+    private TagAdapter domainAdapter;
+    private TagAdapter stageAdapter;
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -116,13 +125,31 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
     @Override
     protected void initData() {
-        tvTitle.setText(getResources().getString(R.string.title_add_project));
+        isEdit=getIntent().getExtras().getBoolean(ConstantUtil.INTENT_IS_EDIT);
+
+        if(isEdit){
+            projectBean=getIntent().getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
+
+            tvTitle.setText(getResources().getString(R.string.title_edit_project));
+
+
+        }else{
+            projectBean=new ProjectBean();
+            tvTitle.setText(getResources().getString(R.string.title_add_project));
+        }
+
         tvRight.setVisibility(View.VISIBLE);
 
         //获取投资行业
         mPresenter.getType("common_domain", TYPE_DOMAIN);
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_STAGE);
+    }
+
+    private void setValue(){
+        tvName.setText(StringUtil.formatString(projectBean.getProject_name()));
+        tvIntroduce.setText(StringUtil.formatString(projectBean.getShort_intro()));
+
     }
 
     @Override
@@ -137,7 +164,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,StringUtil.formatString(message));
     }
 
     @Override
@@ -164,13 +191,13 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                 break;
             case R.id.nameContainer:
                 Bundle nameBundle = new Bundle();
-                nameBundle.putString(ModifyActivity.MODIFY_INTENT_VALUE1, name);
+                nameBundle.putString(ModifyActivity.MODIFY_INTENT_VALUE1, StringUtil.formatString(projectBean.getProject_name()));
                 nameBundle.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_PROJECT_NAME);
                 gotoActivityForResult(ModifyActivity.class, nameBundle, ModifyActivity.MODIFY_PROJECT_NAME);
                 break;
             case R.id.introduceContainer:
                 Bundle introduceBundle = new Bundle();
-                introduceBundle.putString(ModifyActivity.MODIFY_INTENT_VALUE1, introduce);
+                introduceBundle.putString(ModifyActivity.MODIFY_INTENT_VALUE1, StringUtil.formatString(projectBean.getShort_intro()));
                 introduceBundle.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_PROJECT_INTRODUCE);
                 gotoActivityForResult(ModifyActivity.class, introduceBundle, ModifyActivity.MODIFY_PROJECT_INTRODUCE);
                 break;
@@ -236,6 +263,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         selectPhotoDialog.show();
     }
 
+
     /**
      * 显示行业的dialog
      */
@@ -254,9 +282,18 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             @Override
             public void onClick(View v) {
                 dismissDomainDialog();
+                long domain_id=0;
+                Set<Integer> domainsSet=holder.flowLayout.getSelectedList();
+                if(domainsSet!=null&&!domainsSet.isEmpty()){
+                    Iterator<Integer> it=domainsSet.iterator();
+                    if (it.hasNext()){
+                        domain_id=domainData.get(it.next()).getType_id();
+                    }
+                }
+                projectBean.setDomain_id(domain_id);
             }
         });
-        TagAdapter domainAdapter = new TagAdapter<FilterEntity>(domainData) {
+        domainAdapter = new TagAdapter<FilterEntity>(domainData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
                 TextView tv = (TextView) LayoutInflater.from(AddProjectActivity.this).inflate(R.layout.item_filter_textview, holder.flowLayout, false);
@@ -264,6 +301,8 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                 return tv;
             }
         };
+        setDomainStatus();
+
         holder.flowLayout.setAdapter(domainAdapter);
         holder.flowLayout.setMaxSelectCount(1);
         domainDialog = new Dialog(this);
@@ -291,7 +330,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         View view = LayoutInflater.from(this).inflate(R.layout.stage_dialog, null);
 
         final StageHolder holder=new StageHolder(view);
-        TagAdapter stageAdapter=new TagAdapter<FilterEntity>(stageData) {
+        stageAdapter=new TagAdapter<FilterEntity>(stageData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
                 TextView tv = (TextView) LayoutInflater.from(AddProjectActivity.this).inflate(R.layout.item_filter_textview, holder.flowLayout, false);
@@ -299,15 +338,19 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                 return tv;
             }
         };
+
+        setStageStatus();
         holder.flowLayout.setAdapter(stageAdapter);
         holder.flowLayout.setMaxSelectCount(1);
 
         holder.changeMoneyContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(holder.tvMoneyType.getText().toString().equals(getResources().getString(R.string.dollar))){
+                if(projectBean.getLast_currency()==0){
+                    projectBean.setLast_currency(1);
                     holder.tvMoneyType.setText(getResources().getString(R.string.renminbi));
                 }else{
+                    projectBean.setLast_currency(0);
                     holder.tvMoneyType.setText(getResources().getString(R.string.dollar));
                 }
             }
@@ -315,6 +358,12 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
         InputFilter[] filters={new CashierInputFilter()};
         holder.etMoney.setFilters(filters);
+        holder.etMoney.setText(""+projectBean.getLast_financial_amount());
+        if(projectBean.getLast_currency()==0){
+            holder.tvMoneyType.setText(getResources().getString(R.string.dollar));
+        }else{
+            holder.tvMoneyType.setText(getResources().getString(R.string.renminbi));
+        }
 
         holder.tvCancle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +375,17 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             @Override
             public void onClick(View v) {
                 dismissStageDialog();
+                long stage_id=0;
+                Set<Integer> stageSet=holder.flowLayout.getSelectedList();
+                if(stageSet!=null&&!stageSet.isEmpty()){
+                    Iterator<Integer> it=stageSet.iterator();
+                    if (it.hasNext()){
+                        stage_id=stageData.get(it.next()).getType_id();
+                    }
+                }
+                projectBean.setLast_stage_id(stage_id);
+                projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
+
             }
         });
 
@@ -366,14 +426,16 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         switch (requestCode) {
             case ModifyActivity.MODIFY_PROJECT_NAME:
                 if (data != null) {
-                    name = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1);
+                    String name = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1);
                     tvName.setText(StringUtil.formatString(name));
+                    projectBean.setProject_name(name);
                 }
                 break;
             case ModifyActivity.MODIFY_PROJECT_INTRODUCE:
                 if (data != null) {
-                    introduce = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1);
+                    String introduce = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1);
                     tvIntroduce.setText(StringUtil.formatString(introduce));
+                    projectBean.setShort_intro(introduce);
                 }
                 break;
             case ALBUM_REQUEST_CODE:
@@ -435,6 +497,50 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         }
     }
 
+    private void setDomainText(){
+        if(domainData!=null){
+            for(int i=0;i<domainData.size();i++){
+                if(domainData.get(i).getType_id()==projectBean.getDomain_id()){
+                    tvDomain.setText(domainData.get(i).getType_name());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setDomainStatus(){
+        if(domainData!=null){
+            for(int i=0;i<domainData.size();i++){
+                if(domainData.get(i).getType_id()==projectBean.getDomain_id()){
+                    domainAdapter.setSelectedList(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setStageText(){
+        if(stageData!=null){
+            for(int i=0;i<stageData.size();i++){
+                if(stageData.get(i).getType_id()==projectBean.getLast_stage_id()){
+                    tvFinance.setText(stageData.get(i).getType_name());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setStageStatus(){
+        if(stageData!=null){
+            for(int i=0;i<stageData.size();i++){
+                if(stageData.get(i).getType_id()==projectBean.getLast_stage_id()){
+                    stageAdapter.setSelectedList(i);
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public Context getContext() {
         return this;
@@ -446,12 +552,21 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             case TYPE_DOMAIN:
                 domainData.clear();
                 domainData.addAll(list);
+
+                setDomainText();
                 break;
             case TYPE_STAGE:
                 stageData.clear();
                 stageData.addAll(list);
+
+                setStageText();
                 break;
         }
+    }
+
+    @Override
+    public void onSuccess(ProjectBean bean) {
+
     }
 
     public void takePhoto() {

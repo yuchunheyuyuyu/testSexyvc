@@ -33,22 +33,34 @@ public class ConstantUtil {
     //是forResult还是直接进入界面
     public static final String INTENT_IS_FOR_RESULT="INTENT_IS_FOR_RESULT";
 
+    //新建还是编辑
+    public static final String INTENT_IS_EDIT="INTENT_IS_EDIT";
+
     //id
     public static final String INTENT_ID="id";
     //title
     public static final String INTENT_TITLE="title";
+    //地址
+    public static final String INTENT_URL="url";
     //ParcelableArray
     public static final String INTENT_PARCELABLE_ARRAY="ParcelableArray";
+    //Parcelable
+    public static final String INTENT_PARCELABLE="Parcelable";
 
     //认证状态
-    public static final int AUTH_STATE_SUBMIT=0;
+    public static final int AUTH_STATE_UNPASS=0;
     public static final int AUTH_STATE_PASS=1;
-    public static final int AUTH_STATE_FAIL=2;
+    public static final int AUTH_STATE_COMMITING=2;
 
     //身份
     public static final int AUTH_TYPE_UNKNOWN=0;
     public static final int AUTH_TYPE_FOUNDER=1;
     public static final int AUTH_TYPE_INVESTOR=2;
     public static final int AUTH_TYPE_FA=3;
+    public static final int AUTH_TYPE_OTHER=4;
+
+    //上传认证照片
+    public static final int UPLOAD_VERTIFY_PHOTO_REQUEST_CODE=0x01c;
+
 
 }

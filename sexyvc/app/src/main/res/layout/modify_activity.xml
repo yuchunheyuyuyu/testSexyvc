@@ -183,11 +183,11 @@
 
     <LinearLayout
         android:id="@+id/phoneContainer2"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="44px"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <View style="@style/line_style" />
 
@@ -224,6 +224,56 @@
             android:textColor="@color/black90"
             android:textColorHint="@color/black30"
             android:textSize="28px" />
+
+        <View style="@style/line_style" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/positionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44px"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View style="@style/line_style" />
+
+
+        <com.qtin.sexyvc.ui.widget.ClearableEditText
+            android:id="@+id/etCompany"
+            android:layout_width="match_parent"
+            android:layout_height="96px"
+            android:layout_below="@+id/topLine3"
+            android:layout_marginLeft="32px"
+            android:layout_marginRight="32px"
+            android:background="@null"
+            android:hint="@string/input_institution"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black30"
+            android:textSize="14sp" />
+
+        <View
+            style="@style/line_style"
+            android:layout_marginLeft="32px" />
+
+        <com.qtin.sexyvc.ui.widget.ClearableEditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="96px"
+            android:layout_below="@+id/topLine3"
+            android:layout_marginLeft="32px"
+            android:layout_marginRight="32px"
+            android:background="@null"
+            android:hint="@string/input_position"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black30"
+            android:textSize="14sp" />
 
         <View style="@style/line_style" />
 
