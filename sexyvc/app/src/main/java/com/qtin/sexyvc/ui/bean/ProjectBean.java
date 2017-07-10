@@ -15,6 +15,8 @@ public class ProjectBean implements Parcelable {
     private long last_stage_id;
     private long last_financial_amount;
     private int last_currency;
+    private int project_type=2;
+    private long project_id;
 
     public String getToken() {
         return token;
@@ -80,6 +82,22 @@ public class ProjectBean implements Parcelable {
         this.last_currency = last_currency;
     }
 
+    public int getProject_type() {
+        return project_type;
+    }
+
+    public void setProject_type(int project_type) {
+        this.project_type = project_type;
+    }
+
+    public long getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(long project_id) {
+        this.project_id = project_id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -95,6 +113,8 @@ public class ProjectBean implements Parcelable {
         dest.writeLong(this.last_stage_id);
         dest.writeLong(this.last_financial_amount);
         dest.writeInt(this.last_currency);
+        dest.writeInt(this.project_type);
+        dest.writeLong(this.project_id);
     }
 
     public ProjectBean() {
@@ -109,6 +129,8 @@ public class ProjectBean implements Parcelable {
         this.last_stage_id = in.readLong();
         this.last_financial_amount = in.readLong();
         this.last_currency = in.readInt();
+        this.project_type = in.readInt();
+        this.project_id = in.readLong();
     }
 
     public static final Parcelable.Creator<ProjectBean> CREATOR = new Parcelable.Creator<ProjectBean>() {

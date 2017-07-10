@@ -62,5 +62,10 @@ public class ConstantUtil {
     //上传认证照片
     public static final int UPLOAD_VERTIFY_PHOTO_REQUEST_CODE=0x01c;
 
+    public static final int TYPE_NORMAL=1;
+    public static final int TYPE_UNNORMAL=2;
+
+
+    public static final int ACTION_CLEAR_HISTORY=-1;
 
 }

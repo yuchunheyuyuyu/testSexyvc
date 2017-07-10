@@ -1,36 +1,59 @@
 package com.qtin.sexyvc.ui.user.project.my;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import com.jess.arms.widget.autolayout.AutoCardView;
+
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectAdapter;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 import com.qtin.sexyvc.ui.user.project.my.di.DaggerMyProjectComponent;
 import com.qtin.sexyvc.ui.user.project.my.di.MyProjectModule;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
  */
 public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implements MyProjectContract.View {
 
+
     @BindView(R.id.tvTitle)
     TextView tvTitle;
-    @BindView(R.id.ivLogo)
-    ImageView ivLogo;
-    @BindView(R.id.tvName)
-    TextView tvName;
-    @BindView(R.id.tvDomainFinance)
-    TextView tvDomainFinance;
-    @BindView(R.id.tvIntroduce)
-    TextView tvIntroduce;
-    @BindView(R.id.cardViewProject)
-    AutoCardView cardViewProject;
+    @BindView(R.id.tvRight)
+    TextView tvRight;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<ProjectBean> data=new ArrayList<>();
+    private ProjectAdapter mAdapter;
+
+    private ArrayList<FilterEntity> domainData = new ArrayList<>();
+    private ArrayList<FilterEntity> stageData = new ArrayList<>();
+    public static final int TYPE_DOMAIN = 0x001;//行业
+    public static final int TYPE_STAGE = 0x002;//阶段
+
+    private boolean isDomainDownload;
+    private boolean isStageDownload;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -44,22 +67,52 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
 
     @Override
     protected int setContentViewId() {
-        return R.layout.my_project_activity;
+        return R.layout.common_refresh_list_activity;
     }
 
     @Override
     protected void initData() {
         tvTitle.setText(getResources().getString(R.string.title_my_project));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.query();
+            }
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter=new ProjectAdapter(this,data);
+        mAdapter.setItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClickItem(int position) {
+                Bundle bundle=new Bundle();
+                bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,true);
+                bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,data.get(position));
+                gotoActivity(AddProjectActivity.class,bundle);
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
+        //获取投资行业
+        mPresenter.getType("common_domain", TYPE_DOMAIN);
+        //获取投资阶段
+        mPresenter.getType("common_stage", TYPE_STAGE);
     }
 
     @Override
     public void showLoading() {
-
+        Observable.just(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -77,14 +130,72 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.cardViewProject})
+    @Override
+    public void querySuccess(ProjectEntity entity) {
+        data.addAll(entity.getList());
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
+        switch (type) {
+            case TYPE_DOMAIN:
+                domainData.clear();
+                domainData.addAll(list);
+                isDomainDownload=true;
+                query();
+                break;
+            case TYPE_STAGE:
+                stageData.clear();
+                stageData.addAll(list);
+                isStageDownload=true;
+                query();
+                break;
+        }
+    }
+
+    private void query(){
+        if(isStageDownload&&isDomainDownload){
+            mPresenter.query();
+        }
+    }
+
+    public String getProjectInfo(int position){
+        String unit=data.get(position).getLast_currency()==1?"人民币":"美金";
+        String info=getDomainText(position)+" | "+getStageText(position)
+                +"("+data.get(position).getLast_financial_amount()+" "+unit+")";
+        return info;
+    }
+
+    private String getDomainText(int position){
+        if(domainData!=null){
+            for(int i=0;i<domainData.size();i++){
+                if(domainData.get(i).getType_id()==data.get(position).getDomain_id()){
+                    return domainData.get(i).getType_name();
+                }
+            }
+        }
+        return "";
+    }
+
+    private String getStageText(int position){
+        if(stageData!=null){
+            for(int i=0;i<stageData.size();i++){
+                if(stageData.get(i).getType_id()==data.get(position).getLast_stage_id()){
+                   return stageData.get(i).getType_name();
+                }
+            }
+        }
+        return "";
+    }
+
+    @OnClick({R.id.ivLeft, R.id.tvRight})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
                 finish();
                 break;
-            case R.id.cardViewProject:
-                gotoActivity(AddProjectActivity.class);
+            case R.id.tvRight:
                 break;
         }
     }

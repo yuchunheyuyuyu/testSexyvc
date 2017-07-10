@@ -1,13 +1,13 @@
 package com.qtin.sexyvc.ui.follow.list;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -15,10 +15,13 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.ConcernListEntity;
-import com.qtin.sexyvc.ui.follow.detail.ConcernDetailActivity;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-import java.util.ArrayList;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -30,11 +33,17 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private MyBaseActivity activity;
     private Context context;
-    private ArrayList<ConcernListEntity> data;
+    private List<ConcernListEntity> data;
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
-    public ConcernListAdapter(Context context, ArrayList<ConcernListEntity> data) {
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public ConcernListAdapter(Context context, List<ConcernListEntity> data) {
         this.context = context;
         this.data = data;
         activity = (MyBaseActivity) context;
@@ -47,7 +56,7 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-        if (viewType == 0) {
+        if (viewType == ConstantUtil.TYPE_NORMAL) {
             view = LayoutInflater.from(context).inflate(R.layout.person_item, parent, false);
             return new ItemHolder(view);
         } else {
@@ -58,11 +67,14 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        return data.get(position).getViewType();
+        if(data.get(position).getContact_id()== ConstantUtil.DEFALUT_ID){
+            return ConstantUtil.TYPE_UNNORMAL;
+        }
+        return ConstantUtil.TYPE_NORMAL;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
         if(viewHolder instanceof ItemHolder){
             final ConcernListEntity entity=data.get(position);
@@ -79,15 +91,22 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.clickContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bundle bundle=new Bundle();
-                    bundle.putLong("contact_id",entity.getContact_id());
-                    bundle.putLong("investor_id",entity.getInvestor_id());
-                    activity.gotoActivity(ConcernDetailActivity.class,bundle);
+                    if(onItemClickListener!=null){
+                        onItemClickListener.onClickItem(position);
+                    }
                 }
             });
 
+            if(entity.getInvestor_uid()==0){
+                holder.ivAnthStatus.setVisibility(View.GONE);
+            }else{
+                holder.ivAnthStatus.setVisibility(View.VISIBLE);
+            }
+
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
+                    .errorPic(R.drawable.avatar_blank)
+                    .placeholder(R.drawable.avatar_blank)
                     .url(CommonUtil.getAbsolutePath(entity.getInvestor_avatar()))
                     .transformation(new CropCircleTransformation(context))
                     .imageView(holder.ivAvatar)
@@ -103,7 +122,7 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvClearHistory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    onItemClickListener.onClickItem(ConstantUtil.ACTION_CLEAR_HISTORY);
                 }
             });
         }

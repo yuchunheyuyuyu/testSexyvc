@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.jess.arms.widget.autolayout.AutoCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewProject"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="21dp"
+    android:layout_marginLeft="24dp"
+    android:layout_marginRight="24dp"
+    android:layout_marginTop="21dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="5dp"
+    app:contentPaddingBottom="28dp"
+    app:contentPaddingLeft="28dp"
+    app:contentPaddingRight="28dp"
+    app:contentPaddingTop="28dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/case_back"
+            android:padding="1px">
+
+
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_blank" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40px"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="8sp"
+            android:text="HYPEREAL VR"
+            android:textColor="@color/black90"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvDomainFinance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="6sp"
+            android:text="游戏 | B 轮 (2000 万美金)"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+
+        <View
+            style="@style/line_style"
+            android:layout_width="40dp"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tvIntroduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="6sp"
+            android:text="精英团队，大牛云集，有野心，敢于挑战"
+            android:textColor="@color/black70"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</com.jess.arms.widget.autolayout.AutoCardView>

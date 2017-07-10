@@ -27,11 +27,22 @@
             android:textColor="@color/black90"
             android:textSize="28px" />
 
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="112px"
-            android:layout_height="112px"
-            android:src="@drawable/logo_blank" />
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/case_back"
+            android:padding="1px">
+
+
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_blank" />
+
+        </FrameLayout>
+
 
         <ImageView
             android:layout_width="32px"

@@ -1,11 +1,17 @@
 package com.qtin.sexyvc.ui.bean;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by ls on 17/6/20.
  */
 
+@Entity
 public class ConcernListEntity {
 
+    @Id
     private long contact_id;
     private String investor_avatar;
     private String investor_name;
@@ -21,6 +27,36 @@ public class ConcernListEntity {
     private String wechat;
     private String backup_phone;
     private String backup_email;
+
+    private long investor_uid;
+    private long localTime;
+
+    @Generated(hash = 923184231)
+    public ConcernListEntity(long contact_id, String investor_avatar,
+            String investor_name, String fund_name, long investor_id, long fund_id,
+            String title, String intro, String phone, String email, String wechat,
+            String backup_phone, String backup_email, long investor_uid,
+            long localTime) {
+        this.contact_id = contact_id;
+        this.investor_avatar = investor_avatar;
+        this.investor_name = investor_name;
+        this.fund_name = fund_name;
+        this.investor_id = investor_id;
+        this.fund_id = fund_id;
+        this.title = title;
+        this.intro = intro;
+        this.phone = phone;
+        this.email = email;
+        this.wechat = wechat;
+        this.backup_phone = backup_phone;
+        this.backup_email = backup_email;
+        this.investor_uid = investor_uid;
+        this.localTime = localTime;
+    }
+
+    @Generated(hash = 1293661482)
+    public ConcernListEntity() {
+    }
 
     public long getContact_id() {
         return contact_id;
@@ -126,32 +162,19 @@ public class ConcernListEntity {
         this.backup_email = backup_email;
     }
 
-    private int viewType;//是不是上面搜索历史那一栏
-
-    public int getViewType() {
-        return viewType;
+    public long getInvestor_uid() {
+        return investor_uid;
     }
 
-    public void setViewType(int viewType) {
-        this.viewType = viewType;
+    public void setInvestor_uid(long investor_uid) {
+        this.investor_uid = investor_uid;
     }
 
-    /**
-     *  "contact_id": 5,
-     "investor_avatar": "",
-     "investor_name": "",
-     "fund_name": "",
+    public long getLocalTime() {
+        return localTime;
+    }
 
-     "investor_id": 0,
-     "fund_id": 0,
-     "title": "",
-     "intro": "",
-
-     "phone": "",
-     "email": "",
-     "wechat": "",
-     "backup_phone": "",
-     "backup_email": ""
-     *
-     */
+    public void setLocalTime(long localTime) {
+        this.localTime = localTime;
+    }
 }

@@ -128,7 +128,7 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
                     if(userInfo.getHas_project()==0){
                         Bundle bundle=new Bundle();
                         bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
-                        gotoActivity(AddProjectActivity.class);
+                        gotoActivity(AddProjectActivity.class,bundle);
                     }else{
                         gotoActivity(MyProjectActivity.class);
                     }

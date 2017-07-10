@@ -5,6 +5,8 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.KeyWordBean;
+import com.qtin.sexyvc.ui.bean.KeyWordBeanDao;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -22,7 +24,7 @@ public class SearchActionModel extends BaseModel<ServiceManager,CacheManager> im
 
     @Override
     public ArrayList<KeyWordBean> getKeys() {
-        List<KeyWordBean> list=mCacheManager.getDaoSession().getKeyWordBeanDao().queryBuilder().build().list();
+        List<KeyWordBean> list=mCacheManager.getDaoSession().getKeyWordBeanDao().queryBuilder().orderDesc(KeyWordBeanDao.Properties.CreateTime).build().list();
         ArrayList<KeyWordBean> data=new ArrayList<>();
         if(list!=null){
             data.addAll(list);
@@ -32,11 +34,13 @@ public class SearchActionModel extends BaseModel<ServiceManager,CacheManager> im
 
     @Override
     public void insertKey(KeyWordBean bean) {
+        bean.setCreateTime(System.currentTimeMillis());
         List<KeyWordBean> list=mCacheManager.getDaoSession().getKeyWordBeanDao().queryBuilder().build().list();
         if(list!=null){
             for(int i=0;i<list.size();i++){
                 if(list.get(i).getKeyWord().equals(bean.getKeyWord())){
-                    return;
+                    mCacheManager.getDaoSession().getKeyWordBeanDao().delete(list.get(i));
+                    break;
                 }
             }
         }

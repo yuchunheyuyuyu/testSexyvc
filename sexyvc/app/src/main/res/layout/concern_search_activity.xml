@@ -39,6 +39,7 @@
             android:layout_toLeftOf="@+id/tvCancle"
             android:background="@drawable/concern_search_shape"
             android:hint="@string/hint_search_concern"
+            android:imeOptions="actionSearch"
             android:paddingLeft="56px"
             android:paddingRight="16px"
             android:singleLine="true"

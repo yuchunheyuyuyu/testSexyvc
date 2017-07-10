@@ -102,6 +102,10 @@ public class SearchActionActivity extends MyBaseActivity<SearchActionPresent> im
                     data.clear();
                     mAdapter.notifyDataSetChanged();
                 }else{
+                    KeyWordBean bean=new KeyWordBean();
+                    bean.setKeyWord(data.get(position).getKeyWord());
+                    mPresenter.insertKeys(bean);
+
                     gotoResult(data.get(position).getKeyWord());
                 }
             }

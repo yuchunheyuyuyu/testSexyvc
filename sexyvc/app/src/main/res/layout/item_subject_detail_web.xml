@@ -5,6 +5,26 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="8sp"
+        android:textColor="@color/black90"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvAuthorAndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:lineSpacingExtra="6sp"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
+
     <FrameLayout
         android:id="@+id/web_view_container"
         android:layout_width="match_parent"

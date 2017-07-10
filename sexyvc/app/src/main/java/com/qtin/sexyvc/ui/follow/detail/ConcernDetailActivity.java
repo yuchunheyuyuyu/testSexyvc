@@ -27,6 +27,7 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
 
@@ -217,7 +218,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                             @Override
                             public void onFirstClick() {
                                 dismissBottomDialog();
-                                gotoActivity(SetGroupActivity.class);
+                                Bundle bundle=new Bundle();
+                                bundle.putLong(ConstantUtil.INTENT_ID,investor_id);
+                                gotoActivity(SetGroupActivity.class,bundle);
                             }
 
                             @Override

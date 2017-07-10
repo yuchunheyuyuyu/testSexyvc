@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class GroupEntity {
     private int total;
     private int contact_count;
-    private long[] join_groups;
+    private ArrayList<Long> join_groups;
 
     public int getContact_count() {
         return contact_count;
@@ -18,11 +18,11 @@ public class GroupEntity {
         this.contact_count = contact_count;
     }
 
-    public long[] getJoin_groups() {
+    public ArrayList<Long> getJoin_groups() {
         return join_groups;
     }
 
-    public void setJoin_groups(long[] join_groups) {
+    public void setJoin_groups(ArrayList<Long> join_groups) {
         this.join_groups = join_groups;
     }
 

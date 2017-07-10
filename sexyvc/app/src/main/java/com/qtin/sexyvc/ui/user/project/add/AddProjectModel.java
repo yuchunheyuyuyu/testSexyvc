@@ -4,9 +4,14 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
+import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
+import com.qtin.sexyvc.ui.bean.UserEntity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -46,5 +51,19 @@ public class AddProjectModel extends BaseModel<ServiceManager,CacheManager> impl
     @Override
     public Observable<CodeEntity> editProject(ProjectBean request) {
         return mServiceManager.getCommonService().editProject(request);
+    }
+
+    @Override
+    public String getToken() {
+        List<UserEntity> list=mCacheManager.getDaoSession().getUserEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0).getU_token();
+        }
+        return "";
+    }
+
+    @Override
+    public Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(int is_protected) {
+        return mServiceManager.getCommonService().getQiniuToken(is_protected);
     }
 }

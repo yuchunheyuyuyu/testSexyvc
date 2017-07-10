@@ -45,7 +45,8 @@
             android:textColor="#0076ff"
             android:textSize="40px" />
 
-        <View style="@style/line_style" />
+        <View style="@style/line_style"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tvTypeOther"
@@ -53,6 +54,7 @@
             android:layout_height="114px"
             android:background="@color/white"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/auth_type_other"
             android:textColor="#0076ff"
             android:textSize="40px" />

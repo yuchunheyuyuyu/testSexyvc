@@ -511,5 +511,15 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/project/personal")
     Observable<BaseEntity<ProjectEntity>> queryMyProject(@Field("token")String token);
+
+    /**
+     * 搜索我关注的投资人
+     * @param token
+     * @param keyword
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/search")
+    Observable<BaseEntity<ConcernEntity>> searchConcern(@Field("token")String token,@Field("keyword")String keyword);
 }
 

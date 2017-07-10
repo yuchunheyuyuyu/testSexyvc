@@ -74,36 +74,56 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof WebHolder) {
             SubjectContentEntity subjectDetailEntity = (SubjectContentEntity) data.get(position);
-            final WebHolder webHolder= (WebHolder) holder;
+            final WebHolder webHolder = (WebHolder) holder;
             webHolder.webViewContent.loadData(CommonUtil.getHtmlData(subjectDetailEntity.getContent()), "text/html; charset=UTF-8", "utf-8");
             webHolder.itemView.requestFocus();
 
-            TagAdapter tagAdapter=new TagAdapter<TagEntity>(subjectDetailEntity.getTags()) {
+            TagAdapter tagAdapter = new TagAdapter<TagEntity>(subjectDetailEntity.getTags()) {
                 @Override
                 public View getView(FlowLayout parent, int position, TagEntity o) {
-                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview3,webHolder.flowLayout, false);
+                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview3, webHolder.flowLayout, false);
                     tv.setText(o.getTag_name());
                     return tv;
                 }
             };
-            webHolder.tvPraiseNum.setText(""+subjectDetailEntity.getPraise_count());
+            webHolder.tvPraiseNum.setText("" + subjectDetailEntity.getPraise_count());
             webHolder.flowLayout.setMaxSelectCount(0);
             webHolder.flowLayout.setAdapter(tagAdapter);
 
-            if(subjectDetailEntity.getHas_praise()==0){
+            if (subjectDetailEntity.getHas_praise() == 0) {
                 webHolder.ivPraise.setSelected(false);
-            }else{
+            } else {
                 webHolder.ivPraise.setSelected(true);
             }
             webHolder.ivPraise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickListener!=null){
+                    if (clickListener != null) {
                         clickListener.onClickDetailPraise(-1);
                     }
                 }
             });
 
+            if(StringUtil.isBlank(subjectDetailEntity.getTitle())){
+                webHolder.tvTitle.setVisibility(View.GONE);
+            }else{
+                webHolder.tvTitle.setVisibility(View.VISIBLE);
+                webHolder.tvTitle.setText(subjectDetailEntity.getTitle());
+            }
+            StringBuilder sb=new StringBuilder();
+            if(!StringUtil.isBlank(subjectDetailEntity.getSource())){
+                sb.append(subjectDetailEntity.getSource());
+                sb.append("  ");
+            }
+            if(subjectDetailEntity.getCreate_time()!=0){
+                sb.append(DateUtil.getLongDate(subjectDetailEntity.getCreate_time()));
+            }
+            if(StringUtil.isBlank(sb.toString())){
+                webHolder.tvAuthorAndTime.setVisibility(View.GONE);
+            }else{
+                webHolder.tvAuthorAndTime.setVisibility(View.VISIBLE);
+                webHolder.tvAuthorAndTime.setText(sb.toString());
+            }
 
         } else if (holder instanceof CommentHolder) {
             CommentHolder commentHolder = (CommentHolder) holder;
@@ -132,7 +152,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             commentHolder.ivPraise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickListener!=null){
+                    if (clickListener != null) {
                         clickListener.onClickItemPraise(position);
                     }
                 }
@@ -140,7 +160,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             commentHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickListener!=null){
+                    if (clickListener != null) {
                         clickListener.onClickItemReply(position);
                     }
                 }
@@ -159,6 +179,10 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     static class WebHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvTitle)
+        TextView tvTitle;
+        @BindView(R.id.tvAuthorAndTime)
+        TextView tvAuthorAndTime;
         WebView webViewContent;
         @BindView(R.id.web_view_container)
         FrameLayout webViewContainer;

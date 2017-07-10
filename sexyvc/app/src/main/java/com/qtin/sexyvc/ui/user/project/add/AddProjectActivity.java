@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
@@ -45,7 +44,6 @@ import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CashierInputFilter;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -55,7 +53,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -113,6 +110,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         DaggerAddProjectComponent.builder().appComponent(appComponent).addProjectModule(new AddProjectModule(this)).build().inject(this);
     }
 
+
     @Override
     protected boolean isContaineFragment() {
         return false;
@@ -137,6 +135,8 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             projectBean=new ProjectBean();
             tvTitle.setText(getResources().getString(R.string.title_add_project));
         }
+        tvName.setText(StringUtil.formatString(projectBean.getProject_name()));
+        tvIntroduce.setText(StringUtil.formatString(projectBean.getShort_intro()));
 
         tvRight.setVisibility(View.VISIBLE);
 
@@ -184,6 +184,31 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                 finish();
                 break;
             case R.id.tvRight:
+                if(StringUtil.isBlank(projectBean.getProject_name())){
+                    showMessage("项目名称不能为空");
+                    return;
+                }
+
+                if(StringUtil.isBlank(projectBean.getShort_intro())){
+                    showMessage("一句话简介不能为空");
+                    return;
+                }
+
+                if(projectBean.getDomain_id()==0){
+                    showMessage("行业不能为空");
+                    return;
+                }
+
+
+                if(cropedPhoto==null){
+                    if(isEdit){
+                        mPresenter.editProject(projectBean);
+                    }else{
+                        mPresenter.createProject(projectBean);
+                    }
+                }else{
+                    mPresenter.getQiNiuToken(cropedPhoto);
+                }
 
                 break;
             case R.id.logoContainer:
@@ -291,6 +316,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                     }
                 }
                 projectBean.setDomain_id(domain_id);
+                setDomainText();
             }
         });
         domainAdapter = new TagAdapter<FilterEntity>(domainData) {
@@ -385,7 +411,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                 }
                 projectBean.setLast_stage_id(stage_id);
                 projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
-
+                setStageText();
             }
         });
 
@@ -565,8 +591,33 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
     }
 
     @Override
-    public void onSuccess(ProjectBean bean) {
+    public void onEditSuccess(ProjectBean bean) {
+        finish();
+    }
 
+    @Override
+    public void onCreateSuccess(ProjectBean bean) {
+        finish();
+    }
+
+    @Override
+    public void uploadPhotoSuccess(String imageUrl) {
+        projectBean.setLogo(imageUrl);
+        if(isEdit){
+            mPresenter.editProject(projectBean);
+        }else{
+            mPresenter.createProject(projectBean);
+        }
+    }
+
+    @Override
+    public void showProgress(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void hideProgress() {
+        dialogDismiss();
     }
 
     public void takePhoto() {

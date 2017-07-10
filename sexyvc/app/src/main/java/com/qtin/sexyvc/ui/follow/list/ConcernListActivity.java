@@ -1,10 +1,12 @@
 package com.qtin.sexyvc.ui.follow.list;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -13,9 +15,13 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ConcernListEntity;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
+import com.qtin.sexyvc.ui.follow.detail.ConcernDetailActivity;
 import com.qtin.sexyvc.ui.follow.list.di.ConcernListModule;
 import com.qtin.sexyvc.ui.follow.list.di.DaggerConcernListComponent;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -77,8 +83,16 @@ public class ConcernListActivity extends MyBaseActivity<ConcernListPresent> impl
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new ConcernListAdapter(this, data);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClickItem(int position) {
+                //再跳转
+                Bundle bundle=new Bundle();
+                bundle.putLong("contact_id",data.get(position).getContact_id());
+                bundle.putLong("investor_id",data.get(position).getInvestor_id());
+                gotoActivity(ConcernDetailActivity.class,bundle);
+            }
+        });
         initPaginate();
         mPresenter.query(group_id,page,page_size);
     }
