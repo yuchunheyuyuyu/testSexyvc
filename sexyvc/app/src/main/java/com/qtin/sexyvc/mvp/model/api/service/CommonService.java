@@ -26,6 +26,7 @@ import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
+import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
@@ -304,6 +305,16 @@ public interface CommonService {
     Observable<CodeEntity> followInvestor(@Body FollowRequest entity);
 
     /**
+     * 取消关注投资人
+     * @param token
+     * @param investor_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/contact/investor/unfollow")
+    Observable<CodeEntity> unFollowInvestor(@Field("token")String token,@Field("investor_id")long investor_id);
+
+    /**
      * 设置投资人分组
      * @return
      */
@@ -521,5 +532,14 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/contact/investor/search")
     Observable<BaseEntity<ConcernEntity>> searchConcern(@Field("token")String token,@Field("keyword")String keyword);
+
+    /**
+     * 70. 路演评价——问卷列表
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/questions")
+    Observable<BaseListEntity<QuestionBean>> queryRoadQuestion(@Field("token")String token);
 }
 

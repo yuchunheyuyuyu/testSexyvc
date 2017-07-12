@@ -1,15 +1,17 @@
-package com.qtin.sexyvc.ui.widget.tagview;
+package com.qtin.sexyvc.ui.widget.optionview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.qtin.sexyvc.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowLayout extends ViewGroup {
+public class MyFlowLayout extends ViewGroup {
     private static final String TAG = "FlowLayout";
     private static final int LEFT = -1;
     private static final int CENTER = 0;
@@ -21,18 +23,18 @@ public class FlowLayout extends ViewGroup {
     private int mGravity;
     private List<View> lineViews = new ArrayList<>();
 
-    public FlowLayout(Context context, AttributeSet attrs, int defStyle) {
+    public MyFlowLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.OptionFlowLayout);
         mGravity = ta.getInt(R.styleable.OptionFlowLayout_gravity, LEFT);
         ta.recycle();
     }
 
-    public FlowLayout(Context context, AttributeSet attrs) {
+    public MyFlowLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public FlowLayout(Context context) {
+    public MyFlowLayout(Context context) {
         this(context, null);
     }
 

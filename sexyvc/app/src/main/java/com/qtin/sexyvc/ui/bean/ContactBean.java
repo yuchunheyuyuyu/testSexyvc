@@ -1,5 +1,9 @@
 package com.qtin.sexyvc.ui.bean;
 
+import com.qtin.sexyvc.ui.investor.bean.RoadShowBean;
+
+import java.util.ArrayList;
+
 /**
  * Created by ls on 17/7/5.
  */
@@ -28,6 +32,11 @@ public class ContactBean {
     private String remark;
     private int status;
     private long create_time;
+
+    private float score;
+    private RoadShowBean road_show;
+
+    private ArrayList<TagEntity> tags;
 
     public long getContact_id() {
         return contact_id;
@@ -179,6 +188,30 @@ public class ContactBean {
 
     public void setCreate_time(long create_time) {
         this.create_time = create_time;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    public RoadShowBean getRoad_show() {
+        return road_show;
+    }
+
+    public void setRoad_show(RoadShowBean road_show) {
+        this.road_show = road_show;
+    }
+
+    public ArrayList<TagEntity> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<TagEntity> tags) {
+        this.tags = tags;
     }
 }
 /**

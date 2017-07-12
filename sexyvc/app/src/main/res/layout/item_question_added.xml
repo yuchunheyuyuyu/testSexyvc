@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:lineSpacingExtra="6sp"
+        android:text="- 团队构成如何？"
+        android:textColor="@color/barbie_pink_two"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="@string/hint_answer"
+        android:textColor="@color/black50"
+        android:textSize="14sp" />
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="13dp" />
+</LinearLayout>

@@ -75,7 +75,7 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
                     Bundle bundle=new Bundle();
                     bundle.putLong("contact_id",data.get(position).getContact_id());
                     bundle.putLong("investor_id",data.get(position).getInvestor_id());
-                    gotoActivity(ConcernDetailActivity.class,bundle);
+                    gotoActivityForResult(ConcernDetailActivity.class,bundle,ConstantUtil.REQUEST_CODE_ID);
                 }
             }
         });
@@ -105,6 +105,27 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
             data.addAll(local);
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode){
+            case ConstantUtil.REQUEST_CODE_ID:
+                if(data!=null){
+                    long investor_id=data.getExtras().getLong(ConstantUtil.INTENT_ID);
+                    if(this.data!=null&&!this.data.isEmpty()){
+                        for(ConcernListEntity entity:this.data){
+                            if(entity.getInvestor_id()==investor_id){
+                                this.data.remove(entity);
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
     }
 
     private void search(){

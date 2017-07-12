@@ -163,8 +163,8 @@
         <!--选择评论的方式-->
         <activity
             android:name=".ui.choose.ChooseActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!--搜索投资人或者投资机构动作页-->
         <activity
@@ -210,6 +210,12 @@
         <activity
             android:name=".ui.user.photo.PhotoActivity"
             android:screenOrientation="portrait" />
+
+        <!--路演评价-->
+        <activity
+            android:name=".ui.road.RoadCommentActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity

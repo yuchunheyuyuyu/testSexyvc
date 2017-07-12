@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -15,9 +17,15 @@ import com.qtin.sexyvc.ui.follow.set.di.DaggerSetGroupComponent;
 import com.qtin.sexyvc.ui.follow.set.di.SetGroupModule;
 import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -104,7 +112,7 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -133,7 +141,9 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
 
                 ArrayList<Long> group_ids=new ArrayList<>();
                 for(ConcernGroupEntity entity:data){
-                    group_ids.add(entity.getGroup_id());
+                    if(entity.isSelected()){
+                        group_ids.add(entity.getGroup_id());
+                    }
                 }
 
                 request.setGroup_ids(group_ids);
@@ -176,7 +186,15 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
 
     @Override
     public void changeSuccess() {
-
+        Observable.just(1)
+                .delay(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        finish();
+                    }
+                });
     }
 
     @Override

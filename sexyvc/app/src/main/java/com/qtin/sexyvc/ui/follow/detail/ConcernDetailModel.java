@@ -5,6 +5,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 
@@ -37,5 +38,10 @@ public class ConcernDetailModel extends BaseModel<ServiceManager,CacheManager> i
             return list.get(0).getU_token();
         }
         return "";
+    }
+
+    @Override
+    public Observable<CodeEntity> unFollowInvestor(String token, long investor_id) {
+        return mServiceManager.getCommonService().unFollowInvestor(token,investor_id);
     }
 }

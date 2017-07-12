@@ -178,6 +178,7 @@
     <string name="edit_group_name">请输入分组的名称</string>
     <string name="edit_group">修改分组</string>
     <string name="add_group">添加分组</string>
+    <string name="add">添加</string>
     <string name="good">好</string>
     <string name="hint_search_concern">搜索我关注的投资人</string>
 
@@ -231,5 +232,8 @@
     <string name="auth_type_fa">投资顾问</string>
     <string name="auth_type_other">其他</string>
     <string name="upload">上传</string>
+    <string name="evaluate">评价</string>
 
+    <string name="what_question">他提出了什么问题？</string>
+    <string name="hint_answer">你的回答是？</string>
 </resources>

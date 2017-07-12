@@ -38,6 +38,9 @@ public class ConstantUtil {
 
     //id
     public static final String INTENT_ID="id";
+    public static final String INTENT_ID_INVESTOR="investor_id";
+    public static final String INTENT_ID_FUND="fund_id";
+    public static final String INTENT_INDEX="index";
     //title
     public static final String INTENT_TITLE="title";
     //地址
@@ -67,5 +70,9 @@ public class ConstantUtil {
 
 
     public static final int ACTION_CLEAR_HISTORY=-1;
+
+    public static final int REQUEST_CODE_ID=0x004;
+
+
 
 }

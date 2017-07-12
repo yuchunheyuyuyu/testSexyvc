@@ -1,4 +1,4 @@
-package com.qtin.sexyvc.ui.widget.tagview;
+package com.qtin.sexyvc.ui.widget.optionview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.qtin.sexyvc.R;
 
@@ -21,8 +20,8 @@ import java.util.Set;
 /**
  * Created by zhy on 15/9/10.
  */
-public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChangedListener {
-    private TagAdapter mTagAdapter;
+public class OptionFlowLayout extends MyFlowLayout implements OptionAdapter.OnDataChangedListener {
+    private OptionAdapter mTagAdapter;
     private boolean mAutoSelectEffect = true;
     private int mSelectedMax = -1;//-1为不限制数量
     private static final String TAG = "TagFlowLayout";
@@ -31,7 +30,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
     private Set<Integer> mSelectedView = new HashSet<Integer>();
 
 
-    public TagFlowLayout(Context context, AttributeSet attrs, int defStyle) {
+    public OptionFlowLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.OptionFlowLayout);
         mAutoSelectEffect = ta.getBoolean(R.styleable.OptionFlowLayout_auto_select_effect, true);
@@ -43,11 +42,11 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         }
     }
 
-    public TagFlowLayout(Context context, AttributeSet attrs) {
+    public OptionFlowLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TagFlowLayout(Context context) {
+    public OptionFlowLayout(Context context) {
         this(context, null);
     }
 
@@ -57,7 +56,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         int cCount = getChildCount();
 
         for (int i = 0; i < cCount; i++) {
-            TagView tagView = (TagView) getChildAt(i);
+            OptionView tagView = (OptionView) getChildAt(i);
             if (tagView.getVisibility() == View.GONE) continue;
             if (tagView.getTagView().getVisibility() == View.GONE) {
                 tagView.setVisibility(View.GONE);
@@ -78,7 +77,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
     }
 
     public interface OnTagClickListener {
-        boolean onTagClick(View view, int position, FlowLayout parent);
+        boolean onTagClick(View view, int position, MyFlowLayout parent);
     }
 
     private OnTagClickListener mOnTagClickListener;
@@ -89,7 +88,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
     }
 
 
-    public void setAdapter(TagAdapter adapter) {
+    public void setAdapter(OptionAdapter adapter) {
         mTagAdapter = adapter;
         mTagAdapter.setOnDataChangedListener(this);
         mSelectedView.clear();
@@ -99,13 +98,13 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
 
     private void changeAdapter() {
         removeAllViews();
-        TagAdapter adapter = mTagAdapter;
-        TagView tagViewContainer = null;
+        OptionAdapter adapter = mTagAdapter;
+        OptionView tagViewContainer = null;
         HashSet preCheckedList = mTagAdapter.getPreCheckedList();
         for (int i = 0; i < adapter.getCount(); i++) {
             View tagView = adapter.getView(this, i, adapter.getItem(i));
 
-            tagViewContainer = new TagView(getContext());
+            tagViewContainer = new OptionView(getContext());
 //            ViewGroup.MarginLayoutParams clp = (ViewGroup.MarginLayoutParams) tagView.getLayoutParams();
 //            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(clp);
 //            lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -118,7 +117,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
             if (tagView.getLayoutParams() != null) {
                 tagViewContainer.setLayoutParams(tagView.getLayoutParams());
             } else {
-                ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                MarginLayoutParams lp = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
                 lp.setMargins(dip2px(getContext(), 5),
                         dip2px(getContext(), 5),
                         dip2px(getContext(), 5),
@@ -159,7 +158,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         int y = (int) mMotionEvent.getY();
         mMotionEvent = null;
 
-        TagView child = findChild(x, y);
+        OptionView child = findChild(x, y);
         int pos = findPosByView(child);
         if (child != null) {
             doSelect(child, pos);
@@ -183,14 +182,14 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         return new HashSet<Integer>(mSelectedView);
     }
 
-    private void doSelect(TagView child, int position) {
+    private void doSelect(OptionView child, int position) {
         if (mAutoSelectEffect) {
             if (!child.isChecked()) {
                 //处理max_select=1的情况
                 if (mSelectedMax == 1 && mSelectedView.size() == 1) {
                     Iterator<Integer> iterator = mSelectedView.iterator();
                     Integer preIndex = iterator.next();
-                    TagView pre = (TagView) getChildAt(preIndex);
+                    OptionView pre = (OptionView) getChildAt(preIndex);
                     pre.setChecked(false);
                     child.setChecked(true);
                     mSelectedView.remove(preIndex);
@@ -211,7 +210,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         }
     }
 
-    public TagAdapter getAdapter() {
+    public OptionAdapter getAdapter() {
         return mTagAdapter;
     }
 
@@ -247,7 +246,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
                     int index = Integer.parseInt(pos);
                     mSelectedView.add(index);
 
-                    TagView tagView = (TagView) getChildAt(index);
+                    OptionView tagView = (OptionView) getChildAt(index);
                     if (tagView != null)
                         tagView.setChecked(true);
                 }
@@ -268,10 +267,10 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         return -1;
     }
 
-    private TagView findChild(int x, int y) {
+    private OptionView findChild(int x, int y) {
         final int cCount = getChildCount();
         for (int i = 0; i < cCount; i++) {
-            TagView v = (TagView) getChildAt(i);
+            OptionView v = (OptionView) getChildAt(i);
             if (v.getVisibility() == View.GONE) continue;
             Rect outRect = new Rect();
             v.getHitRect(outRect);

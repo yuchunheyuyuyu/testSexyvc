@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/wideLineTop"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/pale_grey_two"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/topLine"
+        style="@style/line_style" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp">
+
+        <View
+            android:id="@+id/viewDot"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/set_group_dot_shape"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:lineSpacingExtra="6sp"
+            android:text="了解"
+            android:textColor="@color/black30_barbie_pink_two_color"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linkContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvLinkQuestionName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="6sp"
+            android:text="你觉得你项目中的哪些地方打动了他？"
+            android:textColor="@color/black90"
+            android:textSize="14sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/linkOptionRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/tvAddLinkOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/black30_barbie_pink_14_selector"
+            android:gravity="center_horizontal"
+            android:paddingBottom="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:text="+ 添加"
+            android:textColor="@color/black30"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvWhatQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/what_question"
+            android:textColor="@color/black90"
+            android:textSize="14sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/addedLinkQuestionRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/tvAddLinkQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/black30_barbie_pink_14_selector"
+            android:gravity="center_horizontal"
+            android:paddingBottom="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:text="+ 添加"
+            android:textColor="@color/black30"
+            android:textSize="14sp" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/bottomWholeLine"
+        style="@style/line_style" />
+
+    <View
+        android:id="@+id/bottomMarginLine"
+        style="@style/line_style"
+        android:layout_marginLeft="16dp" />
+
+    <View
+        android:id="@+id/wideLine"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/pale_grey_two" />
+
+
+</LinearLayout>
