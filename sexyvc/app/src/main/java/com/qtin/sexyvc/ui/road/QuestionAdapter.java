@@ -10,7 +10,10 @@ import android.widget.TextView;
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.road.bean.AddQuestionBean;
+import com.qtin.sexyvc.ui.road.bean.OnOptionClickListener;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,10 +25,17 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context context;
     private ArrayList<AddQuestionBean> data;
+    private OnOptionClickListener onOptionClickListener;
+    private int optionPosition;
 
-    public QuestionAdapter(Context context, ArrayList<AddQuestionBean> data) {
+    public void setOnOptionClickListener(OnOptionClickListener onOptionClickListener) {
+        this.onOptionClickListener = onOptionClickListener;
+    }
+
+    public QuestionAdapter(Context context, ArrayList<AddQuestionBean> data,int optionPosition) {
         this.context = context;
         this.data = data;
+        this.optionPosition=optionPosition;
     }
 
     @Override
@@ -35,11 +45,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         ViewHolder holder= (ViewHolder) viewHolder;
         AddQuestionBean bean=data.get(position);
 
-        holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
+        holder.tvTitle.setText("-"+StringUtil.formatString(bean.getTitle()));
         if(StringUtil.isBlank(bean.getAnswer())){
             holder.tvAnswer.setText(context.getResources().getString(R.string.hint_answer));
         }else{
@@ -48,7 +58,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.tvAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onOptionClickListener.addAnswer(optionPosition,position);
             }
         });
     }

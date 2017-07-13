@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,12 +18,14 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
+import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.follow.detail.di.ConcernDetailModule;
 import com.qtin.sexyvc.ui.follow.detail.di.DaggerConcernDetailComponent;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
+import com.qtin.sexyvc.ui.rate.RateActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
@@ -90,12 +93,18 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     TextView tvComment;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
+    @BindView(R.id.bottomCenterLine)
+    View bottomCenterLine;
+    @BindView(R.id.commentContainer)
+    LinearLayout commentContainer;
+    @BindView(R.id.ivAnthStatus)
+    ImageView ivAnthStatus;
 
     private long contact_id;
     private long investor_id;
     private ContactBean contactBean;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
+    private static final int REQUEST_CODE_SELECTED_TYPE = 0x223;
 
 
     @Override
@@ -124,14 +133,60 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 mPresenter.query(contact_id);
             }
         });
+        tvTitle.setText("");
         mImageLoader = customApplication.getAppComponent().imageLoader();
-        tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText(getResources().getString(R.string.detail));
-
         mPresenter.query(contact_id);
     }
 
     private void setValue() {
+
+        if (mPresenter.getUserInfo() != null) {
+            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
+                    ivComent.setVisibility(View.GONE);
+                    tvComment.setText("已评价(" + contactBean.getScore_value() + "星)");
+                    tvComment.setTextColor(getResources().getColor(R.color.black50));
+                } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
+                    ivComent.setVisibility(View.GONE);
+                    tvComment.setText("还未评价路演");
+                    tvComment.setTextColor(getResources().getColor(R.color.barbie_pink_two));
+                } else if (contactBean.getHas_comment() == 0 && contactBean.getHas_roadshow() == 1) {
+                    ivComent.setVisibility(View.GONE);
+                    tvComment.setText("已评价路演");
+                    tvComment.setTextColor(getResources().getColor(R.color.black50));
+                } else {
+                    ivComent.setVisibility(View.VISIBLE);
+                    tvComment.setText("评价");
+                    tvComment.setTextColor(getResources().getColor(R.color.barbie_pink_two));
+                }
+            } else {
+                if (contactBean.getHas_comment() == 0) {
+                    ivComent.setVisibility(View.GONE);
+                    tvComment.setText("已评价(" + contactBean.getScore_value() + "星)");
+                    tvComment.setTextColor(getResources().getColor(R.color.black50));
+                } else {
+                    ivComent.setVisibility(View.VISIBLE);
+                    tvComment.setText("评价");
+                    tvComment.setTextColor(getResources().getColor(R.color.barbie_pink_two));
+                }
+            }
+        }
+
+        if(contactBean.getInvestor_uid()==0){
+            ivAnthStatus.setVisibility(View.GONE);
+        }else{
+            ivAnthStatus.setVisibility(View.VISIBLE);
+        }
+
+        if (contactBean.getInvestor_id() == 0) {
+            tvRight.setVisibility(View.GONE);
+            bottomCenterLine.setVisibility(View.GONE);
+            commentContainer.setVisibility(View.GONE);
+        } else {
+            tvRight.setVisibility(View.VISIBLE);
+            tvRight.setText(getResources().getString(R.string.detail));
+        }
+
         tvTitle.setText(StringUtil.formatString(contactBean.getInvestor_name()));
         //头像
         mImageLoader.loadImage(customApplication, GlideImageConfig
@@ -162,9 +217,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         tvRemark.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(this, contactBean.getRemark()));
 
         //标签
-        if(contactBean.getTags()==null||contactBean.getTags().isEmpty()){
+        if (contactBean.getTags() == null || contactBean.getTags().isEmpty()) {
             flowLayout.setVisibility(View.GONE);
-        }else{
+        } else {
             flowLayout.setVisibility(View.VISIBLE);
             TagAdapter tagAdapter = new TagAdapter<TagEntity>(contactBean.getTags()) {
                 @Override
@@ -189,10 +244,10 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             pbFeedbackSpeed.setProgress(0);
             pbExperienceShare.setProgress(0);
         }
-        tvRating.setText(""+contactBean.getScore());
-        ratingScore.setRating(contactBean.getScore());
+        tvRating.setText("" + contactBean.getScore());
+        ratingScore.setRating10(contactBean.getScore());
         //缺少参数
-        //tvRateNum.setText();
+        tvRateNum.setText(contactBean.getScore_count() + " 人");
     }
 
     private int countRoadPercent(RoadShowItemBean itemBean) {
@@ -282,11 +337,75 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 break;
             case R.id.commentContainer:
                 Bundle bundle=new Bundle();
-                bundle.putInt(ConstantUtil.INTENT_INDEX,0);
-                bundle.putString(ConstantUtil.INTENT_TITLE,getResources().getString(R.string.evaluate)+contactBean.getInvestor_name());
-                bundle.putLong(ConstantUtil.INTENT_ID_INVESTOR,contactBean.getInvestor_id());
-                bundle.putLong(ConstantUtil.INTENT_ID_FUND,contactBean.getFund_id());
-                gotoActivity(RoadCommentActivity.class,bundle);
+                InvestorInfoBean infoBean=new InvestorInfoBean();
+                infoBean.setInvestor_id(contactBean.getInvestor_id());
+                infoBean.setFund_id(contactBean.getFund_id());
+                infoBean.setFund_name(contactBean.getFund_name());
+                infoBean.setInvestor_avatar(contactBean.getInvestor_avatar());
+
+                infoBean.setInvestor_name(contactBean.getInvestor_name());
+                infoBean.setInvestor_uid(contactBean.getInvestor_uid());
+                infoBean.setTags(contactBean.getTags());
+
+                bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
+                gotoActivity(RateActivity.class,bundle);
+
+                //逻辑暂且隐藏起来
+              /**  if (mPresenter.getUserInfo() != null) {
+                    if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                        if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
+                            showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                                    new OneButtonListerner() {
+                                        @Override
+                                        public void onOptionSelected() {
+
+                                        }
+
+                                        @Override
+                                        public void onCancle() {
+
+                                        }
+                                    });
+                        } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
+                            gotoRoad();
+                        } else if (contactBean.getHas_comment() == 0 && contactBean.getHas_roadshow() == 1) {
+                            showBottomOneDialog(getResources().getString(R.string.comment),
+                                    new OneButtonListerner() {
+                                        @Override
+                                        public void onOptionSelected() {
+
+                                        }
+
+                                        @Override
+                                        public void onCancle() {
+
+                                        }
+                                    });
+                        } else {
+                            gotoActivityFadeForResult(ChooseActivity.class, null, REQUEST_CODE_SELECTED_TYPE);
+                        }
+
+                    } else {
+                        if (contactBean.getHas_comment() == 0) {
+
+                        } else {
+                            showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                                    new OneButtonListerner() {
+                                        @Override
+                                        public void onOptionSelected() {
+
+                                        }
+
+                                        @Override
+                                        public void onCancle() {
+
+                                        }
+                                    });
+                        }
+                    }
+                }
+                */
+
                 break;
             case R.id.telephoneContainer:
                 Bundle mobile = new Bundle();
@@ -321,6 +440,16 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         }
     }
 
+    private void gotoRoad() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(ConstantUtil.INTENT_INDEX, 0);
+        bundle.putString(ConstantUtil.INTENT_TITLE, getResources().getString(R.string.evaluate) + contactBean.getInvestor_name());
+        bundle.putLong(ConstantUtil.INTENT_ID_INVESTOR, contactBean.getInvestor_id());
+        bundle.putLong(ConstantUtil.INTENT_ID_FUND, contactBean.getFund_id());
+        gotoActivity(RoadCommentActivity.class, bundle);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -328,6 +457,20 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             return;
         }
         switch (requestCode) {
+            case REQUEST_CODE_SELECTED_TYPE:
+                if (data != null) {
+                    int type = data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
+                    if (type == ConstantUtil.COMMENT_TYPE_ROAD) {
+                        /** Bundle bundle=new Bundle();
+                         bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,type);
+                         gotoActivity(CommentObjectActivity.class,bundle);
+                         **/
+                    } else if (type == ConstantUtil.COMMENT_TYPE_EDIT) {
+
+
+                    }
+                }
+                break;
             case ModifyActivity.MODIFY_CONCERN_TELPHONE:
                 String phone = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1);
                 String backup_phone = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2);
@@ -379,9 +522,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        Intent intent=new Intent();
-                        intent.putExtra(ConstantUtil.INTENT_ID,investor_id);
-                        setResult(0,intent);
+                        Intent intent = new Intent();
+                        intent.putExtra(ConstantUtil.INTENT_ID, investor_id);
+                        setResult(0, intent);
                         finish();
                     }
                 });

@@ -101,7 +101,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
-        holder.ratingScore.setRating(bean.getScore());
+        holder.ratingScore.setRating10(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
         } else {

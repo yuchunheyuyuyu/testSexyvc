@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.mvp.Presenter;
 import com.jess.arms.utils.StringUtil;
@@ -22,6 +23,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.mvp.test.progress.LoadingDialog;
 import com.umeng.message.PushAgent;
 import com.zhy.autolayout.utils.AutoUtils;
+
 /**
  * Created by jess on 8/5/16 13:13
  * contact with jess.yan.effort@gmail.com
@@ -32,6 +34,9 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     private Dialog twoButtondialog;
     private Dialog inputDialog;
     private Dialog selectPhotoDialog;
+    private Dialog oneButtonDialog;
+
+
     @Override
     protected void ComponentInject() {
         customApplication = (CustomApplication) getApplication();
@@ -78,6 +83,7 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
+
 
     public void gotoActivityFade(Class<? extends Activity> activityClass){
         Intent intent=new Intent(this,activityClass);
@@ -174,6 +180,11 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     public static interface TwoButtonListerner {
         void leftClick();
         void rightClick();
+    }
+
+    public static interface OneButtonListerner {
+        void onOptionSelected();
+        void onCancle();
     }
 
     protected void showBottomDialog(String secondColor,String first,String second,String cancle,final SelecteListerner listerner) {
@@ -273,6 +284,39 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         inputDialog.setCanceledOnTouchOutside(true);
         inputDialog.show();
+    }
+
+    protected void showBottomOneDialog(String optionStr,final OneButtonListerner listerner) {
+        View view = View.inflate(this, R.layout.bottom_one_button_dialog, null);
+        TextView btnOption= (TextView) view.findViewById(R.id.btnOption);
+        TextView cancleSelected= (TextView) view.findViewById(R.id.cancleSelected);
+        btnOption.setText(optionStr);
+
+        btnOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onOptionSelected();
+            }
+        });
+
+        cancleSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onCancle();
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        oneButtonDialog = new Dialog(this);
+        oneButtonDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        oneButtonDialog.setContentView(view);
+        Window regionWindow = oneButtonDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        oneButtonDialog.setCanceledOnTouchOutside(true);
+        oneButtonDialog.show();
     }
 
     protected void dismissInputDialog(){

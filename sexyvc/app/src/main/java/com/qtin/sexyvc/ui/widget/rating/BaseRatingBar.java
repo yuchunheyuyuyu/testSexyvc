@@ -204,9 +204,13 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         return mNumStars;
     }
 
+    public void setRating10(float rating){
+        rating=rating/2;
+        setRating(rating);
+    }
+
     @Override
     public void setRating(float rating) {
-        rating=rating/2;
         if (rating > mNumStars) {
             rating = mNumStars;
         }

@@ -5,8 +5,10 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
+import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 
 import java.util.List;
 
@@ -37,5 +39,15 @@ public class RoadCommentModel extends BaseModel<ServiceManager,CacheManager> imp
             return list.get(0).getU_token();
         }
         return "";
+    }
+
+    @Override
+    public Observable<CodeEntity> uploadAnswers(RoadRequest request) {
+        return mServiceManager.getCommonService().uploadAnswers(request);
+    }
+
+    @Override
+    public Observable<BaseListEntity<String>> queryNormalQuestion() {
+        return mServiceManager.getCommonService().queryNormalQuestion();
     }
 }

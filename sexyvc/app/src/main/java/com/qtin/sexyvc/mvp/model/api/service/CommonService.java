@@ -27,9 +27,12 @@ import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
+import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
+
+import java.util.ArrayList;
 
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -541,5 +544,28 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/page/questions")
     Observable<BaseListEntity<QuestionBean>> queryRoadQuestion(@Field("token")String token);
+
+    /**
+     * 87. 操作--路演答题
+     * @param request
+     * @return
+     */
+    @POST("api/action/answer")
+    Observable<CodeEntity> uploadAnswers(@Body RoadRequest request);
+
+    /**
+     * 88. 页面--常见问题
+     * @return
+     */
+    @POST("api/page/recommend/questions")
+    Observable<BaseListEntity<String>> queryNormalQuestion();
+
+    @FormUrlEncoded
+    @POST("api/action/score")
+    Observable<CodeEntity> rateInvestor(@Field("token")String token,@Field("score")int score,
+                                        @Field("investor_id")long investor_id,@Field("fund_id")long fund_id,
+                                        @Field("tags")ArrayList<String> tags);
+
+
 }
 

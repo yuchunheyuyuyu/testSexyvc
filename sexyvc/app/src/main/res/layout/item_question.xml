@@ -79,7 +79,7 @@
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
             android:text="@string/next_step"
-            android:textColor="@color/barbie_pink_two"
+            android:textColor="@color/black30_barbie_pink_two_color"
             android:textSize="14sp" />
 
 

@@ -49,6 +49,8 @@ public class ConstantUtil {
     public static final String INTENT_PARCELABLE_ARRAY="ParcelableArray";
     //Parcelable
     public static final String INTENT_PARCELABLE="Parcelable";
+    //string
+    public static final String INTENT_STRING_ARRAY="string_array";
 
     //认证状态
     public static final int AUTH_STATE_UNPASS=0;

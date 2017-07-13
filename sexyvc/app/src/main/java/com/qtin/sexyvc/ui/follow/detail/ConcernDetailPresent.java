@@ -9,9 +9,8 @@ import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
-
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import javax.inject.Inject;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -95,6 +94,10 @@ public class ConcernDetailPresent extends BasePresenter<ConcernDetailContract.Mo
                     }
                 });
     }
+
+    public UserInfoEntity getUserInfo(){
+        return mModel.getUserInfo();
+    };
 
     @Override
     public void onDestroy() {

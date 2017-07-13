@@ -8,6 +8,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -43,5 +44,14 @@ public class ConcernDetailModel extends BaseModel<ServiceManager,CacheManager> i
     @Override
     public Observable<CodeEntity> unFollowInvestor(String token, long investor_id) {
         return mServiceManager.getCommonService().unFollowInvestor(token,investor_id);
+    }
+
+    @Override
+    public UserInfoEntity getUserInfo() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }

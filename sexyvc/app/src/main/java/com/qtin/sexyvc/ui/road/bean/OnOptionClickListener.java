@@ -7,4 +7,5 @@ package com.qtin.sexyvc.ui.road.bean;
 public interface OnOptionClickListener {
     void addOption(int position);
     void addQuestion(int position);
+    void addAnswer(int position,int index);
 }

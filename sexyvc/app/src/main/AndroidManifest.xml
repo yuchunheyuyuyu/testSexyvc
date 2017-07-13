@@ -216,6 +216,16 @@
             android:name=".ui.road.RoadCommentActivity"
             android:screenOrientation="portrait" />
 
+        <!--评分-->
+        <activity
+            android:name=".ui.rate.RateActivity"
+            android:screenOrientation="portrait" />
+
+        <!--写评论-->
+        <activity
+            android:name=".ui.review.ReviewActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity

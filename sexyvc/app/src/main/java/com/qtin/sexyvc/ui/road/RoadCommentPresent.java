@@ -7,7 +7,9 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
+import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 
 import javax.inject.Inject;
 
@@ -59,6 +61,60 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                         }else{
                             mRootView.showMessage(listEntity.getErrMsg());
                             mRootView.queryFail();
+                        }
+                    }
+                });
+    }
+
+    public void queryNormalQuestion(){
+        mModel.queryNormalQuestion()
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.startLoad("获取数据中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.endLoad();
+                    }
+                }).compose(RxUtils.<BaseListEntity<String>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseListEntity<String>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseListEntity<String> baseListEntity) {
+                        if(baseListEntity.isSuccess()){
+                            mRootView.queryNormalQuestionsSuccess(baseListEntity.getItems());
+                        }
+                    }
+                });
+    }
+
+    public void uploadAnswers(RoadRequest request){
+        request.setToken(mModel.getToken());
+        mModel.uploadAnswers(request)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startLoad("提交答案中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endLoad();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.onUploadAnswersSuccess();
                         }
                     }
                 });

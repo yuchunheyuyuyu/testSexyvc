@@ -79,7 +79,7 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
             holder.tvFundName.setText(StringUtil.formatString(entity.getFund_name()));
         }
 
-        holder.ratingScore.setRating(entity.getScore());
+        holder.ratingScore.setRating10(entity.getScore());
         if(entity.getU_id()>0){
             holder.ivAnthStatus.setVisibility(View.VISIBLE);
         }else{

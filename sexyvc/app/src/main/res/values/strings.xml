@@ -223,6 +223,7 @@
     <string name="no_data">暂无数据</string>
 
     <string name="has_comment">评论了</string>
+    <string name="comment">评论</string>
     <string name="who_case">%s的投资案例</string>
 
     <string name="format_fund">收录投资人 %1$d | 评论 %2$d</string>
@@ -236,4 +237,6 @@
 
     <string name="what_question">他提出了什么问题？</string>
     <string name="hint_answer">你的回答是？</string>
+    <string name="normal_question">常见问题</string>
+    <string name="plus_comment">追评</string>
 </resources>

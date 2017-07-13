@@ -44,6 +44,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/bottomCenterLine"
             style="@style/line_vertical_style"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp" />
@@ -122,6 +123,14 @@
                                 android:layout_height="match_parent"
                                 android:src="@drawable/avatar_blank" />
 
+                            <ImageView
+                                android:id="@+id/ivAnthStatus"
+                                android:layout_width="11dp"
+                                android:layout_height="11dp"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginRight="3dp"
+                                android:src="@drawable/logo_approve_vc"
+                                android:visibility="visible" />
 
                         </FrameLayout>
 
@@ -146,7 +155,7 @@
                                 android:ellipsize="end"
                                 android:lineSpacingExtra="6sp"
                                 android:maxLines="1"
-                                android:text="梅花天使创投"
+                                android:text="@string/input_defalut"
                                 android:textColor="@color/black50"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -171,7 +180,7 @@
                                 android:ellipsize="end"
                                 android:lineSpacingExtra="6sp"
                                 android:maxLines="1"
-                                android:text="创始合伙人"
+                                android:text="@string/input_defalut"
                                 android:textColor="@color/black50"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -200,7 +209,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
                                 android:lineSpacingExtra="0sp"
-                                android:text="233 人"
+                                android:text="0 人"
                                 android:textColor="@color/black30"
                                 android:textSize="10sp" />
 
@@ -211,7 +220,7 @@
                                 android:layout_marginTop="4dp"
                                 android:gravity="center_horizontal"
                                 android:lineSpacingExtra="0sp"
-                                android:text="7.0"
+                                android:text="0.0"
                                 android:textColor="@color/barbie_pink_two"
                                 android:textSize="28sp" />
 
@@ -221,7 +230,7 @@
                                 android:layout_height="10dp"
                                 android:layout_marginTop="4dp"
                                 app:numStars="5"
-                                app:rating="2.3"
+                                app:rating="0.0"
                                 app:starPadding="2dp"
                                 app:starSize="10dp"
                                 app:touchable="false" />
@@ -236,9 +245,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:visibility="gone"
                     android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone" />
 
                 <View
                     style="@style/line_style"
@@ -283,7 +292,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
                             android:layout_marginTop="4dp"
-                            android:progress="20" />
+                            android:progress="0" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -300,7 +309,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
                             android:layout_marginTop="4dp"
-                            android:progress="20" />
+                            android:progress="0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -324,7 +333,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
                             android:layout_marginTop="4dp"
-                            android:progress="20" />
+                            android:progress="0" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -341,7 +350,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
                             android:layout_marginTop="4dp"
-                            android:progress="20" />
+                            android:progress="0" />
                     </LinearLayout>
 
                 </LinearLayout>

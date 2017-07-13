@@ -93,7 +93,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.tvInvestorAndCommentNumber.setText(String.format(format,entity.getInvestor_number(),entity.getComment_number()));
 
         //评分
-        holder.ratingScore.setRating(entity.getScore());
+        holder.ratingScore.setRating10(entity.getScore());
 
         //标签
         if (entity.getTags() == null || entity.getTags().isEmpty()) {
@@ -146,7 +146,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .build());
 
         //评分
-        holder.ratingScore.setRating(entity.getScore());
+        holder.ratingScore.setRating10(entity.getScore());
         //标签
 
         if (entity.getTags() == null || entity.getTags().isEmpty()) {

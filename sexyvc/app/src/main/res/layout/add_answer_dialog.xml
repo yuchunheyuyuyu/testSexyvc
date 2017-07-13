@@ -6,37 +6,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/normalQuestionContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingTop="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:lineSpacingExtra="6sp"
-            android:text="@string/normal_question"
-            android:textColor="@color/black90"
-            android:textSize="14sp" />
-
-        <com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout
-            android:id="@+id/flowLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:visibility="visible" />
-
-        <View
-            style="@style/line_style"
-            android:layout_marginTop="16dp" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -45,16 +14,16 @@
         android:padding="15dp">
 
         <EditText
-            android:id="@+id/etInputQuestion"
+            android:id="@+id/etInputAnsewer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:background="@null"
+            android:maxLength="140"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="top"
-            android:maxLength="140"
             android:maxLines="4"
             android:padding="3dp"
             android:textColor="@color/black"
@@ -68,7 +37,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvAddQuestion"
+                android:id="@+id/tvAddAnswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

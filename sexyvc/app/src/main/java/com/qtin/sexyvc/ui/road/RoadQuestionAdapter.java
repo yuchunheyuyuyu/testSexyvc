@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
@@ -17,9 +16,7 @@ import com.qtin.sexyvc.ui.road.bean.OnOptionClickListener;
 import com.qtin.sexyvc.ui.road.bean.OptionFirstBean;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -114,6 +111,9 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     if(onOptionClickListener!=null){
+                        if(bean.getAddQuestions()!=null&&bean.getAddQuestions().size()>=3){
+                            return;
+                        }
                         onOptionClickListener.addQuestion(position);
                     }
                 }
@@ -170,9 +170,10 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }else{
             holder.addedLinkQuestionRecyclerView.setVisibility(View.VISIBLE);
             holder.addedLinkQuestionRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            QuestionAdapter adapter=new QuestionAdapter(context,bean.getAddQuestions());
+            QuestionAdapter adapter=new QuestionAdapter(context,bean.getAddQuestions(),position);
             holder.addedLinkQuestionRecyclerView.setAdapter(adapter);
 
+            adapter.setOnOptionClickListener(onOptionClickListener);
         }
 
 
@@ -257,7 +258,7 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
-    private void setQuestion(QuestionBean bean, QuestionHolder holder, final int position){
+    private void setQuestion(QuestionBean bean,final QuestionHolder holder, final int position){
         holder.tvIndex.setText(""+(index+1));
         holder.tvTotal.setText("/"+total);
         holder.tvQuestion.setText(StringUtil.formatString(bean.getTitle()));
@@ -268,11 +269,28 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         holder.tvNextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onSpecialClickListener!=null){
+                if(onSpecialClickListener!=null&&holder.tvNextStep.isSelected()){
                     onSpecialClickListener.onSpecialItem(position);
                 }
             }
         });
+        //下一步的显示
+        boolean isAnswered=false;
+        for(int i=0;i<data.size();i++){
+            if(data.get(i) instanceof OptionFirstBean){
+                OptionFirstBean firstBean= (OptionFirstBean) data.get(i);
+                if(firstBean.isSelected()){
+                    isAnswered=true;
+                    break;
+                }
+            }
+        }
+        if(isAnswered){
+            holder.tvNextStep.setSelected(true);
+        }else{
+            holder.tvNextStep.setSelected(false);
+        }
+
         holder.pbIndex.setProgress((index+1)*100/total);
     }
 

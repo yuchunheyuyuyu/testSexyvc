@@ -111,7 +111,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
-        holder.ratingScore.setRating(bean.getScore());
+        holder.ratingScore.setRating10(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
         } else {
@@ -144,7 +144,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 .build());
 
         holder.tvName.setText(StringUtil.formatString(bean.getFund_name()));
-        holder.ratingScore.setRating(bean.getScore());
+        holder.ratingScore.setRating10(bean.getScore());
         holder.tvRating.setText("" + bean.getScore());
         //holder.tvRateNum.setText(+"人");
         //holder.tvLocation.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.get));

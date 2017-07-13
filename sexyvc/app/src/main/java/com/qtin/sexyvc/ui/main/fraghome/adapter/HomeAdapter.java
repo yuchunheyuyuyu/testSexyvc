@@ -184,7 +184,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
         holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
         holder.ratingScore.invalidate();
-        holder.ratingScore.setRating(entity.getScore());
+        holder.ratingScore.setRating10(entity.getScore());
         holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
         holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
             @Override

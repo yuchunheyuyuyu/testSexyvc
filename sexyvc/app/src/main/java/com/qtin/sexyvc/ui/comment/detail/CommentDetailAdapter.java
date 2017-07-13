@@ -127,7 +127,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
 
             //评分
-            holder.ratingScore.setRating(bean.getScore());
+            holder.ratingScore.setRating10(bean.getScore());
             //点赞
             if(bean.getHas_praise()==0){
                 holder.ivPraise.setSelected(false);

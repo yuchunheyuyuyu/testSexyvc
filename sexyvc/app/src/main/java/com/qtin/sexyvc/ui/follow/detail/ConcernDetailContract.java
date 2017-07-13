@@ -5,6 +5,7 @@ import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import rx.Observable;
 
 /**
@@ -22,5 +23,6 @@ public interface ConcernDetailContract {
         Observable<BaseEntity<ContactBean>> queryContactDetail(String token,long contact_id);
         String getToken();
         Observable<CodeEntity> unFollowInvestor(String token,long investor_id);
+        UserInfoEntity getUserInfo();
     }
 }

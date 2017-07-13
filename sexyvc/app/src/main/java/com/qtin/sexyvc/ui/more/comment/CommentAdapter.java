@@ -63,7 +63,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void dealFundComment(final CommentBean bean, FundHolder holder) {
-        holder.ratingScore.setRating(bean.getScore());
+        holder.ratingScore.setRating10(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
         } else {
@@ -86,7 +86,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void dealInvestorComment(final CommentBean bean, InvestorHolder holder) {
-        holder.ratingScore.setRating(bean.getScore());
+        holder.ratingScore.setRating10(bean.getScore());
         if(StringUtil.isBlank(bean.getDomain_name())){
             holder.tvCommentTag.setVisibility(View.GONE);
         }else{
