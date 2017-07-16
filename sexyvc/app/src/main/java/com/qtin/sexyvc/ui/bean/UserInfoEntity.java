@@ -2,16 +2,16 @@ package com.qtin.sexyvc.ui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by ls on 17/6/15.
  */
 @Entity
 public class UserInfoEntity implements Parcelable {
-
+    @Id
     private String  token;
 
     private int has_project;

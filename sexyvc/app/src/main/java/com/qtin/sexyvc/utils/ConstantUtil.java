@@ -75,6 +75,15 @@ public class ConstantUtil {
 
     public static final int REQUEST_CODE_ID=0x004;
 
+    //写评论还是追评
+    public static final String REVIEW_TYPE_INTENT="REVIEW_TYPE_INTENT";
+    public static final int REVIEW_TYPE_COMMENT=1;
+    public static final int REVIEW_TYPE_COMMENT_PLUS=2;
+
+    public static final String ROAD_SUCCESS = "road_comment_success";
+    public static final String SCORE_SUCCESS = "score_success";
+    public static final String COMMENT_SUCCESS = "comment_success";
+
 
 
 }

@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
@@ -18,14 +19,13 @@ public class InvestorInfoBean implements Parcelable {
     private String fund_name;
     private String title;
     private ArrayList<TagEntity> tags;
-
-    public ArrayList<TagEntity> getTags() {
-        return tags;
-    }
-
-    public void setTags(ArrayList<TagEntity> tags) {
-        this.tags = tags;
-    }
+    private int score_value;
+    private int has_score;
+    private int has_comment;
+    private int has_roadshow;
+    private String comment_title;
+    private long comment_id;
+    private boolean isAppend;//是否是追评
 
     public long getFund_id() {
         return fund_id;
@@ -79,6 +79,74 @@ public class InvestorInfoBean implements Parcelable {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public ArrayList<TagEntity> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<TagEntity> tags) {
+        this.tags = tags;
+    }
+
+    public int getScore_value() {
+        return score_value;
+    }
+
+    public void setScore_value(int score_value) {
+        this.score_value = score_value;
+    }
+
+    public int getHas_score() {
+        return has_score;
+    }
+
+    public void setHas_score(int has_score) {
+        this.has_score = has_score;
+    }
+
+    public int getHas_comment() {
+        return has_comment;
+    }
+
+    public void setHas_comment(int has_comment) {
+        this.has_comment = has_comment;
+    }
+
+    public int getHas_roadshow() {
+        return has_roadshow;
+    }
+
+    public void setHas_roadshow(int has_roadshow) {
+        this.has_roadshow = has_roadshow;
+    }
+
+    public String getComment_title() {
+        return comment_title;
+    }
+
+    public void setComment_title(String comment_title) {
+        this.comment_title = comment_title;
+    }
+
+    public long getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(long comment_id) {
+        this.comment_id = comment_id;
+    }
+
+    public boolean isAppend() {
+        return isAppend;
+    }
+
+    public void setAppend(boolean append) {
+        isAppend = append;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -94,6 +162,13 @@ public class InvestorInfoBean implements Parcelable {
         dest.writeString(this.fund_name);
         dest.writeString(this.title);
         dest.writeTypedList(this.tags);
+        dest.writeInt(this.score_value);
+        dest.writeInt(this.has_score);
+        dest.writeInt(this.has_comment);
+        dest.writeInt(this.has_roadshow);
+        dest.writeString(this.comment_title);
+        dest.writeLong(this.comment_id);
+        dest.writeByte(this.isAppend ? (byte) 1 : (byte) 0);
     }
 
     public InvestorInfoBean() {
@@ -108,6 +183,13 @@ public class InvestorInfoBean implements Parcelable {
         this.fund_name = in.readString();
         this.title = in.readString();
         this.tags = in.createTypedArrayList(TagEntity.CREATOR);
+        this.score_value = in.readInt();
+        this.has_score = in.readInt();
+        this.has_comment = in.readInt();
+        this.has_roadshow = in.readInt();
+        this.comment_title = in.readString();
+        this.comment_id = in.readLong();
+        this.isAppend = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<InvestorInfoBean> CREATOR = new Parcelable.Creator<InvestorInfoBean>() {

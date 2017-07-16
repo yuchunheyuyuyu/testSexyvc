@@ -91,7 +91,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
 
         ivTab1.setSelected(true);
         tvTab1.setSelected(true);
-        mPresenter.getUserInfo();
+        //mPresenter.getUserInfo();
     }
 
 

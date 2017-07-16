@@ -592,11 +592,14 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
     @Override
     public void onEditSuccess(ProjectBean bean) {
+
+
         finish();
     }
 
     @Override
     public void onCreateSuccess(ProjectBean bean) {
+        mPresenter.updateProjectState();
         finish();
     }
 

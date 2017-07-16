@@ -39,6 +39,24 @@ public class ContactBean {
     private int has_roadshow;
     private int score_value;
     private ArrayList<TagEntity> tags;
+    private String comment_title;
+    private long comment_id;
+
+    public String getComment_title() {
+        return comment_title;
+    }
+
+    public void setComment_title(String comment_title) {
+        this.comment_title = comment_title;
+    }
+
+    public long getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(long comment_id) {
+        this.comment_id = comment_id;
+    }
 
     public int getScore_value() {
         return score_value;

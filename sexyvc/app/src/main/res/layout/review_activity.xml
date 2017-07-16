@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我对他的评价："
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+                    android:id="@+id/ratingScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    app:numStars="5"
+                    app:rating="2.3"
+                    app:starPadding="4dp"
+                    app:starSize="16dp"
+                    app:touchable="false" />
+            </LinearLayout>
+
+            <View style="@style/line_style" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etCommentTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@null"
+                        android:hint="@string/hint_review_title"
+                        android:lineSpacingExtra="6sp"
+                        android:maxLines="1"
+                        android:textColor="@color/black90"
+                        android:textColorHint="@color/black30"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvCommentTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="16dp"
+                        android:visibility="gone"
+                        android:gravity="center_vertical"
+                        android:layout_marginRight="16dp"
+                        android:background="@null"
+                        android:hint="@string/hint_review_title"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="6sp"
+                        android:maxLines="1"
+                        android:textColor="@color/black90"
+                        android:textColorHint="@color/black30"
+                        android:textSize="16sp" />
+
+                </FrameLayout>
+
+                <View
+                    style="@style/line_style"
+                    android:layout_marginLeft="16dp" />
+
+                <EditText
+                    android:id="@+id/etCommentContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="148dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="@string/hint_review_content"
+                    android:lineSpacingExtra="6sp"
+                    android:paddingTop="14dp"
+                    android:textColor="@color/black90"
+                    android:textColorHint="@color/black30"
+                    android:textSize="16sp" />
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:lineSpacingExtra="6sp"
+                        android:text="@string/anonymity"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/ivSwitch"
+                        android:layout_width="54dp"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="3dp"
+                        android:src="@drawable/switch_selector" />
+
+
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/review_agreement1"
+                    android:textColor="@color/slate_50"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvAgreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/review_agreement2"
+                    android:textColor="@color/barbie_pink_two"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

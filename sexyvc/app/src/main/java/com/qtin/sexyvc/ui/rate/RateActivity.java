@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
@@ -26,15 +27,18 @@ import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.rate.di.DaggerRateComponent;
 import com.qtin.sexyvc.ui.rate.di.RateModule;
+import com.qtin.sexyvc.ui.request.RateRequest;
+import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
+import com.zhy.autolayout.utils.AutoUtils;
 import java.util.ArrayList;
-
+import java.util.Iterator;
+import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -69,10 +73,12 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
     TagFlowLayout flowLayout;
     private TagAdapter tagAdapter;
 
-    private EditText etInputOption;
-    private Dialog optionDialog;
+    private EditText etInput;
+    private Dialog tagDialog;
 
     private ArrayList<TagEntity> tags = new ArrayList<>();
+    private ArrayList<TagEntity> normalTags = new ArrayList<>();
+
 
     private InvestorInfoBean investorInfoBean;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
@@ -96,6 +102,8 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
     protected void initData() {
         investorInfoBean = getIntent().getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
 
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText(getResources().getString(R.string.commit));
         if (investorInfoBean.getInvestor_uid() == 0) {
             ivAnthStatus.setVisibility(View.GONE);
         } else {
@@ -114,6 +122,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         tvInvestorName.setText(StringUtil.formatString(investorInfoBean.getInvestor_name()));
         tvFundName.setText(StringUtil.formatString(investorInfoBean.getFund_name()));
         tvPosition.setText(StringUtil.formatString(investorInfoBean.getTitle()));
+        tvTitle.setText(getResources().getString(R.string.evaluate)+investorInfoBean.getInvestor_name());
         //ratingScore
         if (investorInfoBean.getTags() != null) {
             tags.addAll(investorInfoBean.getTags());
@@ -167,21 +176,28 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                 return true;
             }
         });
+        String [] tagStr={"浮夸","务实","喜欢扯淡","爱幻想","咋咋呼呼","鞠躬尽瘁死而后已","先天下之忧而乐"};
+        //测试常用标签
+        for(int i=0;i<tagStr.length;i++){
+            TagEntity tagEntity=new TagEntity();
+            tagEntity.setTag_name(tagStr[i]);
+            normalTags.add(tagEntity);
+        }
     }
 
     @Override
     public void showLoading() {
-
+        showDialog("正在提交");
     }
 
     @Override
     public void hideLoading() {
-
+        dialogDismiss();
     }
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -198,27 +214,76 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
+                finish();
                 break;
             case R.id.tvRight:
+                int score= (int) ratingScore.getRating();
+                ArrayList<String> tem=new ArrayList<>();
+
+                if(tags!=null&&!tags.isEmpty()){
+                    for(TagEntity entity:tags){
+                        if(entity.isSelected()){
+                            tem.add(entity.getTag_name());
+                        }
+                    }
+                }
+                if(investorInfoBean!=null){
+                    RateRequest request=new RateRequest();
+                    request.setFund_id(investorInfoBean.getFund_id());
+                    request.setInvestor_id(investorInfoBean.getInvestor_id());
+                    request.setScore(score*2);
+                    request.setTags(tem);
+                    mPresenter.rateInvestor(request);
+                }
                 break;
         }
     }
 
     public void showOptionDialog() {
-        View view = LayoutInflater.from(this).inflate(R.layout.add_option_dialog, null);
-        etInputOption = (EditText) view.findViewById(R.id.etInputOption);
+        View view = LayoutInflater.from(this).inflate(R.layout.add_tag_dialog, null);
+        etInput = (EditText) view.findViewById(R.id.etInput);
         //etInputQuestion.setHint(hint);
-        View tvAddOption = view.findViewById(R.id.tvAddOption);
+        View tvAdd = view.findViewById(R.id.tvAdd);
+        View normalContainer=view.findViewById(R.id.normalContainer);
+        if(normalTags==null||normalTags.isEmpty()){
+            normalContainer.setVisibility(View.GONE);
+        }else{
+            normalContainer.setVisibility(View.VISIBLE);
+            final TagFlowLayout flowLayout= (TagFlowLayout) view.findViewById(R.id.flowLayout);
 
-        tvAddOption.setOnClickListener(new View.OnClickListener() {
+            TagAdapter tagAdapter = new TagAdapter<TagEntity>(normalTags) {
+                @Override
+                public View getView(FlowLayout parent, int position, TagEntity s) {
+                    TextView tv = (TextView) LayoutInflater.from(RateActivity.this).inflate(R.layout.item_normal_question, flowLayout, false);
+                    AutoUtils.auto(tv);
+                    tv.setText("+ "+s.getTag_name());
+                    return tv;
+                }
+            };
+            flowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+                @Override
+                public void onSelected(Set<Integer> selectPosSet) {
+                    Iterator<Integer> it=selectPosSet.iterator();
+                    if (it.hasNext()){
+                        TagEntity tagEntity=normalTags.get(it.next());
+                        etInput.setText(tagEntity.getTag_name());
+                        etInput.setSelection(tagEntity.getTag_name().length());
+                    }
+                }
+            });
+            flowLayout.setMaxSelectCount(1);
+            flowLayout.setAdapter(tagAdapter);
+        }
+
+        tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = etInputOption.getText().toString();
+                String content = etInput.getText().toString();
                 if (StringUtil.isBlank(content)) {
                     showMessage("标签不能为空");
                     return;
                 }
-                optionDialog.dismiss();
+                tagDialog.dismiss();
                 TagEntity tagEntity=new TagEntity();
                 tagEntity.setSelected(true);
                 tagEntity.setTag_name(content);
@@ -227,10 +292,10 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                 tagAdapter.notifyDataChanged();
             }
         });
-        optionDialog = new Dialog(this);
-        optionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        optionDialog.setContentView(view);
-        Window inputWindow = optionDialog.getWindow();
+        tagDialog = new Dialog(this);
+        tagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        tagDialog.setContentView(view);
+        Window inputWindow = tagDialog.getWindow();
         WindowManager.LayoutParams params = inputWindow.getAttributes();
         inputWindow.setSoftInputMode(params.SOFT_INPUT_ADJUST_NOTHING);
 
@@ -239,19 +304,28 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         inputWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         inputWindow.setWindowAnimations(R.style.dialog_fade_animation);
         inputWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        optionDialog.setCanceledOnTouchOutside(true);
-        optionDialog.show();
+        tagDialog.setCanceledOnTouchOutside(true);
+        tagDialog.show();
 
         Observable.just(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        etInputOption.setFocusable(true);
-                        InputMethodManager inputMethodManager = (InputMethodManager) etInputOption.getContext()
+                        etInput.setFocusable(true);
+                        InputMethodManager inputMethodManager = (InputMethodManager) etInput.getContext()
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                         inputMethodManager.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
                     }
                 });
+    }
+
+    @Override
+    public void rateSuccess(int score) {
+        investorInfoBean.setHas_score(1);
+        investorInfoBean.setScore_value(score);
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
+        gotoActivity(ReviewActivity.class,bundle);
     }
 }

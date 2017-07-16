@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_header" />
+
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="48dp"
+        android:src="@drawable/success" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/format_road_success"
+        android:textColor="@color/slate_70"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvVertify"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/barbie_pink_round_shape"
+        android:gravity="center"
+        android:text="进行身份认证"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvEditComment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/barbie_pink_stroke_round_shape"
+        android:gravity="center"
+        android:text="撰写对他的评论"
+        android:textColor="@color/barbie_pink_two"
+        android:textSize="16sp" />
+
+</LinearLayout>

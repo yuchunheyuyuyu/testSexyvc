@@ -97,6 +97,11 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
+    protected void gotoActivityFadeForResult(Class<? extends Activity> activityClass,int requestCode) {
+        Intent intent = new Intent(this, activityClass);
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+    }
 
 
     public void gotoActivity(Class<? extends Activity> activityClass,Bundle bundle){
@@ -311,9 +316,9 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         oneButtonDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         oneButtonDialog.setContentView(view);
         Window regionWindow = oneButtonDialog.getWindow();
-        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setGravity(Gravity.BOTTOM);
         regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setWindowAnimations(R.style.view_animation);
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         oneButtonDialog.setCanceledOnTouchOutside(true);
         oneButtonDialog.show();
@@ -328,6 +333,12 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     protected void dismissBottomDialog(){
         if(selectPhotoDialog!=null&&selectPhotoDialog.isShowing()){
             selectPhotoDialog.dismiss();
+        }
+    }
+
+    protected void dismissBottomOneButtonDialog(){
+        if(oneButtonDialog!=null&&oneButtonDialog.isShowing()){
+            oneButtonDialog.dismiss();
         }
     }
     public static interface SelecteListerner {

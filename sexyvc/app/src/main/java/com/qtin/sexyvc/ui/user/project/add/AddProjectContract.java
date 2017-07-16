@@ -10,7 +10,9 @@ import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
+
 import java.util.ArrayList;
+
 import rx.Observable;
 
 /**
@@ -35,5 +37,6 @@ public interface AddProjectContract {
         Observable<CodeEntity> editProject(ProjectBean request);
         String getToken();
         Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(int is_protected);
+        void  updateProjectState();
     }
 }

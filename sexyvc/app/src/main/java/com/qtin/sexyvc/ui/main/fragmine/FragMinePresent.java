@@ -49,6 +49,7 @@ public class FragMinePresent extends BasePresenter<FragMineContract.Model,FragMi
                             if(baseEntity.isSuccess()){
                                 if(baseEntity.getItems()!=null){
                                     mRootView.requestSuccess(baseEntity.getItems());
+                                    baseEntity.getItems().setToken(mModel.getToken());
                                     mModel.saveUsrInfo(baseEntity.getItems());
                                 }
                             }else{

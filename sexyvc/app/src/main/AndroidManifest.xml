@@ -216,6 +216,10 @@
             android:name=".ui.road.RoadCommentActivity"
             android:screenOrientation="portrait" />
 
+        <!--路演评价完成-->
+        <activity
+            android:name=".ui.road.success.RoadSuccessActivity"
+            android:screenOrientation="portrait" />
         <!--评分-->
         <activity
             android:name=".ui.rate.RateActivity"

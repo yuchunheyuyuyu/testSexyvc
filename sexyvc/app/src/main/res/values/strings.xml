@@ -20,6 +20,7 @@
     <string name="title_position">身份</string>
     <string name="title_vertify_position">身份认证</string>
     <string name="title_institution">机构职务</string>
+    <string name="title_road_success">已提交</string>
 
     <string name="dealing">处理中...</string>
 
@@ -238,5 +239,20 @@
     <string name="what_question">他提出了什么问题？</string>
     <string name="hint_answer">你的回答是？</string>
     <string name="normal_question">常见问题</string>
+    <string name="normal_tag">常见标签</string>
     <string name="plus_comment">追评</string>
+
+    <string name="commit">提交</string>
+    <string name="hint_review_title">标题</string>
+    <string name="hint_review_content">评论正文</string>
+    <string name="hint_review_comment_plus">追评</string>
+    <string name="anonymity">匿名</string>
+
+    <string name="review_agreement1">提交即同意 </string>
+    <string name="review_agreement2">《SexyVC 评论协议》</string>
+    <string name="please_complete_project">请先完善您的项目信息</string>
+
+    <string name="format_road_success">您的评价已计入%s的分数</string>
+
+
 </resources>

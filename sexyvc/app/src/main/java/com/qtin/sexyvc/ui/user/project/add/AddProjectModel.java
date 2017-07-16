@@ -10,6 +10,7 @@ import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -65,5 +66,14 @@ public class AddProjectModel extends BaseModel<ServiceManager,CacheManager> impl
     @Override
     public Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(int is_protected) {
         return mServiceManager.getCommonService().getQiniuToken(is_protected);
+    }
+
+    @Override
+    public void updateProjectState() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            list.get(0).setHas_project(1);
+            mCacheManager.getDaoSession().getUserInfoEntityDao().update(list.get(0));
+        }
     }
 }

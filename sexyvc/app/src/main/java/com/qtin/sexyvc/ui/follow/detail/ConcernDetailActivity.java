@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.follow.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,20 +21,25 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
+import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.detail.di.ConcernDetailModule;
 import com.qtin.sexyvc.ui.follow.detail.di.DaggerConcernDetailComponent;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
 import com.qtin.sexyvc.ui.rate.RateActivity;
+import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
+import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
+import org.simple.eventbus.EventBus;
 
 import java.util.concurrent.TimeUnit;
 
@@ -106,6 +112,22 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private static final int REQUEST_CODE_SELECTED_TYPE = 0x223;
 
+    @Nullable
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    public void onScoreSuccess(){
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -336,75 +358,93 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
 
                 break;
             case R.id.commentContainer:
-                Bundle bundle=new Bundle();
-                InvestorInfoBean infoBean=new InvestorInfoBean();
-                infoBean.setInvestor_id(contactBean.getInvestor_id());
-                infoBean.setFund_id(contactBean.getFund_id());
-                infoBean.setFund_name(contactBean.getFund_name());
-                infoBean.setInvestor_avatar(contactBean.getInvestor_avatar());
 
-                infoBean.setInvestor_name(contactBean.getInvestor_name());
-                infoBean.setInvestor_uid(contactBean.getInvestor_uid());
-                infoBean.setTags(contactBean.getTags());
-
-                bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
-                gotoActivity(RateActivity.class,bundle);
-
-                //逻辑暂且隐藏起来
-              /**  if (mPresenter.getUserInfo() != null) {
+                if (mPresenter.getUserInfo() != null) {
                     if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                        if(mPresenter.getUserInfo().getHas_project()==0){
+                            showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
+                                    getResources().getString(R.string.cancle),
+                                    getResources().getString(R.string.comfirm),
+                                    new TwoButtonListerner() {
+                                        @Override
+                                        public void leftClick() {
+                                            dismissTwoButtonDialog();
+                                        }
+
+                                        @Override
+                                        public void rightClick() {
+                                            dismissTwoButtonDialog();
+                                            Bundle bundle=new Bundle();
+                                            bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                                            gotoActivity(AddProjectActivity.class,bundle);
+                                        }
+                                    });
+                            return;
+                        }
+
+
                         if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
                             showBottomOneDialog(getResources().getString(R.string.plus_comment),
                                     new OneButtonListerner() {
                                         @Override
                                         public void onOptionSelected() {
-
+                                            dismissBottomOneButtonDialog();
+                                            gotoComment(true);
                                         }
 
                                         @Override
                                         public void onCancle() {
-
+                                            dismissBottomOneButtonDialog();
                                         }
                                     });
                         } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
-                            gotoRoad();
+                            gotoRoad(true);
                         } else if (contactBean.getHas_comment() == 0 && contactBean.getHas_roadshow() == 1) {
                             showBottomOneDialog(getResources().getString(R.string.comment),
                                     new OneButtonListerner() {
                                         @Override
                                         public void onOptionSelected() {
-
+                                            dismissBottomOneButtonDialog();
+                                            if(contactBean.getHas_score()==0){
+                                                gotoScore(false);
+                                            }else{
+                                                gotoComment(false);
+                                            }
                                         }
 
                                         @Override
                                         public void onCancle() {
-
+                                            dismissBottomOneButtonDialog();
                                         }
                                     });
                         } else {
-                            gotoActivityFadeForResult(ChooseActivity.class, null, REQUEST_CODE_SELECTED_TYPE);
+                            gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
                         }
 
                     } else {
                         if (contactBean.getHas_comment() == 0) {
-
+                            if(contactBean.getHas_score()==0){
+                                gotoScore(false);
+                            }else{
+                                gotoComment(false);
+                            }
                         } else {
                             showBottomOneDialog(getResources().getString(R.string.plus_comment),
                                     new OneButtonListerner() {
                                         @Override
                                         public void onOptionSelected() {
-
+                                            dismissBottomOneButtonDialog();
+                                            gotoComment(true);
                                         }
 
                                         @Override
                                         public void onCancle() {
-
+                                            dismissBottomOneButtonDialog();
                                         }
                                     });
                         }
                     }
                 }
-                */
 
                 break;
             case R.id.telephoneContainer:
@@ -440,15 +480,53 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         }
     }
 
-    private void gotoRoad() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(ConstantUtil.INTENT_INDEX, 0);
-        bundle.putString(ConstantUtil.INTENT_TITLE, getResources().getString(R.string.evaluate) + contactBean.getInvestor_name());
-        bundle.putLong(ConstantUtil.INTENT_ID_INVESTOR, contactBean.getInvestor_id());
-        bundle.putLong(ConstantUtil.INTENT_ID_FUND, contactBean.getFund_id());
-        gotoActivity(RoadCommentActivity.class, bundle);
+    /**
+     * 进入评分
+     * @param isAppend
+     */
+    private void gotoScore(boolean isAppend){
+        gotoActivity(RateActivity.class,getBundle(isAppend));
     }
 
+    /**
+     * 进入评论或者追评
+     * @param isAppend
+     */
+    private void gotoComment(boolean isAppend){
+        gotoActivity(ReviewActivity.class,getBundle(isAppend));
+    }
+
+    /**
+     * 进入路演评价
+     * @param isAppend
+     */
+    private void gotoRoad(boolean isAppend) {
+        Bundle bundle=getBundle(isAppend);
+        bundle.putInt(ConstantUtil.INTENT_INDEX,0);
+        gotoActivity(RoadCommentActivity.class, getBundle(isAppend));
+    }
+
+    private Bundle getBundle(boolean isAppend){
+        Bundle bundle=new Bundle();
+        InvestorInfoBean infoBean=new InvestorInfoBean();
+        infoBean.setInvestor_id(contactBean.getInvestor_id());
+        infoBean.setFund_id(contactBean.getFund_id());
+        infoBean.setFund_name(contactBean.getFund_name());
+        infoBean.setInvestor_avatar(contactBean.getInvestor_avatar());
+        infoBean.setTitle(contactBean.getTitle());
+        infoBean.setInvestor_name(contactBean.getInvestor_name());
+        infoBean.setInvestor_uid(contactBean.getInvestor_uid());
+        infoBean.setTags(contactBean.getTags());
+        infoBean.setHas_comment(contactBean.getHas_comment());
+        infoBean.setHas_roadshow(contactBean.getHas_roadshow());
+        infoBean.setHas_score(contactBean.getHas_score());
+        infoBean.setScore_value(contactBean.getScore_value());
+        infoBean.setComment_id(contactBean.getComment_id());
+        infoBean.setComment_title(contactBean.getComment_title());
+        infoBean.setAppend(isAppend);
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
+        return bundle;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -457,17 +535,25 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             return;
         }
         switch (requestCode) {
+            /**case REQUEST_CODE_COMMENT:
+                InvestorInfoBean bean=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
+                if(bean!=null){
+                    contactBean.setScore_value(bean.getScore_value());
+                    contactBean.setHas_score(bean.getHas_score());
+                    contactBean.setHas_roadshow(bean.getHas_roadshow());
+                    contactBean.setHas_comment(bean.getHas_comment());
+                    contactBean.setComment_id(bean.getComment_id());
+                    contactBean.setComment_title(bean.getComment_title());
+                }
+
+                break;*/
             case REQUEST_CODE_SELECTED_TYPE:
                 if (data != null) {
                     int type = data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
                     if (type == ConstantUtil.COMMENT_TYPE_ROAD) {
-                        /** Bundle bundle=new Bundle();
-                         bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,type);
-                         gotoActivity(CommentObjectActivity.class,bundle);
-                         **/
+                        gotoRoad(false);
                     } else if (type == ConstantUtil.COMMENT_TYPE_EDIT) {
-
-
+                        gotoScore(false);
                     }
                 }
                 break;

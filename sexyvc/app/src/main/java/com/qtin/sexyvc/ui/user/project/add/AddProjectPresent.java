@@ -49,6 +49,10 @@ public class AddProjectPresent extends BasePresenter<AddProjectContract.Model,Ad
         uploadManager = new UploadManager();
     }
 
+    public void updateProjectState(){
+        mModel.updateProjectState();
+    }
+
     public void getType(String type_key, final int type){
         mModel.getType(type_key)
                 .subscribeOn(Schedulers.io())

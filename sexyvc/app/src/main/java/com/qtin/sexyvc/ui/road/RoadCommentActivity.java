@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -24,6 +25,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
 import com.qtin.sexyvc.ui.road.bean.AddQuestionBean;
 import com.qtin.sexyvc.ui.road.bean.OnOptionClickListener;
@@ -33,12 +35,17 @@ import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 import com.qtin.sexyvc.ui.road.di.DaggerRoadCommentComponent;
 import com.qtin.sexyvc.ui.road.di.RoadCommentModule;
+import com.qtin.sexyvc.ui.road.success.RoadSuccessActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+import org.simple.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,9 +66,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     TextView tvTitle;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    private String title;
-    private long fund_id;
-    private long investor_id;
+    private InvestorInfoBean investorInfoBean;
     private int index;
 
     private ArrayList<QuestionBean> questions;
@@ -76,6 +81,24 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     private Dialog answerDialog;
 
     private ArrayList<String> normalQuestions=new ArrayList<>();
+
+    @Nullable
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscriber(tag = ConstantUtil.ROAD_SUCCESS, mode = ThreadMode.MAIN)
+    public void onReceive(){
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -94,12 +117,10 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
 
     @Override
     protected void initData() {
-        title = getIntent().getExtras().getString(ConstantUtil.INTENT_TITLE);
-        fund_id = getIntent().getExtras().getLong(ConstantUtil.INTENT_ID_FUND);
-        investor_id = getIntent().getExtras().getLong(ConstantUtil.INTENT_ID_INVESTOR);
+        investorInfoBean = getIntent().getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
         index = getIntent().getExtras().getInt(ConstantUtil.INTENT_INDEX);
 
-        tvTitle.setText(StringUtil.formatString(title));
+        tvTitle.setText(getResources().getString(R.string.evaluate)+investorInfoBean.getInvestor_name());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter=new RoadQuestionAdapter(this,data);
         recyclerView.setAdapter(mAdapter);
@@ -108,9 +129,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
             public void onSpecialItem(int position) {
                 if(index<questions.size()-1){
                     Bundle bundle=new Bundle();
-                    bundle.putString(ConstantUtil.INTENT_TITLE,title);
-                    bundle.putLong(ConstantUtil.INTENT_ID_FUND,fund_id);
-                    bundle.putLong(ConstantUtil.INTENT_ID_INVESTOR,investor_id);
+                    bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
                     bundle.putInt(ConstantUtil.INTENT_INDEX,index+1);
                     bundle.putParcelableArrayList(ConstantUtil.INTENT_PARCELABLE_ARRAY,questions);
                     bundle.putStringArrayList(ConstantUtil.INTENT_STRING_ARRAY,normalQuestions);
@@ -119,8 +138,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                     //提交题目
                     //第一层
                     RoadRequest request=new RoadRequest();
-                    request.setInvestor_id(investor_id);
-                    request.setFund_id(fund_id);
+                    request.setInvestor_id(investorInfoBean.getInvestor_id());
+                    request.setFund_id(investorInfoBean.getFund_id());
                     ArrayList<RoadRequest.AnswerItem> answers=new ArrayList<RoadRequest.AnswerItem>();
                     request.setAnswers(answers);
                     //第二层
@@ -242,6 +261,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
         mAdapter.setIndex(index);
         mAdapter.setTotal(questions.size());
         mAdapter.notifyDataSetChanged();
+        investorInfoBean.setHas_roadshow(1);
+
     }
 
     @Override
@@ -256,7 +277,10 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
 
     @Override
     public void onUploadAnswersSuccess() {
-
+        investorInfoBean.setHas_roadshow(1);
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
+        gotoActivity(RoadSuccessActivity.class,bundle);
     }
 
     @Override
