@@ -21,6 +21,7 @@
     <string name="title_vertify_position">身份认证</string>
     <string name="title_institution">机构职务</string>
     <string name="title_road_success">已提交</string>
+    <string name="title_create_investor">手动录入投资人</string>
 
     <string name="dealing">处理中...</string>
 
@@ -156,6 +157,7 @@
     <string name="notice">通知</string>
     <string name="edit">编辑</string>
     <string name="has_concern">已关注</string>
+    <string name="concern">关注</string>
     <string name="commnet">评价</string>
     <string name="road_comment">路演评价</string>
     <string name="professional_qualities">专业素养</string>
@@ -253,6 +255,14 @@
     <string name="please_complete_project">请先完善您的项目信息</string>
 
     <string name="format_road_success">您的评价已计入%s的分数</string>
+
+    <string name="investor_name">投资人姓名</string>
+    <string name="fund_name">所在机构</string>
+    <string name="investor_title">职务</string>
+    <string name="remark">介绍/备注</string>
+    <string name="add_investor_warn">被系统收录前，手动录入的投资人仅对您个人显示</string>
+
+    <string name="create_and_concern">录入并关注</string>
 
 
 </resources>

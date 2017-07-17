@@ -7,6 +7,7 @@ package com.qtin.sexyvc.utils;
 public class ConstantUtil {
     //默认id
     public static final long DEFALUT_ID=0;
+    public static final long SPECIAL_ID=-1;
 
     //对象类型 1：评论；2：专题；3：回复
     public static final int OBJECT_TYPE_COMMENT=1;
@@ -69,9 +70,11 @@ public class ConstantUtil {
 
     public static final int TYPE_NORMAL=1;
     public static final int TYPE_UNNORMAL=2;
+    public static final int TYPE_CUSTOM=3;
 
 
     public static final int ACTION_CLEAR_HISTORY=-1;
+    public static final int ACTION_TO_SEXYVC_SEACRCH=-2;
 
     public static final int REQUEST_CODE_ID=0x004;
 
@@ -79,7 +82,7 @@ public class ConstantUtil {
     public static final String REVIEW_TYPE_INTENT="REVIEW_TYPE_INTENT";
     public static final int REVIEW_TYPE_COMMENT=1;
     public static final int REVIEW_TYPE_COMMENT_PLUS=2;
-
+    
     public static final String ROAD_SUCCESS = "road_comment_success";
     public static final String SCORE_SUCCESS = "score_success";
     public static final String COMMENT_SUCCESS = "comment_success";

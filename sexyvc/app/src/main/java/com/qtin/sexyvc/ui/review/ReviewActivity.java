@@ -1,6 +1,8 @@
 package com.qtin.sexyvc.ui.review;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,11 +13,14 @@ import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.review.di.DaggerReviewComponent;
 import com.qtin.sexyvc.ui.review.di.ReviewModule;
 import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
+import org.simple.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,6 +48,19 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
     TextView tvAgreement;
 
     private InvestorInfoBean investorInfoBean;
+
+    @Nullable
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -119,7 +137,7 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
                         showMessage("追评内容不能为空");
                         return;
                     }
-                    //mPresenter.appendInvestor(content,);
+                    mPresenter.appendInvestor(content,investorInfoBean.getComment_id());
                 }else{
                     String title=etCommentTitle.getText().toString();
                     if(StringUtil.isBlank(title)){
@@ -151,12 +169,16 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
     }
 
     @Override
-    public void onCommentSuccess() {
-
+    public void onCommentSuccess(long comment_id, String comment_title) {
+        CommentEvent event=new CommentEvent();
+        event.setComment_id(comment_id);
+        event.setComment_title(comment_title);
+        EventBus.getDefault().post(event,ConstantUtil.COMMENT_SUCCESS);
+        finish();
     }
 
     @Override
     public void onAppendSuccess() {
-
+        finish();
     }
 }

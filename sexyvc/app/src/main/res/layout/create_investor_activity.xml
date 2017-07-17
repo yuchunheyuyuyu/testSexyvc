@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                style="@style/line_style"
+                android:layout_marginTop="42px" />
+
+            <LinearLayout
+                android:id="@+id/avatarContainer"
+                android:layout_width="match_parent"
+                android:layout_height="160px"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="32px"
+                android:paddingRight="32px">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/avatar"
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="112px"
+                    android:layout_height="112px"
+                    android:src="@drawable/avatar_user_s" />
+
+                <ImageView
+                    android:layout_width="32px"
+                    android:layout_height="32px"
+                    android:layout_marginLeft="8px"
+                    android:src="@drawable/arrow_disclosure_l" />
+            </LinearLayout>
+
+            <View style="@style/line_style" />
+
+            <View
+                style="@style/line_style"
+                android:layout_marginTop="42px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="32px">
+
+                <LinearLayout
+                    android:id="@+id/nameContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="32px">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/investor_name"
+                        android:textColor="@color/black90"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="*"
+                        android:textColor="@color/barbie_pink_two"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/black50"
+                        android:textSize="28px" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:id="@+id/fundContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="32px">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fund_name"
+                        android:textColor="@color/black90"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="*"
+                        android:textColor="@color/barbie_pink_two"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:id="@+id/tvFundName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/black50"
+                        android:textSize="28px" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:id="@+id/titleContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="32px">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/investor_title"
+                        android:textColor="@color/black90"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="*"
+                        android:textColor="@color/barbie_pink_two"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:id="@+id/tvInvestorTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/black50"
+                        android:textSize="28px" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/line_style" />
+
+            <View
+                style="@style/line_style"
+                android:layout_marginTop="42px" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="32px">
+
+                <LinearLayout
+                    android:id="@+id/phoneContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="32px">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone"
+                        android:textColor="@color/black90"
+                        android:textSize="28px" />
+
+
+                    <TextView
+                        android:id="@+id/tvPhone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/black50"
+                        android:textSize="28px" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:id="@+id/emailContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="32px">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email"
+                        android:textColor="@color/black90"
+                        android:textSize="28px" />
+
+
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/black50"
+                        android:textSize="28px" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:id="@+id/remarkContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="96px"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="32px">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remark"
+                        android:textColor="@color/black90"
+                        android:textSize="28px" />
+
+                    <TextView
+                        android:id="@+id/tvRemark"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36px"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/black50"
+                        android:textSize="28px" />
+
+                    <ImageView
+                        android:layout_width="32px"
+                        android:layout_height="32px"
+                        android:layout_marginLeft="8px"
+                        android:src="@drawable/arrow_disclosure_l" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/line_style" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingBottom="32px"
+                android:paddingTop="32px"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/add_investor_warn"
+                android:textColor="@color/slate_50"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

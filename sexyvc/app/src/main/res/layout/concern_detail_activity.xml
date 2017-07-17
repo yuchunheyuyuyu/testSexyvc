@@ -61,6 +61,7 @@
                 android:id="@+id/ivComent"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
+                android:visibility="gone"
                 android:layout_marginRight="7dp"
                 android:src="@drawable/plus_pink" />
 
@@ -69,7 +70,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="6sp"
-                android:text="@string/commnet"
                 android:textColor="@color/barbie_pink_two"
                 android:textSize="14sp" />
         </LinearLayout>

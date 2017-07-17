@@ -154,10 +154,16 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context, bean.getInvestor_intro()));
 
+        if(bean.getInvestor_uid()==0){
+            holder.ivAnthStatus.setVisibility(View.GONE);
+        }else{
+            holder.ivAnthStatus.setVisibility(View.VISIBLE);
+        }
+
         //评分
-        holder.tvRateNum.setText(bean.getComment_number() + " 人");
-        //holder.tvRating.setText();
-        //holder.ratingScore.setRating();
+        holder.tvRateNum.setText(bean.getScore_count() + " 人");
+        holder.tvRating.setText(""+bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         //路演评价
         if (bean.getRoad_show() != null) {
             holder.pbProfessionalQualities.setProgress(countRoadPercent(bean.getRoad_show().getProfessional()));

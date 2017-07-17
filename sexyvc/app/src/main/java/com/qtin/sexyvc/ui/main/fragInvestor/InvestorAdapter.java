@@ -65,6 +65,9 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (viewType == DataTypeInterface.TYPE_INVESTOR) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_investor, parent, false);
             return new InvestorHolder(view);
+        } else if (viewType == DataTypeInterface.TYPE_TO_ENTERING) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_entering, parent, false);
+            return new EnteringHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fund, parent, false);
             return new FundHolder(view);
@@ -75,22 +78,31 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
         if (viewHolder instanceof FundHolder) {
-            FundHolder holder= (FundHolder) viewHolder;
-            FundEntity entity= (FundEntity) data.get(position);
+            FundHolder holder = (FundHolder) viewHolder;
+            FundEntity entity = (FundEntity) data.get(position);
 
-            dealFund(position,entity,holder);
-        } else {
+            dealFund(position, entity, holder);
+        }else if(viewHolder instanceof EnteringHolder){
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null) {
+                        itemClickListener.onClickItem(position);
+                    }
+                }
+            });
+        }else {
             InvestorHolder holder = (InvestorHolder) viewHolder;
             InvestorEntity entity = (InvestorEntity) data.get(position);
 
-            dealInvestor(position,entity, holder);
+            dealInvestor(position, entity, holder);
         }
     }
 
-    private void dealFund(final int position,FundEntity entity,FundHolder holder){
+    private void dealFund(final int position, FundEntity entity, FundHolder holder) {
         holder.tvName.setText(StringUtil.formatString(entity.getFund_name()));
-        String format=context.getResources().getString(R.string.format_fund);
-        holder.tvInvestorAndCommentNumber.setText(String.format(format,entity.getInvestor_number(),entity.getComment_number()));
+        String format = context.getResources().getString(R.string.format_fund);
+        holder.tvInvestorAndCommentNumber.setText(String.format(format, entity.getInvestor_number(), entity.getComment_number()));
 
         //评分
         holder.ratingScore.setRating10(entity.getScore());
@@ -112,7 +124,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .transformation(new RoundedCornersTransformation(context,0,0))
+                .transformation(new RoundedCornersTransformation(context, 0, 0))
                 .placeholder(R.drawable.logo_blank)
                 .errorPic(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(entity.getFund_logo()))
@@ -130,7 +142,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    private void dealInvestor(final int  position,InvestorEntity entity, InvestorHolder holder) {
+    private void dealInvestor(final int position, InvestorEntity entity, InvestorHolder holder) {
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
         holder.tvPosition.setText(StringUtil.formatString(entity.getFund_name()));
         holder.tvCommentNum.setText(context.getResources().getString(R.string.investor_join_comment) + entity.getComment_number());
@@ -208,7 +220,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    static class FundHolder extends RecyclerView.ViewHolder{
+    static class FundHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.ivLogo)
         ImageView ivLogo;
         @BindView(R.id.tvName)
@@ -223,6 +235,16 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TagFlowLayout flowLayout;
 
         FundHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class EnteringHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tv)
+        TextView tv;
+
+        EnteringHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

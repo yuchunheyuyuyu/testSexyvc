@@ -59,6 +59,9 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (viewType == ConstantUtil.TYPE_NORMAL) {
             view = LayoutInflater.from(context).inflate(R.layout.person_item, parent, false);
             return new ItemHolder(view);
+        } else if (viewType == ConstantUtil.TYPE_CUSTOM) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_to_sexyvc_search, parent, false);
+            return new CustomHolder(view);
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.item_local_search, parent, false);
             return new HistoryHolder(view);
@@ -67,8 +70,10 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if(data.get(position).getContact_id()== ConstantUtil.DEFALUT_ID){
+        if (data.get(position).getContact_id() == ConstantUtil.DEFALUT_ID) {
             return ConstantUtil.TYPE_UNNORMAL;
+        } else if (data.get(position).getContact_id() == ConstantUtil.SPECIAL_ID) {
+            return ConstantUtil.TYPE_CUSTOM;
         }
         return ConstantUtil.TYPE_NORMAL;
     }
@@ -76,13 +81,13 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
-        if(viewHolder instanceof ItemHolder){
-            final ConcernListEntity entity=data.get(position);
+        if (viewHolder instanceof ItemHolder) {
+            final ConcernListEntity entity = data.get(position);
 
             ItemHolder holder = (ItemHolder) viewHolder;
             if (position == data.size() - 1) {
-                holder.wholeLine.setVisibility(View.VISIBLE);
-                holder.marginLine.setVisibility(View.GONE);
+                holder.wholeLine.setVisibility(View.GONE);
+                holder.marginLine.setVisibility(View.VISIBLE);
             } else {
                 holder.wholeLine.setVisibility(View.GONE);
                 holder.marginLine.setVisibility(View.VISIBLE);
@@ -91,15 +96,15 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.clickContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(onItemClickListener!=null){
+                    if (onItemClickListener != null) {
                         onItemClickListener.onClickItem(position);
                     }
                 }
             });
 
-            if(entity.getInvestor_uid()==0){
+            if (entity.getInvestor_uid() == 0) {
                 holder.ivAnthStatus.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.ivAnthStatus.setVisibility(View.VISIBLE);
             }
 
@@ -113,12 +118,21 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .build());
             holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
 
-            String title=StringUtil.isBlank(entity.getFund_name())?entity.getTitle():(entity.getFund_name()+" "+entity.getTitle());
+            String title = StringUtil.isBlank(entity.getFund_name()) ? entity.getTitle() : (entity.getFund_name() + " " + entity.getTitle());
             holder.tvPosition.setText(title);
 
 
-        }else{
-            HistoryHolder holder= (HistoryHolder) viewHolder;
+        }else if(viewHolder instanceof CustomHolder){
+            CustomHolder holder= (CustomHolder) viewHolder;
+            holder.tvKeyword.setText("搜索 “ "+data.get(position).getTitle()+"”");
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onClickItem(ConstantUtil.ACTION_TO_SEXYVC_SEACRCH);
+                }
+            });
+        } else {
+            HistoryHolder holder = (HistoryHolder) viewHolder;
             holder.tvClearHistory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -156,13 +170,23 @@ public class ConcernListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    static class HistoryHolder extends RecyclerView.ViewHolder{
+    static class HistoryHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvClearHistory)
         TextView tvClearHistory;
 
         HistoryHolder(View view) {
             super(view);
             AutoUtils.auto(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class CustomHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tvKeyword)
+        TextView tvKeyword;
+
+        CustomHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
     }

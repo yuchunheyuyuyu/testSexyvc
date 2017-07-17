@@ -10,7 +10,15 @@ public class RoadRequest {
     private String token;
     private long fund_id;
     private long investor_id;
-    private ArrayList<AnswerItem> answers;
+    private String answers;
+
+    public String getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(String answers) {
+        this.answers = answers;
+    }
 
     public String getToken() {
         return token;
@@ -34,14 +42,6 @@ public class RoadRequest {
 
     public void setInvestor_id(long investor_id) {
         this.investor_id = investor_id;
-    }
-
-    public ArrayList<AnswerItem> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(ArrayList<AnswerItem> answers) {
-        this.answers = answers;
     }
 
     public static class AnswerItem{

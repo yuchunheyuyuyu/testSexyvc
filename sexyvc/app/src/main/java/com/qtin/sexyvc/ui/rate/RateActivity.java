@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -23,6 +25,7 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.rate.di.DaggerRateComponent;
@@ -36,9 +39,14 @@ import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
+import org.simple.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -86,6 +94,19 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerRateComponent.builder().appComponent(appComponent).rateModule(new RateModule(this)).build().inject(this);
+    }
+
+    @Nullable
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -322,10 +343,25 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
 
     @Override
     public void rateSuccess(int score) {
+        //发送事件，改变状态
+        CommentEvent entity=new CommentEvent();
+        entity.setScore(score);
+        EventBus.getDefault().post(entity,ConstantUtil.SCORE_SUCCESS);
+        //进入写点评页面
         investorInfoBean.setHas_score(1);
         investorInfoBean.setScore_value(score);
         Bundle bundle=new Bundle();
         bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
         gotoActivity(ReviewActivity.class,bundle);
+        //销毁自己
+        Observable.just(1)
+                .delay(100, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        finish();
+                    }
+                });
     }
 }

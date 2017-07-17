@@ -5,7 +5,10 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.CommentIdBean;
+
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -31,7 +34,7 @@ public class ReviewPresent extends BasePresenter<ReviewContract.Model,ReviewCont
         this.mApplication = mApplication;
     }
 
-    public void commentInvestor(String title,String content,long investor_id,long fund_id,int is_anon){
+    public void commentInvestor(final String title,String content,long investor_id,long fund_id,int is_anon){
         mModel.commentInvestor(mModel.getToken(),title,content,investor_id,fund_id,is_anon)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -46,13 +49,13 @@ public class ReviewPresent extends BasePresenter<ReviewContract.Model,ReviewCont
                     public void call() {
                         mRootView.hideLoading();
                     }
-                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                }).compose(RxUtils.<BaseEntity<CommentIdBean>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<CommentIdBean>>(mErrorHandler) {
                     @Override
-                    public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
-                        if(codeEntity.isSuccess()){
-                            mRootView.onCommentSuccess();
+                    public void onNext(BaseEntity<CommentIdBean> baseEntity) {
+                        mRootView.showMessage(baseEntity.getErrMsg());
+                        if(baseEntity.isSuccess()){
+                            mRootView.onCommentSuccess(baseEntity.getItems().getComment_id(),title);
                         }
                     }
                 });

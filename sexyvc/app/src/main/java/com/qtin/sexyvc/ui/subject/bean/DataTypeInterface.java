@@ -11,6 +11,7 @@ public interface DataTypeInterface {
 
     public static final int TYPE_INVESTOR=3;//投资人
     public static final int TYPE_FUND=4;//投资机构
+    public static final int TYPE_TO_ENTERING=7;//去录入投资人
 
     public static final int TYPE_QUESTION=5;//题目
     public static final int TYPE_OPTION=6;//选项

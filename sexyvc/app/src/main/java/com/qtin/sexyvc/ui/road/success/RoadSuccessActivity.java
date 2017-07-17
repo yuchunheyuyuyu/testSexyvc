@@ -6,10 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.rate.RateActivity;
@@ -18,11 +18,8 @@ import com.qtin.sexyvc.ui.road.success.di.DaggerRoadSuccessComponent;
 import com.qtin.sexyvc.ui.road.success.di.RoadSuccessModule;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import org.simple.eventbus.EventBus;
-
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -90,7 +87,7 @@ public class RoadSuccessActivity extends MyBaseActivity<RoadSuccessPresent> impl
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        EventBus.getDefault().post(1,ConstantUtil.ROAD_SUCCESS);
+                        EventBus.getDefault().post(new CommentEvent(ConstantUtil.ROAD_SUCCESS),ConstantUtil.ROAD_SUCCESS);
                     }
                 });
     }

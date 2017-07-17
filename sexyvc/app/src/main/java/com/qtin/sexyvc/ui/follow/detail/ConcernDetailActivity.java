@@ -18,6 +18,7 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
@@ -40,6 +41,8 @@ import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+import org.simple.eventbus.ThreadMode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -119,8 +122,25 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         EventBus.getDefault().register(this);
     }
 
-    public void onScoreSuccess(){
+    @Subscriber(tag = ConstantUtil.ROAD_SUCCESS, mode = ThreadMode.MAIN)
+    public void onReceiveRoad(CommentEvent commentEvent){
+        contactBean.setHas_roadshow(1);
+        setCommentStatus();
+    }
 
+    @Subscriber(tag = ConstantUtil.SCORE_SUCCESS, mode = ThreadMode.MAIN)
+    public void onReceiveScore(CommentEvent commentEvent){
+        contactBean.setHas_score(1);
+        contactBean.setScore_value(commentEvent.getScore());
+        setCommentStatus();
+    }
+
+    @Subscriber(tag = ConstantUtil.COMMENT_SUCCESS, mode = ThreadMode.MAIN)
+    public void onReceiveComment(CommentEvent commentEvent){
+        contactBean.setHas_comment(1);
+        contactBean.setComment_id(commentEvent.getComment_id());
+        contactBean.setComment_title(commentEvent.getComment_title());
+        setCommentStatus();
     }
 
     @Override
@@ -160,8 +180,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         mPresenter.query(contact_id);
     }
 
-    private void setValue() {
-
+    private void setCommentStatus(){
         if (mPresenter.getUserInfo() != null) {
             if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                 if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
@@ -193,7 +212,10 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 }
             }
         }
+    }
 
+    private void setValue() {
+        setCommentStatus();
         if(contactBean.getInvestor_uid()==0){
             ivAnthStatus.setVisibility(View.GONE);
         }else{
@@ -535,18 +557,6 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             return;
         }
         switch (requestCode) {
-            /**case REQUEST_CODE_COMMENT:
-                InvestorInfoBean bean=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
-                if(bean!=null){
-                    contactBean.setScore_value(bean.getScore_value());
-                    contactBean.setHas_score(bean.getHas_score());
-                    contactBean.setHas_roadshow(bean.getHas_roadshow());
-                    contactBean.setHas_comment(bean.getHas_comment());
-                    contactBean.setComment_id(bean.getComment_id());
-                    contactBean.setComment_title(bean.getComment_title());
-                }
-
-                break;*/
             case REQUEST_CODE_SELECTED_TYPE:
                 if (data != null) {
                     int type = data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);

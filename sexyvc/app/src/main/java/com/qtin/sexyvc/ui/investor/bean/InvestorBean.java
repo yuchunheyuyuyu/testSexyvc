@@ -28,6 +28,97 @@ public class InvestorBean implements DataTypeInterface{
     private RoadShowBean road_show;
     private ArrayList<TagEntity> tags;
 
+    private int has_comment;
+    private String comment_title;
+    private long comment_id;
+    private float score;
+    private int score_count;
+    private int has_roadshow;
+    private int has_score;
+    private int score_value;
+    private long investor_uid;
+    private long fund_id;
+
+    public long getInvestor_uid() {
+        return investor_uid;
+    }
+
+    public void setInvestor_uid(long investor_uid) {
+        this.investor_uid = investor_uid;
+    }
+
+    public long getFund_id() {
+        return fund_id;
+    }
+
+    public void setFund_id(long fund_id) {
+        this.fund_id = fund_id;
+    }
+
+    public int getHas_comment() {
+        return has_comment;
+    }
+
+    public void setHas_comment(int has_comment) {
+        this.has_comment = has_comment;
+    }
+
+    public String getComment_title() {
+        return comment_title;
+    }
+
+    public void setComment_title(String comment_title) {
+        this.comment_title = comment_title;
+    }
+
+    public long getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(long comment_id) {
+        this.comment_id = comment_id;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    public int getScore_count() {
+        return score_count;
+    }
+
+    public void setScore_count(int score_count) {
+        this.score_count = score_count;
+    }
+
+    public int getHas_roadshow() {
+        return has_roadshow;
+    }
+
+    public void setHas_roadshow(int has_roadshow) {
+        this.has_roadshow = has_roadshow;
+    }
+
+    public int getHas_score() {
+        return has_score;
+    }
+
+    public void setHas_score(int has_score) {
+        this.has_score = has_score;
+    }
+
+    public int getScore_value() {
+        return score_value;
+    }
+
+    public void setScore_value(int score_value) {
+        this.score_value = score_value;
+    }
+
     public long getInvestor_id() {
         return investor_id;
     }

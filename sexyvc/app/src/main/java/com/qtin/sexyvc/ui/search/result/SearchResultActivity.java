@@ -20,6 +20,8 @@ import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.FundEntity;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
+import com.qtin.sexyvc.ui.bean.ToEnteringBean;
+import com.qtin.sexyvc.ui.create.investor.CreateInvestorActivity;
 import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fragInvestor.EfficiencyAdapter;
@@ -307,6 +309,9 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         } else {
             hasLoadedAllItems = true;
         }
+
+        //加入去录入的选项
+        data.add(new ToEnteringBean());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -399,6 +404,8 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                     Bundle bundle = new Bundle();
                     bundle.putLong("fund_id", ((FundEntity)data.get(position)).getFund_id());
                     gotoActivity(FundDetailActivity.class, bundle);
+                }else if(data.get(position) instanceof ToEnteringBean ){
+                    gotoActivity(CreateInvestorActivity.class);
                 }
             }
         });

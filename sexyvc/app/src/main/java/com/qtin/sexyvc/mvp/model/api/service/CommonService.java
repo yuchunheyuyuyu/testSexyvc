@@ -5,11 +5,13 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.CommentIdBean;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
+import com.qtin.sexyvc.ui.bean.IdBean;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
@@ -24,6 +26,7 @@ import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
+import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.request.RateRequest;
@@ -578,8 +581,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/action/comment")
-    Observable<CodeEntity> commentInvestor(@Field("token")String token,@Field("title")String title,@Field("content")String content,
-                                           @Field("investor_id")long investor_id,@Field("fund_id")long fund_id,@Field("is_anon")int is_anon);
+    Observable<BaseEntity<CommentIdBean>> commentInvestor(@Field("token")String token, @Field("title")String title, @Field("content")String content,
+                                                          @Field("investor_id")long investor_id, @Field("fund_id")long fund_id, @Field("is_anon")int is_anon);
 
     /**
      * 操作——追评
@@ -592,5 +595,12 @@ public interface CommonService {
     @POST("api/action/append")
     Observable<CodeEntity> appendInvestor(@Field("token")String token,@Field("content")String content,@Field("comment_id")long comment_id);
 
+    /**
+     * 35. 新建投资人
+     * @param request
+     * @return
+     */
+    @POST("api/user/contact/investor/add")
+    Observable<BaseEntity<IdBean>> createInvestor(@Body CreateInvestorRequest request);
 }
 

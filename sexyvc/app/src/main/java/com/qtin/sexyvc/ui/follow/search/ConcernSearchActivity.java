@@ -20,6 +20,7 @@ import com.qtin.sexyvc.ui.follow.detail.ConcernDetailActivity;
 import com.qtin.sexyvc.ui.follow.list.ConcernListAdapter;
 import com.qtin.sexyvc.ui.follow.search.di.ConcernSearchModule;
 import com.qtin.sexyvc.ui.follow.search.di.DaggerConcernSearchComponent;
+import com.qtin.sexyvc.ui.search.result.SearchResultActivity;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
 
     private List<ConcernListEntity> data=new ArrayList<>();
     private ConcernListAdapter mAdapter;
+    private String keyWord;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -68,6 +70,11 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
                     mPresenter.clearHistory();
                     data.clear();
                     mAdapter.notifyDataSetChanged();
+                }else if(position==ConstantUtil.ACTION_TO_SEXYVC_SEACRCH){
+                    Bundle bundle=new Bundle();
+                    bundle.putString(ConstantUtil.KEY_WORD_INTENT,keyWord);
+                    bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
+                    gotoActivity(SearchResultActivity.class,bundle);
                 }else{
                     //先保存
                     mPresenter.insertConcern(data.get(position));
@@ -129,7 +136,7 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
     }
 
     private void search(){
-        String keyWord=etSearch.getText().toString();
+        keyWord=etSearch.getText().toString();
         if(StringUtil.isBlank(keyWord)){
             showMessage("关键词不能为空");
             return;
@@ -174,6 +181,12 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
         if(entity.getList()!=null){
             data.addAll(entity.getList());
         }
+        //添加在sexyVc中搜索
+        ConcernListEntity listEntity=new ConcernListEntity();
+        listEntity.setContact_id(ConstantUtil.SPECIAL_ID);
+        listEntity.setTitle(keyWord);
+        data.add(listEntity);
+
         mAdapter.notifyDataSetChanged();
     }
 }

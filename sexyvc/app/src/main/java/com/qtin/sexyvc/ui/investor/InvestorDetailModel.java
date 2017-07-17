@@ -7,10 +7,14 @@ import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.request.FollowRequest;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
@@ -36,11 +40,24 @@ public class InvestorDetailModel extends BaseModel<ServiceManager,CacheManager> 
 
 
     @Override
+    public Observable<CodeEntity> unFollowInvestor(String token, long investor_id) {
+        return mServiceManager.getCommonService().unFollowInvestor(token,investor_id);
+    }
+
+    @Override
     public String getToken() {
         List<UserEntity> list=mCacheManager.getDaoSession().getUserEntityDao().queryBuilder().build().list();
         if(list!=null&&!list.isEmpty()){
             return list.get(0).getU_token();
         }
         return "";
+    }
+    @Override
+    public UserInfoEntity getUserInfo() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }

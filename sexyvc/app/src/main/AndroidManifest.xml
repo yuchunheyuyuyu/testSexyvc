@@ -230,6 +230,11 @@
             android:name=".ui.review.ReviewActivity"
             android:screenOrientation="portrait" />
 
+        <!--录入投资人-->
+        <activity
+            android:name=".ui.create.investor.CreateInvestorActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity

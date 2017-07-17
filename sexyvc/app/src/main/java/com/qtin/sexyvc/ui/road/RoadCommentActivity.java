@@ -18,13 +18,14 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import com.google.gson.Gson;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
+import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
 import com.qtin.sexyvc.ui.road.bean.AddQuestionBean;
@@ -90,7 +91,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     }
 
     @Subscriber(tag = ConstantUtil.ROAD_SUCCESS, mode = ThreadMode.MAIN)
-    public void onReceive(){
+    public void onReceive(CommentEvent commentEvent){
         finish();
     }
 
@@ -99,6 +100,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -141,7 +143,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                     request.setInvestor_id(investorInfoBean.getInvestor_id());
                     request.setFund_id(investorInfoBean.getFund_id());
                     ArrayList<RoadRequest.AnswerItem> answers=new ArrayList<RoadRequest.AnswerItem>();
-                    request.setAnswers(answers);
+
                     //第二层
                     for(QuestionBean bean:questions){
                         RoadRequest.AnswerItem item=new RoadRequest.AnswerItem();
@@ -177,6 +179,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                         }
                         answers.add(item);
                     }
+                    String answerJson=new Gson().toJson(answers);
+                    request.setAnswers(answerJson);
                     mPresenter.uploadAnswers(request);
                 }
             }
