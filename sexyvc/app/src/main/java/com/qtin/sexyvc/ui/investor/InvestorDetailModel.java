@@ -6,6 +6,7 @@ import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
@@ -36,6 +37,21 @@ public class InvestorDetailModel extends BaseModel<ServiceManager,CacheManager> 
     @Override
     public Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id) {
         return mServiceManager.getCommonService().queryInvestorDetail(token,investor_id,comment_id);
+    }
+
+    @Override
+    public void insertLastBrower(LastBrowerBean bean) {
+        bean.setLocalTime(System.currentTimeMillis());
+        List<LastBrowerBean> list=mCacheManager.getDaoSession().getLastBrowerBeanDao().queryBuilder().build().list();
+        if(list!=null){
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getInvestor_id()==bean.getInvestor_id()){
+                    mCacheManager.getDaoSession().getLastBrowerBeanDao().delete(list.get(i));
+                    break;
+                }
+            }
+        }
+        mCacheManager.getDaoSession().getLastBrowerBeanDao().insert(bean);
     }
 
 

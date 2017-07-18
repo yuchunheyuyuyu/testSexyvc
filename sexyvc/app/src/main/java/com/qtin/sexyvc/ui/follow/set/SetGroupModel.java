@@ -9,7 +9,8 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
-import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
 import java.util.List;
 import javax.inject.Inject;
 import rx.Observable;
@@ -40,12 +41,17 @@ public class SetGroupModel extends BaseModel<ServiceManager,CacheManager> implem
     }
 
     @Override
-    public Observable<CodeEntity> changeGroup(ChangeGroupRequest request) {
+    public Observable<CodeEntity> changeGroup(ChangeInvestorGroupRequest request) {
         return mServiceManager.getCommonService().changeGroup(request);
     }
 
     @Override
-    public Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token, long investor_id, int page, int page_size) {
-        return mServiceManager.getCommonService().queryInvestorGroup(token,investor_id,page,page_size);
+    public Observable<CodeEntity> changeContactGroup(ChangeContactGroupRequest request) {
+        return mServiceManager.getCommonService().changeContactGroup(request);
+    }
+
+    @Override
+    public Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token, long investor_id,long contact_id, int page, int page_size) {
+        return mServiceManager.getCommonService().queryInvestorGroup(token,investor_id,contact_id,page,page_size);
     }
 }

@@ -15,9 +15,19 @@ import com.qtin.sexyvc.ui.add.frag.di.DaggerIndividualListComponent;
 import com.qtin.sexyvc.ui.add.frag.di.IndividualListModule;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ConcernListEntity;
+import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
+import com.qtin.sexyvc.ui.bean.LastBrowerBean;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.follow.list.ConcernListAdapter;
+import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
+import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
+import com.qtin.sexyvc.ui.rate.RateActivity;
+import com.qtin.sexyvc.ui.review.ReviewActivity;
+import com.qtin.sexyvc.ui.road.RoadCommentActivity;
+import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
+import java.util.List;
 import butterknife.BindView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,6 +57,8 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     private int page_size=15;
 
     private long DEFALUT_GROUP_ID=0;
+    private InvestorBean investorBean;
+    private int typeComment;
 
     @Override
     protected void setupFragmentComponent(AppComponent appComponent) {
@@ -57,12 +69,14 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dataSourceType=getArguments().getInt(ConstantUtil.DATA_FROM_TYPE);
+        typeComment=getArguments().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
     }
 
-    public static IndividualListFrag getInstance(int type){
+    public static IndividualListFrag getInstance(int type,int typeComment){
         IndividualListFrag frag=new IndividualListFrag();
         Bundle bundle=new Bundle();
         bundle.putInt(ConstantUtil.DATA_FROM_TYPE,type);
+        bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,typeComment);
         frag.setArguments(bundle);
         return frag;
     }
@@ -84,12 +98,34 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mAdapter=new ConcernListAdapter(mActivity,data);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClickItem(int position) {
+                mPresenter.queryDetail(data.get(position).getInvestor_id(),ConstantUtil.DEFALUT_ID);
+            }
+        });
 
-        //本地不分页
+        //本地不分页,服务端都不分页
         if(dataSourceType==ConstantUtil.DATA_FROM_LOCAL){
             hasLoadedAllItems=true;
+            List<LastBrowerBean> list=mPresenter.queryLastBrowers();
+            if(list!=null){
+                for(LastBrowerBean bean:list){
+                    ConcernListEntity entity=new ConcernListEntity();
+                    entity.setTitle(bean.getTitle());
+                    entity.setFund_name(bean.getFund_name());
+                    entity.setInvestor_avatar(bean.getInvestor_avatar());
+                    entity.setInvestor_name(bean.getInvestor_name());
+                    entity.setInvestor_id(bean.getInvestor_id());
+                    entity.setContact_id(2);//为了区分类型的
+                    entity.setLocalTime(bean.getLocalTime());
+                    entity.setInvestor_uid(bean.getInvestor_uid());
+                    data.add(entity);
+                }
+            }
+            mAdapter.notifyDataSetChanged();
         }else{
-            initPaginate();
+            //initPaginate();
             mPresenter.query(DEFALUT_GROUP_ID,page,page_size);
         }
     }
@@ -178,5 +214,162 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
             hasLoadedAllItems=true;
         }
         mAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void queryDetailSuccess(CallBackBean backBean) {
+        if (backBean.getInvestor() != null) {
+            investorBean=backBean.getInvestor();
+
+            if (mPresenter.getUserInfo() != null) {
+                if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                    if(mPresenter.getUserInfo().getHas_project()==0){
+                        showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
+                                getResources().getString(R.string.cancle),
+                                getResources().getString(R.string.comfirm),
+                                new TwoButtonListerner() {
+                                    @Override
+                                    public void leftClick() {
+                                        dismissTwoButtonDialog();
+                                    }
+
+                                    @Override
+                                    public void rightClick() {
+                                        dismissTwoButtonDialog();
+                                        Bundle bundle=new Bundle();
+                                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                                        gotoActivity(AddProjectActivity.class,bundle);
+                                    }
+                                });
+                        return;
+                    }
+
+
+                    if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
+                        showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                                new OneButtonListerner() {
+                                    @Override
+                                    public void onOptionSelected() {
+                                        dismissBottomOneButtonDialog();
+                                        gotoComment(true);
+                                    }
+
+                                    @Override
+                                    public void onCancle() {
+                                        dismissBottomOneButtonDialog();
+                                    }
+                                });
+                    } else if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 0) {
+                        gotoRoad(true);
+                    } else if (investorBean.getHas_comment() == 0 && investorBean.getHas_roadshow() == 1) {
+                        showBottomOneDialog(getResources().getString(R.string.comment),
+                                new OneButtonListerner() {
+                                    @Override
+                                    public void onOptionSelected() {
+                                        dismissBottomOneButtonDialog();
+                                        if(investorBean.getHas_score()==0){
+                                            gotoScore(false);
+                                        }else{
+                                            gotoComment(false);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancle() {
+                                        dismissBottomOneButtonDialog();
+                                    }
+                                });
+                    } else {
+                        if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
+                            gotoRoad(false);
+                        }else if(typeComment==ConstantUtil.COMMENT_TYPE_EDIT){
+                            gotoScore(false);
+                        }
+                        //gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                    }
+
+                } else {
+                    if (investorBean.getHas_comment() == 0) {
+                        if(investorBean.getHas_score()==0){
+                            gotoScore(false);
+                        }else{
+                            gotoComment(false);
+                        }
+                    } else {
+                        showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                                new OneButtonListerner() {
+                                    @Override
+                                    public void onOptionSelected() {
+                                        dismissBottomOneButtonDialog();
+                                        gotoComment(true);
+                                    }
+
+                                    @Override
+                                    public void onCancle() {
+                                        dismissBottomOneButtonDialog();
+                                    }
+                                });
+                    }
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void startRefresh(String msg) {
+        showLoadingDialog(msg);
+    }
+
+    @Override
+    public void endRefresh() {
+        loadingDialogDismiss();
+    }
+
+    /**
+     * 进入评分
+     * @param isAppend
+     */
+    private void gotoScore(boolean isAppend){
+        gotoActivity(RateActivity.class,getBundle(isAppend));
+    }
+
+    /**
+     * 进入评论或者追评
+     * @param isAppend
+     */
+    private void gotoComment(boolean isAppend){
+        gotoActivity(ReviewActivity.class,getBundle(isAppend));
+    }
+
+    /**
+     * 进入路演评价
+     * @param isAppend
+     */
+    private void gotoRoad(boolean isAppend) {
+        Bundle bundle=getBundle(isAppend);
+        bundle.putInt(ConstantUtil.INTENT_INDEX,0);
+        gotoActivity(RoadCommentActivity.class, getBundle(isAppend));
+    }
+
+    private Bundle getBundle(boolean isAppend){
+        Bundle bundle=new Bundle();
+        InvestorInfoBean infoBean=new InvestorInfoBean();
+        infoBean.setInvestor_id(investorBean.getInvestor_id());
+        infoBean.setFund_id(investorBean.getFund_id());
+        infoBean.setFund_name(investorBean.getFund_name());
+        infoBean.setInvestor_avatar(investorBean.getInvestor_avatar());
+        infoBean.setTitle(investorBean.getInvestor_title());
+        infoBean.setInvestor_name(investorBean.getInvestor_name());
+        infoBean.setInvestor_uid(investorBean.getInvestor_uid());
+        infoBean.setTags(investorBean.getTags());
+        infoBean.setHas_comment(investorBean.getHas_comment());
+        infoBean.setHas_roadshow(investorBean.getHas_roadshow());
+        infoBean.setHas_score(investorBean.getHas_score());
+        infoBean.setScore_value(investorBean.getScore_value());
+        infoBean.setComment_id(investorBean.getComment_id());
+        infoBean.setComment_title(investorBean.getComment_title());
+        infoBean.setAppend(isAppend);
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
+        return bundle;
     }
 }

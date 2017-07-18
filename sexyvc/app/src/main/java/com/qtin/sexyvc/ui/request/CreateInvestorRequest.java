@@ -12,12 +12,8 @@ public class CreateInvestorRequest {
 
     private String investor_avatar;
     private String phone;
-    private String backup_phone;
     private String email;
 
-    private String backup_email;
-    private String wechat;
-    private String intro;
     private String remark;
 
     public String getToken() {
@@ -68,44 +64,12 @@ public class CreateInvestorRequest {
         this.phone = phone;
     }
 
-    public String getBackup_phone() {
-        return backup_phone;
-    }
-
-    public void setBackup_phone(String backup_phone) {
-        this.backup_phone = backup_phone;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getBackup_email() {
-        return backup_email;
-    }
-
-    public void setBackup_email(String backup_email) {
-        this.backup_email = backup_email;
-    }
-
-    public String getWechat() {
-        return wechat;
-    }
-
-    public void setWechat(String wechat) {
-        this.wechat = wechat;
-    }
-
-    public String getIntro() {
-        return intro;
-    }
-
-    public void setIntro(String intro) {
-        this.intro = intro;
     }
 
     public String getRemark() {

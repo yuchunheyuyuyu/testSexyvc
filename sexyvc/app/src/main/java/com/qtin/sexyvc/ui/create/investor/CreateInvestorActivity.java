@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
@@ -14,25 +15,40 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.jess.arms.utils.UploadPhotoUtil;
+import com.jess.arms.widget.imageloader.ImageLoader;
+import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.create.investor.di.CreateInvestorModule;
 import com.qtin.sexyvc.ui.create.investor.di.DaggerCreateInvestorComponent;
+import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
 import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
+import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -59,7 +75,7 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
     TextView tvEmail;
     @BindView(R.id.tvRemark)
     TextView tvRemark;
-
+    private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private CreateInvestorRequest request=new CreateInvestorRequest();
 
     private Dialog selectPhotoDialog;
@@ -92,7 +108,7 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
         tvTitle.setText(getResources().getString(R.string.title_create_investor));
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.create_and_concern));
-
+        mImageLoader = customApplication.getAppComponent().imageLoader();
 
     }
 
@@ -108,7 +124,7 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -122,8 +138,47 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
     }
 
     @Override
-    public void onCreateSuccess(CreateInvestorRequest request) {
+    public void onCreateSuccess(long contact_id) {
+        Bundle bundle = new Bundle();
+        bundle.putLong(ConstantUtil.INTENT_ID, contact_id);
+        bundle.putInt(ConstantUtil.INTENT_TYPE_SET_GROUP, ConstantUtil.TYPE_SET_GROUP_CONTACT);
+        gotoActivity(SetGroupActivity.class, bundle);
 
+        Observable.just(1)
+                .delay(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    public void call(Integer integer) {
+                        finish();
+                    }
+                });
+    }
+
+    @Override
+    public void uploadAvatarSuccess(String avatar) {
+        if(!StringUtil.isBlank(avatar)){
+            request.setInvestor_avatar(avatar);
+        }
+
+        //头像
+        mImageLoader.loadImage(customApplication, GlideImageConfig
+                .builder()
+                .errorPic(R.drawable.avatar_user_s)
+                .placeholder(R.drawable.avatar_user_s)
+                .url(CommonUtil.getAbsolutePath(avatar))
+                .transformation(new CropCircleTransformation(this))
+                .imageView(ivAvatar)
+                .build());
+    }
+
+    @Override
+    public void startRefresh(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void endRefresh() {
+        dialogDismiss();
     }
 
     @Override
@@ -183,6 +238,49 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
                     mPresenter.getQiNiuToken(cropedPhoto);
                 }
                 break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_NAME:
+                if(data!=null){
+                    String name=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setInvestor_name(name);
+                    tvName.setText(StringUtil.formatString(name));
+                }
+                break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_FUND:
+                if(data!=null){
+                    String fund=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setFund_name(fund);
+                    tvFundName.setText(StringUtil.formatString(fund));
+                }
+                break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_TITLE:
+                if(data!=null){
+                    String title=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setTitle(title);
+                    tvInvestorTitle.setText(StringUtil.formatString(title));
+                }
+                break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_PHONE:
+                if(data!=null){
+                    String phone=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setPhone(phone);
+                    tvPhone.setText(StringUtil.formatString(phone));
+                }
+                break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_EMAIL:
+                if(data!=null){
+                    String email=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setEmail(email);
+                    tvEmail.setText(StringUtil.formatString(email));
+                }
+                break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_REMARK:
+                if(data!=null){
+                    String remark=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setRemark(remark);
+                    tvRemark.setText(StringUtil.formatString(remark));
+                }
+                break;
+
         }
     }
 
@@ -193,23 +291,59 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
                 finish();
                 break;
             case R.id.tvRight:
+                if(StringUtil.isBlank(request.getInvestor_name())){
+                    showMessage("投资人姓名不能为空");
+                    return;
+                }
 
+                if(StringUtil.isBlank(request.getFund_name())){
+                    showMessage("所在机构不能为空");
+                    return;
+                }
+                if(StringUtil.isBlank(request.getTitle())){
+                    showMessage("职务不能为空");
+                    return;
+                }
+                mPresenter.createInvestor(request);
                 break;
             case R.id.avatarContainer:
                 showPhotoDialog();
                 break;
             case R.id.nameContainer:
-
+                Bundle name=new Bundle();
+                name.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_NAME);
+                name.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getInvestor_name()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,name,ConstantUtil.TYPE_CREATE_INVESTOR_NAME);
                 break;
             case R.id.fundContainer:
+                Bundle fund=new Bundle();
+                fund.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_FUND);
+                fund.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getFund_name()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,fund,ConstantUtil.TYPE_CREATE_INVESTOR_FUND);
                 break;
             case R.id.titleContainer:
+                Bundle title=new Bundle();
+                title.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_TITLE);
+                title.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getTitle()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,title,ConstantUtil.TYPE_CREATE_INVESTOR_TITLE);
                 break;
             case R.id.phoneContainer:
+                Bundle phone=new Bundle();
+                phone.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_PHONE);
+                phone.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getPhone()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,phone,ConstantUtil.TYPE_CREATE_INVESTOR_PHONE);
                 break;
             case R.id.emailContainer:
+                Bundle email=new Bundle();
+                email.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_EMAIL);
+                email.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getEmail()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,email,ConstantUtil.TYPE_CREATE_INVESTOR_EMAIL);
                 break;
             case R.id.remarkContainer:
+                Bundle remark=new Bundle();
+                remark.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_REMARK);
+                remark.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getRemark()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,remark,ConstantUtil.TYPE_CREATE_INVESTOR_REMARK);
                 break;
         }
     }

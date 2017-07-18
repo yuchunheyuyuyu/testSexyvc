@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -39,13 +38,10 @@ import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -362,7 +358,8 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                             public void onFirstClick() {
                                 dismissBottomDialog();
                                 Bundle bundle = new Bundle();
-                                bundle.putLong(ConstantUtil.INTENT_ID, investor_id);
+                                bundle.putLong(ConstantUtil.INTENT_ID, contact_id);
+                                bundle.putInt(ConstantUtil.INTENT_TYPE_SET_GROUP, ConstantUtil.TYPE_SET_GROUP_CONTACT);
                                 gotoActivity(SetGroupActivity.class, bundle);
                             }
 

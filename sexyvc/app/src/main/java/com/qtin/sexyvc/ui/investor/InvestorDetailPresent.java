@@ -8,6 +8,7 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.request.FollowRequest;
@@ -36,6 +37,10 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
+    }
+
+    public void insertLastBrower(LastBrowerBean bean){
+        mModel.insertLastBrower(bean);
     }
 
     public void cancleFollow(final long investor_id){

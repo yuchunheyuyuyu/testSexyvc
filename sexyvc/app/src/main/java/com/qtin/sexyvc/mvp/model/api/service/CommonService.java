@@ -25,7 +25,8 @@ import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
-import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
 import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
@@ -250,7 +251,7 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/group")
-    Observable<BaseEntity<GroupEntity>> queryInvestorGroup(@Field("token")String token,@Field("investor_id")long investor_id,@Field("page")int page,@Field("page_size")int page_size);
+    Observable<BaseEntity<GroupEntity>> queryInvestorGroup(@Field("token")String token,@Field("investor_id")long investor_id,@Field("contact_id")long contact_id,@Field("page")int page,@Field("page_size")int page_size);
 
     /**
      * 创建投资人分组
@@ -324,7 +325,14 @@ public interface CommonService {
      * @return
      */
     @POST("api/user/contact/investor/change/group")
-    Observable<CodeEntity> changeGroup(@Body ChangeGroupRequest request);
+    Observable<CodeEntity> changeGroup(@Body ChangeInvestorGroupRequest request);
+
+    /**
+     * 设置自己添加投资人的分组
+     * @return
+     */
+    @POST("api/user/contact/investor/move/group/single")
+    Observable<CodeEntity> changeContactGroup(@Body ChangeContactGroupRequest request);
 
     /**
      * 快讯列表页

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_header" />
+
+    <LinearLayout
+        android:id="@+id/singLineContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View style="@style/line_style" />
+
+
+        <com.qtin.sexyvc.ui.widget.ClearableEditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="96px"
+            android:layout_marginLeft="32px"
+            android:layout_marginRight="32px"
+            android:background="@null"
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black30"
+            android:textSize="14sp" />
+
+        <View style="@style/line_style" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/phoneContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View style="@style/line_style" />
+
+        <com.qtin.sexyvc.ui.widget.PhoneEditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="96px"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_phone"
+            android:inputType="phone"
+            android:paddingLeft="32px"
+            android:paddingRight="32px"
+            android:textColor="@color/black90"
+            android:textColorHint="@color/black30"
+            android:textSize="28px" />
+
+        <View style="@style/line_style" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/introduceContainer"
+        android:layout_width="match_parent"
+        android:layout_height="360px"
+        android:layout_marginTop="48px"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/topLine2"
+            style="@style/line_style"
+            android:layout_alignParentTop="true" />
+
+        <View
+            android:id="@+id/BottomLine2"
+            style="@style/line_style"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/tvCountDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="32px"
+            android:layout_marginRight="32px"
+            android:gravity="end"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/input_count"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etIntroduce"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tvCountDown"
+            android:layout_below="@+id/topLine2"
+            android:layout_marginBottom="22px"
+            android:layout_marginLeft="32px"
+            android:layout_marginRight="32px"
+            android:layout_marginTop="22px"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="@string/remark"
+            android:lineSpacingExtra="6sp"
+            android:maxLength="140"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black30"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+</LinearLayout>

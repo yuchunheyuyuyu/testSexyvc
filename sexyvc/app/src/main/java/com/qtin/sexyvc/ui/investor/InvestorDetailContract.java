@@ -4,6 +4,7 @@ import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.request.FollowRequest;
@@ -27,5 +28,6 @@ public interface InvestorDetailContract {
         UserInfoEntity getUserInfo();
         Observable<CodeEntity> followInvestor(FollowRequest entity);
         Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token,long investor_id,long comment_id);
+        void insertLastBrower(LastBrowerBean bean);
     }
 }

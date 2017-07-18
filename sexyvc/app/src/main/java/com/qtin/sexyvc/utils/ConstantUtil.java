@@ -88,5 +88,17 @@ public class ConstantUtil {
     public static final String COMMENT_SUCCESS = "comment_success";
 
 
+    public static final String INTENT_CREATE_INVESTOR_TYPE="INTENT_CREATE_INVESTOR";
+    public static final int TYPE_CREATE_INVESTOR_NAME=0x111;
+    public static final int TYPE_CREATE_INVESTOR_FUND=0x112;
+    public static final int TYPE_CREATE_INVESTOR_TITLE=0x113;
+    public static final int TYPE_CREATE_INVESTOR_PHONE=0x114;
+    public static final int TYPE_CREATE_INVESTOR_EMAIL=0x115;
+    public static final int TYPE_CREATE_INVESTOR_REMARK=0x116;
+    public static final String INTENT_CREATE_INVESTOR_OLD_VALUE="INTENT_CREATE_INVESTOR_OLD_VALUE";
+
+    public static final String INTENT_TYPE_SET_GROUP="set_group";
+    public static final int TYPE_SET_GROUP_INVESTOR=1;
+    public static final int TYPE_SET_GROUP_CONTACT=2;
 
 }

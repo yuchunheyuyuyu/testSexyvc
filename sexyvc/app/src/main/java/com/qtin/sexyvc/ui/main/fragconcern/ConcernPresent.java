@@ -10,6 +10,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import javax.inject.Inject;
 
@@ -96,7 +97,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
     }
 
     public void query(int page,int page_size){
-        mModel.queryInvestorGroup(mModel.getToken(),0,page,page_size)
+        mModel.queryInvestorGroup(mModel.getToken(), ConstantUtil.DEFALUT_ID,ConstantUtil.DEFALUT_ID,page,page_size)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override

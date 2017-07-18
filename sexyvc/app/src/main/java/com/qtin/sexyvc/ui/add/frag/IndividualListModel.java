@@ -6,12 +6,15 @@ import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
+import com.qtin.sexyvc.ui.bean.LastBrowerBean;
+import com.qtin.sexyvc.ui.bean.LastBrowerBeanDao;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
 import rx.Observable;
 
 /**
@@ -37,5 +40,25 @@ public class IndividualListModel extends BaseModel<ServiceManager,CacheManager> 
             return list.get(0).getU_token();
         }
         return "";
+    }
+
+    @Override
+    public List<LastBrowerBean> queryLastBrowers() {
+        List<LastBrowerBean> list=mCacheManager.getDaoSession().getLastBrowerBeanDao().queryBuilder().orderDesc(LastBrowerBeanDao.Properties.LocalTime).build().list();
+        return list;
+    }
+
+    @Override
+    public Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id) {
+        return mServiceManager.getCommonService().queryInvestorDetail(token,investor_id,comment_id);
+    }
+
+    @Override
+    public UserInfoEntity getUserInfo() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }

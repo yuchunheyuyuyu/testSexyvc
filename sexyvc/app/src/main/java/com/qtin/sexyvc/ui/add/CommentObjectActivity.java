@@ -35,7 +35,7 @@ public class CommentObjectActivity extends MyBaseActivity {
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    private int type;
+    private int typeComment;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -54,14 +54,14 @@ public class CommentObjectActivity extends MyBaseActivity {
 
     @Override
     protected void initData() {
-        type=getIntent().getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
+        typeComment=getIntent().getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
 
         tvTab1.setSelected(true);
         line1.setSelected(true);
 
         ArrayList<Fragment> frags = new ArrayList<>();
-        frags.add(IndividualListFrag.getInstance(ConstantUtil.DATA_FROM_LOCAL));
-        frags.add(IndividualListFrag.getInstance(ConstantUtil.DATA_FROM_WEB));
+        frags.add(IndividualListFrag.getInstance(ConstantUtil.DATA_FROM_LOCAL,typeComment));
+        frags.add(IndividualListFrag.getInstance(ConstantUtil.DATA_FROM_WEB,typeComment));
 
         MyViewPagerAdapter adapter = new MyViewPagerAdapter(getSupportFragmentManager(), frags);
         viewPager.setAdapter(adapter);

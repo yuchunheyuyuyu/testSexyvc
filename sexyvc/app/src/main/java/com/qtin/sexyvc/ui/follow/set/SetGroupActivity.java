@@ -15,7 +15,8 @@ import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.follow.set.di.DaggerSetGroupComponent;
 import com.qtin.sexyvc.ui.follow.set.di.SetGroupModule;
-import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
@@ -41,7 +42,8 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
 
     private SetGroupAdapter mAdapter;
     private ArrayList<ConcernGroupEntity> data=new ArrayList<>();
-    private long investor_id;
+    private long id;
+    private int type;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -60,7 +62,8 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
 
     @Override
     protected void initData() {
-        investor_id=getIntent().getExtras().getLong(ConstantUtil.INTENT_ID);
+        id=getIntent().getExtras().getLong(ConstantUtil.INTENT_ID);
+        type=getIntent().getExtras().getInt(ConstantUtil.INTENT_TYPE_SET_GROUP);
         tvTitle.setText(getResources().getString(R.string.title_set_group));
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.complete));
@@ -97,7 +100,12 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                 mAdapter.notifyDataSetChanged();
             }
         });
-        mPresenter.query(investor_id);
+        if(type==ConstantUtil.TYPE_SET_GROUP_INVESTOR){
+            mPresenter.query(id,ConstantUtil.DEFALUT_ID);
+        }else {
+            mPresenter.query(ConstantUtil.DEFALUT_ID,id);
+        }
+
     }
 
     @Override
@@ -135,19 +143,23 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                 if(data==null||data.isEmpty()){
                     return;
                 }
-
-                ChangeGroupRequest request=new ChangeGroupRequest();
-                request.setInvestor_id(investor_id);
-
                 ArrayList<Long> group_ids=new ArrayList<>();
                 for(ConcernGroupEntity entity:data){
                     if(entity.isSelected()){
                         group_ids.add(entity.getGroup_id());
                     }
                 }
-
-                request.setGroup_ids(group_ids);
-                mPresenter.changeGroup(request);
+                if(type==ConstantUtil.TYPE_SET_GROUP_INVESTOR){
+                    ChangeInvestorGroupRequest request=new ChangeInvestorGroupRequest();
+                    request.setInvestor_id(id);
+                    request.setGroup_ids(group_ids);
+                    mPresenter.changeGroup(request);
+                }else{
+                    ChangeContactGroupRequest request=new ChangeContactGroupRequest();
+                    request.setContact_id(id);
+                    request.setGroup_ids(group_ids);
+                    mPresenter.changeContactGroup(request);
+                }
 
                 break;
         }

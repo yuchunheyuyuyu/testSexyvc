@@ -14,7 +14,10 @@ import rx.Observable;
 
 public interface CreateInvestorContract {
     interface View extends BaseView{
-        void onCreateSuccess(CreateInvestorRequest request);
+        void onCreateSuccess(long investor_id);
+        void uploadAvatarSuccess(String avatar);
+        void startRefresh(String msg);
+        void endRefresh();
     }
     interface Model extends IModel{
         Observable<BaseEntity<IdBean>> createInvestor(CreateInvestorRequest request);

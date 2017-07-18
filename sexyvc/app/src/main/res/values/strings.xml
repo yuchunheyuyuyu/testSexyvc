@@ -263,6 +263,7 @@
     <string name="add_investor_warn">被系统收录前，手动录入的投资人仅对您个人显示</string>
 
     <string name="create_and_concern">录入并关注</string>
+    <string name="who_you_want_comment">您要评价谁？</string>
 
 
 </resources>

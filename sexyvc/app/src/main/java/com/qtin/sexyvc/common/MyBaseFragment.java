@@ -33,6 +33,7 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
     private Dialog inputDialog;
 
     private LoadingDialog loadingDialog;
+    private Dialog oneButtonDialog;
 
     @Override
     protected void ComponentInject() {
@@ -63,6 +64,7 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
             loadingDialog.close();
         }
     }
+
 
     public void gotoActivity(Class<? extends Activity> activityClass){
         Intent intent=new Intent(mActivity,activityClass);
@@ -238,5 +240,47 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
     public static interface InputListerner {
         void onComfirm(String content);
         void cancle();
+    }
+
+    protected void showBottomOneDialog(String optionStr,final OneButtonListerner listerner) {
+        View view = View.inflate(mActivity, R.layout.bottom_one_button_dialog, null);
+        TextView btnOption= (TextView) view.findViewById(R.id.btnOption);
+        TextView cancleSelected= (TextView) view.findViewById(R.id.cancleSelected);
+        btnOption.setText(optionStr);
+
+        btnOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onOptionSelected();
+            }
+        });
+
+        cancleSelected.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onCancle();
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        oneButtonDialog = new Dialog(mActivity);
+        oneButtonDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        oneButtonDialog.setContentView(view);
+        Window regionWindow = oneButtonDialog.getWindow();
+        regionWindow.setGravity(Gravity.BOTTOM);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.view_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        oneButtonDialog.setCanceledOnTouchOutside(true);
+        oneButtonDialog.show();
+    }
+    public static interface OneButtonListerner {
+        void onOptionSelected();
+        void onCancle();
+    }
+    protected void dismissBottomOneButtonDialog(){
+        if(oneButtonDialog!=null&&oneButtonDialog.isShowing()){
+            oneButtonDialog.dismiss();
+        }
     }
 }

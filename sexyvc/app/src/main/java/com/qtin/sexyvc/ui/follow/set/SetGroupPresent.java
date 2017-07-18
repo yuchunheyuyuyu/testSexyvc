@@ -9,7 +9,8 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
-import com.qtin.sexyvc.ui.request.ChangeGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -64,7 +65,7 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 });
     }
 
-    public void changeGroup(ChangeGroupRequest request){
+    public void changeGroup(ChangeInvestorGroupRequest request){
         request.setToken(mModel.getToken());
         mModel.changeGroup(request)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -92,8 +93,36 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 });
     }
 
-    public void query(long investor_id){
-        mModel.queryInvestorGroup(mModel.getToken(),investor_id,page,page_size)
+    public void changeContactGroup(ChangeContactGroupRequest request){
+        request.setToken(mModel.getToken());
+        mModel.changeContactGroup(request)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("处理中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity baseEntity) {
+                        mRootView.showMessage(baseEntity.getErrMsg());
+                        if(baseEntity.isSuccess()){
+                            mRootView.changeSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void query(long investor_id,long contact_id){
+        mModel.queryInvestorGroup(mModel.getToken(),investor_id,contact_id,page,page_size)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override

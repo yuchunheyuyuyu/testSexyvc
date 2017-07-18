@@ -21,6 +21,7 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
+import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
@@ -221,12 +222,29 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
             investorBean = backBean.getInvestor();
             data.add(investorBean);
             setValue();
+            insertLastBrower();
         }
 
         if (backBean.getComments() != null && backBean.getComments().getList() != null) {
             data.addAll(backBean.getComments().getList());
         }
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void insertLastBrower(){
+        if(investorBean!=null){
+            LastBrowerBean bean=new LastBrowerBean();
+            bean.setLocalTime(System.currentTimeMillis());
+            bean.setTitle(investorBean.getInvestor_title());
+            bean.setInvestor_uid(investorBean.getInvestor_uid());
+
+            bean.setInvestor_name(investorBean.getInvestor_name());
+            bean.setInvestor_avatar(investorBean.getInvestor_avatar());
+            bean.setFund_name(investorBean.getFund_name());
+            bean.setInvestor_id(investorBean.getInvestor_id());
+
+            mPresenter.insertLastBrower(bean);
+        }
     }
 
     @Override
@@ -236,6 +254,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         }
         setConcernStatus();
         Bundle bundle = new Bundle();
+        bundle.putInt(ConstantUtil.INTENT_TYPE_SET_GROUP, ConstantUtil.TYPE_SET_GROUP_INVESTOR);
         bundle.putLong(ConstantUtil.INTENT_ID, investor_id);
         gotoActivity(SetGroupActivity.class, bundle);
     }
@@ -341,6 +360,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                                         dismissBottomDialog();
                                         Bundle bundle = new Bundle();
                                         bundle.putLong(ConstantUtil.INTENT_ID, investor_id);
+                                        bundle.putInt(ConstantUtil.INTENT_TYPE_SET_GROUP, ConstantUtil.TYPE_SET_GROUP_INVESTOR);
                                         gotoActivity(SetGroupActivity.class, bundle);
                                     }
 

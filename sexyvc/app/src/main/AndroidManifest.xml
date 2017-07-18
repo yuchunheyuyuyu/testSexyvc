@@ -235,6 +235,16 @@
             android:name=".ui.create.investor.CreateInvestorActivity"
             android:screenOrientation="portrait" />
 
+        <!--填写投资人信息-->
+        <activity
+            android:name=".ui.create.investor.CreateInvestorInfoActivity"
+            android:screenOrientation="portrait" />
+
+        <!--搜索评论对象-->
+        <activity
+            android:name=".ui.add.search.SearchObjectActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity

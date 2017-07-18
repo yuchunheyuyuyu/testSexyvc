@@ -37,8 +37,8 @@ public class ConcernModel extends BaseModel<ServiceManager,CacheManager> impleme
     }
 
     @Override
-    public Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token,long investor_id, int page, int page_size) {
-        return mServiceManager.getCommonService().queryInvestorGroup(token,investor_id,page,page_size);
+    public Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token,long investor_id, long contact_id,int page, int page_size) {
+        return mServiceManager.getCommonService().queryInvestorGroup(token,investor_id,contact_id,page,page_size);
     }
 
     @Override

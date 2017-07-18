@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by ls on 17/6/22.
  */
 
-public class ChangeGroupRequest {
+public class ChangeInvestorGroupRequest {
     private String token;
     private Long investor_id;
     private ArrayList<Long> group_ids;

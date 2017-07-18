@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.create.investor;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -11,10 +12,16 @@ import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.IdBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
+
 import org.json.JSONObject;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,6 +48,35 @@ public class CreateInvestorPresent extends BasePresenter<CreateInvestorContract.
         uploadManager = new UploadManager();
     }
 
+    public void createInvestor(CreateInvestorRequest request){
+        request.setToken(mModel.getToken());
+        mModel.createInvestor(request)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("提交中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+
+                    }
+                }).compose(RxUtils.<BaseEntity<IdBean>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<IdBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<IdBean> codeEntity) {
+                        mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.onCreateSuccess(codeEntity.getItems().getId());
+                        }
+                    }
+                });
+    }
+
     public void upload(String path, String token) {
         String key = mModel.getToken()+System.currentTimeMillis() + ".png";
         UploadOptions uploadOptions = new UploadOptions(null, null, false,
@@ -53,7 +89,8 @@ public class CreateInvestorPresent extends BasePresenter<CreateInvestorContract.
         uploadManager.put(path, key, token, new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
-                
+                mRootView.uploadAvatarSuccess(key);
+                mRootView.endRefresh();
             }
 
         }, uploadOptions);
@@ -66,7 +103,7 @@ public class CreateInvestorPresent extends BasePresenter<CreateInvestorContract.
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.showLoading();
+                        mRootView.startRefresh("上传头像中");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -74,12 +111,12 @@ public class CreateInvestorPresent extends BasePresenter<CreateInvestorContract.
                 .subscribe(new Observer<BaseEntity<QiniuTokenEntity>>() {
                     @Override
                     public void onCompleted() {
-                        mRootView.hideLoading();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mRootView.hideLoading();
+                        mRootView.endRefresh();
                     }
 
                     @Override

@@ -25,7 +25,7 @@ public interface ConcernContract {
     }
     interface Model extends IModel{
         String getToken();
-        Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token,long investor_id,int page,int page_size);
+        Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token,long investor_id,long contact_id,int page,int page_size);
         Observable<BaseEntity<CreateGroupEntity>> addInvestorGroup(String token,String group_name);
         Observable<CodeEntity> updateInvestorGroup(String token,long group_id,String group_name,int status);
     }
