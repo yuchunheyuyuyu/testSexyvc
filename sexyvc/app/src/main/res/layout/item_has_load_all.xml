@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvHasLoadAll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:lineSpacingExtra="6sp"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
+    android:text="已经没有啦"
+    android:textColor="@color/slate"
+    android:textSize="12sp">
+
+</TextView>

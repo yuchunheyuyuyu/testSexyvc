@@ -81,6 +81,8 @@ public class RoadSuccessActivity extends MyBaseActivity<RoadSuccessPresent> impl
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.complete));
 
+        tvName.setText(String.format(getResources().getString(R.string.format_road_success),""+investorInfoBean.getInvestor_name()));
+
         Observable.just(1)
                 .delay(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

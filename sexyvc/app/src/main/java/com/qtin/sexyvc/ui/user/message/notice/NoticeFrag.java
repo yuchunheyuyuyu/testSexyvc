@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.ui.user.bean.MsgItems;
 import com.qtin.sexyvc.ui.user.message.notice.di.DaggerNoticeFragComponent;
 import com.qtin.sexyvc.ui.user.message.notice.di.NoticeFragModule;
 
@@ -20,7 +21,7 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
 
     @Override
     protected int setContentViewId() {
-        return R.layout.message_frag;
+        return R.layout.swipe_recycleview;
     }
 
     @Override
@@ -50,6 +51,11 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
 
     @Override
     public void killMyself() {
+
+    }
+
+    @Override
+    public void querySuccess(MsgItems items) {
 
     }
 }

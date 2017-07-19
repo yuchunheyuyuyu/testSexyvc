@@ -4,8 +4,12 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.user.bean.MsgItems;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 /**
  * Created by ls on 17/4/26.
@@ -16,5 +20,10 @@ public class NoticeFragModel extends BaseModel<ServiceManager,CacheManager> impl
     @Inject
     public NoticeFragModel(ServiceManager serviceManager, CacheManager cacheManager) {
         super(serviceManager, cacheManager);
+    }
+
+    @Override
+    public Observable<BaseEntity<MsgItems>> queryNotice(String token, long id, int page_size) {
+        return null;
     }
 }

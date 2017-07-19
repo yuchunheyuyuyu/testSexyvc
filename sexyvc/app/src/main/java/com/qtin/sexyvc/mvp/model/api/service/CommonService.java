@@ -20,6 +20,7 @@ import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
+import com.qtin.sexyvc.ui.comment.list.frag.bean.CommentItemsBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
@@ -35,6 +36,7 @@ import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
+import com.qtin.sexyvc.ui.user.bean.MsgItems;
 import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 
 import retrofit2.http.Body;
@@ -610,5 +612,41 @@ public interface CommonService {
      */
     @POST("api/user/contact/investor/add")
     Observable<BaseEntity<IdBean>> createInvestor(@Body CreateInvestorRequest request);
-}
+
+    /**
+     * 62. 页面——评论列表页
+     * @param token
+     * @param page
+     * @param page_size
+     * @param hot_comment
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/comment/list")
+    Observable<BaseEntity<CommentItemsBean>> queryCommentList(@Field("token")String token,@Field("page")int page,
+                                                                 @Field("page_size")int page_size,@Field("hot_comment")int hot_comment);
+
+    /**
+     * 消息--通知列表
+     * @param token
+     * @param id
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/notice")
+    Observable<BaseEntity<MsgItems>> queryNotice(@Field("token")String token,@Field("id")long id,@Field("page_size")int page_size);
+
+    /**
+     * 消息--消息列表
+     * @param token
+     * @param id
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/message")
+    Observable<BaseEntity<MsgItems>> queryMessage(@Field("token")String token,@Field("id")long id,@Field("page_size")int page_size);
+
+ }
 

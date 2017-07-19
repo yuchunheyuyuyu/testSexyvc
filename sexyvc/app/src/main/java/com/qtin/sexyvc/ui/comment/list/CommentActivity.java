@@ -53,8 +53,8 @@ public class CommentActivity extends MyBaseActivity {
         lineNew.setSelected(true);
 
         ArrayList<Fragment> frags=new ArrayList<>();
-        frags.add(new CommentLastFrag());
-        frags.add(new CommentLastFrag());
+        frags.add(CommentLastFrag.getInstance(0));
+        frags.add(CommentLastFrag.getInstance(1));
         MyViewPagerAdapter adapter=new MyViewPagerAdapter(getSupportFragmentManager(),frags);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

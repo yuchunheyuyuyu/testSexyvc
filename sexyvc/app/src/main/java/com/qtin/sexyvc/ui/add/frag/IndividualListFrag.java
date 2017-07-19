@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -24,7 +25,6 @@ import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.rate.RateActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
-import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     private boolean isLoadingMore;
 
     private int page=1;
-    private int page_size=15;
+    private int page_size=30;
 
     private long DEFALUT_GROUP_ID=0;
     private InvestorBean investorBean;
@@ -121,6 +121,9 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                     entity.setLocalTime(bean.getLocalTime());
                     entity.setInvestor_uid(bean.getInvestor_uid());
                     data.add(entity);
+                    if(data.size()>=10){
+                        break;
+                    }
                 }
             }
             mAdapter.notifyDataSetChanged();
@@ -206,12 +209,14 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
             data.clear();
         }
         if(entity.getList()!=null){
-            data.addAll(entity.getList());
-        }
-        if(data.size()<entity.getTotal()){
-            hasLoadedAllItems=false;
-        }else{
-            hasLoadedAllItems=true;
+            for(ConcernListEntity listEntity:entity.getList()){
+                if(listEntity.getInvestor_id()!=0){
+                    data.add(listEntity);
+                    if(data.size()>=10){
+                        break;
+                    }
+                }
+            }
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -219,99 +224,37 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     public void queryDetailSuccess(CallBackBean backBean) {
         if (backBean.getInvestor() != null) {
             investorBean=backBean.getInvestor();
-
             if (mPresenter.getUserInfo() != null) {
+                //创始人逻辑
                 if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
-                    if(mPresenter.getUserInfo().getHas_project()==0){
-                        showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
-                                getResources().getString(R.string.cancle),
-                                getResources().getString(R.string.comfirm),
-                                new TwoButtonListerner() {
-                                    @Override
-                                    public void leftClick() {
-                                        dismissTwoButtonDialog();
-                                    }
-
-                                    @Override
-                                    public void rightClick() {
-                                        dismissTwoButtonDialog();
-                                        Bundle bundle=new Bundle();
-                                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
-                                        gotoActivity(AddProjectActivity.class,bundle);
-                                    }
-                                });
-                        return;
-                    }
-
-
-                    if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
-                        showBottomOneDialog(getResources().getString(R.string.plus_comment),
-                                new OneButtonListerner() {
-                                    @Override
-                                    public void onOptionSelected() {
-                                        dismissBottomOneButtonDialog();
-                                        gotoComment(true);
-                                    }
-
-                                    @Override
-                                    public void onCancle() {
-                                        dismissBottomOneButtonDialog();
-                                    }
-                                });
-                    } else if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 0) {
-                        gotoRoad(true);
-                    } else if (investorBean.getHas_comment() == 0 && investorBean.getHas_roadshow() == 1) {
-                        showBottomOneDialog(getResources().getString(R.string.comment),
-                                new OneButtonListerner() {
-                                    @Override
-                                    public void onOptionSelected() {
-                                        dismissBottomOneButtonDialog();
-                                        if(investorBean.getHas_score()==0){
-                                            gotoScore(false);
-                                        }else{
-                                            gotoComment(false);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancle() {
-                                        dismissBottomOneButtonDialog();
-                                    }
-                                });
-                    } else {
-                        if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
-                            gotoRoad(false);
-                        }else if(typeComment==ConstantUtil.COMMENT_TYPE_EDIT){
-                            gotoScore(false);
-                        }
-                        //gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
-                    }
-
-                } else {
-                    if (investorBean.getHas_comment() == 0) {
-                        if(investorBean.getHas_score()==0){
-                            gotoScore(false);
+                    if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
+                        if(investorBean.getHas_roadshow()==0){
+                            gotoRoad();
                         }else{
-                            gotoComment(false);
+                            String format=getResources().getString(R.string.format_has_road);
+                            String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
+                            showComfirmDialog(title, getResources().getString(R.string.comfirm), new ComfirmListerner() {
+                                @Override
+                                public void onComfirm() {
+                                    dismissComfirmDialog();
+                                }
+                            });
                         }
-                    } else {
-                        showBottomOneDialog(getResources().getString(R.string.plus_comment),
-                                new OneButtonListerner() {
-                                    @Override
-                                    public void onOptionSelected() {
-                                        dismissBottomOneButtonDialog();
-                                        gotoComment(true);
-                                    }
-
-                                    @Override
-                                    public void onCancle() {
-                                        dismissBottomOneButtonDialog();
-                                    }
-                                });
+                    }else{
+                        if(investorBean.getHas_score()==0){
+                            gotoScore();
+                        }else{
+                            gotoComment();
+                        }
+                    }
+                } else {
+                    if(investorBean.getHas_score()==0){
+                        gotoScore();
+                    }else{
+                        gotoComment();
                     }
                 }
             }
-
         }
     }
 
@@ -327,31 +270,27 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
 
     /**
      * 进入评分
-     * @param isAppend
      */
-    private void gotoScore(boolean isAppend){
-        gotoActivity(RateActivity.class,getBundle(isAppend));
+    private void gotoScore(){
+        gotoActivity(RateActivity.class,getBundle());
     }
 
     /**
-     * 进入评论或者追评
-     * @param isAppend
      */
-    private void gotoComment(boolean isAppend){
-        gotoActivity(ReviewActivity.class,getBundle(isAppend));
+    private void gotoComment(){
+        gotoActivity(ReviewActivity.class,getBundle());
     }
 
     /**
      * 进入路演评价
-     * @param isAppend
      */
-    private void gotoRoad(boolean isAppend) {
-        Bundle bundle=getBundle(isAppend);
+    private void gotoRoad() {
+        Bundle bundle=getBundle();
         bundle.putInt(ConstantUtil.INTENT_INDEX,0);
-        gotoActivity(RoadCommentActivity.class, getBundle(isAppend));
+        gotoActivity(RoadCommentActivity.class, bundle);
     }
 
-    private Bundle getBundle(boolean isAppend){
+    private Bundle getBundle(){
         Bundle bundle=new Bundle();
         InvestorInfoBean infoBean=new InvestorInfoBean();
         infoBean.setInvestor_id(investorBean.getInvestor_id());
@@ -368,7 +307,6 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         infoBean.setScore_value(investorBean.getScore_value());
         infoBean.setComment_id(investorBean.getComment_id());
         infoBean.setComment_title(investorBean.getComment_title());
-        infoBean.setAppend(isAppend);
         bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
         return bundle;
     }

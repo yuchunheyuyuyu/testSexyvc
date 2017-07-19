@@ -265,5 +265,7 @@
     <string name="create_and_concern">录入并关注</string>
     <string name="who_you_want_comment">您要评价谁？</string>
 
+    <string name="format_has_road">您已对%s进行过路演评价</string>
+
 
 </resources>

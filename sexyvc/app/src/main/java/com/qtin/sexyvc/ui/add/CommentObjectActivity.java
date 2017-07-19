@@ -1,20 +1,18 @@
 package com.qtin.sexyvc.ui.add;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
-
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.add.frag.IndividualListFrag;
-import com.qtin.sexyvc.ui.follow.search.ConcernSearchActivity;
+import com.qtin.sexyvc.ui.add.search.SearchObjectActivity;
 import com.qtin.sexyvc.ui.user.message.MyViewPagerAdapter;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -100,7 +98,9 @@ public class CommentObjectActivity extends MyBaseActivity {
                 finish();
                 break;
             case R.id.searchContainer:
-                gotoActivity(ConcernSearchActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,typeComment);
+                gotoActivity(SearchObjectActivity.class,bundle);
                 break;
             case R.id.tvTab1:
                 viewPager.setCurrentItem(0);

@@ -81,7 +81,7 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
     protected void initData() {
         investorInfoBean = getIntent().getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
 
-        if(investorInfoBean.isAppend()){
+        if(investorInfoBean.getHas_comment()==1){
             tvCommentTitle.setVisibility(View.VISIBLE);
             etCommentTitle.setVisibility(View.GONE);
             tvCommentTitle.setText(StringUtil.formatString(investorInfoBean.getComment_title()));
@@ -132,7 +132,7 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
                 break;
             case R.id.tvRight:
                 String content=etCommentContent.getText().toString();
-                if(investorInfoBean.isAppend()){
+                if(investorInfoBean.getHas_comment()==1){
                     if(StringUtil.isBlank(content)){
                         showMessage("追评内容不能为空");
                         return;

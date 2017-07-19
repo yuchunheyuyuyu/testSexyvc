@@ -71,6 +71,7 @@ public class ConstantUtil {
     public static final int TYPE_NORMAL=1;
     public static final int TYPE_UNNORMAL=2;
     public static final int TYPE_CUSTOM=3;
+    public static final int TYPE_FOOTER=4;
 
 
     public static final int ACTION_CLEAR_HISTORY=-1;

@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseFragment;
 import com.jess.arms.mvp.Presenter;
 import com.jess.arms.utils.StringUtil;
@@ -115,6 +116,43 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         twoButtondialog.setCanceledOnTouchOutside(true);
         twoButtondialog.show();
+    }
+
+
+    private Dialog comfirmDialog;
+    protected void showComfirmDialog(String title,String button,final ComfirmListerner listerner) {
+
+        View view = View.inflate(mActivity, R.layout.one_button_dialog, null);
+        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+
+        tvDialogTitle.setText(title);
+        btnRight.setText(button);
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onComfirm();
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        comfirmDialog = new Dialog(mActivity);
+        comfirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        comfirmDialog.setContentView(view);
+        Window regionWindow = comfirmDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        comfirmDialog.setCanceledOnTouchOutside(true);
+        comfirmDialog.show();
+    }
+
+    protected void dismissComfirmDialog(){
+        if(comfirmDialog!=null&&comfirmDialog.isShowing()){
+            comfirmDialog.dismiss();
+        }
     }
 
     protected void dismissTwoButtonDialog(){
@@ -231,6 +269,10 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
         void leftClick();
         void rightClick();
     }
+    public static interface ComfirmListerner {
+        void onComfirm();
+    }
+
     public static interface SelecteListerner {
         void onFirstClick();
         void onSecondClick();

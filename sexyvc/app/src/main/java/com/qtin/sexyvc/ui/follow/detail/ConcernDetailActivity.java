@@ -408,7 +408,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         @Override
                                         public void onOptionSelected() {
                                             dismissBottomOneButtonDialog();
-                                            gotoComment(true);
+                                            gotoComment();
                                         }
 
                                         @Override
@@ -417,7 +417,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         }
                                     });
                         } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
-                            gotoRoad(true);
+                            gotoRoad();
                         } else if (contactBean.getHas_comment() == 0 && contactBean.getHas_roadshow() == 1) {
                             showBottomOneDialog(getResources().getString(R.string.comment),
                                     new OneButtonListerner() {
@@ -425,9 +425,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         public void onOptionSelected() {
                                             dismissBottomOneButtonDialog();
                                             if(contactBean.getHas_score()==0){
-                                                gotoScore(false);
+                                                gotoScore();
                                             }else{
-                                                gotoComment(false);
+                                                gotoComment();
                                             }
                                         }
 
@@ -443,9 +443,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                     } else {
                         if (contactBean.getHas_comment() == 0) {
                             if(contactBean.getHas_score()==0){
-                                gotoScore(false);
+                                gotoScore();
                             }else{
-                                gotoComment(false);
+                                gotoComment();
                             }
                         } else {
                             showBottomOneDialog(getResources().getString(R.string.plus_comment),
@@ -453,7 +453,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         @Override
                                         public void onOptionSelected() {
                                             dismissBottomOneButtonDialog();
-                                            gotoComment(true);
+                                            gotoComment();
                                         }
 
                                         @Override
@@ -501,31 +501,28 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
 
     /**
      * 进入评分
-     * @param isAppend
      */
-    private void gotoScore(boolean isAppend){
-        gotoActivity(RateActivity.class,getBundle(isAppend));
+    private void gotoScore(){
+        gotoActivity(RateActivity.class,getBundle());
     }
 
     /**
      * 进入评论或者追评
-     * @param isAppend
      */
-    private void gotoComment(boolean isAppend){
-        gotoActivity(ReviewActivity.class,getBundle(isAppend));
+    private void gotoComment(){
+        gotoActivity(ReviewActivity.class,getBundle());
     }
 
     /**
      * 进入路演评价
-     * @param isAppend
      */
-    private void gotoRoad(boolean isAppend) {
-        Bundle bundle=getBundle(isAppend);
+    private void gotoRoad() {
+        Bundle bundle=getBundle();
         bundle.putInt(ConstantUtil.INTENT_INDEX,0);
-        gotoActivity(RoadCommentActivity.class, getBundle(isAppend));
+        gotoActivity(RoadCommentActivity.class, getBundle());
     }
 
-    private Bundle getBundle(boolean isAppend){
+    private Bundle getBundle(){
         Bundle bundle=new Bundle();
         InvestorInfoBean infoBean=new InvestorInfoBean();
         infoBean.setInvestor_id(contactBean.getInvestor_id());
@@ -542,7 +539,6 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         infoBean.setScore_value(contactBean.getScore_value());
         infoBean.setComment_id(contactBean.getComment_id());
         infoBean.setComment_title(contactBean.getComment_title());
-        infoBean.setAppend(isAppend);
         bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
         return bundle;
     }
@@ -558,9 +554,13 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 if (data != null) {
                     int type = data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
                     if (type == ConstantUtil.COMMENT_TYPE_ROAD) {
-                        gotoRoad(false);
+                        gotoRoad();
                     } else if (type == ConstantUtil.COMMENT_TYPE_EDIT) {
-                        gotoScore(false);
+                        if(contactBean.getHas_score()==0){
+                            gotoScore();
+                        }else {
+                            gotoComment();
+                        }
                     }
                 }
                 break;

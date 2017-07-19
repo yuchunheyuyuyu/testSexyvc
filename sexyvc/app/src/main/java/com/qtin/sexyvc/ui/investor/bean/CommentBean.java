@@ -25,6 +25,15 @@ public class CommentBean implements DataTypeInterface, Parcelable {
     private String investor_name;
     private float score;
     private int has_praise;
+    private long create_time;
+
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
+    }
 
     public String getDomain_name() {
         return domain_name;

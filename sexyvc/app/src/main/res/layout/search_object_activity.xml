@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="88px"
+        android:paddingLeft="16px">
+
+        <TextView
+            android:id="@+id/tvCancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="32px"
+            android:paddingRight="32px"
+            android:text="取消"
+            android:textColor="@color/barbie_pink_two"
+            android:textSize="28px" />
+
+        <ImageView
+            android:layout_width="24px"
+            android:layout_height="24px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16px"
+            android:layout_marginRight="15px"
+            android:src="@drawable/search_icon" />
+
+
+        <com.qtin.sexyvc.ui.widget.ClearableEditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="60px"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tvCancle"
+            android:background="@drawable/concern_search_shape"
+            android:hint="@string/who_you_want_comment"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="56px"
+            android:paddingRight="16px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black30"
+            android:textSize="28px" />
+
+    </RelativeLayout>
+
+    <View style="@style/line_style" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

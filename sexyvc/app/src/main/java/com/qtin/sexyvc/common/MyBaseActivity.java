@@ -324,6 +324,46 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         oneButtonDialog.show();
     }
 
+    private Dialog comfirmDialog;
+    protected void showComfirmDialog(String title,String button,final ComfirmListerner listerner) {
+
+        View view = View.inflate(this, R.layout.one_button_dialog, null);
+        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+
+        tvDialogTitle.setText(title);
+        btnRight.setText(button);
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onComfirm();
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        comfirmDialog = new Dialog(this);
+        comfirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        comfirmDialog.setContentView(view);
+        Window regionWindow = comfirmDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        comfirmDialog.setCanceledOnTouchOutside(true);
+        comfirmDialog.show();
+    }
+
+    protected void dismissComfirmDialog(){
+        if(comfirmDialog!=null&&comfirmDialog.isShowing()){
+            comfirmDialog.dismiss();
+        }
+    }
+    public static interface ComfirmListerner {
+        void onComfirm();
+    }
+
+
     protected void dismissInputDialog(){
         if(inputDialog!=null&&inputDialog.isShowing()){
             inputDialog.dismiss();
