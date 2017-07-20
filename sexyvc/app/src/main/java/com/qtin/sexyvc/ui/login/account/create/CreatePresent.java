@@ -12,6 +12,7 @@ import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import javax.inject.Inject;
 
@@ -78,8 +79,9 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                 });
     }
 
-    public void doRegister(final RegisterRequestEntity entity){
-        mModel.doRegister(entity)
+    public void doRegister(final RegisterRequestEntity requestEntity){
+        requestEntity.setClient_type(1);
+        mModel.doRegister(requestEntity)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -90,11 +92,35 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                         if(userEntityBaseEntity!=null){
                             if(userEntityBaseEntity.isSuccess()&&userEntityBaseEntity.getItems()!=null){
                                 mModel.saveUser(userEntityBaseEntity.getItems());
+
+                                UserInfoEntity entity=new UserInfoEntity();
+
+                                entity.setToken(userEntityBaseEntity.getItems().getU_token());
+                                entity.setHas_project(userEntityBaseEntity.getItems().getHas_project());
+                                entity.setBusiness_card(userEntityBaseEntity.getItems().getBusiness_card());
+                                entity.setU_nickname(userEntityBaseEntity.getItems().getU_nickname());
+
+                                entity.setU_gender(userEntityBaseEntity.getItems().getU_gender());
+                                entity.setU_avatar(userEntityBaseEntity.getItems().getU_avatar());
+                                entity.setU_signature(userEntityBaseEntity.getItems().getU_signature());
+                                entity.setU_phone(userEntityBaseEntity.getItems().getU_phone());
+
+                                entity.setU_email(userEntityBaseEntity.getItems().getU_email());
+                                entity.setU_backup_phone(userEntityBaseEntity.getItems().getU_backup_phone());
+                                entity.setU_backup_email(userEntityBaseEntity.getItems().getU_backup_email());
+                                entity.setU_company(userEntityBaseEntity.getItems().getU_company());
+
+                                entity.setU_title(userEntityBaseEntity.getItems().getU_title());
+                                entity.setU_auth_state(userEntityBaseEntity.getItems().getU_auth_state());
+                                entity.setU_auth_type(userEntityBaseEntity.getItems().getU_auth_type());
+
+                                mModel.saveUsrInfo(entity);
+
+
                                 if(userEntityBaseEntity.getItems().getBind_mobile()==1){
                                     mRootView.notNeedBind();
                                 }else{
-                                    mRootView.gotoBind(entity.getAccount_type()
-                                    );
+                                    mRootView.gotoBind(requestEntity.getAccount_type());
                                 }
                             }else{
                                 mRootView.showMessage(StringUtil.formatString(userEntityBaseEntity.getErrMsg()));

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contentContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pale_grey_two_white_selector"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="18dp">
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:lineSpacingExtra="6sp"
+        android:text="昨天"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="6dp"
+        android:lineSpacingExtra="6sp"
+        android:text="恭喜您的身份认证已通过，获得「认证创始人」身份标识！"
+        android:textColor="@color/black90"
+        android:textSize="14sp" />
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="19dp" />
+
+
+</LinearLayout>

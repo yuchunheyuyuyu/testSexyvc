@@ -28,6 +28,7 @@ import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
 import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
+import com.qtin.sexyvc.ui.request.ChangeReadStatusRequest;
 import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
@@ -105,7 +106,7 @@ public interface CommonService {
 
     @FormUrlEncoded
     @POST("api/user/login")
-    Observable<BaseEntity<UserEntity>> login(@Field("username")String username, @Field("account_type")int account_type,
+    Observable<BaseEntity<UserEntity>> login(@Field("client_type")int client_type,@Field("username")String username, @Field("account_type")int account_type,
                     @Field("password")String password,@Field("device_token")String device_token);
 
     /**
@@ -647,6 +648,14 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/message")
     Observable<BaseEntity<MsgItems>> queryMessage(@Field("token")String token,@Field("id")long id,@Field("page_size")int page_size);
+
+    /**
+     * 操作--更改已读
+     * @param request
+     * @return
+     */
+    @POST("api/action/read")
+    Observable<CodeEntity> changeReadStatus(@Body ChangeReadStatusRequest request);
 
  }
 

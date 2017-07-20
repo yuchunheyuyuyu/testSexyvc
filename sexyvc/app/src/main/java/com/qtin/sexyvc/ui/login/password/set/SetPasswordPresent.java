@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.login.password.set;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -9,7 +10,10 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -54,8 +58,9 @@ public class SetPasswordPresent extends BasePresenter<SetPasswordContract.Model,
                 });
     }
 
-    public void doRegister(RegisterRequestEntity entity){
-        mModel.doRegister(entity)
+    public void doRegister(RegisterRequestEntity requestEntity){
+        requestEntity.setClient_type(1);
+        mModel.doRegister(requestEntity)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -66,6 +71,30 @@ public class SetPasswordPresent extends BasePresenter<SetPasswordContract.Model,
                         if(userEntityBaseEntity.isSuccess()){
 
                             mModel.saveUser(userEntityBaseEntity.getItems());
+
+                            UserInfoEntity entity=new UserInfoEntity();
+
+                            entity.setToken(userEntityBaseEntity.getItems().getU_token());
+                            entity.setHas_project(userEntityBaseEntity.getItems().getHas_project());
+                            entity.setBusiness_card(userEntityBaseEntity.getItems().getBusiness_card());
+                            entity.setU_nickname(userEntityBaseEntity.getItems().getU_nickname());
+
+                            entity.setU_gender(userEntityBaseEntity.getItems().getU_gender());
+                            entity.setU_avatar(userEntityBaseEntity.getItems().getU_avatar());
+                            entity.setU_signature(userEntityBaseEntity.getItems().getU_signature());
+                            entity.setU_phone(userEntityBaseEntity.getItems().getU_phone());
+
+                            entity.setU_email(userEntityBaseEntity.getItems().getU_email());
+                            entity.setU_backup_phone(userEntityBaseEntity.getItems().getU_backup_phone());
+                            entity.setU_backup_email(userEntityBaseEntity.getItems().getU_backup_email());
+                            entity.setU_company(userEntityBaseEntity.getItems().getU_company());
+
+                            entity.setU_title(userEntityBaseEntity.getItems().getU_title());
+                            entity.setU_auth_state(userEntityBaseEntity.getItems().getU_auth_state());
+                            entity.setU_auth_type(userEntityBaseEntity.getItems().getU_auth_type());
+
+                            mModel.saveUsrInfo(entity);
+
                             mRootView.rigisterSuccess();
                         }else{
                             mRootView.showMessage(userEntityBaseEntity.getErrMsg());

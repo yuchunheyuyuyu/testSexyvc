@@ -9,6 +9,7 @@ import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -60,5 +61,14 @@ public class CreateModel extends BaseModel<ServiceManager,CacheManager> implemen
             }
         }
         return false;
+    }
+
+    @Override
+    public void saveUsrInfo(UserInfoEntity entity) {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
+        }
+        mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
 }

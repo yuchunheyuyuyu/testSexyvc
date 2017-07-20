@@ -13,6 +13,15 @@ public class RegisterRequestEntity {
     private int gender;
     private String wx_union_id;
     private String device_token;
+    private int client_type;
+
+    public int getClient_type() {
+        return client_type;
+    }
+
+    public void setClient_type(int client_type) {
+        this.client_type = client_type;
+    }
 
     public String getUsername() {
         return username;

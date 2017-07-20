@@ -336,9 +336,11 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         domainAdapter = new TagAdapter<FilterEntity>(industryData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, domainFlowLayout, false);
+                View view = LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter, stageFlowLayout, false);
+                //AutoUtils.auto(tv);
+                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
                 tv.setText(o.getType_name());
-                return tv;
+                return view;
             }
         };
         domainFlowLayout.setAdapter(domainAdapter);
@@ -367,9 +369,11 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         stageAdapter = new TagAdapter<FilterEntity>(turnData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter_textview, stageFlowLayout, false);
+                View view = LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter, stageFlowLayout, false);
+                //AutoUtils.auto(tv);
+                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
                 tv.setText(o.getType_name());
-                return tv;
+                return view;
             }
         };
 

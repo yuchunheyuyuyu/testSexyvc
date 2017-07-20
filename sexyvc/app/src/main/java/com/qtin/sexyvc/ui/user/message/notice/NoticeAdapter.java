@@ -1,15 +1,14 @@
-package com.qtin.sexyvc.ui.user.message.message;
+package com.qtin.sexyvc.ui.user.message.notice;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
-import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.user.bean.MsgBean;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.qtin.sexyvc.utils.DateUtil;
@@ -23,21 +22,16 @@ import butterknife.ButterKnife;
  * Created by ls on 17/7/19.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NoticeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<MsgBean> data;
-    private OnItemClickListener onItemClickListener;
     private boolean isHasLoadMore;
 
     public void setHasLoadMore(boolean hasLoadMore) {
         isHasLoadMore = hasLoadMore;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public MessageAdapter(ArrayList<MsgBean> data) {
+    public NoticeAdapter(ArrayList<MsgBean> data) {
         this.data = data;
     }
 
@@ -54,8 +48,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         View view = null;
         if (viewType == ConstantUtil.TYPE_NORMAL) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
-            return new MsgHolder(view);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notice, parent, false);
+            return new NoticeHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_has_load_all, parent, false);
             return new FootHolder(view);
@@ -64,29 +58,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
-        if(viewHolder instanceof MsgHolder){
-            MsgHolder holder= (MsgHolder) viewHolder;
-            MsgBean bean=data.get(position);
-            holder.tvMsgTitle.setText(StringUtil.formatString(bean.getTitle()));
-            holder.tvMsgContent.setText(StringUtil.formatString(bean.getContent()));
-
-            if(bean.getMessage_type()==2){
-                holder.ivMsg.setImageResource(R.drawable.icon_msg_reaction);
-            }else{
-                holder.ivMsg.setImageResource(R.drawable.icon_msg_follow);
-            }
+        if (viewHolder instanceof NoticeHolder) {
+            NoticeHolder holder = (NoticeHolder) viewHolder;
+            MsgBean bean = data.get(position);
+            holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
             holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(onItemClickListener!=null){
-                        onItemClickListener.onClickItem(position);
-                    }
-                }
-            });
-            if(bean.getRead_time()>0){
+            if (bean.getRead_time() > 0) {
                 holder.contentContainer.setSelected(true);
-            }else{
+            } else {
                 holder.contentContainer.setSelected(false);
             }
         }
@@ -110,20 +89,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ButterKnife.bind(this, view);
         }
     }
-
-    static class MsgHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.ivMsg)
-        ImageView ivMsg;
-        @BindView(R.id.tvMsgTitle)
-        TextView tvMsgTitle;
+    static class NoticeHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.tvTime)
         TextView tvTime;
-        @BindView(R.id.tvMsgContent)
-        TextView tvMsgContent;
+        @BindView(R.id.tvContent)
+        TextView tvContent;
         @BindView(R.id.contentContainer)
-        View contentContainer;
+        LinearLayout contentContainer;
 
-        MsgHolder(View view) {
+        NoticeHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

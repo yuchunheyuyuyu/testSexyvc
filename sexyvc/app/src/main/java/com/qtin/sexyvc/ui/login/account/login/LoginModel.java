@@ -6,6 +6,7 @@ import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class LoginModel extends BaseModel<ServiceManager,CacheManager> implement
     }
 
     @Override
-    public Observable<BaseEntity<UserEntity>> login(String username, int account_type, String password,String device_token) {
-        return mServiceManager.getCommonService().login(username,account_type,password,device_token);
+    public Observable<BaseEntity<UserEntity>> login(int client_type,String username, int account_type, String password,String device_token) {
+        return mServiceManager.getCommonService().login(client_type,username,account_type,password,device_token);
     }
 
     @Override
@@ -36,5 +37,14 @@ public class LoginModel extends BaseModel<ServiceManager,CacheManager> implement
             mCacheManager.getDaoSession().getUserEntityDao().deleteAll();
         }
         mCacheManager.getDaoSession().getUserEntityDao().insert(entity);
+    }
+
+    @Override
+    public void saveUsrInfo(UserInfoEntity entity) {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
+        }
+        mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
 }

@@ -87,8 +87,8 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     @Override
     protected void initData() {
         subject_id = getIntent().getExtras().getLong("subject_id");
-        String title = getIntent().getExtras().getString("title");
-        tvTitle.setText(title);
+        //String title = getIntent().getExtras().getString("title");
+        //tvTitle.setText(title);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -228,6 +228,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             data.clear();
             if (detailBean.getDetail() != null) {
                 data.add(detailBean.getDetail());
+                tvTitle.setText(StringUtil.formatString(detailBean.getDetail().getTitle()));
             }
         }
         if (detailBean.getReplies() != null) {

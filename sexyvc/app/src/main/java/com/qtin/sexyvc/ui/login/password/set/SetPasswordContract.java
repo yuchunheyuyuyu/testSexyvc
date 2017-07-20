@@ -6,6 +6,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import rx.Observable;
 
 /**
@@ -22,5 +23,6 @@ public interface SetPasswordContract {
         boolean changeBindStatus(int bind);
         Observable<CodeEntity> bindMobile(String token, String mobile, String password);
         String getToken();
+        void saveUsrInfo(UserInfoEntity entity);
     }
 }

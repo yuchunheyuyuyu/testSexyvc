@@ -7,12 +7,17 @@ package com.qtin.sexyvc.ui.user.bean;
 public class MsgBean {
     private long id;
     private long u_id;
+    private String title;
     private String content;
-    private int action_type;
 
-    private String action_content;
-    private long send_time;
+
+    private int message_type;
+    private long create_time;
     private long read_time;
+
+    private String action_type;
+    private String action_content;
+    private int status;
 
     public long getId() {
         return id;
@@ -30,6 +35,14 @@ public class MsgBean {
         this.u_id = u_id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getContent() {
         return content;
     }
@@ -38,11 +51,35 @@ public class MsgBean {
         this.content = content;
     }
 
-    public int getAction_type() {
+    public int getMessage_type() {
+        return message_type;
+    }
+
+    public void setMessage_type(int message_type) {
+        this.message_type = message_type;
+    }
+
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
+    }
+
+    public long getRead_time() {
+        return read_time;
+    }
+
+    public void setRead_time(long read_time) {
+        this.read_time = read_time;
+    }
+
+    public String getAction_type() {
         return action_type;
     }
 
-    public void setAction_type(int action_type) {
+    public void setAction_type(String action_type) {
         this.action_type = action_type;
     }
 
@@ -54,30 +91,11 @@ public class MsgBean {
         this.action_content = action_content;
     }
 
-    public long getSend_time() {
-        return send_time;
+    public int getStatus() {
+        return status;
     }
 
-    public void setSend_time(long send_time) {
-        this.send_time = send_time;
-    }
-
-    public long getRead_time() {
-        return read_time;
-    }
-
-    public void setRead_time(long read_time) {
-        this.read_time = read_time;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
-/**
-
- "id": 2,
- "u_id": 0,
- "content": "这是一条测试通知",
- "action_type": "",
-
- "action_content": "",
- "send_time": 1499762967,
- "read_time": 0
- */

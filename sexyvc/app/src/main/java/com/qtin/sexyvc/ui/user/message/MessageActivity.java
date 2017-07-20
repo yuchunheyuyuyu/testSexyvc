@@ -31,6 +31,7 @@ public class MessageActivity extends MyBaseActivity {
     TextView tvRight;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+    private MessageFrag messageFrag;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -54,7 +55,8 @@ public class MessageActivity extends MyBaseActivity {
         lineMessage.setVisibility(View.VISIBLE);
 
         ArrayList<Fragment> frags=new ArrayList<>();
-        frags.add(new MessageFrag());
+        messageFrag=new MessageFrag();
+        frags.add(messageFrag);
         frags.add(new NoticeFrag());
         MyViewPagerAdapter adapter=new MyViewPagerAdapter(getSupportFragmentManager(),frags);
         viewPager.setAdapter(adapter);
@@ -71,11 +73,13 @@ public class MessageActivity extends MyBaseActivity {
                     lineMessage.setVisibility(View.VISIBLE);
                     tvNotice.setSelected(false);
                     lineNotice.setVisibility(View.INVISIBLE);
+                    tvRight.setVisibility(View.VISIBLE);
                 }else{
                     tvMessage.setSelected(false);
                     lineMessage.setVisibility(View.INVISIBLE);
                     tvNotice.setSelected(true);
                     lineNotice.setVisibility(View.VISIBLE);
+                    tvRight.setVisibility(View.GONE);
                 }
             }
 
@@ -94,6 +98,7 @@ public class MessageActivity extends MyBaseActivity {
                 finish();
                 break;
             case R.id.tvRight:
+                messageFrag.changeAllReadStatus();
                 break;
             case R.id.tvMessage:
                 viewPager.setCurrentItem(0);

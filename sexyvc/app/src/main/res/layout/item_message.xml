@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/contentContainer"
     android:background="@drawable/pale_grey_two_white_selector"
     android:orientation="vertical"
     android:paddingLeft="16dp"
@@ -15,11 +16,13 @@
         android:paddingRight="16dp">
 
         <ImageView
+            android:id="@+id/ivMsg"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:src="@drawable/icon_msg_reaction" />
 
         <TextView
+            android:id="@+id/tvMsgTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
@@ -30,6 +33,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
@@ -38,6 +42,23 @@
             android:textColor="@color/black30"
             android:textSize="12sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvMsgContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="1"
+        android:text="爱拖创始人时间，不给明确反馈"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="17dp" />
 
 
 </LinearLayout>

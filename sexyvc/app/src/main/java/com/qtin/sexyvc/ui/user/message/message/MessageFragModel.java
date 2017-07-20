@@ -5,10 +5,12 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.request.ChangeReadStatusRequest;
 import com.qtin.sexyvc.ui.user.bean.MsgItems;
-
+import java.util.List;
 import javax.inject.Inject;
-
 import rx.Observable;
 
 /**
@@ -24,6 +26,20 @@ public class MessageFragModel extends BaseModel<ServiceManager,CacheManager> imp
 
     @Override
     public Observable<BaseEntity<MsgItems>> queryMessage(String token, long id, int page_size) {
-        return null;
+        return mServiceManager.getCommonService().queryMessage(token,id,page_size);
+    }
+
+    @Override
+    public String getToken() {
+        List<UserEntity> list=mCacheManager.getDaoSession().getUserEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0).getU_token();
+        }
+        return "";
+    }
+
+    @Override
+    public Observable<CodeEntity> changeReadStatus(ChangeReadStatusRequest request) {
+        return mServiceManager.getCommonService().changeReadStatus(request);
     }
 }

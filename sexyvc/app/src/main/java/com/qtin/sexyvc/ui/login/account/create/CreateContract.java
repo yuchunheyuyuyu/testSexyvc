@@ -7,7 +7,7 @@ import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
-
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import rx.Observable;
 
 /**
@@ -26,5 +26,6 @@ public interface CreateContract {
         Observable<BaseEntity<UserEntity>> doRegister(RegisterRequestEntity entity);
 
         boolean isLogin();
+        void saveUsrInfo(UserInfoEntity entity);
     }
 }

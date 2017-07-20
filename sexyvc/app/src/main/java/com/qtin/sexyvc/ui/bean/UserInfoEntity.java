@@ -13,23 +13,21 @@ import org.greenrobot.greendao.annotation.Id;
 public class UserInfoEntity implements Parcelable {
     @Id
     private String  token;
-
     private int has_project;
-
     private String business_card;
     private String u_nickname;
+
     private int u_gender;
     private String u_avatar;
     private String u_signature;
-
     private String u_phone;
+
     private String u_email;
     private String u_backup_phone;
     private String u_backup_email;
-
     private String u_company;
-    private String u_title;
 
+    private String u_title;
     private int u_auth_state;
     private int u_auth_type;//0未填写，1投资人，2创始人，3FA
 
