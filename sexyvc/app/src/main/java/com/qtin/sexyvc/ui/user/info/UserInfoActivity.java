@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
@@ -36,14 +35,12 @@ import com.qtin.sexyvc.ui.user.position.PositionActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -326,7 +323,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 if (selectPhotoDialog != null) {
                     selectPhotoDialog.dismiss();
                 }
-                takePhoto();
+               takePhoto();
+
             }
         });
         btn_error.setOnClickListener(new View.OnClickListener() {
@@ -500,6 +498,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
             e.printStackTrace();
         }
     }
+
+
 
     public void goToAlbum() {
         Intent picture = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

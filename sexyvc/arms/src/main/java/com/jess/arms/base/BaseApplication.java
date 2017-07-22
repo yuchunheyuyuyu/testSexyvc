@@ -1,8 +1,8 @@
 package com.jess.arms.base;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Point;
+import android.support.multidex.MultiDexApplication;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -26,7 +26,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * +androideventbus
  * +butterknife组成
  */
-public abstract class BaseApplication extends Application {
+public abstract class BaseApplication extends MultiDexApplication {
     static private BaseApplication mApplication;
     private ClientModule mClientModule;
     private AppModule mAppModule;

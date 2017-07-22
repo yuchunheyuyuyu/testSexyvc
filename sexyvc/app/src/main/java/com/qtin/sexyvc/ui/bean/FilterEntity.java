@@ -8,6 +8,15 @@ public class FilterEntity {
     private int key_id;
     private String type_name;
     private long type_id;
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public long getType_id() {
         return type_id;

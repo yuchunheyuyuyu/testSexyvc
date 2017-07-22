@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.UiUtils;
@@ -343,6 +344,26 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 return view;
             }
         };
+
+        domainFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(view instanceof LinearLayout){
+                    LinearLayout layout= (LinearLayout) view;
+                    TextView tv= (TextView) layout.getChildAt(0);
+                    if(industryData.get(position).isSelected()){
+                        industryData.get(position).setSelected(false);
+                        tv.setSelected(false);
+                    }else{
+                        industryData.get(position).setSelected(true);
+                        tv.setSelected(true);
+                    }
+                }
+
+                return false;
+            }
+        });
+
         domainFlowLayout.setAdapter(domainAdapter);
         popupViews.add(view);
     }
@@ -376,6 +397,25 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 return view;
             }
         };
+
+        stageFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(view instanceof LinearLayout){
+                    LinearLayout layout= (LinearLayout) view;
+                    TextView tv= (TextView) layout.getChildAt(0);
+                    if(turnData.get(position).isSelected()){
+                        turnData.get(position).setSelected(false);
+                        tv.setSelected(false);
+                    }else{
+                        turnData.get(position).setSelected(true);
+                        tv.setSelected(true);
+                    }
+                }
+
+                return false;
+            }
+        });
 
         stageFlowLayout.setAdapter(stageAdapter);
         popupViews.add(view);

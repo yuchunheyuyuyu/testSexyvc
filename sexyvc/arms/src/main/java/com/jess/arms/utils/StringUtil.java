@@ -187,4 +187,28 @@ public class StringUtil {
         }
         return sb.toString();
     }
+
+    /**
+     * 是不是纯数字和字母
+     * @param psd
+     * @return
+     */
+    public static boolean isPure(String psd) {
+        Pattern p = Pattern.compile("^[a-zA-Z].*[0-9]|.*[0-9].*[a-zA-Z]");
+        Matcher m = p.matcher(psd);
+        return m.matches();
+    }
+
+    public static boolean checkPasswordFormat(String password){
+        if(isBlank(password)){
+            return false;
+        }
+        if(password.length()<8){
+            return false;
+        }
+        if(isPure(password)){
+            return false;
+        }
+        return true;
+    }
 }
