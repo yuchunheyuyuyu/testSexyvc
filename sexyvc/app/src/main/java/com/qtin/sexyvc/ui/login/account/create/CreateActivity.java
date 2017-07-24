@@ -69,6 +69,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
         DaggerCreateComponent.builder().appComponent(appComponent).createModule(new CreateModule(this)).build().inject(this);
     }
 
+
     @Override
     protected boolean isContaineFragment() {
         return false;
@@ -104,6 +105,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     @Override
     protected void onPause() {
         super.onPause();
+        mHandler.removeCallbacks(runnable);
     }
 
     @Override
@@ -144,6 +146,10 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
                 break;
             case R.id.tvCreateAccount:
                 String code_value=etVertifyCode.getText().toString();
+                if(StringUtil.isBlank(code_value)){
+                    showMessage("验证码不能为空");
+                    return;
+                }
                 if(etPhone.isMobileNO()&& !StringUtil.isBlank(code_value)){
                     mPresenter.validateCode(etPhone.getPhoneText(),code_value);
                 }

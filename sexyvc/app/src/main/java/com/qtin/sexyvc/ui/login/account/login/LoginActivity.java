@@ -81,7 +81,20 @@ public class LoginActivity extends MyBaseActivity<LoginPresent> implements Login
                 break;
             case R.id.tvLogin:
                 String username=etPhone.getPhoneText();
+                if(StringUtil.isBlank(username)){
+                    showMessage("请输入手机号");
+                    return;
+                }
+                if(!StringUtil.isMobile(username)){
+                    showMessage("手机号输入不正确");
+                    return;
+                }
+
                 String password=etPassword.getText().toString();
+                if(StringUtil.isBlank(password)){
+                    showMessage("请输入密码");
+                    return;
+                }
                 mPresenter.login(username,password,customApplication.deviceToken);
                 break;
             case R.id.tvForgetPassword:

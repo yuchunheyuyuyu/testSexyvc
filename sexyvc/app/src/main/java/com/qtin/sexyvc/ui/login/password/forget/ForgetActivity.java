@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -53,6 +54,12 @@ public class ForgetActivity extends MyBaseActivity<ForgetPresent> implements For
     };
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(runnable);
+    }
+
+    @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerForgetComponent.builder().appComponent(appComponent).forgetModule(new ForgetModule(this)).build().inject(this);
     }
@@ -95,7 +102,7 @@ public class ForgetActivity extends MyBaseActivity<ForgetPresent> implements For
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override

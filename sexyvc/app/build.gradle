@@ -28,7 +28,7 @@ android {
 
         applicationId "com.qtin.sexyvc"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         signingConfig signingConfigs.release
@@ -96,8 +96,9 @@ dependencies {
     compile 'com.tencent.bugly:crashreport:latest.release'
     //compile 'com.tencent.bugly:nativecrashreport:latest.release'
     compile 'org.greenrobot:greendao:3.2.2' // add library
-    compile 'com.android.support:multidex:1.0.1'
+    //compile 'com.android.support:multidex:1.0.1'
 
     //glide图像形状处理
     compile 'jp.wasabeef:glide-transformations:2.0.0'
+    //compile 'com.yanzhenjie:permission:1.0.8'
 }

@@ -93,8 +93,13 @@ public class ModifyPasswordActivity extends MyBaseActivity<ModifyPasswordPresent
                 String newPwd1=etNewPassword1.getText().toString();
                 String newPwd2=etNewPassword2.getText().toString();
 
-                if(StringUtil.checkPasswordFormat(oldPwd)){
-                    showMessage("旧密码长度范围在8-20位数字/字母");
+                if(StringUtil.isBlank(oldPwd)){
+                    showMessage("旧密码不能为空");
+                    return;
+                }
+
+                if(!newPwd1.equals(newPwd2)){
+                    showMessage("两次新密码输入不同");
                     return;
                 }
 
@@ -102,10 +107,7 @@ public class ModifyPasswordActivity extends MyBaseActivity<ModifyPasswordPresent
                     showMessage("新密码长度范围在8-20位数字/字母");
                     return;
                 }
-                if(!newPwd1.equals(newPwd2)){
-                    showMessage("两次新密码输入不同");
-                    return;
-                }
+
 
                 mPresenter.modifyPassword(oldPwd,newPwd1);
                 break;

@@ -24,6 +24,7 @@
             android:focusableInTouchMode="true"
             android:gravity="top"
             android:maxLines="4"
+            android:maxLength="140"
             android:padding="3dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black30"

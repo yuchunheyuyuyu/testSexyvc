@@ -66,6 +66,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     private EditText etInputComment;
     private Dialog replyDialog;
+    private SubjectContentEntity mDetailBean;
 
     private final static long DEFALUT_REPLY_ID=0;
 
@@ -227,7 +228,8 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
             if (detailBean.getDetail() != null) {
-                data.add(detailBean.getDetail());
+                mDetailBean=detailBean.getDetail();
+                data.add(mDetailBean);
                 tvTitle.setText(StringUtil.formatString(detailBean.getDetail().getTitle()));
             }
         }
@@ -269,6 +271,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 entity.setLike(entity.getLike() - 1);
             }
         }
+        mDetailBean.setReply_count(mDetailBean.getReply_count()+1);
         mAdapter.notifyDataSetChanged();
     }
 

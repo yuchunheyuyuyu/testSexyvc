@@ -45,6 +45,7 @@
             android:id="@+id/flowLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:layout_weight="1" />
 
         <TextView
@@ -67,5 +68,19 @@
             android:src="@drawable/good_selector" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCommentCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_marginTop="13dp"
+        android:lineSpacingExtra="6sp"
+        android:text="4 条回复"
+        android:textColor="@color/slate"
+        android:textSize="12sp" />
+
 
 </LinearLayout>

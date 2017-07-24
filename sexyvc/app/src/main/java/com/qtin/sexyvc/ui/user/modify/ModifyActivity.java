@@ -312,39 +312,43 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     editSuccess();
 
                 }else if (modifyType == MODIFY_NICK) {
-                    nick = etContent.getText().toString();
+                    nick = etContent.getText().toString().trim();
                     if (StringUtil.isBlank(nick)) {
                         showMessage("昵称不能为空");
                         return;
                     }
                     mPresenter.editNick(nick);
                 } else if (modifyType == MODIFY_EMAIL) {
-                    u_email = etEmail.getText().toString();
-                    u_backup_email = etEmailAlternate.getText().toString();
+                    u_email = etEmail.getText().toString().trim();
+                    u_backup_email = etEmailAlternate.getText().toString().trim();
 
                     if (!StringUtil.isEmail(u_email)) {
                         showMessage("邮箱格式不合法");
                         return;
                     }
+                    if (!StringUtil.isEmail(u_backup_email)) {
+                        showMessage("备用邮箱格式不合法");
+                        return;
+                    }
                     mPresenter.editEmail(u_email, u_backup_email);
 
                 } else if (modifyType == MODIFY_INTRODUCE) {
-                    u_signature = etIntroduce.getText().toString();
+                    u_signature = etIntroduce.getText().toString().trim();
                     if (StringUtil.isBlank(u_signature)) {
                         showMessage("自我介绍不能为空");
                         return;
                     }
                     mPresenter.editSignature(u_signature);
                 } else if (modifyType == MODIFY_PHONE) {
-                    u_phone = tvPhone.getText().toString();
-                    u_backup_phone = etPhoneBackup.getPhoneText();
+                    u_phone = tvPhone.getText().toString().trim();
+                    u_backup_phone = etPhoneBackup.getPhoneText().trim();
                     if (!etPhoneBackup.isMobileNO()) {
                         showMessage("手机格式不合法");
                         return;
                     }
                     mPresenter.editPhone(u_backup_phone);
                 } else if ((modifyType == MODIFY_PROJECT_NAME)) {
-                    project_name = etContent.getText().toString();
+                    project_name = etContent.getText().toString().trim();
                     if (StringUtil.isBlank(project_name)) {
                         showMessage("项目名称不能为空");
                         return;
@@ -352,15 +356,15 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     editSuccess();
 
                 } else if (modifyType == MODIFY_PROJECT_INTRODUCE) {
-                    project_introduce = etIntroduce.getText().toString();
+                    project_introduce = etIntroduce.getText().toString().trim();
                     if (StringUtil.isBlank(project_introduce)) {
                         showMessage("项目介绍不能为空");
                         return;
                     }
                     editSuccess();
                 } else if (modifyType == MODIFY_CONCERN_TELPHONE) {
-                    contact_phone = etPhone2.getPhoneText();
-                    contact_backup_phone = etPhoneBackup2.getPhoneText();
+                    contact_phone = etPhone2.getPhoneText().trim();
+                    contact_backup_phone = etPhoneBackup2.getPhoneText().trim();
                     if (!etPhone2.isMobileNO()) {
                         showMessage("手机格式不合法");
                         return;
@@ -373,8 +377,8 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     mPresenter.editContactPhone(contact_id, contact_phone, contact_backup_phone);
 
                 } else if (modifyType == MODIFY_CONCERN_EMAIL) {
-                    contact_email = etEmail.getText().toString();
-                    contact_backup_email = etEmailAlternate.getText().toString();
+                    contact_email = etEmail.getText().toString().trim();
+                    contact_backup_email = etEmailAlternate.getText().toString().trim();
 
                     if (!StringUtil.isEmail(contact_email)) {
                         showMessage("邮箱格式不合法");
@@ -387,7 +391,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     mPresenter.editContactEmail(contact_id, contact_email, contact_backup_email);
 
                 } else if (modifyType == MODIFY_CONCERN_WECAHT) {
-                    contact_wechat = etContent.getText().toString();
+                    contact_wechat = etContent.getText().toString().trim();
                     if (StringUtil.isBlank(contact_wechat)) {
                         showMessage("微信不能为空");
                         return;
@@ -395,7 +399,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     mPresenter.editContactWechat(contact_id, contact_wechat);
 
                 } else if (modifyType == MODIFY_CONCERN_REMARK) {
-                    contact_remark = etIntroduce.getText().toString();
+                    contact_remark = etIntroduce.getText().toString().trim();
                     if (StringUtil.isBlank(contact_remark)) {
                         showMessage("备注内容不能为空");
                         return;

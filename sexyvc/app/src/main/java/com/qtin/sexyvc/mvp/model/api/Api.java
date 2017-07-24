@@ -6,10 +6,10 @@ package com.qtin.sexyvc.mvp.model.api;
  */
 public interface Api {
     String APP_DOMAIN = "https://api.github.com/users";
-    String QINIU_TOKEN="http://192.168.0.55:8088/admin/qiniu/token";
+    String QINIU_TOKEN="http://demo.api.sexyvc.com/admin/qiniu/token";
 
     int RequestSuccess = 0;
-    String BASE_URL="http://192.168.0.55:9099/";
+    String BASE_URL="http://demo.api.sexyvc.com/";
 
     String IMAGE_URL="http://oli02rut3.bkt.clouddn.com/";
 }

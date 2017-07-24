@@ -62,8 +62,8 @@
     <string name="investor_join_comment">|  评论 </string>
     <string name="hint_input_vertify_code">请输入验证码</string>
     <string name="hint_input_password">请输入密码</string>
-    <string name="hint_password_rule">设置密码 (至少包含8位数字)</string>
-    <string name="hint_new_password_rule">新密码 (至少包含8位数字)</string>
+    <string name="hint_password_rule">设置密码 (8-20位数字/字母组合)</string>
+    <string name="hint_new_password_rule">新密码 (8-20位数字/字母组合)</string>
     <string name="hint_comfirm_password">确认密码</string>
 
     <string name="get_vertify_code">获取验证码</string>
@@ -204,6 +204,7 @@
     <string name="reply_comment">回复评论</string>
     <string name="has_no_comment">还没有人评论，来抢沙发吧</string>
     <string name="reply_count">条回复</string>
+    <string name="comment_count">条评论</string>
     <string name="additional">追评：</string>
 
     <string name="edit_road_comment">路演评价</string>

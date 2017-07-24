@@ -140,7 +140,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
             holder.tvDate.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
-            if(bean.getReply_count()>0){
+            if(bean.getReply_count()==0){
                 holder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_comment));
             }else{
                 holder.tvCommentCount.setText(bean.getReply_count()+context.getResources().getString(R.string.reply_count));

@@ -30,7 +30,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="25dp"
         app:cardElevation="2dp"
-        app:contentPaddingLeft="60px">
+        app:contentPaddingLeft="40px">
 
         <com.qtin.sexyvc.ui.widget.PhoneEditText
             android:id="@+id/etPhone"
@@ -55,7 +55,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="25dp"
         app:cardElevation="2dp"
-        app:contentPaddingLeft="60px">
+        app:contentPaddingLeft="40px">
 
         <EditText
             android:id="@+id/etPassword"

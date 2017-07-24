@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -20,7 +22,9 @@ import com.qtin.sexyvc.ui.user.position.di.DaggerPositionComponent;
 import com.qtin.sexyvc.ui.user.position.di.PositionModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -122,7 +126,7 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -156,17 +160,26 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
                 finish();
                 break;
             case R.id.tvRight:
+                if(u_auth_type==0){
+                    showMessage("请选择身份");
+                    return;
+                }
                 mPresenter.editPosition(u_auth_type,u_company,u_title);
                 break;
             case R.id.authTypeContainer:
                 chooseTypeDialog();
                 break;
             case R.id.positionContainer:
-                Bundle position=new Bundle();
-                position.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_POSITION);
-                position.putString(ModifyActivity.MODIFY_INTENT_VALUE1,u_company);
-                position.putString(ModifyActivity.MODIFY_INTENT_VALUE2,u_title);
-                gotoActivityForResult(ModifyActivity.class,position, ModifyActivity.MODIFY_POSITION);
+
+                if(u_auth_type==0){
+                    showMessage("请选择身份");
+                }else{
+                    Bundle position=new Bundle();
+                    position.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_POSITION);
+                    position.putString(ModifyActivity.MODIFY_INTENT_VALUE1,u_company);
+                    position.putString(ModifyActivity.MODIFY_INTENT_VALUE2,u_title);
+                    gotoActivityForResult(ModifyActivity.class,position, ModifyActivity.MODIFY_POSITION);
+                }
                 break;
         }
     }

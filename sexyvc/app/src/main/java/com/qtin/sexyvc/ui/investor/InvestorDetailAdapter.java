@@ -163,7 +163,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //评分
         holder.tvRateNum.setText(bean.getScore_count() + " 人");
         holder.tvRating.setText(""+bean.getScore());
-        holder.ratingScore.setRating(bean.getScore());
+        holder.ratingScore.setRating10(bean.getScore());
         //路演评价
         if (bean.getRoad_show() != null) {
             holder.pbProfessionalQualities.setProgress(countRoadPercent(bean.getRoad_show().getProfessional()));

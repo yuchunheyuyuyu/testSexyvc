@@ -19,7 +19,6 @@ public class CommentContentBean implements DataTypeInterface{
 
     private String title;
     private String content;
-    private long fund_id;
     private String fund_name;
 
     private long investor_id;
@@ -103,14 +102,6 @@ public class CommentContentBean implements DataTypeInterface{
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public long getFund_id() {
-        return fund_id;
-    }
-
-    public void setFund_id(long fund_id) {
-        this.fund_id = fund_id;
     }
 
     public String getFund_name() {

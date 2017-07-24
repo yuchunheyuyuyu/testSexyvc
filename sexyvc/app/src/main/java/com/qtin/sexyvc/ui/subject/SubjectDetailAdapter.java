@@ -86,6 +86,12 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                     return tv;
                 }
             };
+            if(subjectDetailEntity.getReply_count()==0){
+                webHolder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_comment));
+            }else{
+                webHolder.tvCommentCount.setText(subjectDetailEntity.getReply_count()+context.getResources().getString(R.string.comment_count));
+            }
+
             webHolder.tvPraiseNum.setText("" + subjectDetailEntity.getPraise_count());
             webHolder.flowLayout.setMaxSelectCount(0);
             webHolder.flowLayout.setAdapter(tagAdapter);
@@ -192,6 +198,8 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView tvPraiseNum;
         @BindView(R.id.ivPraise)
         ImageView ivPraise;
+        @BindView(R.id.tvCommentCount)
+        TextView tvCommentCount;
 
         WebHolder(View view) {
             super(view);

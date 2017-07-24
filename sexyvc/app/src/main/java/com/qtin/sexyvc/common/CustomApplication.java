@@ -1,21 +1,34 @@
 package com.qtin.sexyvc.common;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
-
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.module.GlobeConfigModule;
 import com.jess.arms.http.GlobeHttpHandler;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.BuildConfig;
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.di.module.CacheModule;
 import com.qtin.sexyvc.di.module.DataBaseModule;
 import com.qtin.sexyvc.di.module.ServiceModule;
 import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.mvp.model.entity.DaoMaster;
 import com.qtin.sexyvc.mvp.model.entity.DaoSession;
+import com.qtin.sexyvc.ui.login.account.create.CreateActivity;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -24,14 +37,18 @@ import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
-
+import com.zhy.autolayout.utils.AutoUtils;
 import org.greenrobot.greendao.database.Database;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErroListener;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import timber.log.Timber;
 
 /**
@@ -43,6 +60,8 @@ public class CustomApplication extends BaseApplication {
     private DaoSession daoSession;
     private AppComponent mAppComponent;
     private RefWatcher mRefWatcher;//leakCanary观察器
+
+    private boolean isShowedLoginDialog=false;
 
     {
         PlatformConfig.setWeixin("wxdd991af9d0c9ddbe", "e957f59de5bbf4a3b584dd7891b21ecb");
@@ -111,6 +130,63 @@ public class CustomApplication extends BaseApplication {
         });
     }
 
+    private Dialog comfirmDialog;
+
+    protected void showComfirmDialog() {
+
+
+
+        final Activity activity=getAppManager().getCurrentActivity();
+        View view = View.inflate(activity, R.layout.one_button_dialog, null);
+        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+
+        tvDialogTitle.setText("您的账号已在另一个设备上登录");
+        btnRight.setText("确定");
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissComfirmDialog();
+                daoSession.getUserEntityDao().deleteAll();
+                Intent intent=new Intent(activity, CreateActivity.class);
+                activity.startActivity(intent);
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        comfirmDialog = new Dialog(activity);
+        comfirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        comfirmDialog.setContentView(view);
+        Window regionWindow = comfirmDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        comfirmDialog.setCanceledOnTouchOutside(false);
+        comfirmDialog.setCancelable(false);
+        comfirmDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                isShowedLoginDialog=false;
+            }
+        });
+        comfirmDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                isShowedLoginDialog=true;
+            }
+        });
+        comfirmDialog.show();
+    }
+
+    protected void dismissComfirmDialog(){
+        if(comfirmDialog!=null&&comfirmDialog.isShowing()){
+            comfirmDialog.dismiss();
+        }
+    }
+
+
 
     @Override
     public void onTerminate() {
@@ -168,10 +244,21 @@ public class CustomApplication extends BaseApplication {
                         try {
                             if (!TextUtils.isEmpty(httpResult)) {
                                 Log.e("","=========httpResult:"+httpResult);
+                                JSONObject jsonObject=new JSONObject(httpResult);
+                                if(!isShowedLoginDialog&&jsonObject.has("errCode")&&jsonObject.getInt("errCode")==10003){
+                                    Observable.just(1)
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(new Action1<Integer>() {
+                                                @Override
+                                                public void call(Integer integer) {
+                                                    showComfirmDialog();
+                                                }
+                                            });
+                                }
                                 Timber.tag(TAG).w(httpResult);
                             }
 
-                        } catch (Exception e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                             return response;
                         }

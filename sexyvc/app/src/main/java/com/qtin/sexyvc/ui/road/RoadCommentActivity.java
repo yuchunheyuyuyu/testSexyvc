@@ -441,7 +441,15 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     public void showAnswerDialog(final int optionPosition,final int addedQuestionPosition) {
         View view = LayoutInflater.from(this).inflate(R.layout.add_answer_dialog, null);
         etInputAnswer = (EditText) view.findViewById(R.id.etInputAnsewer);
-        //etInputQuestion.setHint(hint);
+        etInputAnswer.setHint("输入你的答案");
+        if(data.get(optionPosition) instanceof OptionFirstBean){
+            OptionFirstBean optionBean= (OptionFirstBean) data.get(optionPosition);
+            //添加答案
+            AddQuestionBean questionBean=optionBean.getAddQuestions().get(addedQuestionPosition);
+            String oldAnswer=StringUtil.formatString(questionBean.getAnswer());
+            etInputAnswer.setText(oldAnswer);
+            etInputAnswer.setSelection(oldAnswer.length());
+        }
         View tvAddAnswer = view.findViewById(R.id.tvAddAnswer);
 
         tvAddAnswer.setOnClickListener(new View.OnClickListener() {

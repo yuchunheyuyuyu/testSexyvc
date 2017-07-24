@@ -6,11 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -21,6 +25,11 @@ public class EfficiencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private ArrayList<FilterEntity> data;
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public EfficiencyAdapter(Context context, ArrayList<FilterEntity> data) {
         this.context = context;
@@ -34,15 +43,33 @@ public class EfficiencyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        FilterEntity entity = data.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+        final FilterEntity entity = data.get(position);
         ViewHolder holder= (ViewHolder) viewHolder;
+
+        if(entity.isSelected()){
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.barbie_pink_two));
+            holder.viewLine.setBackgroundColor(context.getResources().getColor(R.color.barbie_pink_two));
+        }else{
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.black50));
+            holder.viewLine.setBackgroundColor(context.getResources().getColor(R.color.silver_two));
+        }
+
         if(position==data.size()-1){
             holder.viewLine.setVisibility(View.INVISIBLE);
         }else{
             holder.viewLine.setVisibility(View.VISIBLE);
         }
         holder.tvName.setText(StringUtil.formatString(entity.getType_name()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null){
+                    onItemClickListener.onClickItem(position);
+                }
+            }
+        });
     }
 
     @Override

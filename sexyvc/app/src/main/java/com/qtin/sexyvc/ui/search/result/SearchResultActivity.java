@@ -74,6 +74,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     public static final int TYPE_DOMAIN = 0x001;//行业
     public static final int TYPE_STAGE = 0x002;//阶段
     public static final int TYPE_RATE = 0x003;//评分
+    private String [] rateStrs={"综合评分","专业素养","路演效率","反馈速度","经验分享","评论数"};
 
     private TagAdapter domainAdapter;
     private TagAdapter stageAdapter;
@@ -132,8 +133,17 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         mPresenter.getType("common_domain", TYPE_DOMAIN);
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_STAGE);
-        //获取投资阶段
-        mPresenter.getType("common_stage", TYPE_RATE);
+        //评分
+        for(int i=0;i<rateStrs.length;i++){
+            FilterEntity entity=new FilterEntity();
+            entity.setType_name(rateStrs[i]);
+            entity.setKey_id(i+1);
+            if(i==0){
+                entity.setSelected(true);
+            }
+            efficiencyData.add(entity);
+        }
+        ratingAdapter.notifyDataSetChanged();
 
         search();
     }
@@ -160,6 +170,13 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             Iterator<Integer> it=stageSet.iterator();
             while (it.hasNext()){
                 stages.add(turnData.get(it.next()).getType_id());
+            }
+        }
+
+        for(FilterEntity entity:efficiencyData){
+            if(entity.isSelected()){
+                request.setSort((int) entity.getType_id());
+                break;
             }
         }
 
@@ -262,11 +279,6 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 turnData.clear();
                 turnData.addAll(list);
                 stageAdapter.notifyDataChanged();
-                break;
-            case TYPE_RATE:
-                efficiencyData.clear();
-                efficiencyData.addAll(list);
-                ratingAdapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -427,6 +439,22 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         RecyclerView efficiencyRecycle = new RecyclerView(this);
         efficiencyRecycle.setLayoutManager(new LinearLayoutManager(this));
         ratingAdapter = new EfficiencyAdapter(this, efficiencyData);
+        ratingAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClickItem(int position) {
+                FilterEntity entity=efficiencyData.get(position);
+                if(!entity.isSelected()){
+                    for(FilterEntity filterEntity:efficiencyData){
+                        filterEntity.setSelected(false);
+                    }
+                    entity.setSelected(true);
+                    ratingAdapter.notifyDataSetChanged();
+                    dropDownMenu.closeMenu();
+                    page=1;
+                    search();
+                }
+            }
+        });
         efficiencyRecycle.setAdapter(ratingAdapter);
         popupViews.add(efficiencyRecycle);
     }

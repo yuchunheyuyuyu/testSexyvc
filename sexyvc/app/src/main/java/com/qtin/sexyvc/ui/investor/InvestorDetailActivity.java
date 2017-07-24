@@ -109,7 +109,14 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     public void onReceiveScore(CommentEvent commentEvent){
         investorBean.setHas_score(1);
         investorBean.setScore_value(commentEvent.getScore());
+
+        float totalScore=investorBean.getScore()*investorBean.getScore_count()+commentEvent.getScore();
+        int scoreCount=investorBean.getScore_count()+1;
+
+        investorBean.setScore_count(scoreCount);
+        investorBean.setScore(totalScore/scoreCount);
         setCommentStatus();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Subscriber(tag = ConstantUtil.COMMENT_SUCCESS, mode = ThreadMode.MAIN)
@@ -308,7 +315,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
             if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                 if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
                     ivComent.setVisibility(View.GONE);
-                    tvComment.setText("已评价(" + investorBean.getScore_value() + "星)");
+                    tvComment.setText("已评价(" + investorBean.getScore_value()/2 + "星)");
                     tvComment.setTextColor(getResources().getColor(R.color.black50));
                 } else if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 0) {
                     ivComent.setVisibility(View.GONE);
@@ -324,9 +331,9 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                     tvComment.setTextColor(getResources().getColor(R.color.barbie_pink_two));
                 }
             } else {
-                if (investorBean.getHas_comment() == 0) {
+                if (investorBean.getHas_comment() != 0) {
                     ivComent.setVisibility(View.GONE);
-                    tvComment.setText("已评价(" + investorBean.getScore_value() + "星)");
+                    tvComment.setText("已评价(" + investorBean.getScore_value()/2 + "星)");
                     tvComment.setTextColor(getResources().getColor(R.color.black50));
                 } else {
                     ivComent.setVisibility(View.VISIBLE);

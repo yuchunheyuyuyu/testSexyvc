@@ -128,6 +128,13 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     public void onReceiveScore(CommentEvent commentEvent){
         contactBean.setHas_score(1);
         contactBean.setScore_value(commentEvent.getScore());
+        float totalScore=contactBean.getScore()*contactBean.getScore_count()+commentEvent.getScore();
+        int scoreCount=contactBean.getScore_count()+1;
+
+        contactBean.setScore_count(scoreCount);
+        contactBean.setScore(totalScore/scoreCount);
+
+        setScore();
         setCommentStatus();
     }
 
@@ -181,7 +188,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                 if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
                     ivComent.setVisibility(View.GONE);
-                    tvComment.setText("已评价(" + contactBean.getScore_value() + "星)");
+                    tvComment.setText("已评价(" + contactBean.getScore_value()/2 + "星)");
                     tvComment.setTextColor(getResources().getColor(R.color.black50));
                 } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
                     ivComent.setVisibility(View.GONE);
@@ -197,9 +204,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                     tvComment.setTextColor(getResources().getColor(R.color.barbie_pink_two));
                 }
             } else {
-                if (contactBean.getHas_comment() == 0) {
+                if (contactBean.getHas_comment() != 0) {
                     ivComent.setVisibility(View.GONE);
-                    tvComment.setText("已评价(" + contactBean.getScore_value() + "星)");
+                    tvComment.setText("已评价(" + contactBean.getScore_value()/2 + "星)");
                     tvComment.setTextColor(getResources().getColor(R.color.black50));
                 } else {
                     ivComent.setVisibility(View.VISIBLE);
@@ -284,6 +291,10 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             pbFeedbackSpeed.setProgress(0);
             pbExperienceShare.setProgress(0);
         }
+        setScore();
+    }
+
+    private void setScore(){
         tvRating.setText("" + contactBean.getScore());
         ratingScore.setRating10(contactBean.getScore());
         //缺少参数

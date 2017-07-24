@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.create.investor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
@@ -120,17 +121,20 @@ public class CreateInvestorInfoActivity extends MyBaseActivity {
 
             if (type == ConstantUtil.TYPE_CREATE_INVESTOR_NAME) {
                 etContent.setHint(getResources().getString(R.string.investor_name));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 tvTitle.setText(getResources().getString(R.string.investor_name));
                 etContent.setInputType(InputType.TYPE_CLASS_TEXT);
 
             } else if (type == ConstantUtil.TYPE_CREATE_INVESTOR_FUND) {
                 etContent.setHint(getResources().getString(R.string.fund_name));
                 tvTitle.setText(getResources().getString(R.string.fund_name));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
                 etContent.setInputType(InputType.TYPE_CLASS_TEXT);
 
             } else if (type == ConstantUtil.TYPE_CREATE_INVESTOR_TITLE) {
                 etContent.setHint(getResources().getString(R.string.investor_title));
                 tvTitle.setText(getResources().getString(R.string.investor_title));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 etContent.setInputType(InputType.TYPE_CLASS_TEXT);
 
             } else {

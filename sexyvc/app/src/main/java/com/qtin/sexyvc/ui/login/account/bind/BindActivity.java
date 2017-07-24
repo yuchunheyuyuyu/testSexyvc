@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -61,6 +63,12 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerBindComponent.builder().appComponent(appComponent).bindModule(new BindModule(this)).build().inject(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(runnable);
     }
 
     @Override
@@ -133,15 +141,31 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
                 break;
             case R.id.tvGetVertify:
                 if(tvGetVertify.isSelected()){
-                    tvGetVertify.setSelected(false);
-                    mHandler.post(runnable);
                     //获取验证码
                     phoneStr=etPhone.getPhoneText();
+                    if(StringUtil.isBlank(phoneStr)){
+                        showMessage("手机号不能为空");
+                        return;
+                    }
+                    if(!StringUtil.isMobile(phoneStr)){
+                        showMessage("手机号输入不正确");
+                        return;
+                    }
+
+                    tvGetVertify.setSelected(false);
+                    mHandler.post(runnable);
+
                     mPresenter.getVertifyCode(phoneStr);
                 }
                 break;
             case R.id.tvBind:
-                mPresenter.validateCode(phoneStr,etVertifyCode.getText().toString());
+
+                String code_value=etVertifyCode.getText().toString();
+                if(StringUtil.isBlank(code_value)){
+                    showMessage("验证码不能为空");
+                    return;
+                }
+                mPresenter.validateCode(phoneStr,code_value);
                 break;
         }
     }

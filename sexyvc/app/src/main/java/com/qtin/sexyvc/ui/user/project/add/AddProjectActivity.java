@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
@@ -44,6 +45,7 @@ import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CashierInputFilter;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -53,6 +55,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -384,7 +387,9 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
         InputFilter[] filters={new CashierInputFilter()};
         holder.etMoney.setFilters(filters);
-        holder.etMoney.setText(""+projectBean.getLast_financial_amount());
+        String money=""+projectBean.getLast_financial_amount();
+        holder.etMoney.setText(money);
+        holder.etMoney.setSelection(money.length());
         if(projectBean.getLast_currency()==0){
             holder.tvMoneyType.setText(getResources().getString(R.string.dollar));
         }else{

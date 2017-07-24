@@ -94,23 +94,30 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
             case R.id.tvComplete:
                 String pwd1=etFirstPassword.getText().toString();
                 String pwd2=etSecondPassword.getText().toString();
-                if(pwd1.equals(pwd2)){
-                    if(type==1){
-                        RegisterRequestEntity entity=new RegisterRequestEntity();
-                        // 1：手机号，2：微信；3：QQ
-                        entity.setAccount_type(1);
-                        entity.setAvatar("");
-                        entity.setGender(0);
-                        entity.setNickname("");
-                        entity.setPassword(pwd1);
-                        entity.setUsername(phoneStr);
-                        entity.setWx_union_id("");
-                        entity.setDevice_token(customApplication.deviceToken);
+                if(!pwd1.equals(pwd2)){
+                    showMessage("两次密码输入不同");
+                    return;
+                }
 
-                        mPresenter.doRegister(entity);
-                    }else{
-                        mPresenter.bindMobile(phoneStr,pwd1);
-                    }
+                if(StringUtil.checkPasswordFormat(pwd1)){
+                    showMessage("新密码长度范围在8-20位数字/字母");
+                    return;
+                }
+                if(type==1){
+                    RegisterRequestEntity entity=new RegisterRequestEntity();
+                    // 1：手机号，2：微信；3：QQ
+                    entity.setAccount_type(1);
+                    entity.setAvatar("");
+                    entity.setGender(0);
+                    entity.setNickname("");
+                    entity.setPassword(pwd1);
+                    entity.setUsername(phoneStr);
+                    entity.setWx_union_id("");
+                    entity.setDevice_token(customApplication.deviceToken);
+
+                    mPresenter.doRegister(entity);
+                }else{
+                    mPresenter.bindMobile(phoneStr,pwd1);
                 }
                 break;
         }

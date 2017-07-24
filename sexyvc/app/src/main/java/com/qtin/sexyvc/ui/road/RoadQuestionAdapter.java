@@ -107,6 +107,10 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }else{
             holder.tvAddLinkQuestion.setVisibility(View.VISIBLE);
             holder.tvWhatQuestion.setVisibility(View.VISIBLE);
+            if(bean.getAddQuestions()!=null&&bean.getAddQuestions().size()>=3){
+                holder.tvAddLinkQuestion.setVisibility(View.GONE);
+            }
+
             holder.tvAddLinkQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

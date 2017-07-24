@@ -54,6 +54,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.tvFooter)
     TextView tvFooter;
+    private CommentContentBean detailBean;
 
     private long comment_id;
     private EditText etInputComment;
@@ -306,6 +307,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             entity.setReply_content("@" + replyEntity.getU_nickname() + ":" + content);
         }
         data.add(1, entity);
+        detailBean.setReply_count(detailBean.getReply_count()+1);
         mAdapter.notifyDataSetChanged();
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
@@ -327,8 +329,9 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
             if (commentBean.getDetail() != null) {
-                commentBean.getDetail().setAdditional(commentBean.getAdditional());
-                data.add(commentBean.getDetail());
+                detailBean=commentBean.getDetail();
+                detailBean.setAdditional(commentBean.getAdditional());
+                data.add(detailBean);
                 String name=StringUtil.formatString(commentBean.getDetail().getInvestor_name());
                 tvTitle.setText(String.format(getResources().getString(R.string.title_comment_detail),name));
             }
