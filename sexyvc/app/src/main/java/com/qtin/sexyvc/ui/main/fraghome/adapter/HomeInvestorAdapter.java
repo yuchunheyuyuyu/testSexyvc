@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -17,11 +16,9 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -79,7 +76,7 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
             holder.tvFundName.setText(StringUtil.formatString(entity.getFund_name()));
         }
 
-        holder.ratingScore.setRating10(entity.getScore());
+        holder.ratingScore.setRating(entity.getScore());
         if(entity.getU_id()>0){
             holder.ivAnthStatus.setVisibility(View.VISIBLE);
         }else{
@@ -111,7 +108,7 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
         @BindView(R.id.tvFundName)
         TextView tvFundName;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
 
         ViewHolder(View view) {
             super(view);

@@ -25,7 +25,7 @@ import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentContentBean;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.DeviceUtils;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.DateUtil;
 
@@ -127,7 +127,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
 
             //评分
-            holder.ratingScore.setRating10(bean.getScore());
+            holder.ratingScore.setRating(bean.getScore());
             //点赞
             if(bean.getHas_praise()==0){
                 holder.ivPraise.setSelected(false);
@@ -139,7 +139,13 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
             holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
-            holder.tvDate.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
+            long time=0;
+            try{
+                time=Long.parseLong(bean.getCreate_time());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            holder.tvDate.setText(DateUtil.getSpecialDate(time));
             if(bean.getReply_count()==0){
                 holder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_comment));
             }else{
@@ -209,7 +215,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         @BindView(R.id.tvFrom)
         TextView tvFrom;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvContent)

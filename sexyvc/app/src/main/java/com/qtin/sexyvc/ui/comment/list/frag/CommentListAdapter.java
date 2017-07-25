@@ -10,7 +10,7 @@ import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.DateUtil;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
         holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
         holder.ratingScore.invalidate();
-        holder.ratingScore.setRating10(entity.getScore());
+        holder.ratingScore.setRating(entity.getScore());
         holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +82,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @BindView(R.id.tvTo)
         TextView tvTo;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvComentContent)
         TextView tvComentContent;
         @BindView(R.id.tvTime)

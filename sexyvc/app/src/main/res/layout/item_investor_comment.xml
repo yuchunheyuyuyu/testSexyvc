@@ -39,16 +39,23 @@
             android:textColor="@color/black50"
             android:textSize="12sp" />
 
-        <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
             android:id="@+id/ratingScore"
             android:layout_width="wrap_content"
-            android:layout_height="10dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="12dp"
-            app:numStars="5"
-            app:rating="2.3"
-            app:starPadding="2dp"
-            app:starSize="10dp"
-            app:touchable="false" />
+            app:emptyDrawable="@drawable/star_l_blank"
+            app:filledDrawable="@drawable/star_l_full"
+            app:isIndicator="true"
+            app:minAllowedStars="0"
+            app:numStarsValue="5"
+            app:ratingValue="3"
+            app:starMargin="0dp"
+            app:starSizeValue="10dp"
+            app:starSpacing="1dp"
+            app:stepSizeValue="1" />
+
 
     </LinearLayout>
 

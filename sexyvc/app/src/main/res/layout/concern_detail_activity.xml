@@ -224,16 +224,22 @@
                                 android:textColor="@color/barbie_pink_two"
                                 android:textSize="28sp" />
 
-                            <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+                            <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
                                 android:id="@+id/ratingScore"
                                 android:layout_width="wrap_content"
-                                android:layout_height="10dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                app:minAllowedStars="0"
+                                app:numStarsValue="5"
+                                app:stepSizeValue="1"
                                 android:layout_marginTop="4dp"
-                                app:numStars="5"
-                                app:rating="0.0"
-                                app:starPadding="2dp"
-                                app:starSize="10dp"
-                                app:touchable="false" />
+                                app:starSizeValue="10dp"
+                                app:ratingValue="3"
+                                app:starMargin="2dp"
+                                app:starSpacing="1dp"
+                                app:isIndicator="true"
+                                app:emptyDrawable="@drawable/star_l_blank"
+                                app:filledDrawable="@drawable/star_l_full" />
 
                         </LinearLayout>
                     </android.support.v7.widget.CardView>

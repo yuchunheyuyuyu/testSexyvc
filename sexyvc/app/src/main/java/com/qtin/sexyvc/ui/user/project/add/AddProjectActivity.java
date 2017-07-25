@@ -52,9 +52,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,10 +134,10 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
         }else{
             projectBean=new ProjectBean();
+            projectBean.setLast_currency(1);
             tvTitle.setText(getResources().getString(R.string.title_add_project));
         }
-        tvName.setText(StringUtil.formatString(projectBean.getProject_name()));
-        tvIntroduce.setText(StringUtil.formatString(projectBean.getShort_intro()));
+        setValue();
 
         tvRight.setVisibility(View.VISIBLE);
 
@@ -152,7 +150,6 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
     private void setValue(){
         tvName.setText(StringUtil.formatString(projectBean.getProject_name()));
         tvIntroduce.setText(StringUtil.formatString(projectBean.getShort_intro()));
-
     }
 
     @Override
@@ -199,6 +196,11 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
                 if(projectBean.getDomain_id()==0){
                     showMessage("行业不能为空");
+                    return;
+                }
+
+                if(projectBean.getLast_stage_id()==0){
+                    showMessage("请选择轮次标签");
                     return;
                 }
 
@@ -311,11 +313,10 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             public void onClick(View v) {
                 dismissDomainDialog();
                 long domain_id=0;
-                Set<Integer> domainsSet=holder.flowLayout.getSelectedList();
-                if(domainsSet!=null&&!domainsSet.isEmpty()){
-                    Iterator<Integer> it=domainsSet.iterator();
-                    if (it.hasNext()){
-                        domain_id=domainData.get(it.next()).getType_id();
+                for(FilterEntity entity:domainData){
+                    if(entity.isSelected()){
+                        domain_id=entity.getType_id();
+                        break;
                     }
                 }
                 projectBean.setDomain_id(domain_id);
@@ -325,11 +326,38 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         domainAdapter = new TagAdapter<FilterEntity>(domainData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(AddProjectActivity.this).inflate(R.layout.item_filter_textview, holder.flowLayout, false);
+                View view = LayoutInflater.from(AddProjectActivity.this).inflate(R.layout.item_filter, holder.flowLayout, false);
+                //AutoUtils.auto(tv);
+                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
+                if(o.isSelected()){
+                    tv.setSelected(true);
+                }else{
+                    tv.setSelected(false);
+                }
                 tv.setText(o.getType_name());
-                return tv;
+                return view;
             }
         };
+        holder.flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(view instanceof LinearLayout){
+                    LinearLayout layout= (LinearLayout) view;
+                    TextView tv= (TextView) layout.getChildAt(0);
+                    if(!domainData.get(position).isSelected()){
+                        for(FilterEntity entity:domainData){
+                            entity.setSelected(false);
+                        }
+                        domainData.get(position).setSelected(true);
+                        tv.setSelected(true);
+                        domainAdapter.notifyDataChanged();
+                    }
+                }
+
+                return false;
+            }
+        });
+
         setDomainStatus();
 
         holder.flowLayout.setAdapter(domainAdapter);
@@ -362,11 +390,38 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         stageAdapter=new TagAdapter<FilterEntity>(stageData) {
             @Override
             public View getView(FlowLayout parent, int position, FilterEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(AddProjectActivity.this).inflate(R.layout.item_filter_textview, holder.flowLayout, false);
+                View view = LayoutInflater.from(AddProjectActivity.this).inflate(R.layout.item_filter, holder.flowLayout, false);
+                //AutoUtils.auto(tv);
+                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
                 tv.setText(o.getType_name());
-                return tv;
+                if(o.isSelected()){
+                    tv.setSelected(true);
+                }else{
+                    tv.setSelected(false);
+                }
+                return view;
             }
         };
+        holder.flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(view instanceof LinearLayout){
+                    LinearLayout layout= (LinearLayout) view;
+                    TextView tv= (TextView) layout.getChildAt(0);
+
+                    if(!stageData.get(position).isSelected()){
+                        for(FilterEntity entity:stageData){
+                            entity.setSelected(false);
+                        }
+                        stageData.get(position).setSelected(true);
+                        tv.setSelected(true);
+                        stageAdapter.notifyDataChanged();
+                    }
+                }
+
+                return false;
+            }
+        });
 
         setStageStatus();
         holder.flowLayout.setAdapter(stageAdapter);
@@ -388,8 +443,13 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         InputFilter[] filters={new CashierInputFilter()};
         holder.etMoney.setFilters(filters);
         String money=""+projectBean.getLast_financial_amount();
-        holder.etMoney.setText(money);
-        holder.etMoney.setSelection(money.length());
+        if(projectBean.getLast_financial_amount()==0){
+            holder.etMoney.setText("");
+        }else{
+            holder.etMoney.setText(money);
+            holder.etMoney.setSelection(money.length());
+        }
+
         if(projectBean.getLast_currency()==0){
             holder.tvMoneyType.setText(getResources().getString(R.string.dollar));
         }else{
@@ -407,15 +467,24 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             public void onClick(View v) {
                 dismissStageDialog();
                 long stage_id=0;
-                Set<Integer> stageSet=holder.flowLayout.getSelectedList();
-                if(stageSet!=null&&!stageSet.isEmpty()){
-                    Iterator<Integer> it=stageSet.iterator();
-                    if (it.hasNext()){
-                        stage_id=stageData.get(it.next()).getType_id();
+                for(FilterEntity entity:stageData){
+                    if(entity.isSelected()){
+                        stage_id=entity.getType_id();
+                        break;
                     }
                 }
+                if(stage_id==0){
+                    showMessage("请选择轮次标签");
+                    return;
+                }
                 projectBean.setLast_stage_id(stage_id);
-                projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
+                try{
+                    projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
+                }catch(Exception e){
+                    e.printStackTrace();
+                    projectBean.setLast_financial_amount(0);
+                }
+
                 setStageText();
             }
         });
@@ -533,6 +602,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             for(int i=0;i<domainData.size();i++){
                 if(domainData.get(i).getType_id()==projectBean.getDomain_id()){
                     tvDomain.setText(domainData.get(i).getType_name());
+                    domainData.get(i).setSelected(true);
                     break;
                 }
             }
@@ -554,10 +624,30 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         if(stageData!=null){
             for(int i=0;i<stageData.size();i++){
                 if(stageData.get(i).getType_id()==projectBean.getLast_stage_id()){
-                    tvFinance.setText(stageData.get(i).getType_name());
+                    setStageValue(stageData.get(i).getType_name());
+                    stageData.get(i).setSelected(true);
                     break;
                 }
             }
+
+        }
+    }
+
+    private void setStageValue(String stage){
+        long money=projectBean.getLast_financial_amount();
+        if(money<=0){
+            tvFinance.setText(StringUtil.formatString(stage));
+        }else{
+            StringBuilder sb=new StringBuilder();
+            sb.append(stage);
+            sb.append("  ");
+            sb.append(money);
+            if(projectBean.getLast_currency()==0){
+                sb.append(getResources().getString(R.string.dollar));
+            }else{
+                sb.append(getResources().getString(R.string.renminbi));
+            }
+            tvFinance.setText(sb.toString());
         }
     }
 
@@ -597,8 +687,11 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
     @Override
     public void onEditSuccess(ProjectBean bean) {
-
-
+        Intent intent=new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,bean);
+        intent.putExtras(bundle);
+        setResult(0,intent);
         finish();
     }
 

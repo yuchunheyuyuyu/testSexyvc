@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -32,7 +33,7 @@ import com.qtin.sexyvc.ui.more.MoreCaseActivity;
 import com.qtin.sexyvc.ui.more.MoreInvestorActivity;
 import com.qtin.sexyvc.ui.more.comment.MoreCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
@@ -111,7 +112,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
-        holder.ratingScore.setRating10(bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
         } else {
@@ -144,7 +145,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 .build());
 
         holder.tvName.setText(StringUtil.formatString(bean.getFund_name()));
-        holder.ratingScore.setRating10(bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         holder.tvRating.setText("" + bean.getScore());
         //holder.tvRateNum.setText(+"人");
         //holder.tvLocation.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.get));
@@ -356,7 +357,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.tvRating)
         TextView tvRating;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.pbProfessionalQualities)
         ProgressBar pbProfessionalQualities;
         @BindView(R.id.pbFeedbackSpeed)
@@ -414,7 +415,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.tvTo)
         TextView tvTo;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvContent)

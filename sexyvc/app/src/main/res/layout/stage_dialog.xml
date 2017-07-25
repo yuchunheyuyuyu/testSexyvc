@@ -43,7 +43,7 @@
                     android:background="@null"
                     android:gravity="center_vertical"
                     android:hint="@string/hint_last_finance"
-                    android:inputType="numberDecimal"
+                    android:digits="@string/money_vcode"
                     android:maxLines="1"
                     android:textColor="@color/black70"
                     android:textColorHint="@color/black30"

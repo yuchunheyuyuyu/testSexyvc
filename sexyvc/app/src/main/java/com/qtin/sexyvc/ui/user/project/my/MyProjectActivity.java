@@ -55,6 +55,8 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
     private boolean isDomainDownload;
     private boolean isStageDownload;
 
+    private static final int REQUEST_CODE_EDIT=0x11a;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMyProjectComponent.builder().appComponent(appComponent).myProjectModule(new MyProjectModule(this)).build().inject(this);
@@ -88,7 +90,7 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
                 Bundle bundle=new Bundle();
                 bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,true);
                 bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,data.get(position));
-                gotoActivity(AddProjectActivity.class,bundle);
+                gotoActivityForResult(AddProjectActivity.class,bundle,REQUEST_CODE_EDIT);
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -96,6 +98,24 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
         mPresenter.getType("common_domain", TYPE_DOMAIN);
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_STAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            return;
+        }
+
+        switch(requestCode){
+            case REQUEST_CODE_EDIT:
+                ProjectBean bean=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
+                this.data.clear();
+                this.data.add(bean);
+                mAdapter.notifyDataSetChanged();
+
+                break;
+        }
     }
 
     @Override

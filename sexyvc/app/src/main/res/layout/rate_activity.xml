@@ -97,19 +97,22 @@
                 android:textColor="@color/black90"
                 android:textSize="14sp" />
 
-
-            <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+            <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
                 android:id="@+id/ratingScore"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_marginLeft="4dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:minAllowedStars="0"
+                app:numStarsValue="5"
+                app:stepSizeValue="1"
+                app:starSizeValue="32dp"
                 android:layout_marginTop="12dp"
-                app:numStars="5"
-                app:clearRatingEnabled="true"
-                app:rating="0"
-                app:starPadding="8dp"
-                app:starSize="32dp"
-                app:touchable="true" />
+                app:ratingValue="0"
+                app:starMargin="0dp"
+                app:starSpacing="4dp"
+                app:isIndicator="false"
+                app:emptyDrawable="@drawable/star_l_blank"
+                app:filledDrawable="@drawable/star_l_full" />
 
             <TextView
                 android:layout_width="wrap_content"

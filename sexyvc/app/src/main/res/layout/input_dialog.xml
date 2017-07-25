@@ -38,6 +38,8 @@
             android:id="@+id/etContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:maxLength="8"
             android:textColor="@color/black70"
             android:layout_marginLeft="32px"
             android:layout_marginRight="32px"

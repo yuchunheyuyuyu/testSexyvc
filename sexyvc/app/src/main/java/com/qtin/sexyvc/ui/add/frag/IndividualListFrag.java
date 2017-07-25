@@ -229,7 +229,11 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                 if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                     if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
                         if(investorBean.getHas_roadshow()==0){
-                            gotoRoad();
+                            if(investorBean.getHas_score()==0){
+                                gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                            }else{
+                                gotoRoad();
+                            }
                         }else{
                             String format=getResources().getString(R.string.format_has_road);
                             String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
@@ -242,14 +246,14 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                         }
                     }else{
                         if(investorBean.getHas_score()==0){
-                            gotoScore();
+                            gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                         }else{
                             gotoComment();
                         }
                     }
                 } else {
                     if(investorBean.getHas_score()==0){
-                        gotoScore();
+                        gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                     }else{
                         gotoComment();
                     }
@@ -271,28 +275,30 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     /**
      * 进入评分
      */
-    private void gotoScore(){
-        gotoActivity(RateActivity.class,getBundle());
+    private void gotoScore(int intent){
+        gotoActivity(RateActivity.class,getBundle(intent));
     }
 
     /**
+     * 进入评论或者追评
      */
     private void gotoComment(){
-        gotoActivity(ReviewActivity.class,getBundle());
+        gotoActivity(ReviewActivity.class,getBundle(ConstantUtil.INTENT_TEXT_COMMENT));
     }
 
     /**
      * 进入路演评价
      */
     private void gotoRoad() {
-        Bundle bundle=getBundle();
+        Bundle bundle=getBundle(ConstantUtil.INTENT_ROAD_COMMENT);
         bundle.putInt(ConstantUtil.INTENT_INDEX,0);
         gotoActivity(RoadCommentActivity.class, bundle);
     }
 
-    private Bundle getBundle(){
+    private Bundle getBundle(int intent){
         Bundle bundle=new Bundle();
         InvestorInfoBean infoBean=new InvestorInfoBean();
+        infoBean.setIntent(intent);
         infoBean.setInvestor_id(investorBean.getInvestor_id());
         infoBean.setFund_id(investorBean.getFund_id());
         infoBean.setFund_name(investorBean.getFund_name());

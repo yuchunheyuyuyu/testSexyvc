@@ -82,17 +82,24 @@
                 android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-
-
-                <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+                
+                <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
                     android:id="@+id/ratingScore"
                     android:layout_width="wrap_content"
-                    android:layout_height="16dp"
-                    app:numStars="5"
-                    app:rating="2.3"
-                    app:starPadding="4dp"
-                    app:starSize="16dp"
-                    app:touchable="false" />
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:minAllowedStars="0"
+                    app:numStarsValue="5"
+                    app:stepSizeValue="1"
+                    app:starSizeValue="16dp"
+                    app:ratingValue="3"
+                    app:starMargin="0dp"
+                    app:starSpacing="2dp"
+                    app:isIndicator="true"
+                    app:emptyDrawable="@drawable/star_l_blank"
+                    app:filledDrawable="@drawable/star_l_full" />
+
+
 
                 <TextView
                     android:id="@+id/tvScore"

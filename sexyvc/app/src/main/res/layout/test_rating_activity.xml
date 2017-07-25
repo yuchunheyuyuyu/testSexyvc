@@ -27,9 +27,9 @@
         android:layout_margin="8dp"
         app:srb_borderColor="#f00"
         app:srb_fillColor="#f00"
+        app:srb_maxStarSize="40px"
         app:srb_pressedBorderColor="#f00"
         app:srb_pressedFillColor="#f00"
-        app:srb_maxStarSize="40px"
         app:srb_starBackgroundColor="#B7B7B7"
         app:srb_starBorderWidth="0.01"
         app:srb_starCornerRadius="50"
@@ -48,5 +48,8 @@
         app:srb_starBorderWidth="0.01"
         app:srb_starCornerRadius="0"
         app:srb_stepSize="0.5" />
+
+
+
 
 </LinearLayout>

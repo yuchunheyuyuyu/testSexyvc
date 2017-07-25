@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -25,9 +24,7 @@ import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
 import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.lang.reflect.Field;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -131,7 +128,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                     });
                 }
                 popupwindow.show(this);*/
-                gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                gotoActivityFadeForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
                 break;
         }
     }

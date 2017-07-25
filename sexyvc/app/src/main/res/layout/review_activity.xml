@@ -29,15 +29,23 @@
                     android:textColor="@color/black90"
                     android:textSize="14sp" />
 
-                <com.qtin.sexyvc.ui.widget.rating.BaseRatingBar
+                <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
                     android:id="@+id/ratingScore"
                     android:layout_width="wrap_content"
-                    android:layout_height="16dp"
-                    app:numStars="5"
-                    app:rating="2.3"
-                    app:starPadding="4dp"
-                    app:starSize="16dp"
-                    app:touchable="false" />
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:emptyDrawable="@drawable/star_l_blank"
+                    app:filledDrawable="@drawable/star_l_full"
+                    app:isIndicator="true"
+                    app:minAllowedStars="0"
+                    app:numStarsValue="5"
+                    app:ratingValue="3"
+                    app:starMargin="0dp"
+                    app:starSizeValue="16dp"
+                    app:starSpacing="2dp"
+                    app:stepSizeValue="1" />
+
+
             </LinearLayout>
 
             <View style="@style/line_style" />
@@ -60,8 +68,8 @@
                         android:layout_marginRight="16dp"
                         android:background="@null"
                         android:hint="@string/hint_review_title"
-                        android:maxLength="50"
                         android:lineSpacingExtra="6sp"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:textColor="@color/black90"
                         android:textColorHint="@color/black30"
@@ -72,17 +80,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_marginLeft="16dp"
-                        android:visibility="gone"
-                        android:gravity="center_vertical"
                         android:layout_marginRight="16dp"
                         android:background="@null"
-                        android:hint="@string/hint_review_title"
                         android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:hint="@string/hint_review_title"
                         android:lineSpacingExtra="6sp"
                         android:maxLines="1"
                         android:textColor="@color/black90"
                         android:textColorHint="@color/black30"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                 </FrameLayout>
 
@@ -98,9 +106,9 @@
                     android:layout_marginRight="16dp"
                     android:background="@null"
                     android:gravity="top"
-                    android:maxLength="3000"
                     android:hint="@string/hint_review_content"
                     android:lineSpacingExtra="6sp"
+                    android:maxLength="3000"
                     android:paddingTop="14dp"
                     android:textColor="@color/black90"
                     android:textColorHint="@color/black30"

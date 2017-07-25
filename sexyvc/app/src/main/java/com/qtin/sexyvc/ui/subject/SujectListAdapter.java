@@ -13,6 +13,8 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
+import com.qtin.sexyvc.ui.bean.OnBannerItemClickListener;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBannerEntity;
 import com.qtin.sexyvc.ui.subject.bean.SubjectListEntity;
@@ -35,9 +37,14 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int ITEM_BANNER = 0;
     public static final int ITEM_NORMAL = 1;
     private OnItemClickListener onItemClickListener;
-
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    private OnBannerClickListener onBannerClickListener;
+
+    public void setOnBannerClickListener(OnBannerClickListener onBannerClickListener) {
+        this.onBannerClickListener = onBannerClickListener;
     }
 
     private final CustomApplication mApplication;
@@ -69,8 +76,14 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         if(viewHolder instanceof BannerHolder){
             BannerHolder holder= (BannerHolder) viewHolder;
-            SubjectBannerEntity bannerEntity= (SubjectBannerEntity) data.get(position);
+            final SubjectBannerEntity bannerEntity= (SubjectBannerEntity) data.get(position);
             holder.bannerView.setData(bannerEntity.getBanners());
+            holder.bannerView.setOnItemClickListener(new OnBannerItemClickListener() {
+                @Override
+                public void onBannerClickItem(int position) {
+                    onBannerClickListener.onBannerClickItem(bannerEntity.getBanners().get(position));
+                }
+            });
         }else{
             SubjectHolder holder= (SubjectHolder) viewHolder;
             SubjectListEntity entity= (SubjectListEntity) data.get(position);

@@ -219,7 +219,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 etIntroduce.setHint(getResources().getString(R.string.hint_introduce));
                 tvTitle.setText(getResources().getString(R.string.title_introduce));
             } else if (modifyType == MODIFY_PROJECT_INTRODUCE) {
-                wordNumber = 200;
+                wordNumber = 140;
                 tvRight.setText(getResources().getString(R.string.comfirm));
                 tvTitle.setText(getResources().getString(R.string.project_introduce));
                 etIntroduce.setHint(getResources().getString(R.string.hint_introduce_project));

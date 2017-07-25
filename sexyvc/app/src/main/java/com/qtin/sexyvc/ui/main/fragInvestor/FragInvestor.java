@@ -21,14 +21,13 @@ import com.qtin.sexyvc.ui.main.fragInvestor.di.FragInvestorModule;
 import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
 
 /**
  * Created by ls on 17/4/14.
@@ -76,6 +75,8 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
                 mPresenter.getInvestorData(page, page_size);
             }
         });
+
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new InvestorAdapter(mRootView.getContext(), data);

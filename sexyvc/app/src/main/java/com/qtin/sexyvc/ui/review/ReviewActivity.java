@@ -17,7 +17,7 @@ import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.review.di.DaggerReviewComponent;
 import com.qtin.sexyvc.ui.review.di.ReviewModule;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import org.simple.eventbus.EventBus;
@@ -35,7 +35,7 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
     @BindView(R.id.tvRight)
     TextView tvRight;
     @BindView(R.id.ratingScore)
-    BaseRatingBar ratingScore;
+    RatingBar ratingScore;
     @BindView(R.id.etCommentTitle)
     EditText etCommentTitle;
     @BindView(R.id.tvCommentTitle)
@@ -92,7 +92,7 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
             etCommentContent.setHint(getResources().getString(R.string.hint_review_content));
         }
 
-        ratingScore.setRating10(investorInfoBean.getScore_value());
+        ratingScore.setRating(investorInfoBean.getScore_value());
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.commit));
         tvTitle.setText(getResources().getString(R.string.evaluate)+investorInfoBean.getInvestor_name());

@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
@@ -24,6 +25,8 @@ public class InvestorInfoBean implements Parcelable {
     private int has_roadshow;
     private String comment_title;
     private long comment_id;
+
+    private int intent;//0代表进入路演评价，1代表进入文字评价
 
     public long getFund_id() {
         return fund_id;
@@ -137,6 +140,14 @@ public class InvestorInfoBean implements Parcelable {
         this.comment_id = comment_id;
     }
 
+    public int getIntent() {
+        return intent;
+    }
+
+    public void setIntent(int intent) {
+        this.intent = intent;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -158,6 +169,7 @@ public class InvestorInfoBean implements Parcelable {
         dest.writeInt(this.has_roadshow);
         dest.writeString(this.comment_title);
         dest.writeLong(this.comment_id);
+        dest.writeInt(this.intent);
     }
 
     public InvestorInfoBean() {
@@ -178,6 +190,7 @@ public class InvestorInfoBean implements Parcelable {
         this.has_roadshow = in.readInt();
         this.comment_title = in.readString();
         this.comment_id = in.readLong();
+        this.intent = in.readInt();
     }
 
     public static final Parcelable.Creator<InvestorInfoBean> CREATOR = new Parcelable.Creator<InvestorInfoBean>() {

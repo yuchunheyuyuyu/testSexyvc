@@ -38,7 +38,7 @@ public class SetPasswordModel extends BaseModel<ServiceManager,CacheManager> imp
         if(list!=null&&!list.isEmpty()){
             mCacheManager.getDaoSession().getUserEntityDao().deleteAll();
         }
-        mCacheManager.getDaoSession().getUserEntityDao().save(entity);
+        mCacheManager.getDaoSession().getUserEntityDao().insert(entity);
     }
     @Override
     public boolean changeBindStatus(int bind) {

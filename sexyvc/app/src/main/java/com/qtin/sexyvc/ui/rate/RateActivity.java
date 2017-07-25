@@ -32,7 +32,8 @@ import com.qtin.sexyvc.ui.rate.di.DaggerRateComponent;
 import com.qtin.sexyvc.ui.rate.di.RateModule;
 import com.qtin.sexyvc.ui.request.RateRequest;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.road.RoadCommentActivity;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
@@ -76,7 +77,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
     @BindView(R.id.tvPosition)
     TextView tvPosition;
     @BindView(R.id.ratingScore)
-    BaseRatingBar ratingScore;
+    RatingBar ratingScore;
     @BindView(R.id.flowLayout)
     TagFlowLayout flowLayout;
     private TagAdapter tagAdapter;
@@ -124,6 +125,20 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         investorInfoBean = getIntent().getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
 
         tvRight.setVisibility(View.VISIBLE);
+        tvRight.setTextColor(getResources().getColor(R.color.black30));
+        ratingScore.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if(rating>0){
+                    tvRight.setSelected(true);
+                    tvRight.setTextColor(getResources().getColor(R.color.barbie_pink_two));
+                }else{
+                    tvRight.setSelected(false);
+                    tvRight.setTextColor(getResources().getColor(R.color.black30));
+                }
+            }
+        });
+
         tvRight.setText(getResources().getString(R.string.commit));
         if (investorInfoBean.getInvestor_uid() == 0) {
             ivAnthStatus.setVisibility(View.GONE);
@@ -238,24 +253,27 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                 finish();
                 break;
             case R.id.tvRight:
-                int score= (int) ratingScore.getRating();
-                ArrayList<String> tem=new ArrayList<>();
+                if(tvRight.isSelected()){
+                    int score= (int) ratingScore.getRating();
+                    ArrayList<String> tem=new ArrayList<>();
 
-                if(tags!=null&&!tags.isEmpty()){
-                    for(TagEntity entity:tags){
-                        if(entity.isSelected()){
-                            tem.add(entity.getTag_name());
+                    if(tags!=null&&!tags.isEmpty()){
+                        for(TagEntity entity:tags){
+                            if(entity.isSelected()){
+                                tem.add(entity.getTag_name());
+                            }
                         }
                     }
+                    if(investorInfoBean!=null){
+                        RateRequest request=new RateRequest();
+                        request.setFund_id(investorInfoBean.getFund_id());
+                        request.setInvestor_id(investorInfoBean.getInvestor_id());
+                        request.setScore(score*2);
+                        request.setTags(tem);
+                        mPresenter.rateInvestor(request);
+                    }
                 }
-                if(investorInfoBean!=null){
-                    RateRequest request=new RateRequest();
-                    request.setFund_id(investorInfoBean.getFund_id());
-                    request.setInvestor_id(investorInfoBean.getInvestor_id());
-                    request.setScore(score*2);
-                    request.setTags(tem);
-                    mPresenter.rateInvestor(request);
-                }
+
                 break;
         }
     }
@@ -351,8 +369,15 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         investorInfoBean.setHas_score(1);
         investorInfoBean.setScore_value(score);
         Bundle bundle=new Bundle();
+
         bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
-        gotoActivity(ReviewActivity.class,bundle);
+        if(investorInfoBean.getIntent()==ConstantUtil.INTENT_ROAD_COMMENT){
+            bundle.putInt(ConstantUtil.INTENT_INDEX,0);
+            gotoActivity(RoadCommentActivity.class, bundle);
+        }else{
+            gotoActivity(ReviewActivity.class,bundle);
+        }
+
         //销毁自己
         Observable.just(1)
                 .delay(100, TimeUnit.MILLISECONDS)

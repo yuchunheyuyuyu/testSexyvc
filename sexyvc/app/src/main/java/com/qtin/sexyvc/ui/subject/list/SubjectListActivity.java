@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.BannerEntity;
+import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.subject.SujectListAdapter;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBannerEntity;
@@ -26,7 +29,9 @@ import com.qtin.sexyvc.ui.subject.bean.SubjectListInterface;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.ui.subject.list.di.DaggerSubjectListComponent;
 import com.qtin.sexyvc.ui.subject.list.di.SubjectListModule;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -102,6 +107,22 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
 
             }
         });
+
+        mAdapter.setOnBannerClickListener(new OnBannerClickListener() {
+            @Override
+            public void onBannerClickItem(BannerEntity bannerEntity) {
+                try{
+                    if("subject_detail".equals(bannerEntity.getAction_type())){
+                        Bundle bundle=new Bundle();
+                        bundle.putLong("subject_id",Long.parseLong(bannerEntity.getAction_value()));
+                        gotoActivity(SubjectDetailActivity.class,bundle);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
         recyclerView.setAdapter(mAdapter);
 
         initPaginate();

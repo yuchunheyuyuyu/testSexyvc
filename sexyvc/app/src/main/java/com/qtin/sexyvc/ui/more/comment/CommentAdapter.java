@@ -7,14 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -63,7 +66,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void dealFundComment(final CommentBean bean, FundHolder holder) {
-        holder.ratingScore.setRating10(bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
         } else {
@@ -86,7 +89,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void dealInvestorComment(final CommentBean bean, InvestorHolder holder) {
-        holder.ratingScore.setRating10(bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         if(StringUtil.isBlank(bean.getDomain_name())){
             holder.tvCommentTag.setVisibility(View.GONE);
         }else{
@@ -118,7 +121,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @BindView(R.id.tvFrom)
         TextView tvFrom;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvContent)
@@ -140,7 +143,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @BindView(R.id.tvTo)
         TextView tvTo;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvContent)

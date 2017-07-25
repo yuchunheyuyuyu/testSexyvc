@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.module.GlobeConfigModule;
 import com.jess.arms.http.GlobeHttpHandler;
-import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.BuildConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.di.module.CacheModule;
@@ -38,9 +38,11 @@ import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import org.greenrobot.greendao.database.Database;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErroListener;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
@@ -306,7 +308,7 @@ public class CustomApplication extends BaseApplication {
                     @Override
                     public void handleResponseError(Context context, Exception e) {
                         Timber.tag(TAG).w("------------>" + e.getMessage());
-                        UiUtils.SnackbarText(e.toString());
+                        //UiUtils.SnackbarText(e.toString());
                     }
                 }).build();
     }

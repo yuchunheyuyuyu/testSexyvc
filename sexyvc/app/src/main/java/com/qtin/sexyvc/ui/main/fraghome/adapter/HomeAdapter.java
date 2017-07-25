@@ -19,6 +19,8 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEntity;
+import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
+import com.qtin.sexyvc.ui.bean.OnBannerItemClickListener;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.comment.list.CommentActivity;
@@ -31,7 +33,7 @@ import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.ui.subject.list.SubjectListActivity;
 import com.qtin.sexyvc.ui.widget.AutoTextView;
 import com.qtin.sexyvc.ui.widget.BannerView;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.SpaceItemDecoration;
 import com.zhy.autolayout.utils.AutoUtils;
@@ -61,6 +63,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private MyBaseActivity activity;
 
+    private OnBannerClickListener onBannerClickItem;
+
+    public void setOnBannerClickItem(OnBannerClickListener onBannerClickItem) {
+        this.onBannerClickItem = onBannerClickItem;
+    }
 
     public HomeAdapter(Context context, List<HomeInterface> data) {
         this.context = context;
@@ -99,8 +106,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof BannerHolder){
-            ItemBannerEntity entity= (ItemBannerEntity) data.get(position);
+            final ItemBannerEntity entity= (ItemBannerEntity) data.get(position);
             ((BannerHolder) holder).bannerView.setData(entity.getList());
+            ((BannerHolder) holder).bannerView.setOnItemClickListener(new OnBannerItemClickListener() {
+                @Override
+                public void onBannerClickItem(int position) {
+                    onBannerClickItem.onBannerClickItem(entity.getList().get(position));
+                }
+            });
+
         }else if(holder instanceof NewsHolder){
             ItemNewsEntity entity= (ItemNewsEntity) data.get(position);
             ((NewsHolder) holder).autoTextView.setDate(entity.getList());
@@ -184,7 +198,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
         holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
         holder.ratingScore.invalidate();
-        holder.ratingScore.setRating10(entity.getScore());
+        holder.ratingScore.setRating(entity.getScore());
         holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
         holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,7 +286,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.tvTo)
         TextView tvTo;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvComentContent)
         TextView tvComentContent;
         @BindView(R.id.marginLine)

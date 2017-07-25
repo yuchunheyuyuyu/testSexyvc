@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -32,16 +33,20 @@ import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
+
+import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -69,7 +74,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     @BindView(R.id.tvRating)
     TextView tvRating;
     @BindView(R.id.ratingScore)
-    BaseRatingBar ratingScore;
+    RatingBar ratingScore;
     @BindView(R.id.flowLayout)
     TagFlowLayout flowLayout;
     @BindView(R.id.pbProfessionalQualities)
@@ -132,7 +137,10 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         int scoreCount=contactBean.getScore_count()+1;
 
         contactBean.setScore_count(scoreCount);
-        contactBean.setScore(totalScore/scoreCount);
+        float average=totalScore/scoreCount;
+        BigDecimal b = new BigDecimal(average);
+        float averageResult=b.setScale(1,BigDecimal.ROUND_HALF_UP).floatValue();
+        contactBean.setScore(averageResult);
 
         setScore();
         setCommentStatus();
@@ -296,7 +304,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
 
     private void setScore(){
         tvRating.setText("" + contactBean.getScore());
-        ratingScore.setRating10(contactBean.getScore());
+        ratingScore.setRating(contactBean.getScore());
         //缺少参数
         tvRateNum.setText(contactBean.getScore_count() + " 人");
     }
@@ -436,7 +444,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         public void onOptionSelected() {
                                             dismissBottomOneButtonDialog();
                                             if(contactBean.getHas_score()==0){
-                                                gotoScore();
+                                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                                             }else{
                                                 gotoComment();
                                             }
@@ -448,13 +456,13 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         }
                                     });
                         } else {
-                            gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                            gotoActivityFadeForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
                         }
 
                     } else {
                         if (contactBean.getHas_comment() == 0) {
                             if(contactBean.getHas_score()==0){
-                                gotoScore();
+                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                             }else{
                                 gotoComment();
                             }
@@ -513,29 +521,30 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     /**
      * 进入评分
      */
-    private void gotoScore(){
-        gotoActivity(RateActivity.class,getBundle());
+    private void gotoScore(int intent){
+        gotoActivity(RateActivity.class,getBundle(intent));
     }
 
     /**
      * 进入评论或者追评
      */
     private void gotoComment(){
-        gotoActivity(ReviewActivity.class,getBundle());
+        gotoActivity(ReviewActivity.class,getBundle(ConstantUtil.INTENT_TEXT_COMMENT));
     }
 
     /**
      * 进入路演评价
      */
     private void gotoRoad() {
-        Bundle bundle=getBundle();
+        Bundle bundle=getBundle(ConstantUtil.INTENT_ROAD_COMMENT);
         bundle.putInt(ConstantUtil.INTENT_INDEX,0);
-        gotoActivity(RoadCommentActivity.class, getBundle());
+        gotoActivity(RoadCommentActivity.class, bundle);
     }
 
-    private Bundle getBundle(){
+    private Bundle getBundle(int intent){
         Bundle bundle=new Bundle();
         InvestorInfoBean infoBean=new InvestorInfoBean();
+        infoBean.setIntent(intent);
         infoBean.setInvestor_id(contactBean.getInvestor_id());
         infoBean.setFund_id(contactBean.getFund_id());
         infoBean.setFund_name(contactBean.getFund_name());
@@ -565,10 +574,15 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 if (data != null) {
                     int type = data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
                     if (type == ConstantUtil.COMMENT_TYPE_ROAD) {
-                        gotoRoad();
+                        if(contactBean.getHas_score()==0){
+                            gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                        }else{
+                            gotoRoad();
+                        }
+
                     } else if (type == ConstantUtil.COMMENT_TYPE_EDIT) {
                         if(contactBean.getHas_score()==0){
-                            gotoScore();
+                            gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                         }else {
                             gotoComment();
                         }

@@ -28,7 +28,7 @@ public class CommentContentBean implements DataTypeInterface{
 
     private int praise_count;
     private int has_praise;
-    private long create_time;
+    private String create_time;
 
     public String getU_nickname() {
         return u_nickname;
@@ -38,11 +38,11 @@ public class CommentContentBean implements DataTypeInterface{
         this.u_nickname = u_nickname;
     }
 
-    public long getCreate_time() {
+    public String getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(long create_time) {
+    public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
 

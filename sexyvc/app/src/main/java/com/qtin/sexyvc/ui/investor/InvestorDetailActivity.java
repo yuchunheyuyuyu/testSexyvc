@@ -40,6 +40,7 @@ import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -114,7 +115,12 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         int scoreCount=investorBean.getScore_count()+1;
 
         investorBean.setScore_count(scoreCount);
-        investorBean.setScore(totalScore/scoreCount);
+
+        float average=totalScore/scoreCount;
+        BigDecimal b = new BigDecimal(average);
+        float averageResult=b.setScale(1,BigDecimal.ROUND_HALF_UP).floatValue();
+
+        investorBean.setScore(averageResult);
         setCommentStatus();
         mAdapter.notifyDataSetChanged();
     }
@@ -434,7 +440,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                                         public void onOptionSelected() {
                                             dismissBottomOneButtonDialog();
                                             if(investorBean.getHas_score()==0){
-                                                gotoScore();
+                                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                                             }else{
                                                 gotoComment();
                                             }
@@ -446,13 +452,13 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                                         }
                                     });
                         } else {
-                            gotoActivityForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                            gotoActivityFadeForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
                         }
 
                     } else {
                         if (investorBean.getHas_comment() == 0) {
                             if(investorBean.getHas_score()==0){
-                                gotoScore();
+                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                             }else{
                                 gotoComment();
                             }
@@ -486,29 +492,30 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     /**
      * 进入评分
      */
-    private void gotoScore(){
-        gotoActivity(RateActivity.class,getBundle());
+    private void gotoScore(int intent){
+        gotoActivity(RateActivity.class,getBundle(intent));
     }
 
     /**
      * 进入评论或者追评
      */
     private void gotoComment(){
-        gotoActivity(ReviewActivity.class,getBundle());
+        gotoActivity(ReviewActivity.class,getBundle(ConstantUtil.INTENT_TEXT_COMMENT));
     }
 
     /**
      * 进入路演评价
      */
     private void gotoRoad() {
-        Bundle bundle=getBundle();
+        Bundle bundle=getBundle(ConstantUtil.INTENT_ROAD_COMMENT);
         bundle.putInt(ConstantUtil.INTENT_INDEX,0);
         gotoActivity(RoadCommentActivity.class, bundle);
     }
 
-    private Bundle getBundle(){
+    private Bundle getBundle(int intent){
         Bundle bundle=new Bundle();
         InvestorInfoBean infoBean=new InvestorInfoBean();
+        infoBean.setIntent(intent);
         infoBean.setInvestor_id(investorBean.getInvestor_id());
         infoBean.setFund_id(investorBean.getFund_id());
         infoBean.setFund_name(investorBean.getFund_name());
@@ -538,10 +545,14 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 if (data != null) {
                     int type = data.getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
                     if (type == ConstantUtil.COMMENT_TYPE_ROAD) {
-                        gotoRoad();
+                        if(investorBean.getHas_score()==0){
+                            gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                        }else{
+                            gotoRoad();
+                        }
                     } else if (type == ConstantUtil.COMMENT_TYPE_EDIT) {
                         if(investorBean.getHas_score()==0){
-                            gotoScore();
+                            gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                         }else{
                             gotoComment();
                         }

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -28,16 +27,14 @@ import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
 import com.qtin.sexyvc.ui.more.MoreCaseActivity;
 import com.qtin.sexyvc.ui.more.comment.MoreCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -101,7 +98,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
-        holder.ratingScore.setRating10(bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
         } else {
@@ -163,7 +160,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //评分
         holder.tvRateNum.setText(bean.getScore_count() + " 人");
         holder.tvRating.setText(""+bean.getScore());
-        holder.ratingScore.setRating10(bean.getScore());
+        holder.ratingScore.setRating(bean.getScore());
         //路演评价
         if (bean.getRoad_show() != null) {
             holder.pbProfessionalQualities.setProgress(countRoadPercent(bean.getRoad_show().getProfessional()));
@@ -299,7 +296,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @BindView(R.id.tvFrom)
         TextView tvFrom;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tvContent)
@@ -331,7 +328,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @BindView(R.id.tvRating)
         TextView tvRating;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.pbProfessionalQualities)
         ProgressBar pbProfessionalQualities;
         @BindView(R.id.pbFeedbackSpeed)

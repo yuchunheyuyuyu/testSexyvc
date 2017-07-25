@@ -18,7 +18,7 @@ import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-import com.qtin.sexyvc.ui.widget.rating.BaseRatingBar;
+import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
@@ -105,8 +105,8 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.tvInvestorAndCommentNumber.setText(String.format(format, entity.getInvestor_number(), entity.getComment_number()));
 
         //评分
-        holder.ratingScore.setRating10(entity.getScore());
-
+        holder.ratingScore.setRating(entity.getScore());
+        holder.tvScore.setText(""+entity.getScore());
         //标签
         if (entity.getTags() == null || entity.getTags().isEmpty()) {
             holder.flowLayout.setVisibility(View.GONE);
@@ -158,7 +158,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .build());
 
         //评分
-        holder.ratingScore.setRating10(entity.getScore());
+        holder.ratingScore.setRating(entity.getScore());
         //标签
 
         if (entity.getTags() == null || entity.getTags().isEmpty()) {
@@ -204,7 +204,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @BindView(R.id.tvCommentNum)
         TextView tvCommentNum;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvScore)
         TextView tvScore;
         @BindView(R.id.flowLayout)
@@ -228,7 +228,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @BindView(R.id.tvInvestorAndCommentNumber)
         TextView tvInvestorAndCommentNumber;
         @BindView(R.id.ratingScore)
-        BaseRatingBar ratingScore;
+        RatingBar ratingScore;
         @BindView(R.id.tvScore)
         TextView tvScore;
         @BindView(R.id.flowLayout)

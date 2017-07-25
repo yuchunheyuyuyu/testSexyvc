@@ -95,7 +95,7 @@ public class ChooseActivity extends Activity {
                 // 图标的动画
                 MyAnimations.startAnimationsIn(switchContainer, ANIM_DURATION);
                 // 加号的动画
-                ivChoose.startAnimation(MyAnimations.getRotateAnimation(0, -225, ANIM_DURATION));
+                ivChoose.startAnimation(MyAnimations.getRotateAnimation(0, -180, ANIM_DURATION));
                 //文字的淡入
                 textViewShow(tvChooseTitle);
                 textViewShow(tvEditComment);
@@ -130,14 +130,14 @@ public class ChooseActivity extends Activity {
         switch (view.getId()) {
             case R.id.ivRoadComment:
                 type= ConstantUtil.COMMENT_TYPE_ROAD;
-                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-225, 0, ANIM_DURATION));
+                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
                 ivRoadComment.startAnimation(MyAnimations.getMaxAnimation(MAX_DURATION));
                 ivEditComment.startAnimation(MyAnimations.getMiniAnimation(ANIM_DURATION));
                 dismiss();
                 break;
             case R.id.ivEditComment:
                 type= ConstantUtil.COMMENT_TYPE_EDIT;
-                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-225, 0, ANIM_DURATION));
+                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
                 ivEditComment.startAnimation(MyAnimations.getMaxAnimation(MAX_DURATION));
                 ivRoadComment.startAnimation(MyAnimations.getMiniAnimation(ANIM_DURATION));
                 dismiss();
@@ -147,7 +147,7 @@ public class ChooseActivity extends Activity {
                 // 图标的动画
                 MyAnimations.startAnimationsOut(switchContainer, ANIM_DURATION);
                 // 加号的动画
-                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-225, 0, ANIM_DURATION));
+                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
                 //消失
                 dismiss();
                 break;

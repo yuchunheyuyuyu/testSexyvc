@@ -136,7 +136,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     private void initRatingView() {
-        mPartialViews = new ArrayList<>();
+        if(mPartialViews==null){
+            mPartialViews = new ArrayList<>();
+        }else{
+            mPartialViews.clear();
+        }
+
 
         for (int i = 1; i <= mNumStars; i++) {
             PartialView partialView = getPartialView(i, mFilledDrawable, mEmptyDrawable);
@@ -183,7 +188,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             } else {
                 partialView.setFilled();
             }
+            partialView.invalidate();
         }
+        invalidate();
     }
 
     @Override
@@ -205,12 +212,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     public void setRating10(float rating){
+        //setNumStars(5);
+        setEmptyDrawableRes(R.drawable.star_l_blank);
+        setFilledDrawableRes(R.drawable.star_l_full);
         rating=rating/2;
         setRating(rating);
     }
 
     @Override
     public void setRating(float rating) {
+
         if (rating > mNumStars) {
             rating = mNumStars;
         }

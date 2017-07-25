@@ -102,4 +102,8 @@ public class ConstantUtil {
     public static final int TYPE_SET_GROUP_INVESTOR=1;
     public static final int TYPE_SET_GROUP_CONTACT=2;
 
+    //0代表进入路演评价，1代表进入文字评价
+    public static int INTENT_ROAD_COMMENT=0;
+    public static int INTENT_TEXT_COMMENT=1;
+
 }

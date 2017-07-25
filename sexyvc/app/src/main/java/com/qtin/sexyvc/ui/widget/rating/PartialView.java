@@ -64,6 +64,7 @@ public class PartialView extends RelativeLayout {
     public void setFilled() {
         mFilledView.setImageLevel(10000);
         mEmptyView.setImageLevel(0);
+        invalidateView();
     }
 
     public void setPartialFilled(float rating) {
@@ -72,11 +73,18 @@ public class PartialView extends RelativeLayout {
         level = level == 0 ? 10000 : level;
         mFilledView.setImageLevel(level);
         mEmptyView.setImageLevel(10000 - level);
+        invalidateView();
     }
 
     public void setEmpty() {
         mFilledView.setImageLevel(0);
         mEmptyView.setImageLevel(10000);
+        invalidateView();
+    }
+
+    private void invalidateView(){
+        mFilledView.invalidate();
+        mEmptyView.invalidate();
     }
 
 }

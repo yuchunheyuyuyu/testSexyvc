@@ -8,12 +8,15 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +28,9 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.BannerEntity;
+import com.qtin.sexyvc.ui.bean.OnBannerItemClickListener;
 import com.qtin.sexyvc.utils.CommonUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +40,11 @@ import java.util.List;
 public class BannerView extends FrameLayout {
     private final int defalutIndicatorMarginBottom=8;
     private int indicatorMarginBottom=defalutIndicatorMarginBottom;
+    private OnBannerItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnBannerItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     private ViewPager mViewPager;
     private LinearLayout mIndicatorContainer;
@@ -54,6 +64,8 @@ public class BannerView extends FrameLayout {
     private static final String KEY_INDEX = "key_index";
     private static final String KEY_DEFAULT = "key_default";
 
+    private int mTouchSlop;
+
     public BannerView(@NonNull Context context) {
         super(context);
         this.context=context;
@@ -72,6 +84,9 @@ public class BannerView extends FrameLayout {
     }
 
     private void init(Context context){
+        ViewConfiguration configuration = ViewConfiguration.get(context);
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+
         //添加viewPager
         LayoutParams params=new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mViewPager=new ViewPager(context);
@@ -188,6 +203,38 @@ public class BannerView extends FrameLayout {
                 return views.get(position);
             }
         };
+        mViewPager.setOnTouchListener(new OnTouchListener() {
+            int touchFlag = 0;
+            float x = 0, y = 0;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        touchFlag = 0;
+                        x = event.getX();
+                        y = event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float xDiff = Math.abs(event.getX() - x);
+                        float yDiff = Math.abs(event.getY() - y);
+                        if (xDiff < mTouchSlop && yDiff<= mTouchSlop)
+                            touchFlag = 0;
+                        else
+                            touchFlag = -1;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (touchFlag == 0) {
+                            int item = mViewPager.getCurrentItem();
+                            if(onItemClickListener!=null){
+                                onItemClickListener.onBannerClickItem(item);
+                            }
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

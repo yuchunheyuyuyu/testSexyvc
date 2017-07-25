@@ -4,23 +4,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.ui.bean.BannerEntity;
+import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
+import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
+import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fraghome.adapter.HomeAdapter;
 import com.qtin.sexyvc.ui.main.fraghome.di.DaggerFragHomeComponent;
 import com.qtin.sexyvc.ui.main.fraghome.di.FragHomeModule;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
+import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
+import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -67,9 +80,38 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mAdapter = new HomeAdapter(mActivity, data);
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setOnBannerClickItem(new OnBannerClickListener() {
+            @Override
+            public void onBannerClickItem(BannerEntity bean) {
+                try {
+                    long id = Long.parseLong(bean.getAction_value());
+                    Bundle bundle = new Bundle();
+                    if ("investor_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("investor_id", id);
+                        gotoActivity(InvestorDetailActivity.class, bundle);
+
+                    } else if ("fund_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("fund_id", id);
+                        gotoActivity(FundDetailActivity.class, bundle);
+
+                    } else if ("comment_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("comment_id", id);
+                        gotoActivity(CommentDetailActivity.class, bundle);
+
+                    } else if ("subject_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("subject_id", id);
+                        gotoActivity(SubjectDetailActivity.class, bundle);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         mPresenter.query();
 
-        maxDistance= (int)DeviceUtils.dpToPixel(mActivity,40);
+
+        maxDistance = (int) DeviceUtils.dpToPixel(mActivity, 40);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -79,23 +121,23 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                mDistance+=dy;
-                float percent=mDistance*1f/maxDistance>1?1:mDistance*1f/maxDistance;
+                mDistance += dy;
+                float percent = mDistance * 1f / maxDistance > 1 ? 1 : mDistance * 1f / maxDistance;
                 int alpha = (int) (percent * 255);
 
                 //整个背景
                 int argb = Color.argb(alpha, 255, 255, 255);
                 headContainer.setBackgroundColor(argb);
                 //间隔线
-                int lineColor=Color.argb(alpha,224,224,226);
+                int lineColor = Color.argb(alpha, 224, 224, 226);
                 homeLine.setBackgroundColor(lineColor);
 
                 //搜索框 #3b4357
-                int searchColor=Color.argb((int)(alpha*0.1),59,67,87);
-                GradientDrawable myGrad = (GradientDrawable)searchContainer.getBackground();
-                if(mDistance==0){
+                int searchColor = Color.argb((int) (alpha * 0.1), 59, 67, 87);
+                GradientDrawable myGrad = (GradientDrawable) searchContainer.getBackground();
+                if (mDistance == 0) {
                     myGrad.setColor(Color.parseColor("#b3ffffff"));
-                }else{
+                } else {
                     myGrad.setColor(searchColor);
                 }
             }
@@ -121,7 +163,7 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
 
     @Override
     public void showMessage(String message) {
-        UiUtils.showToastShort(mActivity,message);
+        UiUtils.showToastShort(mActivity, message);
     }
 
     @Override
@@ -156,5 +198,14 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     @Override
     public void killMyself() {
 
+    }
+
+    @OnClick(R.id.headContainer)
+    public void onClick() {
+        Bundle bundle=new Bundle();
+        bundle.putString(ConstantUtil.KEY_WORD_INTENT,"");
+        bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT,false);
+        bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
+        gotoActivity(SearchActionActivity.class,bundle);
     }
 }

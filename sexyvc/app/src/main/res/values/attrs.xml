@@ -46,6 +46,19 @@
         <attr name="clearRatingEnabled" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RatingBar">
+        <attr name="filledDrawable" format="integer" />
+        <attr name="emptyDrawable" format="integer" />
+        <attr name="ratingValue" format="float"/>
+        <attr name="numStarsValue" format="integer"/>
+        <attr name="minAllowedStars" format="integer"/>
+        <attr name="starSizeValue" format="dimension"/>
+        <attr name="starSpacing" format="dimension"/>
+        <attr name="starMargin" format="dimension" />
+        <attr name="isIndicator" format="boolean"/>
+        <attr name="stepSizeValue" format="float"/>
+    </declare-styleable>
+
     <!--自动轮播的TextView-->
     <declare-styleable name="auto3d">
         <attr name="textSize" format="dimension" />
