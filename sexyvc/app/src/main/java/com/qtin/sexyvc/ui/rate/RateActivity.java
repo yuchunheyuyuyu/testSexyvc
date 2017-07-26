@@ -166,6 +166,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
 
         TagEntity addTag=new TagEntity();
         addTag.setTag_name("+ 添加");
+        addTag.setTag_id(ConstantUtil.SPECIAL_ID);
         tags.add(addTag);
 
         tagAdapter = new TagAdapter<TagEntity>(tags) {
@@ -199,7 +200,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                if(position== tags.size()-1){
+                if(tags.get(position).getTag_id()== ConstantUtil.SPECIAL_ID){
                     showOptionDialog();
                 }else{
                     if(tags.get(position).isSelected()){
@@ -212,7 +213,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                 return true;
             }
         });
-        String [] tagStr={"浮夸","务实","喜欢扯淡","爱幻想","咋咋呼呼","鞠躬尽瘁死而后已","先天下之忧而乐"};
+        String [] tagStr={"靠谱","务实","真诚","有见解","导师","正直","眼光独到"};
         //测试常用标签
         for(int i=0;i<tagStr.length;i++){
             TagEntity tagEntity=new TagEntity();
@@ -308,6 +309,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                         etInput.setText(tagEntity.getTag_name());
                         etInput.setSelection(tagEntity.getTag_name().length());
                     }
+
                 }
             });
             flowLayout.setMaxSelectCount(1);
@@ -325,9 +327,20 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                 tagDialog.dismiss();
                 TagEntity tagEntity=new TagEntity();
                 tagEntity.setSelected(true);
+                tagEntity.setCustom(true);
                 tagEntity.setTag_name(content);
+                tagEntity.setCustom(true);
                 tags.add(tags.size()-1,tagEntity);
 
+                int customNum=0;
+                for(TagEntity entity:tags){
+                    if(entity.isCustom()){
+                        customNum++;
+                    }
+                }
+                if(customNum>=3){
+                    tags.remove(tags.size()-1);
+                }
                 tagAdapter.notifyDataChanged();
             }
         });

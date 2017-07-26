@@ -325,11 +325,20 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     }
 
     private Dialog comfirmDialog;
-    protected void showComfirmDialog(String title,String button,final ComfirmListerner listerner) {
+    protected void showComfirmDialog(String title,String content,String button,final ComfirmListerner listerner) {
 
         View view = View.inflate(this, R.layout.one_button_dialog, null);
         TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        TextView tvContent= (TextView) view.findViewById(R.id.tvContent);
         Button btnRight= (Button) view.findViewById(R.id.btnRight);
+
+        if(StringUtil.isBlank(content)){
+            tvContent.setVisibility(View.GONE);
+        }else{
+            tvContent.setVisibility(View.VISIBLE);
+            tvContent.setText(content);
+        }
+
 
         tvDialogTitle.setText(title);
         btnRight.setText(button);

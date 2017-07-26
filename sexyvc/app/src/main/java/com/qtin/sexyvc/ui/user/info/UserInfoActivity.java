@@ -554,5 +554,12 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         userInfo.setBusiness_card(url);
         userInfo.setU_auth_state(ConstantUtil.AUTH_STATE_COMMITING);
         ivIdentity.setImageResource(R.drawable.approve_reviewing);
+
+        showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
+            @Override
+            public void onComfirm() {
+                dismissComfirmDialog();
+            }
+        });
     }
 }

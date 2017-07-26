@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -19,9 +18,7 @@ import com.qtin.sexyvc.ui.review.di.DaggerReviewComponent;
 import com.qtin.sexyvc.ui.review.di.ReviewModule;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import org.simple.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 

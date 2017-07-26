@@ -166,6 +166,8 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
             }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FA){
                 ivIdentity.setImageResource(R.drawable.tag_approve_fa);
             }
+        }else if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_COMMITING){
+            ivIdentity.setImageResource(R.drawable.approve_reviewing);
         }else{
             ivIdentity.setImageResource(R.drawable.approve_not_done);
         }

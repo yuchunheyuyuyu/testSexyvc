@@ -48,7 +48,7 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
      * 获取验证码
      */
     public void getVertifyCode(String mobile){
-        mModel.getVertifyCode(mobile,"register")
+        mModel.getVertifyCode("",mobile,"register")
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())

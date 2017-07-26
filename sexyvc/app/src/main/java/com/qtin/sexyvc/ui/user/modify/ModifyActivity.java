@@ -2,12 +2,14 @@ package com.qtin.sexyvc.ui.user.modify;
 
 import android.content.Intent;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -17,7 +19,9 @@ import com.qtin.sexyvc.ui.user.modify.di.DaggerModifyComponent;
 import com.qtin.sexyvc.ui.user.modify.di.ModifyModule;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
+
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -160,6 +164,8 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             etTitle.setText(StringUtil.formatString(value2));
             etTitle.setSelection(StringUtil.formatString(value2).length());
 
+            etTitle.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+
             tvRight.setText(getResources().getString(R.string.comfirm));
             tvTitle.setText(getResources().getString(R.string.title_institution));
         } else if (modifyType == MODIFY_CONCERN_TELPHONE) {
@@ -186,13 +192,16 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             if (modifyType == MODIFY_NICK) {
                 etContent.setHint(getResources().getString(R.string.nick));
                 tvTitle.setText(getResources().getString(R.string.title_nick));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
             } else if (modifyType == MODIFY_PROJECT_NAME) {
                 etContent.setHint(getResources().getString(R.string.project_name));
                 tvTitle.setText(getResources().getString(R.string.project_name));
                 tvRight.setText(getResources().getString(R.string.comfirm));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
             } else if (modifyType == MODIFY_CONCERN_WECAHT) {
                 etContent.setHint(getResources().getString(R.string.we_chat));
                 tvTitle.setText(getResources().getString(R.string.we_chat));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
             }
 
         } else if (modifyType == MODIFY_EMAIL || modifyType == MODIFY_CONCERN_EMAIL) {
@@ -224,7 +233,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 tvTitle.setText(getResources().getString(R.string.project_introduce));
                 etIntroduce.setHint(getResources().getString(R.string.hint_introduce_project));
             } else if (modifyType == MODIFY_CONCERN_REMARK) {
-                wordNumber = 200;
+                wordNumber = 140;
                 tvTitle.setText(getResources().getString(R.string.remarks));
                 etIntroduce.setHint(getResources().getString(R.string.remarks));
             }
@@ -370,7 +379,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         return;
                     }
 
-                    if (!etPhoneBackup2.isMobileNO()) {
+                    if (!StringUtil.isBlank(contact_backup_phone)&&!etPhoneBackup2.isMobileNO()) {
                         showMessage("备用手机格式不合法");
                         return;
                     }
@@ -384,8 +393,8 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         showMessage("邮箱格式不合法");
                         return;
                     }
-                    if (!StringUtil.isEmail(contact_backup_email)) {
-                        showMessage("邮箱格式不合法");
+                    if (!StringUtil.isBlank(contact_backup_email)&&!StringUtil.isEmail(contact_backup_email)) {
+                        showMessage("备用邮箱格式不合法");
                         return;
                     }
                     mPresenter.editContactEmail(contact_id, contact_email, contact_backup_email);

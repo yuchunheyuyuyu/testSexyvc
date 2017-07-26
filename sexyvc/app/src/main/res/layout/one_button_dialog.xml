@@ -18,13 +18,26 @@
             android:id="@+id/tvDialogTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32px"
-            android:layout_marginTop="52px"
+            android:layout_marginTop="36px"
             android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="32px" />
+            android:text="已完成提交"
+            android:textColor="#030303"
+            android:textSize="34px" />
 
-        <View style="@style/line_style" />
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14px"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="我们的工作人员将在 3 个工作日内审核"
+            android:textColor="#030303"
+            android:textSize="26px" />
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="36px" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,8 +51,9 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:gravity="center"
-                android:textColor="@color/dodger_blue_two"
-                android:textSize="32px" />
+                android:text="好"
+                android:textColor="#0076ff"
+                android:textSize="34px" />
 
         </LinearLayout>
 

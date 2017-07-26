@@ -17,7 +17,7 @@ public interface ForgetContract {
         void validateSuccess();
     }
     interface Model extends IModel{
-        Observable<CodeEntity> getVertifyCode(String mobile, String code_type);
+        Observable<CodeEntity> getVertifyCode(String token,String mobile, String code_type);
         Observable<BaseEntity<BindEntity>> validateCode(String mobile, String code_type, String code_value);
     }
 }

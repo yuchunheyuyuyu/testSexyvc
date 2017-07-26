@@ -21,7 +21,7 @@ public interface CreateContract {
     }
     interface Model extends IModel{
         void saveUser(UserEntity entity);
-        Observable<CodeEntity> getVertifyCode(String mobile,String code_type);
+        Observable<CodeEntity> getVertifyCode(String token,String mobile,String code_type);
         Observable<BaseEntity<BindEntity>> validateCode(String mobile, String code_type, String code_value);
         Observable<BaseEntity<UserEntity>> doRegister(RegisterRequestEntity entity);
 

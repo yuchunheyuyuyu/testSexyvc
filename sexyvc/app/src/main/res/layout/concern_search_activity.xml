@@ -43,6 +43,7 @@
             android:imeOptions="actionSearch"
             android:paddingLeft="56px"
             android:paddingRight="16px"
+            android:maxLength="20"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/black30"

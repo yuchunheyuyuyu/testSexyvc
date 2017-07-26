@@ -105,6 +105,9 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
+
+
+
             long lastStamp=0;
             if(position>0){
                 SubjectListInterface last=data.get(position-1);
@@ -113,7 +116,7 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
             //和上一条是同一天
-            if(DateUtil.isNeedShow(entity.getCreate_time(),lastStamp)){
+            if(!DateUtil.isNeedShow(entity.getCreate_time(),lastStamp)){
                 holder.tvDate.setVisibility(View.GONE);
             }else{
                 holder.tvDate.setVisibility(View.VISIBLE);

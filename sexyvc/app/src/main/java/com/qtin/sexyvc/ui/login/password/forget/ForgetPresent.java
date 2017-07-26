@@ -40,7 +40,7 @@ public class ForgetPresent extends BasePresenter<ForgetContract.Model,ForgetCont
      * 获取验证码
      */
     public void getVertifyCode(String mobile){
-        mModel.getVertifyCode(mobile,"reset")
+        mModel.getVertifyCode("",mobile,"reset")
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())

@@ -27,8 +27,8 @@ public class BindModel extends BaseModel<ServiceManager,CacheManager> implements
     }
 
     @Override
-    public Observable<CodeEntity> getVertifyCode(String mobile, String code_type) {
-        return mServiceManager.getCommonService().getVertifyCode(mobile,code_type);
+    public Observable<CodeEntity> getVertifyCode(String token,String mobile, String code_type) {
+        return mServiceManager.getCommonService().getVertifyCode(token,mobile,code_type);
     }
 
     @Override

@@ -117,7 +117,7 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/mobile/code")
-    Observable<CodeEntity> getVertifyCode(@Field("mobile")String mobile, @Field("code_type")String code_type);
+    Observable<CodeEntity> getVertifyCode(@Field("token")String token,@Field("mobile")String mobile, @Field("code_type")String code_type);
 
     /**
      * 验证验证码的正确性

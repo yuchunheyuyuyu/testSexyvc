@@ -62,8 +62,8 @@
     <string name="investor_join_comment">|  评论 </string>
     <string name="hint_input_vertify_code">请输入验证码</string>
     <string name="hint_input_password">请输入密码</string>
-    <string name="hint_password_rule">设置密码 (8-20位数字/字母组合)</string>
-    <string name="hint_new_password_rule">新密码 (8-20位数字/字母组合)</string>
+    <string name="hint_password_rule">设置密码 (8-20位数字、字母组合)</string>
+    <string name="hint_new_password_rule">新密码 (8-20位数字、字母组合)</string>
     <string name="hint_comfirm_password">确认密码</string>
 
     <string name="get_vertify_code">获取验证码</string>

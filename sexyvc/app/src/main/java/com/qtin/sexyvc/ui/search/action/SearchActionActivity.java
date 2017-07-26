@@ -180,9 +180,11 @@ public class SearchActionActivity extends MyBaseActivity<SearchActionPresent> im
                 if(searchType==ConstantUtil.TYPE_FUND){
                     searchType=ConstantUtil.TYPE_INVESTOR;
                     tvChange.setText(getResources().getString(R.string.investor));
+                    etSearch.setHint(getResources().getString(R.string.hint_search_investor));
                 }else{
                     searchType=ConstantUtil.TYPE_FUND;
                     tvChange.setText(getResources().getString(R.string.fund));
+                    etSearch.setHint(getResources().getString(R.string.hint_search_fund));
                 }
 
                 break;

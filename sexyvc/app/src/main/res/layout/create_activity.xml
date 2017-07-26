@@ -29,6 +29,7 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center_vertical"
+            android:digits="@string/money_vcode"
             android:hint="@string/hint_input_phone"
             android:inputType="phone"
             android:maxLength="13"

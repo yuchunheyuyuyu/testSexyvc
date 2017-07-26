@@ -285,6 +285,13 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
         Intent intent=new Intent();
         intent.putExtra(ConstantUtil.INTENT_URL,url);
         setResult(0,intent);
-        finish();
+        showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
+            @Override
+            public void onComfirm() {
+                dismissComfirmDialog();
+                finish();
+
+            }
+        });
     }
 }

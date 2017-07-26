@@ -12,7 +12,7 @@ public class TagEntity implements Parcelable {
     private long tag_id;
     private String tag_name;
     private boolean isSelected;
-
+    private boolean isCustom;
 
     public int getTag_count() {
         return tag_count;
@@ -46,6 +46,14 @@ public class TagEntity implements Parcelable {
         isSelected = selected;
     }
 
+    public boolean isCustom() {
+        return isCustom;
+    }
+
+    public void setCustom(boolean custom) {
+        isCustom = custom;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -57,6 +65,7 @@ public class TagEntity implements Parcelable {
         dest.writeLong(this.tag_id);
         dest.writeString(this.tag_name);
         dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isCustom ? (byte) 1 : (byte) 0);
     }
 
     public TagEntity() {
@@ -67,6 +76,7 @@ public class TagEntity implements Parcelable {
         this.tag_id = in.readLong();
         this.tag_name = in.readString();
         this.isSelected = in.readByte() != 0;
+        this.isCustom = in.readByte() != 0;
     }
 
     public static final Creator<TagEntity> CREATOR = new Creator<TagEntity>() {

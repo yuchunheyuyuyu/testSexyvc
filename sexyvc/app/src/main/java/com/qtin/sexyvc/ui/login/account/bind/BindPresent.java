@@ -38,7 +38,7 @@ public class BindPresent extends BasePresenter<BindContract.Model,BindContract.V
      * 获取验证码
      */
     public void getVertifyCode(String mobile){
-        mModel.getVertifyCode(mobile,"bind")
+        mModel.getVertifyCode(mModel.getToken(),mobile,"bind")
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
                 .observeOn(AndroidSchedulers.mainThread())

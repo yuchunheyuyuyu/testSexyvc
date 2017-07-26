@@ -57,9 +57,12 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<CreateGroupEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<CreateGroupEntity> baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+
                         if(baseEntity.isSuccess()){
+                            mRootView.showMessage("该组已建立");
                             mRootView.addSuccess(baseEntity.getItems().getGroup_id(),group_name);
+                        }else{
+                            mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
