@@ -6,8 +6,10 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 
@@ -59,7 +61,7 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                         if(listEntity.isSuccess()){
                             mRootView.querySuccess(listEntity);
                         }else{
-                            mRootView.showMessage(listEntity.getErrMsg());
+                            //mRootView.showMessage(listEntity.getErrMsg());
                             mRootView.queryFail();
                         }
                     }
@@ -81,10 +83,10 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                     public void call() {
                         //mRootView.endLoad();
                     }
-                }).compose(RxUtils.<BaseListEntity<String>>bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseListEntity<String>>(mErrorHandler) {
+                }).compose(RxUtils.<BaseEntity<CommonBean>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<CommonBean>>(mErrorHandler) {
                     @Override
-                    public void onNext(BaseListEntity<String> baseListEntity) {
+                    public void onNext(BaseEntity<CommonBean> baseListEntity) {
                         if(baseListEntity.isSuccess()){
                             mRootView.queryNormalQuestionsSuccess(baseListEntity.getItems());
                         }
@@ -112,9 +114,9 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.onUploadAnswersSuccess();
+                            mRootView.showMessage("提交成功");
                         }
                     }
                 });

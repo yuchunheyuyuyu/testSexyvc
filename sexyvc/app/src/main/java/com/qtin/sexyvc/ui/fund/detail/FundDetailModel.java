@@ -23,8 +23,8 @@ public class FundDetailModel extends BaseModel<ServiceManager,CacheManager> impl
     }
 
     @Override
-    public Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(String token, long fund_id, long comment_id) {
-        return mServiceManager.getCommonService().queryFundDetail(token,fund_id,comment_id);
+    public Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(String token, long fund_id, long comment_id,int page_size) {
+        return mServiceManager.getCommonService().queryFundDetail(token,fund_id,comment_id, page_size);
     }
 
     @Override

@@ -76,7 +76,7 @@ public class MyProjectPresent extends BasePresenter<MyProjectContract.Model,MyPr
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

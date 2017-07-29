@@ -22,8 +22,10 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.LastBrowerBean;
+import com.qtin.sexyvc.ui.bean.OnClickFundListener;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
+import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.investor.di.DaggerInvestorDetailComponent;
@@ -86,6 +88,8 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
     private InvestorBean investorBean;
     private static final int REQUEST_CODE_SELECTED_TYPE = 0x223;
+
+    private boolean isFromFund=false;
 
     @Nullable
     @Override
@@ -151,6 +155,12 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     @Override
     protected void initData() {
         investor_id = getIntent().getExtras().getLong("investor_id");
+        try{
+            isFromFund=getIntent().getExtras().getBoolean("isFromFund");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -160,8 +170,20 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new InvestorDetailAdapter(this, data);
         recyclerView.setAdapter(mAdapter);
-
-        mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+        mAdapter.setOnClickFundListener(new OnClickFundListener() {
+            @Override
+            public void onClick() {
+                if(investorBean!=null&&investorBean.getFund_id()!=0){
+                    if(isFromFund){
+                        finish();
+                    }else{
+                        Bundle bundle=new Bundle();
+                        bundle.putLong("fund_id",investorBean.getFund_id());
+                        gotoActivity(FundDetailActivity.class,bundle);
+                    }
+                }
+            }
+        });
 
         maxDistance = (int) DeviceUtils.dpToPixel(this, 122);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -197,6 +219,12 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+    }
+
+    @Override
     public void showLoading() {
         Observable.just(1)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -227,6 +255,8 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     public void killMyself() {
 
     }
+
+
 
     @Override
     public void querySuccess(CallBackBean backBean) {
@@ -452,7 +482,9 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                                         }
                                     });
                         } else {
-                            gotoActivityFadeForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                            Bundle bundle=new Bundle();
+                            bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
+                            gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
                         }
 
                     } else {

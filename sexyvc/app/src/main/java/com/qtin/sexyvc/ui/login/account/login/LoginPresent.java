@@ -76,7 +76,7 @@ public class LoginPresent extends BasePresenter<LoginContract.Model, LoginContra
                                     mRootView.loginSuccess();
                                 }
                             } else {
-                                mRootView.showMessage(userEntityBaseEntity.getErrMsg());
+                                //mRootView.showMessage(userEntityBaseEntity.getErrMsg());
                             }
                         }
                     }

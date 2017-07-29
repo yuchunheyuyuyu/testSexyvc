@@ -64,7 +64,7 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.cancleSuccess(investor_id);
                         }
@@ -94,7 +94,7 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.followSuccess();
                         }
@@ -103,7 +103,7 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
     }
 
     public void query(long investor_id,long comment_id){
-        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id)
+        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id,3)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -126,7 +126,7 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

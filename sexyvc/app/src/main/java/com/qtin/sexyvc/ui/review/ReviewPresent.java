@@ -53,8 +53,9 @@ public class ReviewPresent extends BasePresenter<ReviewContract.Model,ReviewCont
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<CommentIdBean>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<CommentIdBean> baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
+                            mRootView.showMessage("评论成功");
                             mRootView.onCommentSuccess(baseEntity.getItems().getComment_id(),title);
                         }
                     }
@@ -80,8 +81,9 @@ public class ReviewPresent extends BasePresenter<ReviewContract.Model,ReviewCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
+                            mRootView.showMessage("追评成功");
                             mRootView.onAppendSuccess();
                         }
                     }

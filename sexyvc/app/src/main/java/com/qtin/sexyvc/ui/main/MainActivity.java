@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -16,6 +17,7 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.popupwindow.ChoosePopupwindow;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
 import com.qtin.sexyvc.ui.main.di.MainModule;
@@ -23,8 +25,11 @@ import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
 import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
 import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
+import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.lang.reflect.Field;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -88,7 +93,6 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
 
         ivTab1.setSelected(true);
         tvTab1.setSelected(true);
-        //mPresenter.getUserInfo();
     }
 
 
@@ -112,23 +116,39 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                 gotoFrag();
                 break;
             case R.id.ivCenter:
-               /** if(popupwindow==null){
-                    popupwindow=new ChoosePopupwindow(new ChoosePopupwindow.OnChooseListener() {
-                        @Override
-                        public void onChooseLoad() {
-                            popupwindow.dismiss();
-                            gotoActivity(CommentObjectActivity.class);
-                        }
+                UserInfoEntity userInfoEntity=mPresenter.getUserInfo();
 
-                        @Override
-                        public void onChooseEdit() {
-                            popupwindow.dismiss();
-                            gotoActivity(CommentObjectActivity.class);
+                if(userInfoEntity!=null){
+                    Bundle bundle=new Bundle();
+                    bundle.putInt(ChooseActivity.AUTH_TYPE,userInfoEntity.getU_auth_type());
+
+                    if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                        if(mPresenter.getUserInfo().getHas_project()==0){
+                            showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
+                                    getResources().getString(R.string.cancle),
+                                    getResources().getString(R.string.comfirm),
+                                    new TwoButtonListerner() {
+                                        @Override
+                                        public void leftClick() {
+                                            dismissTwoButtonDialog();
+                                        }
+
+                                        @Override
+                                        public void rightClick() {
+                                            dismissTwoButtonDialog();
+                                            Bundle bundle=new Bundle();
+                                            bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                                            gotoActivity(AddProjectActivity.class,bundle);
+                                        }
+                                    });
+                            return;
                         }
-                    });
+                        gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
+                    }else{
+                        gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
+                    }
                 }
-                popupwindow.show(this);*/
-                gotoActivityFadeForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+
                 break;
         }
     }
@@ -165,6 +185,11 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
             gotoFrag();
         }
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void gotoInvestor(){
+        clickIndex = 1;
+        gotoFrag();
     }
 
     private void gotoFrag() {

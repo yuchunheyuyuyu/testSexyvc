@@ -30,6 +30,15 @@ public class FundDetailBean implements DataTypeInterface{
 
     private RoadShowBean road_show;
     private ArrayList<TagEntity> tags;
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public long getFund_id() {
         return fund_id;

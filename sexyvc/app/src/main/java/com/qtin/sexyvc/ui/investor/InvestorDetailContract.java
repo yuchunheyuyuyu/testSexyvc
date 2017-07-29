@@ -27,7 +27,7 @@ public interface InvestorDetailContract {
         String getToken();
         UserInfoEntity getUserInfo();
         Observable<CodeEntity> followInvestor(FollowRequest entity);
-        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token,long investor_id,long comment_id);
+        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token,long investor_id,long comment_id,int page_size);
         void insertLastBrower(LastBrowerBean bean);
     }
 }

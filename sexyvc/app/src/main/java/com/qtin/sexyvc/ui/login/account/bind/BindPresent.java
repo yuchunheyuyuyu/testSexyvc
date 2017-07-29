@@ -1,15 +1,17 @@
 package com.qtin.sexyvc.ui.login.account.bind;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
-import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -46,8 +48,8 @@ public class BindPresent extends BasePresenter<BindContract.Model,BindContract.V
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        if(codeEntity.isSuccess()){
-
+                        if(!codeEntity.isSuccess()){
+                            mRootView.sendCodeFail();
                         }
                     }
                 });
@@ -92,7 +94,7 @@ public class BindPresent extends BasePresenter<BindContract.Model,BindContract.V
                                     }
                                 }
                             }else{
-                                mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
+                                //mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
                             }
                         }
                     }

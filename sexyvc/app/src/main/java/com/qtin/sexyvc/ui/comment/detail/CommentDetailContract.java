@@ -23,6 +23,7 @@ public interface CommentDetailContract {
         void querySuccess(long reply_id,CommentBean commentBean);
         void startLoadMore();
         void endLoadMore();
+        void showNotExistDialog();
     }
 
     interface Model extends IModel{

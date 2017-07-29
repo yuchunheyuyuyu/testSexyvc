@@ -24,13 +24,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.utils.UploadPhotoUtil;
+import com.jess.arms.widget.imageloader.ImageLoader;
+import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -43,6 +44,7 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CashierInputFilter;
+import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -104,7 +106,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
     private TagAdapter domainAdapter;
     private TagAdapter stageAdapter;
-
+    private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -124,6 +126,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
 
     @Override
     protected void initData() {
+        mImageLoader = customApplication.getAppComponent().imageLoader();
         isEdit=getIntent().getExtras().getBoolean(ConstantUtil.INTENT_IS_EDIT);
 
         if(isEdit){
@@ -145,6 +148,15 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         mPresenter.getType("common_domain", TYPE_DOMAIN);
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_STAGE);
+
+        //头像
+        mImageLoader.loadImage(customApplication, GlideImageConfig
+                .builder()
+                .errorPic(R.drawable.logo_blank)
+                .placeholder(R.drawable.logo_blank)
+                .url(CommonUtil.getAbsolutePath(projectBean.getLogo()))
+                .imageView(ivLogo)
+                .build());
     }
 
     private void setValue(){

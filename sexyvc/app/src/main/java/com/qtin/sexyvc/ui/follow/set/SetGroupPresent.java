@@ -62,7 +62,7 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                             mRootView.showMessage("该组已建立");
                             mRootView.addSuccess(baseEntity.getItems().getGroup_id(),group_name);
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
@@ -88,7 +88,7 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.changeSuccess();
                         }
@@ -116,7 +116,7 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.changeSuccess();
                         }
@@ -149,7 +149,7 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                                 mRootView.querySuccess(groupEntity);
                             }
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

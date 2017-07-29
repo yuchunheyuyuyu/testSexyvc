@@ -92,7 +92,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(DEFALUT_GROUP_ID,page,page_size);
+                loadData();
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -104,7 +104,11 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                 mPresenter.queryDetail(data.get(position).getInvestor_id(),ConstantUtil.DEFALUT_ID);
             }
         });
+        loadData();
 
+    }
+
+    private void loadData(){
         //本地不分页,服务端都不分页
         if(dataSourceType==ConstantUtil.DATA_FROM_LOCAL){
             hasLoadedAllItems=true;
@@ -127,8 +131,16 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                 }
             }
             mAdapter.notifyDataSetChanged();
+            Observable.just(1)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Integer>() {
+                        @Override
+                        public void call(Integer integer) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+
         }else{
-            //initPaginate();
             mPresenter.query(DEFALUT_GROUP_ID,page,page_size);
         }
     }

@@ -361,4 +361,15 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     public void endLoadMore() {
         isLoadingMore = false;
     }
+
+    @Override
+    public void showNotExistDialog() {
+        showComfirmDialog("该评论已下架", null, "确定", new ComfirmListerner() {
+            @Override
+            public void onComfirm() {
+                dismissComfirmDialog();
+                finish();
+            }
+        });
+    }
 }

@@ -2,7 +2,7 @@ package com.qtin.sexyvc.ui.road.success.di;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.qtin.sexyvc.common.AppComponent;
-import com.qtin.sexyvc.ui.road.success.RoadSuccessActivity;
+import com.qtin.sexyvc.ui.road.success.SuccessActivity;
 
 import dagger.Component;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @ActivityScope
 @Component(modules = RoadSuccessModule.class,dependencies = AppComponent.class)
 public interface RoadSuccessComponent {
-    void inject(RoadSuccessActivity activity);
+    void inject(SuccessActivity activity);
 }

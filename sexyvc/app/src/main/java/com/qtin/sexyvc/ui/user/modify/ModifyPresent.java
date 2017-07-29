@@ -50,7 +50,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -77,7 +77,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -104,7 +104,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -131,7 +131,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -158,7 +158,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -185,7 +185,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -212,7 +212,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }
@@ -239,7 +239,7 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.editSuccess();
                         }

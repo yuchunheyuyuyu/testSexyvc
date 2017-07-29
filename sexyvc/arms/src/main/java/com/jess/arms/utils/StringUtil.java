@@ -199,16 +199,47 @@ public class StringUtil {
         return m.matches();
     }
 
-    public static boolean checkPasswordFormat(String password){
-        if(isBlank(password)){
-            return false;
-        }
-        if(password.length()<8){
-            return false;
-        }
-        if(isPure(password)){
-            return false;
+    /** * 纯数字
+     * @param str
+     * @return */
+    public static boolean isNumeric(String str) {
+        for (int i = str.length(); --i >= 0; ) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
         }
         return true;
+    }
+    /** * 纯字母
+     * @param data
+     * @return */
+    public static boolean isChar(String data) {
+        for (int i = data.length(); --i >= 0; ) {
+            char c = data.charAt(i);
+            if (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))) {
+                //字母不作处理
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    public static boolean checkPasswordFormat(String password){
+        if(isBlank(password)){
+            return true;
+        }
+        if(password.length()<8){
+            return true;
+        }
+        if(isNumeric(password)){
+            return true;
+        }
+        if(isChar(password)){
+            return true;
+        }
+        return false;
     }
 }

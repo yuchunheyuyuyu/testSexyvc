@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -19,6 +20,7 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CaseBean;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.OnClickFundListener;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
@@ -33,8 +35,10 @@ import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -50,6 +54,12 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private MyBaseActivity activity;
+
+    private OnClickFundListener onClickFundListener;
+
+    public void setOnClickFundListener(OnClickFundListener onClickFundListener) {
+        this.onClickFundListener = onClickFundListener;
+    }
 
     public InvestorDetailAdapter(Context context, ArrayList<DataTypeInterface> data) {
         this.context = context;
@@ -221,13 +231,13 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.stageFlowLayout.setAdapter(tagAdapter);
         }
         //投资案例
-        if (bean.getCase_number() == 0) {
+        if (bean.getCase_list() == null||bean.getCase_list().isEmpty()) {
             holder.ivArrowCase.setVisibility(View.GONE);
             holder.tvCaseNum.setText(context.getResources().getString(R.string.no_data));
         } else {
             holder.ivArrowCase.setVisibility(View.VISIBLE);
             String caseFormat = context.getResources().getString(R.string.format_more_case);
-            holder.tvCaseNum.setText(String.format(caseFormat, "" + bean.getCase_number()));
+            holder.tvCaseNum.setText(String.format(caseFormat, "" + bean.getCase_list().size()));
         }
         if (bean.getCase_list() == null || bean.getCase_list().isEmpty()) {
             holder.recyclerViewCase.setVisibility(View.GONE);
@@ -272,6 +282,17 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getInvestor_id());
                     bundle.putString(ConstantUtil.INTENT_TITLE,bean.getInvestor_name());
                     activity.gotoActivity(MoreCommentActivity.class,bundle);
+                }
+            });
+        }
+
+        if(bean.getFund_id()!=0){
+            holder.companyContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onClickFundListener!=null){
+                        onClickFundListener.onClick();
+                    }
                 }
             });
         }
@@ -357,6 +378,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         LinearLayout caseContainer;
         @BindView(R.id.commentContainer)
         LinearLayout commentContainer;
+        @BindView(R.id.companyContainer)
+        View companyContainer;
 
         ContentHolder(View view) {
             super(view);

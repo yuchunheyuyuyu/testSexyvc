@@ -67,7 +67,7 @@ public class CommentLastPresent extends BasePresenter<CommentLastContract.Model,
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

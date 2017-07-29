@@ -151,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp">
 

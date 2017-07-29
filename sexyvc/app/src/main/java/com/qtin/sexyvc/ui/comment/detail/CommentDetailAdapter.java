@@ -105,23 +105,32 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                 for(AdditionalBean a:additional){
                     //追加的内容
                     TextView tvContent=new TextView(context);
-                    tvContent.setTextColor(context.getResources().getColor(R.color.black70));
                     tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                     tvContent.setLineSpacing(DeviceUtils.sp2px(context,6),1);
 
                     SpannableStringBuilder stringBuilder=new SpannableStringBuilder();
+
                     stringBuilder.append(context.getResources().getString(R.string.additional));
-                    ForegroundColorSpan span = new ForegroundColorSpan(context.getResources().getColor(R.color.black90));
-                    stringBuilder.setSpan(span,0,stringBuilder.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    int start=stringBuilder.length();
+                    ForegroundColorSpan span = new ForegroundColorSpan(context.getResources().getColor(R.color.black70));
+                    stringBuilder.setSpan(span,0,start, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
                     stringBuilder.append(a.getContent());
+                    ForegroundColorSpan span2 = new ForegroundColorSpan(context.getResources().getColor(R.color.black90));
+                    stringBuilder.setSpan(span,start,stringBuilder.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+
                     tvContent.setText(stringBuilder);
 
                     //时间
                     TextView tvTime=new TextView(context);
                     tvTime.setTextColor(context.getResources().getColor(R.color.black30));
                     tvTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                    tvTime.setPadding(0,DeviceUtils.dip2px(context,10),0,0);
+                    tvTime.setPadding(0,DeviceUtils.dip2px(context,3),0,DeviceUtils.dip2px(context,10));
                     tvTime.setText(DateUtil.getSpecialDate(a.getCreate_time()));
+
+                    holder.additionalContainer.addView(tvContent);
+                    holder.additionalContainer.addView(tvTime);
                 }
 
             }

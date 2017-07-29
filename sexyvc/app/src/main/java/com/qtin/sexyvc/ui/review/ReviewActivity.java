@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -16,11 +17,19 @@ import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.review.di.DaggerReviewComponent;
 import com.qtin.sexyvc.ui.review.di.ReviewModule;
+import com.qtin.sexyvc.ui.road.success.SuccessActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import org.simple.eventbus.EventBus;
+
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -171,7 +180,20 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
         event.setComment_id(comment_id);
         event.setComment_title(comment_title);
         EventBus.getDefault().post(event,ConstantUtil.COMMENT_SUCCESS);
-        finish();
+
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
+        gotoActivity(SuccessActivity.class,bundle);
+
+        Observable.just(1)
+                .delay(100, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        finish();
+                    }
+                });
     }
 
     @Override

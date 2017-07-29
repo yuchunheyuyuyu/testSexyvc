@@ -147,8 +147,8 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         holder.tvName.setText(StringUtil.formatString(bean.getFund_name()));
         holder.ratingScore.setRating(bean.getScore());
         holder.tvRating.setText("" + bean.getScore());
-        //holder.tvRateNum.setText(+"人");
-        //holder.tvLocation.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context,bean.get));
+        holder.tvRateNum.setText(bean.getComment_number()+" 人");
+        holder.tvLocation.setText(StringUtil.formatString(bean.getLocation()));
 
         //路演评价
         if (bean.getRoad_show() != null) {
@@ -212,13 +212,13 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         //投资案例
-        if (bean.getCase_number() == 0) {
+        if (bean.getCase_list() == null||bean.getCase_list().isEmpty()) {
             holder.ivArrowCase.setVisibility(View.GONE);
             holder.tvCaseNum.setText(context.getResources().getString(R.string.no_data));
         } else {
             holder.ivArrowCase.setVisibility(View.VISIBLE);
             String caseFormat = context.getResources().getString(R.string.format_more_case);
-            holder.tvCaseNum.setText(String.format(caseFormat, "" + bean.getCase_number()));
+            holder.tvCaseNum.setText(String.format(caseFormat, "" + bean.getCase_list().size()));
         }
 
         if (bean.getCase_list() == null || bean.getCase_list().isEmpty()) {
@@ -264,20 +264,20 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Bundle bundle=new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_FUND);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getFund_id());
-                    bundle.putString(ConstantUtil.INTENT_TITLE,bean.getFund_name());
+                    bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getFund_name()+"的评论");
                     activity.gotoActivity(MoreCommentActivity.class,bundle);
                 }
             });
         }
 
         //投资人
-        if (bean.getInvestor_number() == 0) {
+        if (bean.getInvestor_list() == null||bean.getInvestor_list().isEmpty()) {
             holder.ivArrowInvestor.setVisibility(View.GONE);
             holder.tvInvestorNum.setText(context.getResources().getString(R.string.no_data));
         } else {
             holder.ivArrowInvestor.setVisibility(View.VISIBLE);
             String format = context.getResources().getString(R.string.format_more_investor);
-            holder.tvInvestorNum.setText(String.format(format, bean.getInvestor_number()));
+            holder.tvInvestorNum.setText(String.format(format, bean.getInvestor_list().size()));
 
             holder.investorContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -319,7 +319,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ArrayList<InvestorEntity> investorEntities=new ArrayList<>();
             investorEntities.addAll(tem);
             HomeInvestorAdapter adapter = new HomeInvestorAdapter(context, investorEntities);
-
+            adapter.setFromFund(true);
             adapter.setShowTitle(true);
             holder.recyclerViewInvestor.setAdapter(adapter);
         }

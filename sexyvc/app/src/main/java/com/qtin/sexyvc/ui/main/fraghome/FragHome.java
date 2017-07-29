@@ -19,9 +19,11 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.bean.BannerEntity;
 import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
+import com.qtin.sexyvc.ui.bean.OnClickMoreInvestorListener;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
+import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.main.fraghome.adapter.HomeAdapter;
 import com.qtin.sexyvc.ui.main.fraghome.di.DaggerFragHomeComponent;
 import com.qtin.sexyvc.ui.main.fraghome.di.FragHomeModule;
@@ -106,6 +108,13 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+        mAdapter.setOnClickMoreInvestorListener(new OnClickMoreInvestorListener() {
+            @Override
+            public void onClick() {
+                MainActivity mainActivity= (MainActivity) mActivity;
+                mainActivity.gotoInvestor();
             }
         });
         mPresenter.query();

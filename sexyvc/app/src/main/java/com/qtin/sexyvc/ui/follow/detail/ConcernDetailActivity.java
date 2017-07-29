@@ -26,6 +26,7 @@ import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.detail.di.ConcernDetailModule;
 import com.qtin.sexyvc.ui.follow.detail.di.DaggerConcernDetailComponent;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
+import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
 import com.qtin.sexyvc.ui.rate.RateActivity;
@@ -109,6 +110,8 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     LinearLayout commentContainer;
     @BindView(R.id.ivAnthStatus)
     ImageView ivAnthStatus;
+    @BindView(R.id.cardView)
+    View cardView;
 
     private long contact_id;
     private long investor_id;
@@ -188,6 +191,12 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         });
         tvTitle.setText("");
         mImageLoader = customApplication.getAppComponent().imageLoader();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mPresenter.query(contact_id);
     }
 
@@ -237,9 +246,13 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
             tvRight.setVisibility(View.GONE);
             bottomCenterLine.setVisibility(View.GONE);
             commentContainer.setVisibility(View.GONE);
+
+            cardView.setVisibility(View.GONE);
+
         } else {
             tvRight.setVisibility(View.VISIBLE);
             tvRight.setText(getResources().getString(R.string.detail));
+            cardView.setVisibility(View.VISIBLE);
         }
 
         tvTitle.setText(StringUtil.formatString(contactBean.getInvestor_name()));
@@ -353,13 +366,23 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.concernContainer, R.id.commentContainer, R.id.telephoneContainer, R.id.emailContainer, R.id.wechatContainer, R.id.remarkContainer})
+    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.concernContainer, R.id.commentContainer, R.id.telephoneContainer,
+            R.id.emailContainer, R.id.wechatContainer, R.id.remarkContainer,R.id.fundContainer})
     public void onClick(View view) {
         if (contactBean == null) {
             return;
         }
 
         switch (view.getId()) {
+            case R.id.fundContainer:
+                if(contactBean!=null){
+                    if (contactBean.getInvestor_id() != 0&&contactBean.getFund_id()!=0) {
+                        Bundle bundle=new Bundle();
+                        bundle.putLong("fund_id",contactBean.getFund_id());
+                        gotoActivity(FundDetailActivity.class,bundle);
+                    }
+                }
+                break;
             case R.id.ivLeft:
                 finish();
                 break;
@@ -456,7 +479,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                                         }
                                     });
                         } else {
-                            gotoActivityFadeForResult(ChooseActivity.class,REQUEST_CODE_SELECTED_TYPE);
+                            Bundle bundle=new Bundle();
+                            bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
+                            gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
                         }
 
                     } else {

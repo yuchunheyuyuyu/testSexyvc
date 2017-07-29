@@ -138,6 +138,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             FilterEntity entity=new FilterEntity();
             entity.setType_name(rateStrs[i]);
             entity.setKey_id(i+1);
+            entity.setType_id(i+1);
             if(i==0){
                 entity.setSelected(true);
             }
@@ -183,7 +184,6 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         request.setDomains(domains);
         request.setStages(stages);
         request.setKeyword(keyWord);
-        request.setSort(0);
         if(searchType==ConstantUtil.TYPE_FUND){
             mPresenter.queryFunds(request);
         }else{

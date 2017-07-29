@@ -45,6 +45,7 @@
         android:layout_marginLeft="52dp"
         android:layout_marginRight="52dp"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         android:background="@drawable/barbie_pink_stroke_round_shape"
         android:gravity="center"
         android:text="撰写对他的评论"

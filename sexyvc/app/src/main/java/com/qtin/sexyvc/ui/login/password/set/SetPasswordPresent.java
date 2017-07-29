@@ -95,9 +95,9 @@ public class SetPasswordPresent extends BasePresenter<SetPasswordContract.Model,
 
                             mModel.saveUsrInfo(entity);
 
-                            mRootView.rigisterSuccess();
+                            mRootView.rigisterSuccess(entity);
                         }else{
-                            mRootView.showMessage(userEntityBaseEntity.getErrMsg());
+                            //mRootView.showMessage(userEntityBaseEntity.getErrMsg());
                         }
                     }
                 });

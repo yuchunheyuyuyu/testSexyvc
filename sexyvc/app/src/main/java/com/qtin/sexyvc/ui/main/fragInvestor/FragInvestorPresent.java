@@ -69,7 +69,7 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.login.password.set;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,10 +12,14 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.login.account.create.success.CreateSuccessActivity;
 import com.qtin.sexyvc.ui.login.password.set.di.DaggerSetPasswordComponent;
 import com.qtin.sexyvc.ui.login.password.set.di.SetPasswordModule;
 import com.qtin.sexyvc.ui.main.MainActivity;
+import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
+import com.qtin.sexyvc.ui.web.WebActivity;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -85,17 +90,22 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
     }
 
 
-    @OnClick({R.id.ivBack, R.id.tvComplete})
+    @OnClick({R.id.ivBack, R.id.tvComplete,R.id.tvServiceProtocol})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
                 finish();
                 break;
+            case R.id.tvServiceProtocol:
+                Bundle bundle=new Bundle();
+                bundle.putString(ConstantUtil.INTENT_URL,"service_protocol");
+                gotoActivity(WebActivity.class,bundle);
+                break;
             case R.id.tvComplete:
                 String pwd1=etFirstPassword.getText().toString();
                 String pwd2=etSecondPassword.getText().toString();
                 if(!pwd1.equals(pwd2)){
-                    showMessage("两次密码输入不同");
+                    showMessage("两次密码不一致");
                     return;
                 }
 
@@ -124,8 +134,10 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
     }
 
     @Override
-    public void rigisterSuccess() {
-        gotoActivity(CreateSuccessActivity.class);
+    public void rigisterSuccess(UserInfoEntity entity) {
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(UserInfoActivity.INTENT_USER,entity);
+        gotoActivity(CreateSuccessActivity.class,bundle);
     }
 
     @Override

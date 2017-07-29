@@ -7,9 +7,7 @@ import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
-
 import java.util.List;
-
 import rx.Observable;
 
 /**
@@ -30,7 +28,7 @@ public interface IndividualListContract {
         Observable<BaseEntity<ConcernEntity>> queryGroupDetail(String token, long group_id, int page, int page_size);
         String getToken();
         List<LastBrowerBean> queryLastBrowers();
-        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id);
+        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size);
         UserInfoEntity getUserInfo();
 
     }

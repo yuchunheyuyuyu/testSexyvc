@@ -68,6 +68,7 @@ public class MoreInvestorActivity extends MyBaseActivity {
                 if(data.get(position) instanceof InvestorEntity){
                     Bundle bundle = new Bundle();
                     bundle.putLong("investor_id", ((InvestorEntity)data.get(position)).getInvestor_id());
+                    bundle.putBoolean("isFromFund",true);
                     gotoActivity(InvestorDetailActivity.class, bundle);
                 }
             }

@@ -352,7 +352,8 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                     u_phone = tvPhone.getText().toString().trim();
                     u_backup_phone = etPhoneBackup.getPhoneText().trim();
                     if (!etPhoneBackup.isMobileNO()) {
-                        showMessage("手机格式不合法");
+                        //showMessage("手机格式不合法");
+                        finish();
                         return;
                     }
                     mPresenter.editPhone(u_backup_phone);

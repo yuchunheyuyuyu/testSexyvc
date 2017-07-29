@@ -75,7 +75,7 @@ public class ConcernSearchPresent extends BasePresenter<ConcernSearchContract.Mo
                         if(baseEntity.isSuccess()){
                             mRootView.searchSuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

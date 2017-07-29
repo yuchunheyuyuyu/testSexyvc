@@ -51,7 +51,7 @@ public class ModifyPasswordPresent extends BasePresenter<ModifyPasswordContract.
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.modifySuccess();
                         }

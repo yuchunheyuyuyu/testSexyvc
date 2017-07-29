@@ -106,7 +106,7 @@ public class FragHomePresent extends BasePresenter<FragHomeContract.Model,FragHo
                             //
                             mRootView.dataCallback(data);
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

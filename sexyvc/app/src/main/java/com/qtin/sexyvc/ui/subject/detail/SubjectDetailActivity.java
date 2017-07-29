@@ -316,6 +316,17 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         dialogDismiss();
     }
 
+    @Override
+    public void showNotExistDialog() {
+        showComfirmDialog("该专栏已下架", null, "确定", new ComfirmListerner() {
+            @Override
+            public void onComfirm() {
+                dismissComfirmDialog();
+                finish();
+            }
+        });
+    }
+
     public void showReplyDialog(final int position, final long reply_id,String hint) {
         View view = LayoutInflater.from(this).inflate(R.layout.reply_dialog, null);
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);

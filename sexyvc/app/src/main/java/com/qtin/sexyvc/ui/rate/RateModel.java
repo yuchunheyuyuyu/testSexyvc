@@ -4,7 +4,9 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.request.RateRequest;
 import java.util.List;
@@ -34,5 +36,10 @@ public class RateModel extends BaseModel<ServiceManager,CacheManager> implements
     @Override
     public Observable<CodeEntity> rateInvestor(RateRequest request) {
         return mServiceManager.getCommonService().rateInvestor(request);
+    }
+
+    @Override
+    public Observable<BaseEntity<CommonBean>> queryNormalQuestion() {
+        return mServiceManager.getCommonService().queryNormalQuestion();
     }
 }

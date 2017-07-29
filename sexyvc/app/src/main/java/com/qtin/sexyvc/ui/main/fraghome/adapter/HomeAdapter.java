@@ -21,6 +21,7 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEntity;
 import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
 import com.qtin.sexyvc.ui.bean.OnBannerItemClickListener;
+import com.qtin.sexyvc.ui.bean.OnClickMoreInvestorListener;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.comment.list.CommentActivity;
@@ -62,8 +63,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
 
     private MyBaseActivity activity;
-
+    private OnClickMoreInvestorListener onClickMoreInvestorListener;
     private OnBannerClickListener onBannerClickItem;
+
+    public void setOnClickMoreInvestorListener(OnClickMoreInvestorListener onClickMoreInvestorListener) {
+        this.onClickMoreInvestorListener = onClickMoreInvestorListener;
+    }
 
     public void setOnBannerClickItem(OnBannerClickListener onBannerClickItem) {
         this.onBannerClickItem = onBannerClickItem;
@@ -229,6 +234,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.investorRecyclerView.addItemDecoration(decoration);
         HomeInvestorAdapter adapter=new HomeInvestorAdapter(context,entity.getList());
         holder.investorRecyclerView.setAdapter(adapter);
+
+        holder.moreInvestorContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onClickMoreInvestorListener!=null){
+                    onClickMoreInvestorListener.onClick();
+                }
+            }
+        });
     }
 
     @Override

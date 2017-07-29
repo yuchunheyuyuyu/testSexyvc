@@ -31,15 +31,19 @@
         android:theme="@style/MyAppTheme">
 
         <activity
-            android:name=".ui.login.account.create.CreateActivity"
+            android:name=".ui.guide.GuideActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--主页-->
+        <activity
+            android:name=".ui.login.account.create.CreateActivity"
+            android:screenOrientation="portrait" />
 
         <!--主页-->
         <activity
@@ -224,7 +228,7 @@
 
         <!--路演评价完成-->
         <activity
-            android:name=".ui.road.success.RoadSuccessActivity"
+            android:name=".ui.road.success.SuccessActivity"
             android:screenOrientation="portrait" />
         <!--评分-->
         <activity
@@ -251,6 +255,10 @@
             android:name=".ui.add.search.SearchObjectActivity"
             android:screenOrientation="portrait" />
 
+        <!--webView-->
+        <activity
+            android:name=".ui.web.WebActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity

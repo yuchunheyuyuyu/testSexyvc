@@ -61,6 +61,29 @@ public class MyAnimations {
 		}
 	}
 
+	// 图标的动画(入动画)
+	public static void startAnimationsIn2(ViewGroup viewgroup, int durationMillis) {
+		for (int i = 0; i < viewgroup.getChildCount(); i++) {
+			ImageView inoutimagebutton = (ImageView) viewgroup.getChildAt(i);
+			inoutimagebutton.setVisibility(View.VISIBLE);
+			inoutimagebutton.setClickable(true);
+			inoutimagebutton.setFocusable(true);
+			MarginLayoutParams mlp = (MarginLayoutParams) inoutimagebutton.getLayoutParams();
+			Animation animation=null;
+			if(i==0){
+				int x=(CustomApplication.screenSize.x/2);
+				animation = new TranslateAnimation(0F, 0F, mlp.bottomMargin, 0F);
+			}
+			//Animation animation = new TranslateAnimation(mlp.rightMargin - xOffset, 0F, yOffset + mlp.bottomMargin, 0F);
+			animation.setFillAfter(true);
+			animation.setDuration(durationMillis);
+			animation.setStartOffset(0);// 下一个动画的偏移时间
+			animation.setInterpolator(new OvershootInterpolator(2F));// 动画的效果 弹出再回来的效果
+			inoutimagebutton.startAnimation(animation);
+
+		}
+	}
+
 	// 图标的动画(出动画)
 	public static void startAnimationsOut(ViewGroup viewgroup, int durationMillis) {
 		for (int i = 0; i < viewgroup.getChildCount(); i++) {
@@ -81,6 +104,39 @@ public class MyAnimations {
 			animation.setFillAfter(true);
 			animation.setDuration(durationMillis);
 			animation.setStartOffset(((viewgroup.getChildCount() - i) * 100) / (-1 + viewgroup.getChildCount()));// 下一个动画的偏移时间
+			animation.setAnimationListener(new Animation.AnimationListener() {
+				public void onAnimationStart(Animation arg0) {
+				}
+
+				public void onAnimationRepeat(Animation arg0) {
+				}
+
+				public void onAnimationEnd(Animation arg0) {
+					inoutimagebutton.setVisibility(View.GONE);
+					inoutimagebutton.setClickable(false);
+					inoutimagebutton.setFocusable(false);
+				}
+			});
+			inoutimagebutton.startAnimation(animation);
+		}
+	}
+	// 图标的动画(出动画)
+	public static void startAnimationsOut2(ViewGroup viewgroup, int durationMillis) {
+		for (int i = 0; i < viewgroup.getChildCount(); i++) {
+			final ImageView inoutimagebutton = (ImageView) viewgroup.getChildAt(i);
+			MarginLayoutParams mlp = (MarginLayoutParams) inoutimagebutton.getLayoutParams();
+
+			Animation animation=null;
+			//原来的代码
+			//animation = new TranslateAnimation(0F, mlp.rightMargin - xOffset, 0F, yOffset + mlp.bottomMargin);
+			if(i==0){
+				int x=(CustomApplication.screenSize.x/2);
+				animation = new TranslateAnimation(0F, 0F, 0F,mlp.bottomMargin);
+			}
+
+			animation.setFillAfter(true);
+			animation.setDuration(durationMillis);
+			animation.setStartOffset(0);// 下一个动画的偏移时间
 			animation.setAnimationListener(new Animation.AnimationListener() {
 				public void onAnimationStart(Animation arg0) {
 				}

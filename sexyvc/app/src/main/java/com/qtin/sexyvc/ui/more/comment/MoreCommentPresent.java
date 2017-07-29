@@ -39,7 +39,7 @@ public class MoreCommentPresent extends BasePresenter<MoreCommentContract.Model,
     }
 
     public void queryFundComment(long fund_id,final long comment_id){
-        mModel.queryFundDetail(mModel.getToken(),fund_id,comment_id)
+        mModel.queryFundDetail(mModel.getToken(),fund_id,comment_id,15)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -70,14 +70,14 @@ public class MoreCommentPresent extends BasePresenter<MoreCommentContract.Model,
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
     }
 
     public void queryInvestorComment(long investor_id,final long comment_id){
-        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id)
+        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id,15)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -108,7 +108,7 @@ public class MoreCommentPresent extends BasePresenter<MoreCommentContract.Model,
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

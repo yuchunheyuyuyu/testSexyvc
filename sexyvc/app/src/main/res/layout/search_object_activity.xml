@@ -41,6 +41,7 @@
             android:background="@drawable/concern_search_shape"
             android:hint="@string/who_you_want_comment"
             android:imeOptions="actionSearch"
+            android:maxLength="20"
             android:paddingLeft="56px"
             android:paddingRight="16px"
             android:singleLine="true"

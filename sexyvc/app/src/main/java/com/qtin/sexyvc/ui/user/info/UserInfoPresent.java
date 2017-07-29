@@ -62,8 +62,9 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
+                            //mRootView.showMessage("性别修改成功");
                             mRootView.editSexSuccess(u_gender);
                         }
                     }
@@ -139,7 +140,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                     @Override
                     public void onNext(CodeEntity codeEntity) {
                         if(codeEntity.isSuccess()){
-                            mRootView.showMessage("头像修改成功");
+                            //mRootView.showMessage("头像修改成功");
                             mRootView.editAvatarSuccess(u_avatar);
                         }
                     }

@@ -74,14 +74,14 @@ public class SearchObjectPresent extends BasePresenter<SearchObjectContract.Mode
                         if(baseEntity.isSuccess()){
                             mRootView.queryInvestorSuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
     }
 
-    public void queryDetail(long investor_id,long comment_id){
-        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id)
+    public void queryDetail(long investor_id,long comment_id,int page_size){
+        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id,page_size)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -104,7 +104,7 @@ public class SearchObjectPresent extends BasePresenter<SearchObjectContract.Mode
                         if(baseEntity.isSuccess()){
                             mRootView.queryDetailSuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

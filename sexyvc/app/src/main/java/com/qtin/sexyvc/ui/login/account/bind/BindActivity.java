@@ -68,7 +68,14 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
     @Override
     protected void onPause() {
         super.onPause();
+        resetStatus();
+    }
+
+    private void resetStatus(){
         mHandler.removeCallbacks(runnable);
+        countDown=TOTAL_TIME;
+        tvGetVertify.setSelected(true);
+        tvGetVertify.setText(getResources().getString(R.string.get_vertify_code));
     }
 
     @Override
@@ -181,5 +188,10 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
     @Override
     public void notNeedSetPassword() {
         gotoActivity(MainActivity.class);
+    }
+
+    @Override
+    public void sendCodeFail() {
+        //resetStatus();
     }
 }

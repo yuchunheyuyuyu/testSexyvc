@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.user.setting;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import com.jess.arms.utils.DataHelper;
@@ -15,6 +16,9 @@ import com.qtin.sexyvc.ui.login.account.create.CreateActivity;
 import com.qtin.sexyvc.ui.user.password.ModifyPasswordActivity;
 import com.qtin.sexyvc.ui.user.setting.di.DaggerSettingComponent;
 import com.qtin.sexyvc.ui.user.setting.di.SettingModule;
+import com.qtin.sexyvc.ui.web.WebActivity;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -104,7 +108,9 @@ public class SettingActivity extends MyBaseActivity<SettingPresent> implements S
                         });
                 break;
             case R.id.aboutUsContainer:
-
+                Bundle bundle=new Bundle();
+                bundle.putString(ConstantUtil.INTENT_URL,"about_sexyvc");
+                gotoActivity(WebActivity.class,bundle);
                 break;
             case R.id.tvLogout:
                 showTwoButtonDialog(getResources().getString(R.string.comfirm_exit), getResources().getString(R.string.cancle),

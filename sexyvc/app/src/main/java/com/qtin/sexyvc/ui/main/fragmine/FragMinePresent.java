@@ -6,7 +6,6 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
-import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
@@ -53,7 +52,7 @@ public class FragMinePresent extends BasePresenter<FragMineContract.Model,FragMi
                                     mModel.saveUsrInfo(baseEntity.getItems());
                                 }
                             }else{
-                                mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
+                                //mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
                             }
                         }
                     }

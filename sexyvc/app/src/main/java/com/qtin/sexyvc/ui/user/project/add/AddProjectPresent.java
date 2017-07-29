@@ -89,8 +89,9 @@ public class AddProjectPresent extends BasePresenter<AddProjectContract.Model,Ad
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
+                            mRootView.showMessage("修改成功");
                             mRootView.onEditSuccess(bean);
                         }
                     }
@@ -117,8 +118,9 @@ public class AddProjectPresent extends BasePresenter<AddProjectContract.Model,Ad
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
+                            mRootView.showMessage("创建成功");
                             mRootView.onCreateSuccess(bean);
                         }
                     }
@@ -172,7 +174,7 @@ public class AddProjectPresent extends BasePresenter<AddProjectContract.Model,Ad
                         if(baseEntity.isSuccess()){
                             upload(path,baseEntity.getItems().getQiniu_token());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

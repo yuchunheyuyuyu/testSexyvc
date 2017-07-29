@@ -69,8 +69,9 @@ public class CreateInvestorPresent extends BasePresenter<CreateInvestorContract.
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<IdBean>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<IdBean> codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+
                         if(codeEntity.isSuccess()){
+                            mRootView.showMessage("创建成功");
                             mRootView.onCreateSuccess(codeEntity.getItems().getId());
                         }
                     }

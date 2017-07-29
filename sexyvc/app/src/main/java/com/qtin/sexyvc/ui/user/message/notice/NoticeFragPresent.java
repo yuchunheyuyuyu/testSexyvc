@@ -69,7 +69,7 @@ public class NoticeFragPresent extends BasePresenter<NoticeFragContract.Model,No
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

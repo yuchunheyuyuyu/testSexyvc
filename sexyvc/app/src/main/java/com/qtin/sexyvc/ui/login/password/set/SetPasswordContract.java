@@ -14,7 +14,7 @@ import rx.Observable;
  */
 public interface SetPasswordContract {
     interface View extends BaseView{
-        void rigisterSuccess();
+        void rigisterSuccess(UserInfoEntity entity);
         void bindSuccess();
     }
     interface Model extends IModel{

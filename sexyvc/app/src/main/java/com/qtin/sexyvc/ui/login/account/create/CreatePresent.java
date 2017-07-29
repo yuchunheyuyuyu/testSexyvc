@@ -6,7 +6,6 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
-import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
@@ -74,6 +73,8 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                     public void onNext(BaseEntity<BindEntity> codeEntity) {
                         if(codeEntity.isSuccess()){
                             mRootView.validateSuccess();
+                        }else{
+                            //mRootView.showMessage("验证码错误");
                         }
                     }
                 });
@@ -123,7 +124,7 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                                     mRootView.gotoBind(requestEntity.getAccount_type());
                                 }
                             }else{
-                                mRootView.showMessage(StringUtil.formatString(userEntityBaseEntity.getErrMsg()));
+                                //mRootView.showMessage(StringUtil.formatString(userEntityBaseEntity.getErrMsg()));
                             }
                         }
                     }

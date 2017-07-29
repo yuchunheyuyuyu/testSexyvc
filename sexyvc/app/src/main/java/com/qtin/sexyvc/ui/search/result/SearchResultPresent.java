@@ -86,7 +86,7 @@ public class SearchResultPresent extends BasePresenter<SearchResultContract.Mode
                         if(baseEntity.isSuccess()){
                             mRootView.queryFundSuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
@@ -123,7 +123,7 @@ public class SearchResultPresent extends BasePresenter<SearchResultContract.Mode
                         if(baseEntity.isSuccess()){
                             mRootView.queryInvestorSuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

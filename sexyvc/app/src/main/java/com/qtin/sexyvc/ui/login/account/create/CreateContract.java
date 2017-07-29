@@ -18,6 +18,7 @@ public interface CreateContract {
         void validateSuccess();
         void gotoBind(int platform_type);
         void notNeedBind();
+        void getVertifyCodeResult(boolean isSuccess);
     }
     interface Model extends IModel{
         void saveUser(UserEntity entity);

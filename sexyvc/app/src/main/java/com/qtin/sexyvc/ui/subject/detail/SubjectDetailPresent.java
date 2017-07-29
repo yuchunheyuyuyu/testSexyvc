@@ -70,7 +70,11 @@ public class SubjectDetailPresent extends BasePresenter<SubjectDetailContract.Mo
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(reply_id,baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            if(baseEntity.getErrCode()==40002){
+                                mRootView.showNotExistDialog();
+                            }else{
+                                //mRootView.showMessage(baseEntity.getErrMsg());
+                            }
                         }
                     }
                 });
@@ -95,7 +99,7 @@ public class SubjectDetailPresent extends BasePresenter<SubjectDetailContract.Mo
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<ReplyIdBean>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<ReplyIdBean> baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.replySuccess(position,baseEntity.getItems().getReply_id(),reply_content);
                         }
@@ -122,7 +126,7 @@ public class SubjectDetailPresent extends BasePresenter<SubjectDetailContract.Mo
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.praiseSuccess(position);
                         }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.di.module.GlobeConfigModule;
 import com.jess.arms.http.GlobeHttpHandler;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.BuildConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.di.module.CacheModule;
@@ -40,11 +41,9 @@ import com.umeng.socialize.UMShareAPI;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import org.greenrobot.greendao.database.Database;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErroListener;
-import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -63,15 +62,15 @@ public class CustomApplication extends BaseApplication {
     private AppComponent mAppComponent;
     private RefWatcher mRefWatcher;//leakCanary观察器
 
-    private boolean isShowedLoginDialog=false;
+    private boolean isShowedLoginDialog = false;
 
     {
         PlatformConfig.setWeixin("wxdd991af9d0c9ddbe", "e957f59de5bbf4a3b584dd7891b21ecb");
         PlatformConfig.setQQZone("1105726586", "yCie49iiNXUnjBAu");
-        PlatformConfig.setSinaWeibo("3351202988", "c9efb278c7e754735b8a26daaddf2b47","http://sns.whalecloud.com");
+        PlatformConfig.setSinaWeibo("3351202988", "c9efb278c7e754735b8a26daaddf2b47", "http://sns.whalecloud.com");
     }
 
-    public  String deviceToken;
+    public String deviceToken;
 
     @Override
     public void onCreate() {
@@ -105,13 +104,13 @@ public class CustomApplication extends BaseApplication {
         installLeakCanary();//leakCanary内存泄露检查
     }
 
-    private void initDataBase(){
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this,  "sexyvc16-db");
-        Database db =helper.getWritableDb();
+    private void initDataBase() {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "sexyvc16-db");
+        Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }
 
-    private void initPush(){
+    private void initPush() {
         PushAgent mPushAgent = PushAgent.getInstance(this);
         //mPushAgent.setDebugMode(false);//正式发布 关闭日志输出。
 
@@ -121,8 +120,8 @@ public class CustomApplication extends BaseApplication {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-                deviceToken=deviceToken;
-                Log.e("=====","===========deviceToken:"+deviceToken);//测试token Aty3-a0sozquvOYd5MO8KHuWeyi16tVW7D4gntb38k8t
+                CustomApplication.this.deviceToken = deviceToken;
+                Log.e("=====", "===========deviceToken:" + deviceToken);//测试token Aty3-a0sozquvOYd5MO8KHuWeyi16tVW7D4gntb38k8t
             }
 
             @Override
@@ -136,12 +135,14 @@ public class CustomApplication extends BaseApplication {
 
     protected void showComfirmDialog() {
 
+        if (comfirmDialog != null && comfirmDialog.isShowing()) {
+            return;
+        }
 
-
-        final Activity activity=getAppManager().getCurrentActivity();
+        final Activity activity = getAppManager().getCurrentActivity();
         View view = View.inflate(activity, R.layout.one_button_dialog, null);
-        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
-        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        TextView tvDialogTitle = (TextView) view.findViewById(R.id.tvDialogTitle);
+        Button btnRight = (Button) view.findViewById(R.id.btnRight);
 
         tvDialogTitle.setText("您的账号已在另一个设备上登录");
         btnRight.setText("确定");
@@ -151,7 +152,7 @@ public class CustomApplication extends BaseApplication {
             public void onClick(View v) {
                 dismissComfirmDialog();
                 daoSession.getUserEntityDao().deleteAll();
-                Intent intent=new Intent(activity, CreateActivity.class);
+                Intent intent = new Intent(activity, CreateActivity.class);
                 activity.startActivity(intent);
             }
         });
@@ -170,24 +171,23 @@ public class CustomApplication extends BaseApplication {
         comfirmDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                isShowedLoginDialog=false;
+                isShowedLoginDialog = false;
             }
         });
         comfirmDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                isShowedLoginDialog=true;
+                isShowedLoginDialog = true;
             }
         });
         comfirmDialog.show();
     }
 
-    protected void dismissComfirmDialog(){
-        if(comfirmDialog!=null&&comfirmDialog.isShowing()){
+    protected void dismissComfirmDialog() {
+        if (comfirmDialog != null && comfirmDialog.isShowing()) {
             comfirmDialog.dismiss();
         }
     }
-
 
 
     @Override
@@ -230,6 +230,7 @@ public class CustomApplication extends BaseApplication {
 
     /**
      * app的全局配置信息封装进module(使用Dagger注入到需要配置信息的地方)
+     *
      * @return
      */
     @Override
@@ -245,22 +246,39 @@ public class CustomApplication extends BaseApplication {
                         //重新请求token,并重新执行请求
                         try {
                             if (!TextUtils.isEmpty(httpResult)) {
-                                Log.e("","=========httpResult:"+httpResult);
-                                JSONObject jsonObject=new JSONObject(httpResult);
-                                if(!isShowedLoginDialog&&jsonObject.has("errCode")&&jsonObject.getInt("errCode")==10003){
-                                    Observable.just(1)
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(new Action1<Integer>() {
-                                                @Override
-                                                public void call(Integer integer) {
-                                                    showComfirmDialog();
-                                                }
-                                            });
+                                Log.e("", "=========httpResult:" + httpResult);
+                                JSONObject jsonObject = new JSONObject(httpResult);
+                                if(jsonObject.has("errCode")){
+                                    final int errCode=jsonObject.getInt("errCode");
+                                    if(errCode!=0){
+                                        if(errCode== 10003){
+                                            if(!isShowedLoginDialog){
+                                                Observable.just(1)
+                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe(new Action1<Integer>() {
+                                                            @Override
+                                                            public void call(Integer integer) {
+                                                                showComfirmDialog();
+                                                            }
+                                                        });
+                                            }
+                                        }else{
+                                            Observable.just(1)
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribe(new Action1<Integer>() {
+                                                        @Override
+                                                        public void call(Integer integer) {
+                                                            String strName="code_"+errCode;
+                                                            String errorStr=getString(getResources().getIdentifier(strName, "string", getPackageName()));
+                                                            UiUtils.showToastShort(getContext(),errorStr);
+                                                        }
+                                                    });
+                                        }
+                                    }
                                 }
-                                Timber.tag(TAG).w(httpResult);
                             }
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                             return response;
                         }
@@ -285,7 +303,7 @@ public class CustomApplication extends BaseApplication {
                     @Override
                     public Request onHttpRequestBefore(Interceptor.Chain chain, Request request) {
                         //如果需要再请求服务器之前做一些操作,则重新返回一个做过操作的的requeat如增加header,不做操作则返回request
-                        if (request.method().equals("POST")) {
+                        /**if (request.method().equals("POST")) {
                             if (request.body() instanceof FormBody) {
                                 FormBody.Builder bodyBuilder = new FormBody.Builder();
                                 FormBody formBody = (FormBody) request.body();
@@ -294,11 +312,11 @@ public class CustomApplication extends BaseApplication {
                                     bodyBuilder.addEncoded(formBody.encodedName(i), formBody.encodedValue(i));
                                 }
                                 //formBody=bodyBuilder.addEncoded("token","5643e5031a98de846f1d2bd4d01955f6").build();
-                                formBody=bodyBuilder.build();
-                                request=request.newBuilder().post(formBody).build();
+                                formBody = bodyBuilder.build();
+                                request = request.newBuilder().post(formBody).build();
                                 return request;
                             }
-                        }
+                        }*/
                         return request;
                     }
                 })
@@ -308,7 +326,7 @@ public class CustomApplication extends BaseApplication {
                     @Override
                     public void handleResponseError(Context context, Exception e) {
                         Timber.tag(TAG).w("------------>" + e.getMessage());
-                        //UiUtils.SnackbarText(e.toString());
+                        UiUtils.SnackbarText("网络错误，请稍后再试~");
                     }
                 }).build();
     }

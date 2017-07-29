@@ -64,7 +64,7 @@ public class SubjectListPresent extends BasePresenter<SubjectListContract.Model,
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(need_banner,baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                           // mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

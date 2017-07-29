@@ -14,6 +14,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
 import com.qtin.sexyvc.ui.road.bean.OnOptionClickListener;
 import com.qtin.sexyvc.ui.road.bean.OptionFirstBean;
+import com.qtin.sexyvc.ui.road.bean.OptionSecondBean;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import java.util.ArrayList;
@@ -140,7 +141,21 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(bean.getLink_question().getAdd_option()==0){
                 holder.tvAddLinkOption.setVisibility(View.GONE);
             }else {
-                holder.tvAddLinkOption.setVisibility(View.VISIBLE);
+                int customNum=0;
+
+                if(bean.getLink_question().getOptions()!=null&&!bean.getLink_question().getOptions().isEmpty()){
+                    for(OptionSecondBean secondBean:bean.getLink_question().getOptions()){
+                        if(secondBean.getOption_id()==0){
+                            customNum++;
+                        }
+                    }
+                }
+                if(customNum>=3){
+                    holder.tvAddLinkOption.setVisibility(View.GONE);
+                }else {
+                    holder.tvAddLinkOption.setVisibility(View.VISIBLE);
+                }
+
                 holder.tvAddLinkOption.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

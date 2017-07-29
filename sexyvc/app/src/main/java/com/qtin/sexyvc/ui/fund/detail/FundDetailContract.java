@@ -16,7 +16,7 @@ public interface FundDetailContract {
         void querySuccess(FundDetailBackBean bean);
     }
     interface Model extends IModel{
-        Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(String token,long fund_id,long comment_id);
+        Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(String token,long fund_id,long comment_id,int page_size);
         String getToken();
     }
 }

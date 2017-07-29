@@ -26,6 +26,7 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
+import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
 import com.qtin.sexyvc.ui.road.bean.AddQuestionBean;
@@ -36,22 +37,20 @@ import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 import com.qtin.sexyvc.ui.road.di.DaggerRoadCommentComponent;
 import com.qtin.sexyvc.ui.road.di.RoadCommentModule;
-import com.qtin.sexyvc.ui.road.success.RoadSuccessActivity;
+import com.qtin.sexyvc.ui.road.success.SuccessActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-
+import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -282,14 +281,26 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     @Override
     public void onUploadAnswersSuccess() {
         investorInfoBean.setHas_roadshow(1);
+
         Bundle bundle=new Bundle();
         bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
-        gotoActivity(RoadSuccessActivity.class,bundle);
+        gotoActivity(SuccessActivity.class,bundle);
+        Observable.just(1)
+                .delay(100, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        EventBus.getDefault().post(new CommentEvent(ConstantUtil.ROAD_SUCCESS),ConstantUtil.ROAD_SUCCESS);
+                    }
+                });
     }
 
     @Override
-    public void queryNormalQuestionsSuccess(ArrayList<String> questionsData) {
-        normalQuestions.addAll(questionsData);
+    public void queryNormalQuestionsSuccess(CommonBean commonBean) {
+        if(commonBean!=null&&commonBean.getQuestions()!=null){
+            normalQuestions.addAll(commonBean.getQuestions());
+        }
     }
 
 
@@ -403,7 +414,15 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                     //添加选项
                     OptionSecondBean secondBean=new OptionSecondBean();
                     secondBean.setOption_content(content);
+                    secondBean.setOption_id(0);
                     secondBean.setSelected(true);
+
+                    //单选还是多选
+                    if(optionBean.getLink_question().getMulti_select()==0){
+                        for(OptionSecondBean optionSecondBean:optionBean.getLink_question().getOptions()){
+                            optionSecondBean.setSelected(false);
+                        }
+                    }
                     optionBean.getLink_question().getOptions().add(secondBean);
                     mAdapter.notifyDataSetChanged();
                 }

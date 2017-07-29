@@ -57,7 +57,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             if(status==0){
                                 mRootView.deleteSuccess(position);
@@ -92,7 +92,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
                             mRootView.showMessage("该组已建立");
                             mRootView.addSuccess(baseEntity.getItems().getGroup_id(),group_name);
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
@@ -123,7 +123,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
                                 mRootView.querySuccess(groupEntity);
                             }
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

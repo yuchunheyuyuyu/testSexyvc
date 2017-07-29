@@ -35,6 +35,11 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private boolean isShowTitle;
     private MyBaseActivity activity;
+    private boolean isFromFund;
+
+    public void setFromFund(boolean fromFund) {
+        isFromFund = fromFund;
+    }
 
     public void setShowTitle(boolean showTitle) {
         isShowTitle = showTitle;
@@ -87,6 +92,7 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
             public void onClick(View v) {
                 Bundle bundle=new Bundle();
                 bundle.putLong("investor_id",data.get(position).getInvestor_id());
+                bundle.putBoolean("isFromFund",isFromFund);
                 activity.gotoActivity(InvestorDetailActivity.class,bundle);
             }
         });

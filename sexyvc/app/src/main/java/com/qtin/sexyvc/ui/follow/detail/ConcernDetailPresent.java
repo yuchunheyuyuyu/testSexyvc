@@ -60,7 +60,7 @@ public class ConcernDetailPresent extends BasePresenter<ConcernDetailContract.Mo
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
@@ -87,7 +87,7 @@ public class ConcernDetailPresent extends BasePresenter<ConcernDetailContract.Mo
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        mRootView.showMessage(baseEntity.getErrMsg());
+                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.cancleSuccess(investor_id);
                         }

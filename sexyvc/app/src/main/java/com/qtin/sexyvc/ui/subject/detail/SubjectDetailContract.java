@@ -22,6 +22,8 @@ public interface SubjectDetailContract {
         void replySuccess(int position,long reply_id,String content);
         void dialogWaitLoading();
         void dialogWaitDismiss();
+
+        void showNotExistDialog();
     }
     interface Model extends IModel{
         String getToken();

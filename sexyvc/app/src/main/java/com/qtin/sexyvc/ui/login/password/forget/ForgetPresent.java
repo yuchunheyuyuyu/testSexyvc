@@ -64,7 +64,7 @@ public class ForgetPresent extends BasePresenter<ForgetContract.Model,ForgetCont
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<BindEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<BindEntity> codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
                             mRootView.validateSuccess();
                         }

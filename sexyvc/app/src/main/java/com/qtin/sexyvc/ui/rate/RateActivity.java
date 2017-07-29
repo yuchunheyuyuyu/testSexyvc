@@ -26,6 +26,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
+import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.rate.di.DaggerRateComponent;
@@ -213,13 +214,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                 return true;
             }
         });
-        String [] tagStr={"靠谱","务实","真诚","有见解","导师","正直","眼光独到"};
-        //测试常用标签
-        for(int i=0;i<tagStr.length;i++){
-            TagEntity tagEntity=new TagEntity();
-            tagEntity.setTag_name(tagStr[i]);
-            normalTags.add(tagEntity);
-        }
+        mPresenter.queryNormalQuestion();
     }
 
     @Override
@@ -319,11 +314,23 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = etInput.getText().toString();
+                String content = etInput.getText().toString().trim();
                 if (StringUtil.isBlank(content)) {
                     showMessage("标签不能为空");
                     return;
                 }
+
+                if(!tags.isEmpty()){
+                    for(TagEntity tagEntity:tags){
+                        if(content.equals(tagEntity.getTag_name())){
+                            showMessage("该标签已存在");
+                            return;
+                        }
+                    }
+                }
+
+
+
                 tagDialog.dismiss();
                 TagEntity tagEntity=new TagEntity();
                 tagEntity.setSelected(true);
@@ -401,5 +408,16 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                         finish();
                     }
                 });
+    }
+
+    @Override
+    public void queryNormalQuestionsSuccess(CommonBean commonBean) {
+        if(commonBean!=null&&commonBean.getTags()!=null){
+            for(int i=0;i<commonBean.getTags().size();i++){
+                TagEntity tagEntity=new TagEntity();
+                tagEntity.setTag_name(commonBean.getTags().get(i));
+                normalTags.add(tagEntity);
+            }
+        }
     }
 }

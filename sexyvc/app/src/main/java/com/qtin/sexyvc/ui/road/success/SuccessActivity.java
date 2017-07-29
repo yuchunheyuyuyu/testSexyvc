@@ -6,10 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
-import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.rate.RateActivity;
@@ -18,18 +18,16 @@ import com.qtin.sexyvc.ui.road.success.di.DaggerRoadSuccessComponent;
 import com.qtin.sexyvc.ui.road.success.di.RoadSuccessModule;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import org.simple.eventbus.EventBus;
-import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
  */
-public class RoadSuccessActivity extends MyBaseActivity<RoadSuccessPresent> implements RoadSuccessContract.View {
+public class SuccessActivity extends MyBaseActivity<RoadSuccessPresent> implements RoadSuccessContract.View {
 
     @BindView(R.id.ivLeft)
     ImageView ivLeft;
@@ -83,27 +81,19 @@ public class RoadSuccessActivity extends MyBaseActivity<RoadSuccessPresent> impl
 
         tvName.setText(String.format(getResources().getString(R.string.format_road_success),""+investorInfoBean.getInvestor_name()));
 
-        Observable.just(1)
-                .delay(200, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        EventBus.getDefault().post(new CommentEvent(ConstantUtil.ROAD_SUCCESS),ConstantUtil.ROAD_SUCCESS);
-                    }
-                });
+        UserInfoEntity userInfoEntity=mPresenter.getUserInfo();
+        if(userInfoEntity!=null){
+            if(userInfoEntity.getU_auth_state()== ConstantUtil.AUTH_STATE_UNPASS){
+                tvVertify.setVisibility(View.VISIBLE);
+            }else{
+                tvVertify.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
     public void showLoading() {
-        UserInfoEntity userInfoEntity=mPresenter.getUserInfo();
-        if(userInfoEntity!=null){
-            if(userInfoEntity.getU_auth_state()== ConstantUtil.AUTH_STATE_PASS){
-                tvVertify.setVisibility(View.GONE);
-            }else{
-                tvVertify.setVisibility(View.VISIBLE);
-            }
-        }
+
         if(investorInfoBean!=null){
             if(investorInfoBean.getHas_comment()==0){
                 tvEditComment.setVisibility(View.VISIBLE);

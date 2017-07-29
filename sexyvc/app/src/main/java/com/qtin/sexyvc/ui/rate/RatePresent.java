@@ -6,7 +6,9 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.request.RateRequest;
 
 import javax.inject.Inject;
@@ -55,9 +57,36 @@ public class RatePresent extends BasePresenter<RateContract.Model,RateContract.V
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity codeEntity) {
-                        mRootView.showMessage(codeEntity.getErrMsg());
+                        //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
+                            mRootView.showMessage("评分成功");
                             mRootView.rateSuccess(request.getScore());
+                        }
+                    }
+                });
+    }
+
+    public void queryNormalQuestion(){
+        mModel.queryNormalQuestion()
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.startLoad("获取数据中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.endLoad();
+                    }
+                }).compose(RxUtils.<BaseEntity<CommonBean>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<CommonBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<CommonBean> baseListEntity) {
+                        if(baseListEntity.isSuccess()){
+                            mRootView.queryNormalQuestionsSuccess(baseListEntity.getItems());
                         }
                     }
                 });

@@ -106,6 +106,9 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     protected void onPause() {
         super.onPause();
         mHandler.removeCallbacks(runnable);
+        countDown=TOTAL_TIME;
+        tvGetVertify.setSelected(true);
+        tvGetVertify.setText(getResources().getString(R.string.get_vertify_code));
     }
 
     @Override
@@ -195,6 +198,16 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     @Override
     public void notNeedBind() {
         gotoActivity(MainActivity.class);
+    }
+
+    @Override
+    public void getVertifyCodeResult(boolean isSuccess) {
+        if(!isSuccess){
+            mHandler.removeCallbacks(runnable);
+            countDown=TOTAL_TIME;
+            tvGetVertify.setSelected(true);
+            tvGetVertify.setText(getResources().getString(R.string.get_vertify_code));
+        }
     }
 
     private UMAuthListener umAuthListener = new UMAuthListener() {

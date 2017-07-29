@@ -6,6 +6,7 @@ import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommentIdBean;
+import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
@@ -21,6 +22,7 @@ import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.list.frag.bean.CommentItemsBean;
+import com.qtin.sexyvc.ui.demo.activity.bean.PageBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
@@ -467,7 +469,7 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/page/investor/detail")
     Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,@Field("investor_id")long investor_id,
-                                                             @Field("comment_id")long comment_id);
+                                                             @Field("comment_id")long comment_id,@Field("page_size")int page_size);
 
     /**
      * 68. 我的投资人——投资人详情
@@ -488,7 +490,7 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/fund/detail")
-    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,@Field("fund_id")long fund_id,@Field("comment_id")long comment_id);
+    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,@Field("fund_id")long fund_id,@Field("comment_id")long comment_id,@Field("page_size")int page_size);
 
     /**
      * 搜索投资机构
@@ -571,7 +573,7 @@ public interface CommonService {
      * @return
      */
     @POST("api/page/recommend/questions")
-    Observable<BaseListEntity<String>> queryNormalQuestion();
+    Observable<BaseEntity<CommonBean>> queryNormalQuestion();
 
     /**
      * 评分
@@ -656,6 +658,15 @@ public interface CommonService {
      */
     @POST("api/action/read")
     Observable<CodeEntity> changeReadStatus(@Body ChangeReadStatusRequest request);
+
+    /**
+     * 71. 静态页面——详情
+     * @param alias_name
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/static/detail")
+    Observable<BaseEntity<PageBean>> queryPage(@Field("alias_name")String alias_name);
 
  }
 

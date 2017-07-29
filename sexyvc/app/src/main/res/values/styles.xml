@@ -28,7 +28,7 @@
 
     <!--splash页面的-->
     <style name="SplashTheme" parent="MyAppTheme">
-        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowBackground">@drawable/launch_page</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:fitsSystemWindows">false</item>
     </style>
@@ -117,15 +117,15 @@
     </style>
 
     <style name="home_tab_image_style">
-        <item name="android:layout_width">46px</item>
-        <item name="android:layout_height">46px</item>
-        <item name="android:layout_marginTop">16px</item>
+        <item name="android:layout_width">96px</item>
+        <item name="android:layout_height">64px</item>
+        <item name="android:layout_marginTop">6px</item>
     </style>
 
     <style name="home_tab_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8px</item>
+        <item name="android:layout_marginTop">2px</item>
         <item name="android:textSize">20px</item>
         <item name="android:textColor">@color/home_tab_text_color</item>
     </style>

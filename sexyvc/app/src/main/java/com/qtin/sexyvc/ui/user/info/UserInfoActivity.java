@@ -234,13 +234,20 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 gotoActivityForResult(ModifyActivity.class,email,ModifyActivity.MODIFY_EMAIL);
                 break;
             case R.id.positionContainer:
-                Bundle position=new Bundle();
-                position.putString("u_company",userInfo.getU_company());
-                position.putString("u_title",userInfo.getU_title());
-                position.putInt("u_auth_type",userInfo.getU_auth_type());
-                gotoActivityForResult(PositionActivity.class,position,ModifyActivity.MODIFY_POSITION);
+                gotoSetPosition();
                 break;
             case R.id.identifyContainer:
+                if(userInfo.getU_auth_type()==ConstantUtil.AUTH_TYPE_UNKNOWN){
+                    showComfirmDialog("请先完善身份信息", null, "确定", new ComfirmListerner() {
+                        @Override
+                        public void onComfirm() {
+                            dismissComfirmDialog();
+                            gotoSetPosition();
+                        }
+                    });
+                    return;
+                }
+
                 if(StringUtil.isBlank(userInfo.getBusiness_card())){
                     isUpdateAvatar=false;
                     showPhotoDialog(false);
@@ -251,6 +258,14 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 }
                 break;
         }
+    }
+
+    private void gotoSetPosition(){
+        Bundle position=new Bundle();
+        position.putString("u_company",userInfo.getU_company());
+        position.putString("u_title",userInfo.getU_title());
+        position.putInt("u_auth_type",userInfo.getU_auth_type());
+        gotoActivityForResult(PositionActivity.class,position,ModifyActivity.MODIFY_POSITION);
     }
 
     /**

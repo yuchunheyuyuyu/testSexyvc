@@ -67,7 +67,7 @@ public class FlashPresent extends BasePresenter<FlashContract.Model,FlashContrac
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(pullToRefresh,baseEntity.getItems());
                         }else{
-                            mRootView.showMessage(baseEntity.getErrMsg());
+                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

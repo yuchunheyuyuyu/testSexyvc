@@ -35,8 +35,8 @@ public class InvestorDetailModel extends BaseModel<ServiceManager,CacheManager> 
     }
 
     @Override
-    public Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id) {
-        return mServiceManager.getCommonService().queryInvestorDetail(token,investor_id,comment_id);
+    public Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size) {
+        return mServiceManager.getCommonService().queryInvestorDetail(token,investor_id,comment_id,page_size);
     }
 
     @Override

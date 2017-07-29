@@ -16,6 +16,7 @@ public interface BindContract {
     interface View extends BaseView{
         void gotoSetPassword();
         void notNeedSetPassword();
+        void sendCodeFail();
     }
     interface Model extends IModel{
         Observable<CodeEntity> getVertifyCode(String token,String mobile, String code_type);

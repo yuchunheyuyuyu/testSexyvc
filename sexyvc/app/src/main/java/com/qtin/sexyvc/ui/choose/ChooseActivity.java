@@ -10,10 +10,12 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.FastBlur;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.anim.MyAnimations;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -46,17 +48,33 @@ public class ChooseActivity extends Activity {
     private static final int ANIM_DURATION = 300;
     private static final int MAX_DURATION = 400;
 
+    public static final String AUTH_TYPE = "u_auth_type";//身份类型
+    @BindView(R.id.ivEditComment2)
+    ImageView ivEditComment2;
+    @BindView(R.id.switchContainer2)
+    RelativeLayout switchContainer2;
+    @BindView(R.id.tvEditComment2)
+    TextView tvEditComment2;
+
     private Unbinder mUnbinder;
 
+    private int u_auth_type;//0未填写，1投资人，2创始人，3FA
     private int type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        u_auth_type = getIntent().getExtras().getInt(AUTH_TYPE);
         setContentView(R.layout.option_comment_popupwindow);
         mUnbinder = ButterKnife.bind(this);
         ivBackGround.setImageBitmap(FastBlur.getBlurByColor("#b3333333"));
-        showAnim();
+
+        if (u_auth_type == ConstantUtil.AUTH_TYPE_FOUNDER) {
+            showTwoChoiceAnim();
+        } else {
+            showOneChoiceAnim();
+        }
+
     }
 
     @Override
@@ -80,15 +98,44 @@ public class ChooseActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent();
-                intent.putExtra(ConstantUtil.COMMENT_TYPE_INTENT,type);
-                setResult(0,intent);
+                Intent intent = new Intent();
+                intent.putExtra(ConstantUtil.COMMENT_TYPE_INTENT, type);
+                setResult(0, intent);
                 finish();
             }
         }, DISMISS_DELAY_TIME);
     }
 
-    private void showAnim(){
+    public void dismiss2() {
+        //文字的淡出
+        textViewDismiss(tvEditComment2);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent();
+                intent.putExtra(ConstantUtil.COMMENT_TYPE_INTENT, type);
+                setResult(0, intent);
+                finish();
+            }
+        }, DISMISS_DELAY_TIME);
+    }
+
+    private void showOneChoiceAnim() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 图标的动画
+                MyAnimations.startAnimationsIn2(switchContainer2, ANIM_DURATION);
+                // 加号的动画
+                ivChoose.startAnimation(MyAnimations.getRotateAnimation(0, -180, ANIM_DURATION));
+                //文字的淡入
+                textViewShow(tvEditComment2);
+            }
+        }, SHOW_DELAY_TIME);
+    }
+
+    private void showTwoChoiceAnim() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -101,7 +148,7 @@ public class ChooseActivity extends Activity {
                 textViewShow(tvEditComment);
                 textViewShow(tvRoadComment);
             }
-        },SHOW_DELAY_TIME);
+        }, SHOW_DELAY_TIME);
     }
 
     private void textViewDismiss(final TextView textView) {
@@ -125,31 +172,41 @@ public class ChooseActivity extends Activity {
         textView.startAnimation(animation);
     }
 
-    @OnClick({R.id.ivRoadComment, R.id.ivEditComment, R.id.ivChoose})
+    @OnClick({R.id.ivRoadComment, R.id.ivEditComment, R.id.ivChoose,R.id.ivEditComment2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivRoadComment:
-                type= ConstantUtil.COMMENT_TYPE_ROAD;
+                type = ConstantUtil.COMMENT_TYPE_ROAD;
                 ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
                 ivRoadComment.startAnimation(MyAnimations.getMaxAnimation(MAX_DURATION));
                 ivEditComment.startAnimation(MyAnimations.getMiniAnimation(ANIM_DURATION));
                 dismiss();
                 break;
             case R.id.ivEditComment:
-                type= ConstantUtil.COMMENT_TYPE_EDIT;
+                type = ConstantUtil.COMMENT_TYPE_EDIT;
                 ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
                 ivEditComment.startAnimation(MyAnimations.getMaxAnimation(MAX_DURATION));
                 ivRoadComment.startAnimation(MyAnimations.getMiniAnimation(ANIM_DURATION));
                 dismiss();
                 break;
             case R.id.ivChoose:
-                type= ConstantUtil.COMMENT_TYPE_NONE;
+                type = ConstantUtil.COMMENT_TYPE_NONE;
                 // 图标的动画
-                MyAnimations.startAnimationsOut(switchContainer, ANIM_DURATION);
+                if(u_auth_type==ConstantUtil.AUTH_TYPE_FOUNDER){
+                    MyAnimations.startAnimationsOut(switchContainer, ANIM_DURATION);
+                }else{
+                    MyAnimations.startAnimationsOut2(switchContainer2, ANIM_DURATION);
+                }
                 // 加号的动画
                 ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
                 //消失
                 dismiss();
+                break;
+            case R.id.ivEditComment2:
+                type = ConstantUtil.COMMENT_TYPE_EDIT;
+                ivChoose.startAnimation(MyAnimations.getRotateAnimation(-180, 0, ANIM_DURATION));
+                ivEditComment.startAnimation(MyAnimations.getMaxAnimation(MAX_DURATION));
+                dismiss2();
                 break;
         }
     }
