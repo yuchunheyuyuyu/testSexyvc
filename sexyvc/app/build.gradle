@@ -101,4 +101,5 @@ dependencies {
     //glide图像形状处理
     compile 'jp.wasabeef:glide-transformations:2.0.0'
     //compile 'com.yanzhenjie:permission:1.0.8'
+    compile 'com.qianwen:update-app:3.3.0'
 }

@@ -27,6 +27,7 @@ import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.vector.update_app.UpdateAppManager;
 
 import java.lang.reflect.Field;
 
@@ -93,6 +94,19 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
 
         ivTab1.setSelected(true);
         tvTab1.setSelected(true);
+
+        //最简方式
+        new UpdateAppManager
+                .Builder()
+                //当前Activity
+                .setActivity(this)
+                //更新地址
+                .setUpdateUrl("")
+                //实现httpManager接口的对象
+                //.setHttpManager(new UpdateAppHttpUtil())
+                .build()
+                .update();
+
     }
 
 

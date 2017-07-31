@@ -234,7 +234,10 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 gotoActivityForResult(ModifyActivity.class,email,ModifyActivity.MODIFY_EMAIL);
                 break;
             case R.id.positionContainer:
-                gotoSetPosition();
+                if(userInfo.getU_auth_state()!=ConstantUtil.AUTH_STATE_UNPASS){
+                    gotoSetPosition();
+                }
+
                 break;
             case R.id.identifyContainer:
                 if(userInfo.getU_auth_type()==ConstantUtil.AUTH_TYPE_UNKNOWN){

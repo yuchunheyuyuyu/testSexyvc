@@ -181,6 +181,12 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     public Context getContext() {
         return mActivity;
     }

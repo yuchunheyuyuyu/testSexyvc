@@ -134,7 +134,7 @@ public class SearchObjectActivity extends MyBaseActivity<SearchObjectPresent> im
         ArrayList<Long> stages=new ArrayList<>();
         request.setDomains(domains);
         request.setStages(stages);
-        String keyWord=etSearch.getText().toString();
+        String keyWord=etSearch.getText().toString().trim();
         request.setKeyword(keyWord);
         request.setSort(0);
         mPresenter.queryInvestors(request);

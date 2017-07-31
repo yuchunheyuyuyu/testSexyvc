@@ -62,6 +62,12 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     protected int setContentViewId() {
         return R.layout.fund_detail_activity;
     }

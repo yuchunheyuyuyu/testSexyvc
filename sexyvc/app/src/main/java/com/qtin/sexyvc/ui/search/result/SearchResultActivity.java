@@ -74,7 +74,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     public static final int TYPE_DOMAIN = 0x001;//行业
     public static final int TYPE_STAGE = 0x002;//阶段
     public static final int TYPE_RATE = 0x003;//评分
-    private String [] rateStrs={"综合评分","专业素养","路演效率","反馈速度","经验分享","评论数"};
+    private String [] rateStrs={"综合评分","行业理解","路演效率","反馈速度","经验分享","评论数"};
 
     private TagAdapter domainAdapter;
     private TagAdapter stageAdapter;

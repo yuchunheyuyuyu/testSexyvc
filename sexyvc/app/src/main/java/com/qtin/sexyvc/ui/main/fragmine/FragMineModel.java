@@ -5,6 +5,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.UnReadBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import java.util.List;
@@ -43,5 +44,10 @@ public class FragMineModel extends BaseModel<ServiceManager,CacheManager> implem
             mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
         }
         mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
+    }
+
+    @Override
+    public Observable<BaseEntity<UnReadBean>> queryUnRead(String token) {
+        return mServiceManager.getCommonService().queryUnRead(token);
     }
 }

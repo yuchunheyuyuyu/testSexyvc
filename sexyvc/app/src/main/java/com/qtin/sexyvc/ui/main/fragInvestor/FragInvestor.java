@@ -67,6 +67,12 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         configRecycleView();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     private void configRecycleView() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

@@ -7,6 +7,7 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.UnReadBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import javax.inject.Inject;
@@ -53,6 +54,24 @@ public class FragMinePresent extends BasePresenter<FragMineContract.Model,FragMi
                                 }
                             }else{
                                 //mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void queryUnRead(){
+        mModel.queryUnRead(mModel.getToken())
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<BaseEntity<UnReadBean>> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<UnReadBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<UnReadBean> baseEntity) {
+                        if(baseEntity!=null){
+                            if(baseEntity.isSuccess()){
+                                mRootView.queryUnReadSuccess(baseEntity.getItems());
                             }
                         }
                     }

@@ -14,6 +14,7 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.ui.bean.UnReadBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.main.fragmine.di.DaggerFragMineComponent;
 import com.qtin.sexyvc.ui.main.fragmine.di.FragmineModule;
@@ -86,6 +87,7 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     public void onResume() {
         super.onResume();
         mPresenter.getUserInfo();
+        mPresenter.queryUnRead();
     }
 
     @Override
@@ -208,5 +210,14 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     @Override
     public void requestFail() {
 
+    }
+
+    @Override
+    public void queryUnReadSuccess(UnReadBean unReadBean) {
+        if(unReadBean.getTotal_no_read()>0){
+            ivMessage.setSelected(true);
+        }else{
+            ivMessage.setSelected(false);
+        }
     }
 }

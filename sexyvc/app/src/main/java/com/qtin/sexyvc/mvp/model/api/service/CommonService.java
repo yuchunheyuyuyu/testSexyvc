@@ -18,6 +18,7 @@ import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
 import com.qtin.sexyvc.ui.bean.Typebean;
+import com.qtin.sexyvc.ui.bean.UnReadBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
@@ -667,6 +668,15 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/page/static/detail")
     Observable<BaseEntity<PageBean>> queryPage(@Field("alias_name")String alias_name);
+
+    /**
+     * 85. 消息--是否有未读消息
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/unread")
+    Observable<BaseEntity<UnReadBean>> queryUnRead(@Field("token")String token);
 
  }
 

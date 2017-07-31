@@ -420,4 +420,14 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
             }
         }
     }
+
+    @Override
+    public void startLoad(String msg) {
+        showDialog("加载数据");
+    }
+
+    @Override
+    public void endLoad() {
+        dialogDismiss();
+    }
 }

@@ -210,6 +210,11 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
     @Override
     public void querySuccess(GroupEntity groupEntity) {

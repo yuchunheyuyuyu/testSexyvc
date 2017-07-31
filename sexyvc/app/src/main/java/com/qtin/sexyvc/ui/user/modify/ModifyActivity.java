@@ -335,7 +335,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         showMessage("邮箱格式不合法");
                         return;
                     }
-                    if (!StringUtil.isEmail(u_backup_email)) {
+                    if (!StringUtil.isBlank(u_backup_email)&&!StringUtil.isEmail(u_backup_email)) {
                         showMessage("备用邮箱格式不合法");
                         return;
                     }

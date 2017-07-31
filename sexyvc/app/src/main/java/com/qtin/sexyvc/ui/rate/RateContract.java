@@ -15,6 +15,8 @@ public interface RateContract {
     interface View extends BaseView{
         void rateSuccess(int score);
         void queryNormalQuestionsSuccess(CommonBean commonBean);
+        void startLoad(String msg);
+        void endLoad();
     }
     interface Model extends IModel{
         String getToken();

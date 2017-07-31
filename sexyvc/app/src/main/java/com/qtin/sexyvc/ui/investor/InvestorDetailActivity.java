@@ -148,6 +148,12 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     protected int setContentViewId() {
         return R.layout.investor_detail_activity;
     }

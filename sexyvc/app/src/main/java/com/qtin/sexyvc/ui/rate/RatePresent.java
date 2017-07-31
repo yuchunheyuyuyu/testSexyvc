@@ -72,14 +72,14 @@ public class RatePresent extends BasePresenter<RateContract.Model,RateContract.V
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        //mRootView.startLoad("获取数据中");
+                        mRootView.startLoad("获取数据中");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        //mRootView.endLoad();
+                        mRootView.endLoad();
                     }
                 }).compose(RxUtils.<BaseEntity<CommonBean>>bindToLifecycle(mRootView))
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<CommonBean>>(mErrorHandler) {
