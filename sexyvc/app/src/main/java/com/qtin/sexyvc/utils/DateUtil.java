@@ -56,46 +56,60 @@ public class DateUtil {
         }
     }
 
-    /**设置每个阶段时间*/
-    private static final int seconds_of_1minute = 60;
-    private static final int seconds_of_1hour = 60 * 60;
-    private static final int seconds_of_1day = 24 * 60 * 60;
-    private static final int seconds_of_2day = seconds_of_1day*2;
-    private static final int seconds_of_30days = seconds_of_1day * 30;
-    private static final int seconds_of_1year = seconds_of_30days * 12;
-
     /**
      * 格式化时间
      * @return
      */
     public static String getSpecialDate(long timestamp){
 
-        long between=System.currentTimeMillis()/1000- timestamp;
+        Calendar calendar1=Calendar.getInstance();
+        calendar1.setTimeInMillis(System.currentTimeMillis());
+        int year1=calendar1.get(Calendar.YEAR);
+        int month1=calendar1.get(Calendar.MONTH);
+        int day1=calendar1.get(Calendar.DAY_OF_YEAR);
+        int hour1=calendar1.get(Calendar.HOUR_OF_DAY);
+        int minute1=calendar1.get(Calendar.MINUTE);
 
-        if (between < seconds_of_1minute) {
-            return "刚刚";
-        }
-        if (between < seconds_of_1hour) {
-            return between / seconds_of_1minute + "分钟前";
-        }
-        if (between < seconds_of_1day) {
-            return between / seconds_of_1hour + "小时前";
-        }
+        Calendar calendar2=Calendar.getInstance();
+        calendar2.setTimeInMillis(timestamp*1000);
+        int year2=calendar2.get(Calendar.YEAR);
+        int month2=calendar2.get(Calendar.MONTH);
+        int day2=calendar2.get(Calendar.DAY_OF_YEAR);
+        int hour2=calendar2.get(Calendar.HOUR_OF_DAY);
+        int minute2=calendar2.get(Calendar.MINUTE);
 
-        if(!isSameYear(timestamp,System.currentTimeMillis())){
+        //不在同一年
+        if(year1!=year2){
             SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日",Locale.getDefault());
             return format.format(new Date(timestamp*1000));
         }
 
-        if (between < seconds_of_2day) {
-            return "昨天";
-        }
-
-        if (between < seconds_of_1year) {
+        //在同一年,不同月份
+        if(month1!=month2){
             SimpleDateFormat format = new SimpleDateFormat("MM月dd日",Locale.getDefault());
             return format.format(new Date(timestamp*1000));
         }
-        return "";
+        //不同的日,区分是不是昨天
+        if(day1!=day2){
+            if(day2-day1==-1){
+                return "昨天";
+            }else{
+                SimpleDateFormat format = new SimpleDateFormat("MM月dd日",Locale.getDefault());
+                return format.format(new Date(timestamp*1000));
+            }
+        }
+
+        //同一天内，不同小时
+        if(hour1!=hour2){
+            return hour1-hour2+"小时前";
+        }
+
+        //同一小时
+        if(minute1!=minute2){
+            return minute1-minute2+"分钟前";
+        }else{
+            return "刚刚";
+        }
     }
 
     /**

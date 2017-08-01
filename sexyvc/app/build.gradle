@@ -29,6 +29,7 @@ android {
         applicationId "com.qtin.sexyvc"
         minSdkVersion 15
         targetSdkVersion 21
+        versionCode 1
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         signingConfig signingConfigs.release
@@ -56,11 +57,11 @@ android {
         abortOnError false
     }
     productFlavors {
-        wandoujia {}
+        xiaomi {}
         baidu {}
         c360 {}
-        uc {}
-
+        huawei {}
+        mine{}
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
@@ -101,5 +102,5 @@ dependencies {
     //glide图像形状处理
     compile 'jp.wasabeef:glide-transformations:2.0.0'
     //compile 'com.yanzhenjie:permission:1.0.8'
-    compile 'com.qianwen:update-app:3.3.0'
+    //compile 'com.qianwen:update-app:3.3.0'
 }

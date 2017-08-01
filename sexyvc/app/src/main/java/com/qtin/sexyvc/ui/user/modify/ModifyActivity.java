@@ -267,7 +267,14 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
             value2 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE2);
 
-            tvPhone.setText(StringUtil.getFormatPhone(value1));
+            String mobile=value1;
+            if(StringUtil.isBlank(value1)){
+                mobile=getResources().getString(R.string.input_defalut);
+            }else{
+                mobile=mobile.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+            }
+
+            tvPhone.setText(mobile);
             etPhoneBackup.setText(StringUtil.formatString(value2));
             etPhoneBackup.setSelection(etPhoneBackup.getText().toString().length());
         }

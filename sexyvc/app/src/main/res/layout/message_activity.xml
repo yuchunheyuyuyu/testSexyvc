@@ -94,7 +94,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="16px"
             android:text="@string/set_all_readed"
-            android:textColor="@color/barbie_pink_two"
+            android:textColor="@color/barbie_pink_two_color_black30_selector"
             android:textSize="28px"
             android:visibility="visible" />
 

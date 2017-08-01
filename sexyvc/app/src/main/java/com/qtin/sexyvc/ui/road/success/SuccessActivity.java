@@ -131,6 +131,7 @@ public class SuccessActivity extends MyBaseActivity<RoadSuccessPresent> implemen
             case R.id.tvVertify:
                 Bundle bundle=new Bundle();
                 bundle.putParcelable(UserInfoActivity.INTENT_USER,mPresenter.getUserInfo());
+                bundle.putBoolean("isNeedGotoMain",false);
                 gotoActivity(UserInfoActivity.class,bundle);
                 break;
             case R.id.tvEditComment:

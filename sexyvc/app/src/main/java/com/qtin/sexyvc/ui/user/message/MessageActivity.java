@@ -88,7 +88,10 @@ public class MessageActivity extends MyBaseActivity {
 
             }
         });
+    }
 
+    public void setTvRightSelected(boolean isSelected){
+        tvRight.setSelected(isSelected);
     }
 
     @OnClick({R.id.ivLeft, R.id.tvRight,R.id.tvMessage,R.id.tvNotice})
@@ -98,7 +101,11 @@ public class MessageActivity extends MyBaseActivity {
                 finish();
                 break;
             case R.id.tvRight:
-                messageFrag.changeAllReadStatus();
+                if(tvRight.isSelected()){
+                    tvRight.setSelected(false);
+                    messageFrag.changeAllReadStatus();
+                }
+
                 break;
             case R.id.tvMessage:
                 viewPager.setCurrentItem(0);

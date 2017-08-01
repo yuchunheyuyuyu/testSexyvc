@@ -10,11 +10,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
@@ -27,6 +29,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.user.info.di.DaggerUserInfoComponent;
 import com.qtin.sexyvc.ui.user.info.di.UserInfoModule;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
@@ -35,15 +38,21 @@ import com.qtin.sexyvc.ui.user.position.PositionActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -85,6 +94,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     private boolean isUpdateAvatar;//是上传头像还是上传验证
 
+    private boolean isNeedGotoMain=false;//是否需要跳到首页
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerUserInfoComponent.builder().appComponent(appComponent).userInfoModule(new UserInfoModule(this)).build().inject(this);
@@ -104,6 +115,11 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     protected void initData() {
         mImageLoader = customApplication.getAppComponent().imageLoader();
         userInfo=getIntent().getExtras().getParcelable(INTENT_USER);
+        try{
+            isNeedGotoMain=getIntent().getExtras().getBoolean("isNeedGotoMain");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         tvTitle.setText(getResources().getString(R.string.title_user_info));
 
@@ -157,7 +173,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 ivIdentity.setImageResource(R.drawable.tag_approve_fa);
             }else{
                 //暂时缺"其他"图片
-                ivIdentity.setImageResource(R.drawable.login_qq_on);
+                ivIdentity.setImageResource(R.drawable.tag_approve_fc);
             }
         }else if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_COMMITING){
             ivIdentity.setImageResource(R.drawable.approve_reviewing);
@@ -198,7 +214,22 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         }
         switch (view.getId()) {
             case R.id.ivLeft:
-                finish();
+                if(isNeedGotoMain){
+                    gotoActivity(MainActivity.class);
+                    Observable.just(1)
+                            .delay(100, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Action1<Integer>() {
+                                @Override
+                                public void call(Integer integer) {
+                                    finish();
+                                }
+                            });
+
+                }else{
+                    finish();
+                }
+
                 break;
             case R.id.avatarContainer:
                 isUpdateAvatar=true;
@@ -234,12 +265,22 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 gotoActivityForResult(ModifyActivity.class,email,ModifyActivity.MODIFY_EMAIL);
                 break;
             case R.id.positionContainer:
-                if(userInfo.getU_auth_state()!=ConstantUtil.AUTH_STATE_UNPASS){
+                if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
+                    showMessage("您的身份已经认证，暂时无法修改");
+                }else if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_COMMITING){
+                    showMessage("正在审核您提交的身份信息，暂时无法修改");
+                }else{
                     gotoSetPosition();
                 }
 
                 break;
             case R.id.identifyContainer:
+
+                if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
+                    showMessage("您的身份已经认证，暂时无法修改");
+                    return;
+                }
+
                 if(userInfo.getU_auth_type()==ConstantUtil.AUTH_TYPE_UNKNOWN){
                     showComfirmDialog("请先完善身份信息", null, "确定", new ComfirmListerner() {
                         @Override
@@ -454,8 +495,22 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                     int columnIndex = c.getColumnIndex(filePathColumns[0]);
                     String picturePath = c.getString(columnIndex);
                     c.close();
-                    Uri uri = Uri.fromFile(new File(picturePath));
-                    cropPhoto(uri);
+                    File file=new File(picturePath);
+                    if(file!=null&&file.exists()){
+                        if(isUpdateAvatar){
+                            Uri uri = Uri.fromFile(file);
+                            cropPhoto(uri);
+                        }else{
+                            Bitmap bitmapOriginal = UploadPhotoUtil.getUpLoadImage(
+                                    picturePath, BaseApplication.screenSize.x,
+                                    BaseApplication.screenSize.y, true);
+                            String newPath = picturePath + "r.png";
+                            OutputStream stream = new FileOutputStream(newPath);
+                            bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                            DeviceUtils.recycle(bitmapOriginal);
+                            mPresenter.getQiNiuToken(newPath,isUpdateAvatar);
+                        }
+                    }
                     // 获取图片并显示
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -477,13 +532,28 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                             DeviceUtils.recycle(bitmapOriginal);
                             DeviceUtils.recycle(bm);
                         } else {
-                            newPath = path;
+                            if(isUpdateAvatar){
+                                newPath = path;
+                            }else{
+                                newPath = path + "r.png";
+                                Bitmap bitmapOriginal = UploadPhotoUtil.getUpLoadImage(
+                                        path, BaseApplication.screenSize.x,
+                                        BaseApplication.screenSize.y, true);
+
+                                OutputStream stream = new FileOutputStream(newPath);
+                                bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                                DeviceUtils.recycle(bitmapOriginal);
+                            }
                         }
 
                         File file = new File(newPath);
                         if (file != null && file.exists()) {
-                            Uri uri = Uri.fromFile(file);
-                            cropPhoto(uri);
+                            if(isUpdateAvatar){
+                                Uri uri = Uri.fromFile(file);
+                                cropPhoto(uri);
+                            }else{
+                                mPresenter.getQiNiuToken(newPath,isUpdateAvatar);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -579,5 +649,20 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 dismissComfirmDialog();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            if(isNeedGotoMain){
+                gotoActivity(MainActivity.class);
+                finish();
+
+            }else{
+                return super.onKeyDown(keyCode, event);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

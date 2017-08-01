@@ -99,8 +99,8 @@ dependencies {
     }
     compile rootProject.ext.dependencies["photoview"]
 
-    compile rootProject.ext.dependencies["pullloadmorerecyclerview"]
-    compile rootProject.ext.dependencies["SimpleRatingBar"]
+    //compile rootProject.ext.dependencies["pullloadmorerecyclerview"]
+    //compile rootProject.ext.dependencies["SimpleRatingBar"]
     compile rootProject.ext.dependencies["qiniu"]
     compile rootProject.ext.dependencies["umenganalytics"]
     compile rootProject.ext.dependencies["spinkit"]

@@ -30,6 +30,7 @@ import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
 import com.qtin.sexyvc.ui.rate.RateActivity;
+import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
@@ -46,6 +47,7 @@ import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -119,6 +121,8 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private static final int REQUEST_CODE_SELECTED_TYPE = 0x223;
 
+    private boolean isNeedRefresh=false;
+
     @Nullable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +134,13 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
     public void onReceiveRoad(CommentEvent commentEvent){
         contactBean.setHas_roadshow(1);
         setCommentStatus();
+
     }
 
     @Subscriber(tag = ConstantUtil.SCORE_SUCCESS, mode = ThreadMode.MAIN)
     public void onReceiveScore(CommentEvent commentEvent){
+        isNeedRefresh=true;
+
         contactBean.setHas_score(1);
         contactBean.setScore_value(commentEvent.getScore());
         float totalScore=contactBean.getScore()*contactBean.getScore_count()+commentEvent.getScore();
@@ -192,12 +199,17 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         tvTitle.setText("");
         mImageLoader = customApplication.getAppComponent().imageLoader();
 
+        mPresenter.query(contact_id);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.query(contact_id);
+        if(isNeedRefresh){
+            mPresenter.query(contact_id);
+            isNeedRefresh=false;
+        }
+
     }
 
     private void setCommentStatus(){
@@ -408,7 +420,13 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                             @Override
                             public void onSecondClick() {
                                 dismissBottomDialog();
-                                mPresenter.cancleFollow(investor_id);
+                                UnFollowContactRequest request=new UnFollowContactRequest();
+                                ArrayList<Long> contact_ids=new ArrayList<Long>();
+                                contact_ids.add(contact_id);
+
+                                request.setGroup_id(0);
+                                request.setContact_ids(contact_ids);
+                                mPresenter.cancleFollow(request);
                             }
 
                             @Override

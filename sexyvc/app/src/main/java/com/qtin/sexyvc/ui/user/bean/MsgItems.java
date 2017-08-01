@@ -9,6 +9,15 @@ import java.util.ArrayList;
 public class MsgItems {
     private int total;
     private ArrayList<MsgBean> list;
+    private int msg_no_read;
+
+    public int getMsg_no_read() {
+        return msg_no_read;
+    }
+
+    public void setMsg_no_read(int msg_no_read) {
+        this.msg_no_read = msg_no_read;
+    }
 
     public int getTotal() {
         return total;

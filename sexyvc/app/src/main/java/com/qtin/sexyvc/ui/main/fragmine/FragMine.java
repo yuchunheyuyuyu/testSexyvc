@@ -122,7 +122,10 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
                 if(userInfo!=null){
                     Bundle bundle=new Bundle();
                     bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfo);
+                    bundle.putBoolean("isNeedGotoMain",false);
                     gotoActivity(UserInfoActivity.class,bundle);
+
+                    
                 }
                 break;
             case R.id.myProjectContainer:

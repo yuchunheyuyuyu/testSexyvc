@@ -4,12 +4,16 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
+import com.qtin.sexyvc.ui.bean.AndroidUpdateBean;
+import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 /**
  * Created by ls on 17/4/26.
@@ -47,5 +51,10 @@ public class MainModel extends BaseModel<ServiceManager,CacheManager> implements
             return list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public Observable<BaseEntity<AndroidUpdateBean>> queryUpdate() {
+        return mServiceManager.getCommonService().queryUpdate();
     }
 }

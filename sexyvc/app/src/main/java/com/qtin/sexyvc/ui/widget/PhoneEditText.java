@@ -63,8 +63,12 @@ public class PhoneEditText extends EditText implements TextWatcher {
             }
         }
         if (!TextUtils.isEmpty(sb.toString().trim()) && !sb.toString().equals(s.toString())) {
-            setText(sb.toString());
-            setSelection(sb.length());
+            try{
+                setText(sb.toString());
+                setSelection(sb.length());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

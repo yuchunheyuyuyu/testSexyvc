@@ -193,6 +193,19 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                         new InputListerner() {
                             @Override
                             public void onComfirm(String content) {
+                                if("全部关注".equals(content)){
+                                    showMessage("该组已存在");
+                                    return;
+                                }
+                                if(data!=null){
+                                    for(ConcernGroupEntity entity:data){
+                                        if(content.trim().equals(entity.getGroup_name())){
+                                            showMessage("该组已存在");
+                                            return;
+                                        }
+                                    }
+                                }
+
                                 dismissInputDialog();
                                 mPresenter.add(content);
                             }

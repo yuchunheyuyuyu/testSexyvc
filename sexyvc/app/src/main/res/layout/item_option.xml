@@ -41,7 +41,7 @@
             android:layout_marginLeft="12dp"
             android:lineSpacingExtra="6sp"
             android:text="了解"
-            android:textColor="@color/black30_barbie_pink_two_color"
+            android:textColor="@color/black70_barbie_pink_two_color"
             android:textSize="14sp" />
 
     </LinearLayout>

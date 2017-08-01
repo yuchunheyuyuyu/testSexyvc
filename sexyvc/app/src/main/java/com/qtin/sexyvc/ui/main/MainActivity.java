@@ -1,22 +1,32 @@
 package com.qtin.sexyvc.ui.main;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
-import com.qtin.sexyvc.popupwindow.ChoosePopupwindow;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
+import com.qtin.sexyvc.ui.bean.AppUpdateBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
@@ -27,7 +37,9 @@ import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
-import com.vector.update_app.UpdateAppManager;
+import com.qtin.sexyvc.utils.update.updater.Updater;
+import com.qtin.sexyvc.utils.update.updater.UpdaterConfig;
+import com.zhy.autolayout.utils.AutoUtils;
 
 import java.lang.reflect.Field;
 
@@ -59,10 +71,9 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
     private MyBaseFragment[] frags;
     private int currentIndex, clickIndex;
     private long exitTime = 0;
-
-    private ChoosePopupwindow popupwindow;
-
     private static final int REQUEST_CODE_SELECTED_TYPE=0x223;
+
+    private Dialog updateDialog;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -95,20 +106,13 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
         ivTab1.setSelected(true);
         tvTab1.setSelected(true);
 
-        //最简方式
-        new UpdateAppManager
-                .Builder()
-                //当前Activity
-                .setActivity(this)
-                //更新地址
-                .setUpdateUrl("")
-                //实现httpManager接口的对象
-                //.setHttpManager(new UpdateAppHttpUtil())
-                .build()
-                .update();
-
+        mPresenter.queryUpdate();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @OnClick({R.id.llFrag1, R.id.llFrag2, R.id.llFrag3, R.id.llFrag4,R.id.ivCenter})
     public void onClick(View view) {
@@ -344,5 +348,101 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
     @Override
     public void killMyself() {
 
+    }
+
+    @Override
+    public void queryUpdateSuccess(AppUpdateBean updateBean) {
+        if(updateBean!=null){
+            int localCode=getAppVersionCode();
+            if(updateBean.getVersion_code()>localCode){
+                showTwoButtonDialog(updateBean);
+            }
+        }
+    }
+
+    /**
+     * 是否清除缓存框
+     */
+    protected void showTwoButtonDialog(final AppUpdateBean updateBean) {
+
+        if(updateDialog!=null&&updateDialog.isShowing()){
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.app_update_dialog, null);
+        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
+        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        TextView tvLog= (TextView) view.findViewById(R.id.tvLog);
+        View verticalLine=view.findViewById(R.id.verticalLine);
+        tvLog.setText(StringUtil.formatString(updateBean.getUpdate_log()));
+        if(StringUtil.isBlank(updateBean.getNew_version())){
+            tvDialogTitle.setText("发现新版本");
+        }else{
+            tvDialogTitle.setText("发现新版本("+updateBean.getNew_version()+")");
+        }
+
+        if(updateBean.getConstraint()==0){
+            btnLeft.setVisibility(View.VISIBLE);
+            verticalLine.setVisibility(View.VISIBLE);
+        }else{
+            btnLeft.setVisibility(View.GONE);
+            verticalLine.setVisibility(View.GONE);
+        }
+
+
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDialogDismiss();
+            }
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDialogDismiss();
+                UpdaterConfig config = new UpdaterConfig.Builder(MainActivity.this)
+                        .setTitle(getResources().getString(R.string.app_name))
+                        .setDescription("版本更新")
+                        .setFileUrl(updateBean.getApk_file_url())
+                        .setCanMediaScanner(true)
+                        .build();
+                Updater.get().showLog(true).download(config);
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        updateDialog = new Dialog(this);
+        updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        updateDialog.setContentView(view);
+        Window regionWindow = updateDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        updateDialog.setCanceledOnTouchOutside(true);
+        updateDialog.setCancelable(false);
+        updateDialog.show();
+    }
+
+    private void updateDialogDismiss(){
+        if(updateDialog!=null&&updateDialog.isShowing()){
+            updateDialog.dismiss();
+            updateDialog=null;
+        }
+    }
+
+    /**
+     * 获取应用版本号
+     * @return app 版本号
+     */
+    public int getAppVersionCode() {
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            return 0;
+        }
     }
 }

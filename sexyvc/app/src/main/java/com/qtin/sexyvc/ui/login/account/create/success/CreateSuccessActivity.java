@@ -45,7 +45,11 @@ public class CreateSuccessActivity extends MyBaseActivity {
             case R.id.tvContinueInfo:
                 Bundle bundle=new Bundle();
                 bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfoEntity);
+                bundle.putBoolean("isNeedGotoMain",true);
                 gotoActivity(UserInfoActivity.class,bundle);
+
+                finish();
+
                 break;
             case R.id.tvLookAround:
                 gotoActivity(MainActivity.class);

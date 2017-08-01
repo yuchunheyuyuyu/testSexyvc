@@ -89,7 +89,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
                     @Override
                     public void onNext(BaseEntity<CreateGroupEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
-                            mRootView.showMessage("该组已建立");
+                            //mRootView.showMessage("该组已建立");
                             mRootView.addSuccess(baseEntity.getItems().getGroup_id(),group_name);
                         }else{
                             //mRootView.showMessage(baseEntity.getErrMsg());

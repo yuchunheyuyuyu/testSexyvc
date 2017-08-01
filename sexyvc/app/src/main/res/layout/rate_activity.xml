@@ -93,7 +93,7 @@
                 android:layout_marginTop="24dp"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="6sp"
-                android:text="他足够 sexy 吗？点击星星评分"
+                android:text="他足够 sexy 吗？拖动星星评分"
                 android:textColor="@color/black90"
                 android:textSize="14sp" />
 

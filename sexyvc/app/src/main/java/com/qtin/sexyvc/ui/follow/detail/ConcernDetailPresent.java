@@ -10,7 +10,10 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -66,8 +69,9 @@ public class ConcernDetailPresent extends BasePresenter<ConcernDetailContract.Mo
                 });
     }
 
-    public void cancleFollow(final long investor_id){
-        mModel.unFollowInvestor(mModel.getToken(),investor_id)
+    public void cancleFollow(final UnFollowContactRequest request){
+        request.setToken(mModel.getToken());
+        mModel.unFollowContact(request)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -89,7 +93,7 @@ public class ConcernDetailPresent extends BasePresenter<ConcernDetailContract.Mo
                     public void onNext(CodeEntity baseEntity) {
                         //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
-                            mRootView.cancleSuccess(investor_id);
+                            mRootView.cancleSuccess(request.getContact_ids().get(0));
                         }
                     }
                 });

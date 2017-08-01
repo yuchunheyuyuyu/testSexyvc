@@ -148,14 +148,25 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
                 }
                 break;
             case R.id.tvCreateAccount:
+                String phoneStr=etPhone.getPhoneText();
+                if(StringUtil.isBlank(phoneStr)){
+                    showMessage("手机号不能为空");
+                    return;
+                }
+
+                if(!etPhone.isMobileNO()){
+                    showMessage("手机号格式不合法");
+                    return;
+                }
+
                 String code_value=etVertifyCode.getText().toString();
                 if(StringUtil.isBlank(code_value)){
                     showMessage("验证码不能为空");
                     return;
                 }
-                if(etPhone.isMobileNO()&& !StringUtil.isBlank(code_value)){
-                    mPresenter.validateCode(etPhone.getPhoneText(),code_value);
-                }
+
+
+                mPresenter.validateCode(etPhone.getPhoneText(),code_value);
                 break;
             case R.id.tvToLogin:
                 gotoActivity(LoginActivity.class);

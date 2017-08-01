@@ -363,4 +363,7 @@
     <string name="code_40013">已对该投资人评分过</string>
     <string name="code_40014">已对该投资人评论过</string>
 
+    <string name="system_download_component_disable">下载服务不可用,请您启用</string>
+    <string name="system_download_description">版本更新</string>
+
 </resources>

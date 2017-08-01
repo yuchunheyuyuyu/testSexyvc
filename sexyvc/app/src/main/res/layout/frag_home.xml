@@ -8,12 +8,14 @@
 
     <include layout="@layout/swipe_recycleview" />
 
+
     <LinearLayout
         android:id="@+id/headContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white0"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
 
         <LinearLayout
@@ -44,8 +46,25 @@
 
         <View
             android:id="@+id/homeLine"
-            android:background="@color/silver_two0"
-            style="@style/line_style" />
+            style="@style/line_style"
+            android:background="@color/silver_two0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/headLogoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white0"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivHeadLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:src="@drawable/nav_logo_text" />
+
+
     </LinearLayout>
 
 </RelativeLayout>

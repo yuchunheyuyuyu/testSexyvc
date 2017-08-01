@@ -30,6 +30,13 @@
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
 
+        <receiver android:name=".utils.update.receiver.ApkInstallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ui.guide.GuideActivity"
             android:screenOrientation="portrait"
@@ -264,14 +271,7 @@
         <activity
             android:name=".mvp.test.user.UserActivity"
             android:screenOrientation="portrait" />
-        <!--评分控件-->
-        <activity
-            android:name=".mvp.test.rating.RatingActivity"
-            android:screenOrientation="portrait" />
-        <!--刷新加载-->
-        <activity
-            android:name=".mvp.test.refresh.RefreshActivity"
-            android:screenOrientation="portrait" />
+
         <!--上传到七牛
         <activity
             android:name=".mvp.test.upload.UploadActivity"

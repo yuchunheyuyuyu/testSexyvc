@@ -18,6 +18,7 @@ import com.qtin.sexyvc.ui.request.ChangeReadStatusRequest;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.ui.user.bean.MsgBean;
 import com.qtin.sexyvc.ui.user.bean.MsgItems;
+import com.qtin.sexyvc.ui.user.message.MessageActivity;
 import com.qtin.sexyvc.ui.user.message.message.di.DaggerMessageFragComponent;
 import com.qtin.sexyvc.ui.user.message.message.di.MessageFragModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
@@ -44,7 +45,7 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
     private boolean hasLoadedAllItems;
     private ArrayList<MsgBean> data=new ArrayList<>();
     private MessageAdapter mAdapter;
-
+    private MessageActivity activity;
     private int hasLoadedNum;
 
     @Override
@@ -59,6 +60,8 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     protected void init() {
+        activity= (MessageActivity) mActivity;
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -120,11 +123,6 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
         request.setIds(ids);
         request.setObject_type(1);
         mPresenter.changeReadStatus(request,-1);
-
-        for(MsgBean bean:data){
-            bean.setRead_time(System.currentTimeMillis()/1000);
-        }
-        mAdapter.notifyDataSetChanged();
     }
 
     private void initPaginate() {
@@ -151,6 +149,12 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
                     .build();
             mPaginate.setHasMoreDataToLoad(false);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.queryMessageStatus(ConstantUtil.DEFALUT_ID,1);
     }
 
     @Override
@@ -213,6 +217,15 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
     }
 
     @Override
+    public void queryStatusSuccess(MsgItems items) {
+        if(items.getMsg_no_read()>0){
+            activity.setTvRightSelected(true);
+        }else{
+            activity.setTvRightSelected(false);
+        }
+    }
+
+    @Override
     public void startLoadMore() {
         isLoadingMore = true;
     }
@@ -236,6 +249,15 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     public void changeStatusSuccess(int position) {
+        if(position==-1){
+            for(MsgBean bean:data){
+                bean.setRead_time(System.currentTimeMillis()/1000);
+            }
+            activity.setTvRightSelected(false);
+        }else{
 
+        }
+
+        mAdapter.notifyDataSetChanged();
     }
 }

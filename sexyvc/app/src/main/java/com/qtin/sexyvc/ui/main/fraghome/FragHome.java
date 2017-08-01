@@ -10,8 +10,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -31,9 +31,7 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -55,6 +53,10 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     LinearLayout headContainer;
     @BindView(R.id.homeLine)
     View homeLine;
+    @BindView(R.id.ivHeadLogo)
+    ImageView ivHeadLogo;
+    @BindView(R.id.headLogoContainer)
+    LinearLayout headLogoContainer;
     private int mDistance;//滚动的距离
     private int maxDistance;//监测最大的
 
@@ -113,14 +115,14 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
         mAdapter.setOnClickMoreInvestorListener(new OnClickMoreInvestorListener() {
             @Override
             public void onClick() {
-                MainActivity mainActivity= (MainActivity) mActivity;
+                MainActivity mainActivity = (MainActivity) mActivity;
                 mainActivity.gotoInvestor();
             }
         });
         mPresenter.query();
 
 
-        maxDistance = (int) DeviceUtils.dpToPixel(mActivity, 40);
+        maxDistance = (int) DeviceUtils.dpToPixel(mActivity, 140);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -149,6 +151,9 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
                 } else {
                     myGrad.setColor(searchColor);
                 }
+
+                ivHeadLogo.setAlpha(alpha);
+                headLogoContainer.setBackgroundColor(argb);
             }
         });
     }
@@ -217,10 +222,10 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
 
     @OnClick(R.id.headContainer)
     public void onClick() {
-        Bundle bundle=new Bundle();
-        bundle.putString(ConstantUtil.KEY_WORD_INTENT,"");
-        bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT,false);
-        bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
-        gotoActivity(SearchActionActivity.class,bundle);
+        Bundle bundle = new Bundle();
+        bundle.putString(ConstantUtil.KEY_WORD_INTENT, "");
+        bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT, false);
+        bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, ConstantUtil.TYPE_INVESTOR);
+        gotoActivity(SearchActionActivity.class, bundle);
     }
 }

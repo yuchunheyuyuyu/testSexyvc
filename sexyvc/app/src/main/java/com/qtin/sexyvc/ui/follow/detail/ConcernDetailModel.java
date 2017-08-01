@@ -9,6 +9,7 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
 
 import java.util.List;
 
@@ -42,8 +43,8 @@ public class ConcernDetailModel extends BaseModel<ServiceManager,CacheManager> i
     }
 
     @Override
-    public Observable<CodeEntity> unFollowInvestor(String token, long investor_id) {
-        return mServiceManager.getCommonService().unFollowInvestor(token,investor_id);
+    public Observable<CodeEntity> unFollowContact(UnFollowContactRequest request) {
+        return mServiceManager.getCommonService().unFollowContact(request);
     }
 
     @Override

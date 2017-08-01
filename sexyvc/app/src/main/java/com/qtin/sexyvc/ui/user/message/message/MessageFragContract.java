@@ -14,6 +14,7 @@ import rx.Observable;
 public interface MessageFragContract {
     interface View extends BaseView{
         void querySuccess(MsgItems items);
+        void queryStatusSuccess(MsgItems items);
         void startLoadMore();
         void endLoadMore();
         void startRefresh(String msg);

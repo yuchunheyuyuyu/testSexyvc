@@ -156,6 +156,8 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                         //mRootView.showProgress((int)(percent*100));
                     }
                 }, null);
+
+
         uploadManager.put(path, key, token, new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {

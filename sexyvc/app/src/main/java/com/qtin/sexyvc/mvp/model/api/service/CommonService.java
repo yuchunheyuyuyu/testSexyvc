@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.mvp.model.api.service;
 
 import com.qtin.sexyvc.mvp.model.entity.LoginEntity;
+import com.qtin.sexyvc.ui.bean.AndroidUpdateBean;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
@@ -36,6 +37,7 @@ import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.request.RateRequest;
+import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
@@ -325,6 +327,15 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/contact/investor/unfollow")
     Observable<CodeEntity> unFollowInvestor(@Field("token")String token,@Field("investor_id")long investor_id);
+
+    /**
+     * 37. 删除投资人，取消关注联系人
+     * @param request
+     * @return
+     */
+
+    @POST("api/user/contact/investor/remove")
+    Observable<CodeEntity> unFollowContact(@Body UnFollowContactRequest request);
 
     /**
      * 设置投资人分组
@@ -677,6 +688,13 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/unread")
     Observable<BaseEntity<UnReadBean>> queryUnRead(@Field("token")String token);
+
+    /**
+     * 检查版本更新
+     * @return
+     */
+    @POST("api/action/version")
+    Observable<BaseEntity<AndroidUpdateBean>> queryUpdate();
 
  }
 

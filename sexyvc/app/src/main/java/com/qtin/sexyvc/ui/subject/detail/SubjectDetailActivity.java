@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -35,6 +36,7 @@ import com.qtin.sexyvc.ui.subject.detail.di.SubjectDetailModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -68,7 +70,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     private Dialog replyDialog;
     private SubjectContentEntity mDetailBean;
 
-    private final static long DEFALUT_REPLY_ID=0;
+    private final static long DEFALUT_REPLY_ID = 0;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -132,7 +134,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             @Override
             public void onClickItemReply(int position) {
                 ReplyBean entity = (ReplyBean) data.get(position);
-                showReplyDialog(position, entity.getReply_id(),"回复@"+entity.getU_nickname());
+                showReplyDialog(position, entity.getReply_id(), "回复@" + entity.getU_nickname());
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -208,7 +210,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             case R.id.ivShare:
                 break;
             case R.id.actionContainer:
-                showReplyDialog(-1, DEFALUT_REPLY_ID,"评论");
+                showReplyDialog(-1, DEFALUT_REPLY_ID, "评论");
                 break;
         }
     }
@@ -228,7 +230,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
             if (detailBean.getDetail() != null) {
-                mDetailBean=detailBean.getDetail();
+                mDetailBean = detailBean.getDetail();
                 data.add(mDetailBean);
                 tvTitle.setText(StringUtil.formatString(detailBean.getDetail().getTitle()));
             }
@@ -271,7 +273,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 entity.setLike(entity.getLike() - 1);
             }
         }
-        mDetailBean.setReply_count(mDetailBean.getReply_count()+1);
+        mDetailBean.setReply_count(mDetailBean.getReply_count() + 1);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -318,7 +320,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     @Override
     public void showNotExistDialog() {
-        showComfirmDialog("该专栏已下架", null, "确定", new ComfirmListerner() {
+        showComfirmDialog("该专栏不存在", null, "确定", new ComfirmListerner() {
             @Override
             public void onComfirm() {
                 dismissComfirmDialog();
@@ -327,7 +329,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         });
     }
 
-    public void showReplyDialog(final int position, final long reply_id,String hint) {
+    public void showReplyDialog(final int position, final long reply_id, String hint) {
         View view = LayoutInflater.from(this).inflate(R.layout.reply_dialog, null);
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
         etInputComment.setHint(hint);
@@ -341,7 +343,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                mPresenter.reply(position,subject_id, reply_id, content);
+                mPresenter.reply(position, subject_id, reply_id, content);
             }
         });
         replyDialog = new Dialog(this);

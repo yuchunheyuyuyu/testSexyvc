@@ -61,7 +61,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     private Dialog replyDialog;
 
     private CommentDetailAdapter mAdapter;
-    private ArrayList<DataTypeInterface> data=new ArrayList<>();
+    private ArrayList<DataTypeInterface> data = new ArrayList<>();
 
     private boolean hasLoadedAllItems;
     private Paginate mPaginate;
@@ -69,7 +69,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     private long reply_id;
 
-    private final static long DEFALUT_REPLY_ID=0;
+    private final static long DEFALUT_REPLY_ID = 0;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -94,11 +94,11 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(comment_id,DEFALUT_REPLY_ID);
+                mPresenter.query(comment_id, DEFALUT_REPLY_ID);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter=new CommentDetailAdapter(this,data);
+        mAdapter = new CommentDetailAdapter(this, data);
         mAdapter.setClickListener(new DetailClickListener() {
             @Override
             public void onClickDetailPraise(int position) {
@@ -109,7 +109,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                 } else {
                     handle_type = 0;
                 }
-                mPresenter.praise(position, ConstantUtil.OBJECT_TYPE_COMMENT,comment_id,handle_type);
+                mPresenter.praise(position, ConstantUtil.OBJECT_TYPE_COMMENT, comment_id, handle_type);
             }
 
             @Override
@@ -132,12 +132,12 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             @Override
             public void onClickItemReply(int position) {
                 ReplyBean entity = (ReplyBean) data.get(position);
-                showReplyDialog(position, entity.getReply_id(),"回复@"+entity.getU_nickname());
+                showReplyDialog(position, entity.getReply_id(), "回复@" + entity.getU_nickname());
             }
         });
         recyclerView.setAdapter(mAdapter);
         initPaginate();
-        mPresenter.query(comment_id,DEFALUT_REPLY_ID);
+        mPresenter.query(comment_id, DEFALUT_REPLY_ID);
     }
 
     private void initPaginate() {
@@ -207,12 +207,12 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             case R.id.ivShare:
                 break;
             case R.id.actionContainer:
-                showReplyDialog(-1, DEFALUT_REPLY_ID,"评论");
+                showReplyDialog(-1, DEFALUT_REPLY_ID, "评论");
                 break;
         }
     }
 
-    public void showReplyDialog(final int position, final long reply_id,String hint) {
+    public void showReplyDialog(final int position, final long reply_id, String hint) {
         View view = LayoutInflater.from(this).inflate(R.layout.reply_dialog, null);
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
         etInputComment.setHint(hint);
@@ -226,7 +226,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                mPresenter.reply(position,comment_id, reply_id, content);
+                mPresenter.reply(position, comment_id, reply_id, content);
             }
         });
         replyDialog = new Dialog(this);
@@ -307,7 +307,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             entity.setReply_content("@" + replyEntity.getU_nickname() + ":" + content);
         }
         data.add(1, entity);
-        detailBean.setReply_count(detailBean.getReply_count()+1);
+        detailBean.setReply_count(detailBean.getReply_count() + 1);
         mAdapter.notifyDataSetChanged();
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
@@ -325,15 +325,15 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     }
 
     @Override
-    public void querySuccess(long reply_id,CommentBean commentBean) {
+    public void querySuccess(long reply_id, CommentBean commentBean) {
         if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
             if (commentBean.getDetail() != null) {
-                detailBean=commentBean.getDetail();
+                detailBean = commentBean.getDetail();
                 detailBean.setAdditional(commentBean.getAdditional());
                 data.add(detailBean);
-                String name=StringUtil.formatString(commentBean.getDetail().getInvestor_name());
-                tvTitle.setText(String.format(getResources().getString(R.string.title_comment_detail),name));
+                String name = StringUtil.formatString(commentBean.getDetail().getInvestor_name());
+                tvTitle.setText(String.format(getResources().getString(R.string.title_comment_detail), name));
             }
         }
         if (commentBean.getReplies() != null) {
@@ -364,7 +364,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     @Override
     public void showNotExistDialog() {
-        showComfirmDialog("该评论已下架", null, "确定", new ComfirmListerner() {
+        showComfirmDialog("该评论不存在", null, "确定", new ComfirmListerner() {
             @Override
             public void onComfirm() {
                 dismissComfirmDialog();

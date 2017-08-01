@@ -120,10 +120,10 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
         switch(requestCode){
             case ConstantUtil.REQUEST_CODE_ID:
                 if(data!=null){
-                    long investor_id=data.getExtras().getLong(ConstantUtil.INTENT_ID);
+                    long contact_id=data.getExtras().getLong(ConstantUtil.INTENT_ID);
                     if(this.data!=null&&!this.data.isEmpty()){
                         for(ConcernListEntity entity:this.data){
-                            if(entity.getInvestor_id()==investor_id){
+                            if(entity.getContact_id()==contact_id){
                                 this.data.remove(entity);
                                 mAdapter.notifyDataSetChanged();
                                 break;

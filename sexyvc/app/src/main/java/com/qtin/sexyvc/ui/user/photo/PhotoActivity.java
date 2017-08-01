@@ -56,9 +56,6 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
     // 调用系统相册或者相机
     private final int CAMERA_REQUEST_CODE = 0x002;
     private final int ALBUM_REQUEST_CODE = 0x004;
-    private final int CROP_REQUEST_CODE = 0x006;
-    // 裁减过后的照片地址
-    private String cropedPhoto;
     // 拍照地址
     private String path;
 
@@ -143,9 +140,18 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
                     int columnIndex = c.getColumnIndex(filePathColumns[0]);
                     String picturePath = c.getString(columnIndex);
                     c.close();
-                    Uri uri = Uri.fromFile(new File(picturePath));
-                    cropPhoto(uri);
-                    // 获取图片并显示
+                    File file=new File(picturePath);
+                    if(file!=null&&file.exists()){
+                        Bitmap bitmapOriginal = UploadPhotoUtil.getUpLoadImage(
+                                picturePath, BaseApplication.screenSize.x,
+                                BaseApplication.screenSize.y, true);
+                        String newPath = picturePath + "r.png";
+                        OutputStream stream = new FileOutputStream(newPath);
+                        bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                        DeviceUtils.recycle(bitmapOriginal);
+                        mPresenter.getQiNiuToken(newPath);
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -155,24 +161,26 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
                     if (path != null) {
                         String newPath = path;
                         int angle = DeviceUtils.readPictureDegree(path);
+
+                        newPath = path + "r.png";
+                        Bitmap bitmapOriginal = UploadPhotoUtil.getUpLoadImage(
+                                path, BaseApplication.screenSize.x,
+                                BaseApplication.screenSize.y, true);
+
+                        OutputStream stream = new FileOutputStream(newPath);
                         if (angle != 0) {
-                            newPath = path + "r.png";
-                            Bitmap bitmapOriginal = UploadPhotoUtil.getUpLoadImage(
-                                    path, BaseApplication.screenSize.x,
-                                    BaseApplication.screenSize.y, true);
                             Bitmap bm = DeviceUtils.rotaingImageView(angle, bitmapOriginal);
-                            OutputStream stream = new FileOutputStream(newPath);
                             bm.compress(Bitmap.CompressFormat.JPEG, 80, stream);
                             DeviceUtils.recycle(bitmapOriginal);
                             DeviceUtils.recycle(bm);
                         } else {
-                            newPath = path;
+                            bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                            DeviceUtils.recycle(bitmapOriginal);
                         }
 
                         File file = new File(newPath);
                         if (file != null && file.exists()) {
-                            Uri uri = Uri.fromFile(file);
-                            cropPhoto(uri);
+                            mPresenter.getQiNiuToken(newPath);
                         }
                     }
                 } catch (Exception e) {
@@ -181,11 +189,6 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
                     e.printStackTrace();
                 }
 
-                break;
-            case CROP_REQUEST_CODE: // 裁剪
-                if(data!=null){
-                    mPresenter.getQiNiuToken(cropedPhoto);
-                }
                 break;
         }
     }
@@ -259,31 +262,16 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
         startActivityForResult(picture, ALBUM_REQUEST_CODE);
     }
 
-    // 裁减
-    private void cropPhoto(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");// 可裁剪
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        //intent.putExtra("outputX", 300);
-        //intent.putExtra("outputY", 300);
-        intent.putExtra("scale", true);
-        intent.putExtra("scaleUpIfNeeded", true);
-        cropedPhoto = DataHelper.getCacheFile(getApplicationContext()) + File.separator
-                + System.currentTimeMillis() + ".png";
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(cropedPhoto)));
-        intent.putExtra("return-data", false);// 若为false则表示不返回数据
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, CROP_REQUEST_CODE);
-    }
 
     @Override
     public void uploadSuccess(String url) {
         Intent intent=new Intent();
         intent.putExtra(ConstantUtil.INTENT_URL,url);
+        mImageLoader.loadImage(customApplication, GlideImageConfig
+                .builder()
+                .url(CommonUtil.getAbsolutePath(url))
+                .imageView(photoView)
+                .build());
         setResult(0,intent);
         showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
             @Override

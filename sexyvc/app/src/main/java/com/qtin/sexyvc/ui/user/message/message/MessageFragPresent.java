@@ -72,6 +72,36 @@ public class MessageFragPresent extends BasePresenter<MessageFragContract.Model,
                 });
     }
 
+    public void queryMessageStatus(final long id,int page_size){
+        mModel.queryMessage(mModel.getToken(),id,page_size)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+
+                    }
+                })
+                .compose(RxUtils.<BaseEntity<MsgItems>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<MsgItems>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<MsgItems> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.queryStatusSuccess(baseEntity.getItems());
+                        }else{
+                            //mRootView.showMessage(baseEntity.getErrMsg());
+                        }
+                    }
+                });
+    }
+
     public void changeReadStatus(ChangeReadStatusRequest request,final int position){
         request.setToken(mModel.getToken());
         mModel.changeReadStatus(request)

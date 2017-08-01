@@ -91,6 +91,8 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
     private boolean isFromFund=false;
 
+    private boolean isNeedRefresh=false;
+
     @Nullable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
     @Subscriber(tag = ConstantUtil.SCORE_SUCCESS, mode = ThreadMode.MAIN)
     public void onReceiveScore(CommentEvent commentEvent){
+        isNeedRefresh=true;
         investorBean.setHas_score(1);
         investorBean.setScore_value(commentEvent.getScore());
 
@@ -222,12 +225,17 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 }
             }
         });
+        mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+        if(isNeedRefresh){
+            mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+            isNeedRefresh=false;
+        }
+
     }
 
     @Override
@@ -429,6 +437,9 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
                 break;
             case R.id.commentContainer:
+                if(investorBean==null){
+                    return;
+                }
                 if (mPresenter.getUserInfo() != null) {
                     if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                         if(mPresenter.getUserInfo().getHas_project()==0){

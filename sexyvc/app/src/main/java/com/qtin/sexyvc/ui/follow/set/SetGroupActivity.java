@@ -84,6 +84,21 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                             new InputListerner() {
                                 @Override
                                 public void onComfirm(String content) {
+                                    if("全部关注".equals(content)){
+                                        showMessage("该组已存在");
+                                        return;
+                                    }
+                                    if(data!=null&&!data.isEmpty()){
+
+                                        for(ConcernGroupEntity entity:data){
+                                            if(content.equals(entity.getGroup_name())){
+                                                showMessage("该组已存在");
+                                                return;
+                                            }
+                                        }
+                                    }
+
+
                                     dismissInputDialog();
                                     mPresenter.add(content);
                                 }
@@ -140,15 +155,15 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                 finish();
                 break;
             case R.id.tvRight:
-                if(data==null||data.isEmpty()){
-                    return;
-                }
                 ArrayList<Long> group_ids=new ArrayList<>();
-                for(ConcernGroupEntity entity:data){
-                    if(entity.isSelected()){
-                        group_ids.add(entity.getGroup_id());
+                if(data==null||data.isEmpty()){
+                    for(ConcernGroupEntity entity:data){
+                        if(entity.isSelected()){
+                            group_ids.add(entity.getGroup_id());
+                        }
                     }
                 }
+
                 if(type==ConstantUtil.TYPE_SET_GROUP_INVESTOR){
                     ChangeInvestorGroupRequest request=new ChangeInvestorGroupRequest();
                     request.setInvestor_id(id);
