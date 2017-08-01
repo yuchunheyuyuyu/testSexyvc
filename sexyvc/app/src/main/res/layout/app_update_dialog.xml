@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="104px"
+        android:layout_marginRight="104px"
+        android:background="@drawable/round_white_dialog_back"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20px"
+            android:layout_marginTop="30px"
+            android:gravity="center"
+            android:text="发现新版本"
+            android:textColor="@color/black90"
+            android:textSize="32px" />
+
+        <View style="@style/line_style" />
+
+        <TextView
+            android:id="@+id/tvLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="26px"
+            android:lineSpacingExtra="6px"
+            android:layout_marginTop="22px"
+            android:gravity="center_vertical"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:text="1，添加删除信用卡接\n2，添加vip认证\n3，区分自定义消费\n4，添加放弃任务接口\n5，消费任务手动生成。"
+            android:textColor="@color/black90"
+            android:textSize="32px" />
+
+        <View style="@style/line_style" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="88px"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLeft"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="暂不更新"
+                android:textColor="@color/dodger_blue_two"
+                android:textSize="32px" />
+
+            <View
+                android:id="@+id/verticalLine"
+                style="@style/line_vertical_style" />
+
+            <Button
+                android:id="@+id/btnRight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="立即更新"
+                android:textColor="@color/dodger_blue_two"
+                android:textSize="32px" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
