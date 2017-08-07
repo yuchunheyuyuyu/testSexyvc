@@ -5,6 +5,7 @@ import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import rx.Observable;
 
@@ -24,5 +25,6 @@ public interface UserInfoContract {
         Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(int is_protected);
 
         String getToken();
+        void saveUsrInfo(UserInfoEntity entity);
     }
 }

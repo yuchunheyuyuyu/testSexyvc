@@ -652,6 +652,14 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if(userInfo!=null){
+            mPresenter.saveUsrInfo(userInfo);
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
             if(isNeedGotoMain){

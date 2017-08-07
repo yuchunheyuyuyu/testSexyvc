@@ -31,7 +31,7 @@ public class ForgetActivity extends MyBaseActivity<ForgetPresent> implements For
     PhoneEditText etPhone;
 
     private String phoneStr;
-    private static final int TOTAL_TIME = 60;//倒计时总时间
+    private static final int TOTAL_TIME = 30;//倒计时总时间
     @BindView(R.id.tvGetVertify)
     TextView tvGetVertify;
     private int countDown = TOTAL_TIME;

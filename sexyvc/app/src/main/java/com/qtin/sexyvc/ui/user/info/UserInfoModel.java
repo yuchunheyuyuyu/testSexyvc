@@ -8,6 +8,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -52,5 +53,14 @@ public class UserInfoModel extends BaseModel<ServiceManager,CacheManager> implem
             return list.get(0).getU_token();
         }
         return "";
+    }
+
+    @Override
+    public void saveUsrInfo(UserInfoEntity entity) {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
+        }
+        mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
 }

@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">sexyvc</string>
+    <string name="app_name">头牌</string>
+
+    <!--<string name="app_name">头牌VC</string>-->
+
+    <!--<string name="app_name">SexyVC</string>-->
 
     <string name="title_my_center">个人中心</string>
     <string name="title_user_info">个人信息</string>

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -21,11 +20,11 @@ import com.qtin.sexyvc.ui.widget.PhoneEditText;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+
 /**
  * Created by ls on 17/4/26.
  */
 public class BindActivity extends MyBaseActivity<BindPresent> implements BindContract.View {
-
     @BindView(R.id.ivThird)
     ImageView ivThird;
     @BindView(R.id.tvThird)
@@ -36,11 +35,10 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
     EditText etVertifyCode;
     @BindView(R.id.tvGetVertify)
     TextView tvGetVertify;
-
     private int type;
     private String phoneStr;
 
-    private static final int TOTAL_TIME=60;//倒计时总时间
+    private static final int TOTAL_TIME=30;//倒计时总时间
     private int countDown=TOTAL_TIME;
 
     private Handler mHandler=new Handler();

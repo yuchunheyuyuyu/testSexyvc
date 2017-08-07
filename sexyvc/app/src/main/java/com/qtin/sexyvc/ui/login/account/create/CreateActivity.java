@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -42,7 +41,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     EditText etVertifyCode;
     @BindView(R.id.tvGetVertify)
     TextView tvGetVertify;
-    private static final int TOTAL_TIME=60;//倒计时总时间
+    private static final int TOTAL_TIME=30;//倒计时总时间
     private int countDown=TOTAL_TIME;
 
     private UMShareAPI mShareAPI;
@@ -225,12 +224,12 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
         @Override
         public void onStart(SHARE_MEDIA platform) {
             //授权开始的回调
-            Toast.makeText(getApplicationContext(), "Authorize start", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Authorize start", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-            Toast.makeText(getApplicationContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
             String temp = "";
             for (String key : data.keySet()) {
                 temp = temp + key + " : " + data.get(key) + "\n";
@@ -247,6 +246,27 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
             entity.setUsername(data.get("openid"));
             entity.setNickname(data.get("name"));
             if (platform == SHARE_MEDIA.QQ) {
+                mShareAPI.deleteOauth(CreateActivity.this, SHARE_MEDIA.QQ, new UMAuthListener() {
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media, int i) {
+
+                    }
+                });
                 entity.setAccount_type(3);
             } else if (platform == SHARE_MEDIA.WEIXIN) {
                 entity.setAccount_type(2);
@@ -267,12 +287,12 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
         @Override
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-            Toast.makeText(getApplicationContext(), "Authorize fail", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Authorize fail", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
-            Toast.makeText(getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
         }
     };
 

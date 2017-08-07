@@ -65,10 +65,15 @@ public class CustomApplication extends BaseApplication {
     private boolean isShowedLoginDialog = false;
 
     {
-        PlatformConfig.setWeixin("wxdd991af9d0c9ddbe", "e957f59de5bbf4a3b584dd7891b21ecb");
+        PlatformConfig.setWeixin("wxc4550761c07117f4", "feba0baec085cfdfb69de6c21f4d40a9");
         PlatformConfig.setQQZone("1105726586", "yCie49iiNXUnjBAu");
         PlatformConfig.setSinaWeibo("3351202988", "c9efb278c7e754735b8a26daaddf2b47", "http://sns.whalecloud.com");
     }
+
+    /**
+     PlatformConfig.setWeixin("wxdd991af9d0c9ddbe", "e957f59de5bbf4a3b584dd7891b21ecb");
+     PlatformConfig.setSinaWeibo("3351202988", "c9efb278c7e754735b8a26daaddf2b47", "http://sns.whalecloud.com");
+     */
 
     public String deviceToken;
 
@@ -271,6 +276,7 @@ public class CustomApplication extends BaseApplication {
                                                             String strName="code_"+errCode;
                                                             String errorStr=getString(getResources().getIdentifier(strName, "string", getPackageName()));
                                                             UiUtils.showToastShort(getContext(),errorStr);
+                                                            //UiUtils.SnackbarText(errorStr);
                                                         }
                                                     });
                                         }

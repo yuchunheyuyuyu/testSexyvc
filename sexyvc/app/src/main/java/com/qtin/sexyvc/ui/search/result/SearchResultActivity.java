@@ -321,10 +321,10 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;
+            //加入去录入的选项
+            data.add(new ToEnteringBean());
         }
 
-        //加入去录入的选项
-        data.add(new ToEnteringBean());
         mAdapter.notifyDataSetChanged();
     }
 

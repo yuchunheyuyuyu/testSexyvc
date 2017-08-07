@@ -273,7 +273,6 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 entity.setLike(entity.getLike() - 1);
             }
         }
-        mDetailBean.setReply_count(mDetailBean.getReply_count() + 1);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -302,6 +301,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             entity.setReply_content("@" + replyEntity.getU_nickname() + ":" + content);
         }
         data.add(1, entity);
+        mDetailBean.setReply_count(mDetailBean.getReply_count() + 1);
         mAdapter.notifyDataSetChanged();
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();

@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.user.info;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -13,8 +14,12 @@ import com.qiniu.android.storage.UploadOptions;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+
 import org.json.JSONObject;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -201,6 +206,10 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                         }
                     }
                 });
+    }
+
+    public void saveUsrInfo(UserInfoEntity entity){
+        mModel.saveUsrInfo(entity);
     }
 
     @Override

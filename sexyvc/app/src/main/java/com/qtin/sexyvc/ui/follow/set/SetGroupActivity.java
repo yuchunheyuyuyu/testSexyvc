@@ -156,7 +156,7 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                 break;
             case R.id.tvRight:
                 ArrayList<Long> group_ids=new ArrayList<>();
-                if(data==null||data.isEmpty()){
+                if(data!=null&&!data.isEmpty()){
                     for(ConcernGroupEntity entity:data){
                         if(entity.isSelected()){
                             group_ids.add(entity.getGroup_id());

@@ -29,7 +29,7 @@ android {
         applicationId "com.qtin.sexyvc"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
+        versionCode 3
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         signingConfig signingConfigs.release
@@ -62,6 +62,7 @@ android {
         c360 {}
         huawei {}
         mine{}
+        tecent{}
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
