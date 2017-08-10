@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="104px"
-        android:layout_marginRight="104px"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="52dp"
         android:background="@drawable/round_white_dialog_back"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -22,26 +22,28 @@
             android:gravity="center"
             android:text="已完成提交"
             android:textColor="#030303"
-            android:textSize="34px" />
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/tvContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14px"
+            android:layout_marginTop="7dp"
             android:visibility="gone"
             android:gravity="center"
             android:text="我们的工作人员将在 3 个工作日内审核"
             android:textColor="#030303"
-            android:textSize="26px" />
+            android:textSize="13sp" />
 
         <View
             style="@style/line_style"
-            android:layout_marginTop="36px" />
+            android:layout_marginTop="18dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="88px"
+            android:layout_height="44dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:orientation="horizontal">
 
             <Button
@@ -53,7 +55,7 @@
                 android:gravity="center"
                 android:text="好"
                 android:textColor="#0076ff"
-                android:textSize="34px" />
+                android:textSize="17sp" />
 
         </LinearLayout>
 

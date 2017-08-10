@@ -144,7 +144,13 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void dealInvestor(final int position, InvestorEntity entity, InvestorHolder holder) {
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
-        holder.tvPosition.setText(StringUtil.formatString(entity.getFund_name()));
+
+        StringBuilder sb=new StringBuilder();
+        sb.append(StringUtil.formatString(entity.getFund_name()));
+        sb.append("  ");
+        sb.append(StringUtil.formatString(entity.getTitle()));
+
+        holder.tvPosition.setText(sb.toString());
         holder.tvCommentNum.setText(context.getResources().getString(R.string.investor_join_comment) + entity.getComment_number());
         holder.tvScore.setText("" + entity.getScore());
 

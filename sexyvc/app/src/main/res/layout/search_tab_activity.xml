@@ -68,10 +68,10 @@
             <TextView
                 android:id="@+id/tvTab1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="6sp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginTop="4dp"
                 android:text="@string/last_browse"
                 android:textColor="@color/home_tab_text_color"
                 android:textSize="16sp" />
@@ -80,7 +80,7 @@
                 android:id="@+id/line1"
                 android:layout_width="12dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/slate_1_shape" />
 
         </LinearLayout>
@@ -94,10 +94,10 @@
             <TextView
                 android:id="@+id/tvTab2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="6sp"
+                android:layout_height="0dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/last_follow"
                 android:textColor="@color/home_tab_text_color"
                 android:textSize="16sp" />
@@ -106,7 +106,7 @@
                 android:id="@+id/line2"
                 android:layout_width="12dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/slate_1_shape"
                 android:visibility="invisible" />
 

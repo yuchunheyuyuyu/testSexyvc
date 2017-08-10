@@ -113,6 +113,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         if(dataSourceType==ConstantUtil.DATA_FROM_LOCAL){
             hasLoadedAllItems=true;
             List<LastBrowerBean> list=mPresenter.queryLastBrowers();
+            data.clear();
             if(list!=null){
                 for(LastBrowerBean bean:list){
                     ConcernListEntity entity=new ConcernListEntity();

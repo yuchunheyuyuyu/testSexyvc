@@ -50,21 +50,27 @@
             android:background="@color/silver_two0" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/headLogoContainer"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/white0"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/ivHeadLogo"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:layout_centerInParent="true"
             android:src="@drawable/nav_logo_text" />
 
+        <View
+            android:id="@+id/homeLine2"
+            style="@style/line_style"
+            android:layout_alignParentBottom="true"
+            android:background="@color/silver_two0" />
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

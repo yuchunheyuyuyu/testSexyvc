@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -18,9 +19,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -31,6 +34,7 @@ import com.qtin.sexyvc.ui.bean.BannerEntity;
 import com.qtin.sexyvc.ui.bean.OnBannerItemClickListener;
 import com.qtin.sexyvc.utils.CommonUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +87,46 @@ public class BannerView extends FrameLayout {
         init(context);
     }
 
+    private int currentIndex;
+    private final int INTERVAL_TIME=3*1000;
+    private Handler handler=new Handler();
+    private Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+            currentIndex++;
+            mViewPager.setCurrentItem(currentIndex%views.size());
+            handler.postDelayed(this,INTERVAL_TIME);
+        }
+    };
+
+    public void startAutoPlay(){
+        handler.removeCallbacks(runnable);
+        if(views!=null&&views.size()>1){
+            handler.postDelayed(runnable,INTERVAL_TIME);
+        }
+    }
+
+    public void stopAutoPlay(){
+        if(views!=null&&views.size()>1){
+            handler.removeCallbacks(runnable);
+        }
+    }
+    private void setViewPagerScrollSpeed( ){
+        try {
+            Field mScroller = null;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller( mViewPager.getContext( ) );
+            mScroller.set( mViewPager, scroller);
+        }catch(NoSuchFieldException e){
+
+        }catch (IllegalArgumentException e){
+
+        }catch (IllegalAccessException e){
+
+        }
+    }
+
     private void init(Context context){
         ViewConfiguration configuration = ViewConfiguration.get(context);
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
@@ -92,6 +136,8 @@ public class BannerView extends FrameLayout {
         mViewPager=new ViewPager(context);
         mViewPager.setLayoutParams(params);
         addView(mViewPager);
+
+        setViewPagerScrollSpeed();
 
         //添加indicator外部的容器
         LayoutParams p=new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -304,5 +350,32 @@ public class BannerView extends FrameLayout {
     public int dpTpPx(float value) {
         DisplayMetrics dm = getResources().getDisplayMetrics();
         return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, dm) + 0.5);
+    }
+
+    public class FixedSpeedScroller extends Scroller {
+        private int mDuration = 800;
+
+        public FixedSpeedScroller(Context context) {
+            super(context);
+        }
+
+        public FixedSpeedScroller(Context context, Interpolator interpolator) {
+            super(context, interpolator);
+        }
+
+        public FixedSpeedScroller(Context context, Interpolator interpolator, boolean flywheel) {
+            super(context, interpolator, flywheel);
+        }
+
+
+        @Override
+        public void startScroll(int startX, int startY, int dx, int dy, int duration) {
+            super.startScroll(startX, startY, dx, dy, mDuration);
+        }
+
+        @Override
+        public void startScroll(int startX, int startY, int dx, int dy) {
+            super.startScroll(startX, startY, dx, dy, mDuration);
+        }
     }
 }

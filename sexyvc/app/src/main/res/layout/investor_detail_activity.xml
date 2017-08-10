@@ -30,7 +30,6 @@
                 android:id="@+id/tvConcern"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="6sp"
                 android:text="@string/has_concern"
                 android:textColor="@color/black50"
                 android:textSize="14sp" />
@@ -62,7 +61,6 @@
                 android:id="@+id/tvComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="6sp"
                 android:textColor="@color/barbie_pink_two"
                 android:textSize="14sp" />
         </LinearLayout>

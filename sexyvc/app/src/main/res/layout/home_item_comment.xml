@@ -11,7 +11,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="20dp"
-        android:gravity="bottom"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
@@ -28,7 +28,7 @@
             android:gravity="center_vertical"
             android:text="@string/last_comment"
             android:textColor="@color/slate"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="0dp"
@@ -38,7 +38,7 @@
             android:gravity="center_vertical"
             android:text="@string/selected_comment"
             android:textColor="@color/black30"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             android:gravity="end"
             android:text="@string/more"
             android:textColor="@color/black50"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
 
         <ImageView
             android:layout_width="16dp"
@@ -66,15 +66,13 @@
         <TextView
             android:id="@+id/tvCommentTag"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/tag_shape_selector"
             android:gravity="center"
             android:lineSpacingExtra="0sp"
-            android:paddingBottom="4dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
-            android:paddingTop="4dp"
             android:text="本地生活"
             android:textColor="@color/black30"
             android:textSize="10sp" />

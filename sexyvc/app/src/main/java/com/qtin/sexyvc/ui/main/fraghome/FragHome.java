@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -31,7 +33,9 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -56,7 +60,9 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     @BindView(R.id.ivHeadLogo)
     ImageView ivHeadLogo;
     @BindView(R.id.headLogoContainer)
-    LinearLayout headLogoContainer;
+    RelativeLayout headLogoContainer;
+    @BindView(R.id.homeLine2)
+    View homeLine2;
     private int mDistance;//滚动的距离
     private int maxDistance;//监测最大的
 
@@ -142,6 +148,7 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
                 //间隔线
                 int lineColor = Color.argb(alpha, 224, 224, 226);
                 homeLine.setBackgroundColor(lineColor);
+                homeLine2.setBackgroundColor(lineColor);
 
                 //搜索框 #3b4357
                 int searchColor = Color.argb((int) (alpha * 0.1), 59, 67, 87);
@@ -186,9 +193,20 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdapter.bannerView != null) {
+            mAdapter.bannerView.startAutoPlay();
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         swipeRefreshLayout.setRefreshing(false);
+        if (mAdapter.bannerView != null) {
+            mAdapter.bannerView.stopAutoPlay();
+        }
     }
 
     @Override

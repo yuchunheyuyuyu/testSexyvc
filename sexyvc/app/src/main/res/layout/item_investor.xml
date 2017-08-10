@@ -107,6 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:text="7.2"
+                    android:textStyle="bold"
                     android:textColor="@color/barbie_pink_two"
                     android:textSize="16sp" />
             </LinearLayout>

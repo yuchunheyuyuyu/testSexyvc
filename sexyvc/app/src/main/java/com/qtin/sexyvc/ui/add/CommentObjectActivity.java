@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -54,8 +55,7 @@ public class CommentObjectActivity extends MyBaseActivity {
     protected void initData() {
         typeComment=getIntent().getExtras().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
 
-        tvTab1.setSelected(true);
-        line1.setSelected(true);
+        StringUtil.setTextStyle(tvTab1,line1,true);
 
         ArrayList<Fragment> frags = new ArrayList<>();
         frags.add(IndividualListFrag.getInstance(ConstantUtil.DATA_FROM_LOCAL,typeComment));
@@ -72,15 +72,11 @@ public class CommentObjectActivity extends MyBaseActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    tvTab1.setSelected(true);
-                    line1.setVisibility(View.VISIBLE);
-                    tvTab2.setSelected(false);
-                    line2.setVisibility(View.INVISIBLE);
+                    StringUtil.setTextStyle(tvTab1,line1,true);
+                    StringUtil.setTextStyle(tvTab2,line2,false);
                 } else {
-                    tvTab1.setSelected(false);
-                    line1.setVisibility(View.INVISIBLE);
-                    tvTab2.setSelected(true);
-                    line2.setVisibility(View.VISIBLE);
+                    StringUtil.setTextStyle(tvTab1,line1,false);
+                    StringUtil.setTextStyle(tvTab2,line2,true);
                 }
             }
 
@@ -90,6 +86,7 @@ public class CommentObjectActivity extends MyBaseActivity {
             }
         });
     }
+
 
     @OnClick({R.id.ivLeft, R.id.searchContainer,R.id.tvTab1,R.id.tvTab2})
     public void onClick(View view) {

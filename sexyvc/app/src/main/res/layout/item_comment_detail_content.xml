@@ -18,15 +18,13 @@
         <TextView
             android:id="@+id/tvCommentTag"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
             android:layout_marginRight="6dp"
             android:background="@drawable/tag_shape_selector"
             android:gravity="center"
             android:lineSpacingExtra="0sp"
-            android:paddingBottom="4dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
-            android:paddingTop="4dp"
             android:text="本地生活"
             android:textColor="@color/black30"
             android:textSize="10sp" />
@@ -64,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:lineSpacingExtra="6sp"
+        android:textStyle="bold"
         android:text="沟通效率很高推动性也很强的投资经理，是我喜欢的类型"
         android:textColor="@color/black90"
         android:textSize="16sp" />

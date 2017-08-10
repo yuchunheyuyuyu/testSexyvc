@@ -93,7 +93,7 @@
                 android:layout_marginTop="24dp"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="6sp"
-                android:text="他足够 sexy 吗？拖动星星评分"
+                android:text="@string/click_to_rate"
                 android:textColor="@color/black90"
                 android:textSize="14sp" />
 
@@ -111,8 +111,8 @@
                 app:starMargin="0dp"
                 app:starSpacing="4dp"
                 app:isIndicator="false"
-                app:emptyDrawable="@drawable/star_l_blank"
-                app:filledDrawable="@drawable/star_l_full" />
+                app:emptyDrawable="@drawable/star_scoring_blank"
+                app:filledDrawable="@drawable/star_scoring_full" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
                 android:layout_marginTop="24dp"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="6sp"
-                android:text="请选择印象标签吧"
+                android:text="@string/choose_tag"
                 android:textColor="@color/black90"
                 android:textSize="14sp" />
 

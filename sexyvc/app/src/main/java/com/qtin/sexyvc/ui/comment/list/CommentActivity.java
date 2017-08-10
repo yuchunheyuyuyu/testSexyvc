@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -49,8 +50,7 @@ public class CommentActivity extends MyBaseActivity {
 
     @Override
     protected void initData() {
-        tvComentNew.setSelected(true);
-        lineNew.setSelected(true);
+        StringUtil.setTextStyle(tvComentNew,lineNew,true);
 
         ArrayList<Fragment> frags=new ArrayList<>();
         frags.add(CommentLastFrag.getInstance(0));
@@ -66,15 +66,11 @@ public class CommentActivity extends MyBaseActivity {
             @Override
             public void onPageSelected(int position) {
                 if(position==0){
-                    tvComentNew.setSelected(true);
-                    lineNew.setVisibility(View.VISIBLE);
-                    tvCommentSelected.setSelected(false);
-                    lineSelected.setVisibility(View.INVISIBLE);
+                    StringUtil.setTextStyle(tvComentNew,lineNew,true);
+                    StringUtil.setTextStyle(tvCommentSelected,lineSelected,false);
                 }else{
-                    tvComentNew.setSelected(false);
-                    lineNew.setVisibility(View.INVISIBLE);
-                    tvCommentSelected.setSelected(true);
-                    lineSelected.setVisibility(View.VISIBLE);
+                    StringUtil.setTextStyle(tvComentNew,lineNew,false);
+                    StringUtil.setTextStyle(tvCommentSelected,lineSelected,true);
                 }
             }
 

@@ -66,9 +66,12 @@ public class FragHomePresent extends BasePresenter<FragHomeContract.Model,FragHo
                             HomeBean homeBean=baseEntity.getItems();
                             //banner
                             ArrayList<HomeInterface> data=new ArrayList<HomeInterface>();
-                            ItemBannerEntity itemBannerEntity=new ItemBannerEntity();
-                            itemBannerEntity.setList(homeBean.getBanners());
-                            data.add(itemBannerEntity);
+
+                            if(homeBean.getBanners()!=null&&!homeBean.getBanners().isEmpty()){
+                                ItemBannerEntity itemBannerEntity=new ItemBannerEntity();
+                                itemBannerEntity.setList(homeBean.getBanners());
+                                data.add(itemBannerEntity);
+                            }
 
                             //快讯
                             ItemNewsEntity itemNewsEntity=new ItemNewsEntity();

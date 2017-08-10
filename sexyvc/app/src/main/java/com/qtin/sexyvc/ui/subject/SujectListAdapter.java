@@ -33,6 +33,7 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context context;
     private ArrayList<SubjectListInterface> data;
+    public BannerView bannerView;
 
     public static final int ITEM_BANNER = 0;
     public static final int ITEM_NORMAL = 1;
@@ -78,6 +79,8 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             BannerHolder holder= (BannerHolder) viewHolder;
             final SubjectBannerEntity bannerEntity= (SubjectBannerEntity) data.get(position);
             holder.bannerView.setData(bannerEntity.getBanners());
+            bannerView=holder.bannerView;
+            bannerView.startAutoPlay();
             holder.bannerView.setOnItemClickListener(new OnBannerItemClickListener() {
                 @Override
                 public void onBannerClickItem(int position) {

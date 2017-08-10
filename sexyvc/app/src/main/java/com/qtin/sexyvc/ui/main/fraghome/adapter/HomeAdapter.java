@@ -108,11 +108,15 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return null;
     }
 
+    public BannerView bannerView;
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof BannerHolder){
             final ItemBannerEntity entity= (ItemBannerEntity) data.get(position);
             ((BannerHolder) holder).bannerView.setData(entity.getList());
+            bannerView=((BannerHolder) holder).bannerView;
+            bannerView.startAutoPlay();
             ((BannerHolder) holder).bannerView.setOnItemClickListener(new OnBannerItemClickListener() {
                 @Override
                 public void onBannerClickItem(int position) {

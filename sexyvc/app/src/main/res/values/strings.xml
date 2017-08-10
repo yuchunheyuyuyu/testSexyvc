@@ -282,6 +282,9 @@
     <string name="filter_vcode">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="money_vcode">0123456789</string>
 
+    <string name="click_to_rate">他足够 sexy 吗？点击星星评分</string>
+    <string name="choose_tag">请选择印象标签吧</string>
+
     <string name="code_10000">IP超过单位时间内请求次数限制，IP将被屏蔽10分钟</string>
     <string name="code_10001">请求404错误</string>
     <string name="code_10002">缺少请求参数</string>

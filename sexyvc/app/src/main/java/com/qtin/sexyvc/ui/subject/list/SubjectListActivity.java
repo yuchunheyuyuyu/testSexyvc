@@ -161,6 +161,22 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mAdapter.bannerView!=null){
+            mAdapter.bannerView.startAutoPlay();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mAdapter.bannerView!=null){
+            mAdapter.bannerView.stopAutoPlay();
+        }
+    }
+
     private void initPaginate() {
         if (mPaginate == null) {
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
@@ -238,9 +254,11 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
     public void querySuccess(int need_banner, SubjectBean subjectBean) {
         if (need_banner == 1) {
             data.clear();
-            SubjectBannerEntity bannerEntity = new SubjectBannerEntity();
-            bannerEntity.setBanners(subjectBean.getBanners());
-            data.add(bannerEntity);
+            if(subjectBean.getBanners()!=null&&!subjectBean.getBanners().isEmpty()){
+                SubjectBannerEntity bannerEntity = new SubjectBannerEntity();
+                bannerEntity.setBanners(subjectBean.getBanners());
+                data.add(bannerEntity);
+            }
         }
         if (subjectBean.getSubjects() != null) {
             ArrayList<SubjectListEntity> list = subjectBean.getSubjects().getList();

@@ -58,7 +58,7 @@
             <LinearLayout
                 android:id="@+id/changeMoneyContainer"
                 android:layout_width="74dp"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:layout_marginLeft="28dp"
                 android:background="@drawable/money_type_shape"
                 android:gravity="center"
@@ -71,7 +71,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:lineSpacingExtra="6sp"
                     android:text="@string/renminbi"
                     android:textColor="@color/white"
                     android:textSize="12sp" />

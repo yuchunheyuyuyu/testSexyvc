@@ -417,7 +417,8 @@ public class RatingBar extends View {
 
                     selectedAmount = (((x - xPerStar) / xPerStar) + 1);
                     float remainder = selectedAmount % mStepSize;
-                    selectedAmount = selectedAmount - remainder;
+                    //修复bug的地方
+                    selectedAmount = selectedAmount - remainder+1;
                 }
             }
             if (x < 0) {

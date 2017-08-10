@@ -89,6 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
+                    android:textStyle="bold"
                     android:text="7.2"
                     android:textColor="@color/barbie_pink_two"
                     android:textSize="16sp" />

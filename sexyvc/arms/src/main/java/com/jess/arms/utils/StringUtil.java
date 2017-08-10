@@ -1,5 +1,9 @@
 package com.jess.arms.utils;
 
+import android.text.TextPaint;
+import android.view.View;
+import android.widget.TextView;
+
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -105,6 +109,18 @@ public class StringUtil {
             return true;
         }
         return false;
+    }
+
+    public static void setTextStyle(TextView tv, View line,boolean isSelected){
+        tv.setSelected(isSelected);
+        TextPaint paint = tv.getPaint();
+        paint.setFakeBoldText(isSelected);
+        line.setSelected(isSelected);
+        if(isSelected){
+            line.setVisibility(View.VISIBLE);
+        }else{
+            line.setVisibility(View.INVISIBLE);
+        }
     }
 
     // 截取字符串，根据字节长度

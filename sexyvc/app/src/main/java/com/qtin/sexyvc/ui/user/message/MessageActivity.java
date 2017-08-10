@@ -4,12 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+
+import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.user.message.message.MessageFrag;
 import com.qtin.sexyvc.ui.user.message.notice.NoticeFrag;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -51,8 +55,7 @@ public class MessageActivity extends MyBaseActivity {
     @Override
     protected void initData() {
 
-        tvMessage.setSelected(true);
-        lineMessage.setVisibility(View.VISIBLE);
+        StringUtil.setTextStyle(tvMessage,lineMessage,true);
 
         ArrayList<Fragment> frags=new ArrayList<>();
         messageFrag=new MessageFrag();
@@ -69,16 +72,12 @@ public class MessageActivity extends MyBaseActivity {
             @Override
             public void onPageSelected(int position) {
                 if(position==0){
-                    tvMessage.setSelected(true);
-                    lineMessage.setVisibility(View.VISIBLE);
-                    tvNotice.setSelected(false);
-                    lineNotice.setVisibility(View.INVISIBLE);
+                    StringUtil.setTextStyle(tvMessage,lineMessage,true);
+                    StringUtil.setTextStyle(tvNotice,lineNotice,false);
                     tvRight.setVisibility(View.VISIBLE);
                 }else{
-                    tvMessage.setSelected(false);
-                    lineMessage.setVisibility(View.INVISIBLE);
-                    tvNotice.setSelected(true);
-                    lineNotice.setVisibility(View.VISIBLE);
+                    StringUtil.setTextStyle(tvMessage,lineMessage,false);
+                    StringUtil.setTextStyle(tvNotice,lineNotice,true);
                     tvRight.setVisibility(View.GONE);
                 }
             }
