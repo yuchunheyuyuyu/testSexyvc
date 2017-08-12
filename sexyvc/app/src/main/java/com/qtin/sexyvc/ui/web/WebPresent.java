@@ -7,7 +7,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
-import com.qtin.sexyvc.ui.demo.activity.bean.PageBean;
+import com.qtin.sexyvc.ui.bean.PageBean;
 
 import javax.inject.Inject;
 

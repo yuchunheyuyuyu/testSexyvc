@@ -113,30 +113,30 @@
             <LinearLayout
                 android:id="@+id/myProjectContainer"
                 android:layout_width="match_parent"
-                android:layout_height="96px"
+                android:layout_height="48dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="56px"
-                    android:layout_height="56px"
-                    android:layout_marginLeft="32px"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginLeft="16dp"
                     android:src="@drawable/icon_project" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30px"
+                    android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:text="@string/my_project"
                     android:textColor="@color/black90"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="32px"
-                    android:layout_height="32px"
-                    android:layout_marginRight="32px"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="16dp"
                     android:src="@drawable/arrow_disclosure_l" />
 
             </LinearLayout>
@@ -150,30 +150,30 @@
             <LinearLayout
                 android:id="@+id/messageContainer"
                 android:layout_width="match_parent"
-                android:layout_height="96px"
+                android:layout_height="48dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/ivMessage"
-                    android:layout_width="56px"
-                    android:layout_height="56px"
-                    android:layout_marginLeft="32px"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginLeft="16dp"
                     android:src="@drawable/message_selector" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30px"
+                    android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:text="@string/my_message"
                     android:textColor="@color/black90"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="32px"
-                    android:layout_height="32px"
-                    android:layout_marginRight="32px"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="16dp"
                     android:src="@drawable/arrow_disclosure_l" />
 
             </LinearLayout>
@@ -183,32 +183,31 @@
                 android:layout_marginLeft="120px" />
 
             <LinearLayout
-                android:id="@+id/settingContainer"
+                android:id="@+id/mySentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="96px"
-                android:layout_marginTop="48px"
+                android:layout_height="48dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="56px"
-                    android:layout_height="56px"
-                    android:layout_marginLeft="32px"
-                    android:src="@drawable/icon_setting" />
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/icon_sent" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30px"
+                    android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:text="@string/setting"
+                    android:text="@string/my_sent"
                     android:textColor="@color/black90"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="32px"
-                    android:layout_height="32px"
-                    android:layout_marginRight="32px"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="16dp"
                     android:src="@drawable/arrow_disclosure_l" />
 
             </LinearLayout>

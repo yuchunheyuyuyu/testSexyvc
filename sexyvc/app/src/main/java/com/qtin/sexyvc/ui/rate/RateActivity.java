@@ -40,13 +40,10 @@ import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
-import com.zhy.autolayout.utils.AutoUtils;
 
 import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -286,16 +283,39 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
             normalContainer.setVisibility(View.VISIBLE);
             final TagFlowLayout flowLayout= (TagFlowLayout) view.findViewById(R.id.flowLayout);
 
-            TagAdapter tagAdapter = new TagAdapter<TagEntity>(normalTags) {
+            final TagAdapter tagAdapter = new TagAdapter<TagEntity>(normalTags) {
                 @Override
-                public View getView(FlowLayout parent, int position, TagEntity s) {
-                    TextView tv = (TextView) LayoutInflater.from(RateActivity.this).inflate(R.layout.item_normal_question, flowLayout, false);
-                    AutoUtils.auto(tv);
-                    tv.setText("+ "+s.getTag_name());
-                    return tv;
+                public View getView(FlowLayout parent, int position, TagEntity tagEntity) {
+
+                    View view = LayoutInflater.from(RateActivity.this).inflate(R.layout.item_normal_question, flowLayout, false);
+                    TextView tv= (TextView) view.findViewById(R.id.tvContent);
+                    if(tagEntity.isSelected()){
+                        tv.setSelected(true);
+                    }else{
+                        tv.setSelected(false);
+                    }
+                    tv.setText(tagEntity.getTag_name());
+                    return view;
                 }
             };
-            flowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+            flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                @Override
+                public boolean onTagClick(View view, int position, FlowLayout parent) {
+                    if(!normalTags.get(position).isSelected()){
+                        for(TagEntity entity:normalTags){
+                            entity.setSelected(false);
+                        }
+                        normalTags.get(position).setSelected(true);
+                        tagAdapter.notifyDataChanged();
+                        etInput.setText(normalTags.get(position).getTag_name());
+                        etInput.setSelection(normalTags.get(position).getTag_name().length());
+                    }
+
+                    return false;
+                }
+            });
+
+            /**flowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
                 @Override
                 public void onSelected(Set<Integer> selectPosSet) {
                     Iterator<Integer> it=selectPosSet.iterator();
@@ -306,7 +326,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                     }
 
                 }
-            });
+            });*/
             flowLayout.setMaxSelectCount(1);
             flowLayout.setAdapter(tagAdapter);
         }

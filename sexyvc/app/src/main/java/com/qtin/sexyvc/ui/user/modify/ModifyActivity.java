@@ -199,7 +199,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 tvRight.setText(getResources().getString(R.string.comfirm));
                 etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
             } else if (modifyType == MODIFY_CONCERN_WECAHT) {
-                etContent.setHint(getResources().getString(R.string.we_chat));
+                etContent.setHint(getResources().getString(R.string.hint_we_chat));
                 tvTitle.setText(getResources().getString(R.string.we_chat));
                 etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
             }

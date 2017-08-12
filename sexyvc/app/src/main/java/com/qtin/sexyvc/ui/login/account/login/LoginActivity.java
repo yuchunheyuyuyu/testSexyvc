@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.login.account.login;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -13,7 +14,6 @@ import com.qtin.sexyvc.ui.login.account.login.di.DaggerLoginComponent;
 import com.qtin.sexyvc.ui.login.account.login.di.LoginModule;
 import com.qtin.sexyvc.ui.login.password.forget.ForgetActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
-import com.qtin.sexyvc.ui.widget.PhoneEditText;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -23,10 +23,12 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends MyBaseActivity<LoginPresent> implements LoginContract.View {
 
-    @BindView(R.id.etPhone)
-    PhoneEditText etPhone;
+    @BindView(R.id.tvPhone)
+    TextView tvPhone;
     @BindView(R.id.etPassword)
     EditText etPassword;
+
+    private String mobile;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -45,7 +47,8 @@ public class LoginActivity extends MyBaseActivity<LoginPresent> implements Login
 
     @Override
     protected void initData() {
-
+        mobile=getIntent().getExtras().getString("mobile");
+        tvPhone.setText(StringUtil.getFormatPhone(mobile));
     }
 
     @Override
@@ -80,22 +83,12 @@ public class LoginActivity extends MyBaseActivity<LoginPresent> implements Login
                 finish();
                 break;
             case R.id.tvLogin:
-                String username=etPhone.getPhoneText();
-                if(StringUtil.isBlank(username)){
-                    showMessage("请输入手机号");
-                    return;
-                }
-                if(!StringUtil.isMobile(username)){
-                    showMessage("手机号输入不正确");
-                    return;
-                }
-
                 String password=etPassword.getText().toString();
                 if(StringUtil.isBlank(password)){
                     showMessage("请输入密码");
                     return;
                 }
-                mPresenter.login(username,password,customApplication.deviceToken);
+                mPresenter.login(mobile,password,customApplication.deviceToken);
                 break;
             case R.id.tvForgetPassword:
                 gotoActivity(ForgetActivity.class);

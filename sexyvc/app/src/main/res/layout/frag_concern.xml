@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="88px"
+        android:layout_height="44dp"
         android:background="@color/white">
 
         <ImageView
@@ -16,10 +16,10 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="28px"
-            android:paddingLeft="20px"
-            android:paddingRight="16px"
-            android:paddingTop="28px"
+            android:paddingBottom="14dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="8dp"
+            android:paddingTop="14dp"
             android:src="@drawable/plus_pink" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:text="@string/title_frag_concern"
             android:textColor="@color/slate"
-            android:textSize="32px" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/tvEdit"
@@ -39,18 +39,18 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
-            android:paddingLeft="16px"
+            android:paddingLeft="8dp"
             android:paddingRight="20dp"
             android:text="@string/edit"
             android:textColor="@color/barbie_pink_two"
-            android:textSize="28px"
+            android:textSize="14sp"
             android:visibility="gone" />
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="88px"
+        android:layout_height="44dp"
         android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal">
@@ -58,19 +58,17 @@
         <LinearLayout
             android:id="@+id/searchContainer"
             android:layout_width="match_parent"
-            android:layout_height="60px"
-            android:layout_marginBottom="14px"
-            android:layout_marginLeft="16px"
-            android:layout_marginRight="16px"
-            android:layout_marginTop="14px"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/search_shape_back"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="24px"
-                android:layout_height="24px"
-                android:layout_marginRight="15px"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginRight="7.5dp"
                 android:src="@drawable/search_icon" />
 
             <TextView
@@ -78,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/search"
                 android:textColor="@color/black30"
-                android:textSize="28px" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 

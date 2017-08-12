@@ -60,7 +60,7 @@
     <LinearLayout
         android:id="@+id/actionContainer"
         android:layout_width="match_parent"
-        android:layout_height="96px"
+        android:layout_height="41dp"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
@@ -71,11 +71,11 @@
             android:id="@+id/tvFooter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="32px"
+            android:layout_marginLeft="16dp"
             android:gravity="center_vertical"
             android:text="@string/express_your_idea"
             android:textColor="@color/black30"
-            android:textSize="24px" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

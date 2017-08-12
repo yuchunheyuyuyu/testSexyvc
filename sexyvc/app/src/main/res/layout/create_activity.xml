@@ -8,13 +8,13 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="336px"
-        android:layout_height="238px"
+        android:layout_width="177dp"
+        android:layout_height="113dp"
         android:layout_marginBottom="48dp"
-        android:layout_marginTop="136px"
+        android:layout_marginTop="68dp"
         android:src="@drawable/logo" />
 
-    <com.jess.arms.widget.autolayout.AutoCardView
+    <android.support.v7.widget.CardView
         android:layout_width="270dp"
         android:layout_height="52dp"
         android:layout_margin="@dimen/card_elevation_margin"
@@ -28,8 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
-            android:gravity="center_vertical"
             android:digits="@string/money_vcode"
+            android:gravity="center_vertical"
             android:hint="@string/hint_input_phone"
             android:inputType="phone"
             android:maxLength="13"
@@ -37,82 +37,31 @@
             android:textColorHint="@color/slate30"
             android:textSize="14sp" />
 
-    </com.jess.arms.widget.autolayout.AutoCardView>
-
-    <com.jess.arms.widget.autolayout.AutoCardView
-        android:layout_width="270dp"
-        android:layout_height="52dp"
-        android:layout_margin="@dimen/card_elevation_margin"
-        android:layout_marginTop="30px"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="2dp"
-        app:contentPaddingLeft="20dp">
-
-        <EditText
-            android:id="@+id/etVertifyCode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/hint_input_vertify_code"
-            android:maxLength="6"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/slate"
-            android:textColorHint="@color/slate30"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|right"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="1px"
-                android:layout_height="24dp"
-                android:background="@color/silver_two" />
-
-            <TextView
-                android:id="@+id/tvGetVertify"
-                android:layout_width="92dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/get_vertify_code"
-                android:textColor="@color/vertify_code_color"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-    </com.jess.arms.widget.autolayout.AutoCardView>
+    </android.support.v7.widget.CardView>
 
 
     <TextView
         android:id="@+id/tvCreateAccount"
         android:layout_width="290dp"
         android:layout_height="70dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/btn_signup"
         android:gravity="center"
-        android:text="@string/create_account"
+        android:text="@string/next_step"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/tvToLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/please_login"
-        android:textColor="@color/barbie_pink_two"
-        android:textSize="12sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140px"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="40dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -124,14 +73,14 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="64px"
-                android:layout_height="64px"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/login_wechat" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12px"
+                android:layout_marginTop="6dp"
                 android:lineSpacingExtra="6sp"
                 android:text="@string/wx_login"
                 android:textColor="@color/slate_50"
@@ -142,19 +91,19 @@
             android:id="@+id/qqLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="144px"
+            android:layout_marginLeft="72dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="64px"
-                android:layout_height="64px"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/login_qq" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12px"
+                android:layout_marginTop="6dp"
                 android:lineSpacingExtra="6sp"
                 android:text="@string/qq_login"
                 android:textColor="@color/slate_50"

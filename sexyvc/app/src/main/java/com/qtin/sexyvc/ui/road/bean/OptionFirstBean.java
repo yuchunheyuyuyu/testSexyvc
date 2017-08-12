@@ -2,7 +2,9 @@ package com.qtin.sexyvc.ui.road.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+
 import java.util.ArrayList;
 
 /**
@@ -15,7 +17,15 @@ public class OptionFirstBean implements DataTypeInterface, Parcelable {
     private LinkQuestionBean link_question;
     private boolean isSelected;
     private ArrayList<AddQuestionBean> addQuestions;
+    private int status;//0代表初始状态，1被选中，2未被选中
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public long getOption_id() {
         return option_id;
@@ -84,6 +94,7 @@ public class OptionFirstBean implements DataTypeInterface, Parcelable {
         dest.writeParcelable(this.link_question, flags);
         dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
         dest.writeTypedList(this.addQuestions);
+        dest.writeInt(this.status);
     }
 
     public OptionFirstBean() {
@@ -96,9 +107,10 @@ public class OptionFirstBean implements DataTypeInterface, Parcelable {
         this.link_question = in.readParcelable(LinkQuestionBean.class.getClassLoader());
         this.isSelected = in.readByte() != 0;
         this.addQuestions = in.createTypedArrayList(AddQuestionBean.CREATOR);
+        this.status = in.readInt();
     }
 
-    public static final Creator<OptionFirstBean> CREATOR = new Creator<OptionFirstBean>() {
+    public static final Parcelable.Creator<OptionFirstBean> CREATOR = new Parcelable.Creator<OptionFirstBean>() {
         @Override
         public OptionFirstBean createFromParcel(Parcel source) {
             return new OptionFirstBean(source);

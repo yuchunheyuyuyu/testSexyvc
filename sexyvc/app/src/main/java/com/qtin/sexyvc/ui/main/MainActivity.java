@@ -18,13 +18,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.popupwindow.GuidePopupwindow;
+import com.qtin.sexyvc.popupwindow.OnPopupWindowClickListener;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.AppUpdateBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
@@ -40,17 +41,18 @@ import com.qtin.sexyvc.utils.ConstantUtil;
 import com.qtin.sexyvc.utils.update.updater.Updater;
 import com.qtin.sexyvc.utils.update.updater.UpdaterConfig;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.lang.reflect.Field;
-
+import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/14.
  */
 public class MainActivity extends MyBaseActivity<MainPresent> implements MainContract.View{
-
     @BindView(R.id.ivTab1)
     ImageView ivTab1;
     @BindView(R.id.tvTab1)
@@ -74,6 +76,8 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
     private static final int REQUEST_CODE_SELECTED_TYPE=0x223;
 
     private Dialog updateDialog;
+
+    private int guideIndex=0;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -107,6 +111,28 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
         tvTab1.setSelected(true);
 
         mPresenter.queryUpdate();
+
+        Observable.just(1)
+                .delay(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        showGuideWindow();
+                    }
+                });
+    }
+
+    private void showGuideWindow(){
+        new GuidePopupwindow(new OnPopupWindowClickListener() {
+            @Override
+            public void onClick() {
+                if(guideIndex<4){
+                    guideIndex++;
+                    showGuideWindow();
+                }
+            }
+        }).show(MainActivity.this,guideIndex);
     }
 
     @Override

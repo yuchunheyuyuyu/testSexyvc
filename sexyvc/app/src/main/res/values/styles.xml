@@ -26,6 +26,11 @@
         <item name="@android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
+    <style name="popupwindow_fade_animation" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/fade_in_200</item>
+        <item name="@android:windowExitAnimation">@anim/fade_out_200</item>
+    </style>
+
     <!--splash页面的-->
     <style name="SplashTheme" parent="MyAppTheme">
         <item name="android:windowBackground">@drawable/launch_page</item>
@@ -117,16 +122,16 @@
     </style>
 
     <style name="home_tab_image_style">
-        <item name="android:layout_width">96px</item>
-        <item name="android:layout_height">64px</item>
-        <item name="android:layout_marginTop">6px</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginTop">3dp</item>
     </style>
 
     <style name="home_tab_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">2px</item>
-        <item name="android:textSize">20px</item>
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/home_tab_text_color</item>
     </style>
 

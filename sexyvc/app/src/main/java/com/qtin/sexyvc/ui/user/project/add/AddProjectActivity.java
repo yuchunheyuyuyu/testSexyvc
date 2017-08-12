@@ -47,7 +47,6 @@ import com.qtin.sexyvc.utils.CashierInputFilter;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -55,10 +54,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by ls on 17/4/26.
@@ -152,6 +151,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         //头像
         mImageLoader.loadImage(customApplication, GlideImageConfig
                 .builder()
+                .transformation(new RoundedCornersTransformation(this, com.qtin.sexyvc.ui.widget.DeviceUtils.dip2px(this,2),0))
                 .errorPic(R.drawable.logo_blank)
                 .placeholder(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(projectBean.getLogo()))

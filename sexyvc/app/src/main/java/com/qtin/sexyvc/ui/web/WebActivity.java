@@ -7,7 +7,7 @@ import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
-import com.qtin.sexyvc.ui.demo.activity.bean.PageBean;
+import com.qtin.sexyvc.ui.bean.PageBean;
 import com.qtin.sexyvc.ui.web.di.DaggerWebComponent;
 import com.qtin.sexyvc.ui.web.di.WebModule;
 import com.qtin.sexyvc.utils.CommonUtil;

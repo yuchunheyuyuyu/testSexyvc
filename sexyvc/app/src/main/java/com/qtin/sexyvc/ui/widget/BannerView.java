@@ -139,14 +139,6 @@ public class BannerView extends FrameLayout {
 
         setViewPagerScrollSpeed();
 
-        //添加indicator外部的容器
-        LayoutParams p=new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mIndicatorContainer=new LinearLayout(context);
-        p.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-        //p.setMargins(0,0,0,indicatorMarginBottom);
-        mIndicatorContainer.setLayoutParams(p);
-        //mIndicatorContainer.setPadding(0,0,0,indicatorMarginBottom);
-        addView(mIndicatorContainer);
 
         if(isContainText){
             tvTitle=new TextView(context);
@@ -161,6 +153,14 @@ public class BannerView extends FrameLayout {
 
             addView(tvTitle);
         }
+        //添加indicator外部的容器
+        LayoutParams p=new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mIndicatorContainer=new LinearLayout(context);
+        p.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+        //p.setMargins(0,0,0,indicatorMarginBottom);
+        mIndicatorContainer.setLayoutParams(p);
+        //mIndicatorContainer.setPadding(0,0,0,indicatorMarginBottom);
+        addView(mIndicatorContainer);
     }
 
     private void initXml( Context context, AttributeSet attrs,int defStyleAttr){

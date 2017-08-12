@@ -2,11 +2,8 @@ package com.qtin.sexyvc.ui.login.account.create;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -18,7 +15,7 @@ import com.qtin.sexyvc.ui.login.account.bind.BindActivity;
 import com.qtin.sexyvc.ui.login.account.create.di.CreateModule;
 import com.qtin.sexyvc.ui.login.account.create.di.DaggerCreateComponent;
 import com.qtin.sexyvc.ui.login.account.login.LoginActivity;
-import com.qtin.sexyvc.ui.login.password.set.SetPasswordActivity;
+import com.qtin.sexyvc.ui.login.register.RegisterActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
 import com.umeng.socialize.UMAuthListener;
@@ -37,31 +34,8 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     @BindView(R.id.etPhone)
     PhoneEditText etPhone;
-    @BindView(R.id.etVertifyCode)
-    EditText etVertifyCode;
-    @BindView(R.id.tvGetVertify)
-    TextView tvGetVertify;
-    private static final int TOTAL_TIME=30;//倒计时总时间
-    private int countDown=TOTAL_TIME;
-
     private UMShareAPI mShareAPI;
-
-    private Handler mHandler=new Handler();
-    private Runnable runnable=new Runnable() {
-        @Override
-        public void run() {
-            countDown--;
-            if(countDown==0){
-                countDown=TOTAL_TIME;
-                tvGetVertify.setSelected(true);
-                tvGetVertify.setText(getResources().getString(R.string.get_vertify_code));
-            }else{
-                String str=String.format(getResources().getString(R.string.get_vertify_ing),""+countDown);
-                tvGetVertify.setText(str);
-                mHandler.postDelayed(this,1000);
-            }
-        }
-    };
+    private String mobile;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -81,33 +55,10 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     @Override
     protected void initData() {
-
         if(mPresenter.isLogin()){
             gotoActivity(MainActivity.class);
             return;
         }
-
-        etPhone.setPhoneVertifyListener(new PhoneEditText.PhoneVertifyListener() {
-            @Override
-            public void isPhone(boolean isPhone) {
-                if(countDown==TOTAL_TIME){
-                    if(isPhone){
-                        tvGetVertify.setSelected(true);
-                    }else{
-                        tvGetVertify.setSelected(false);
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mHandler.removeCallbacks(runnable);
-        countDown=TOTAL_TIME;
-        tvGetVertify.setSelected(true);
-        tvGetVertify.setText(getResources().getString(R.string.get_vertify_code));
     }
 
     @Override
@@ -135,40 +86,20 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     }
 
-    @OnClick({R.id.tvGetVertify, R.id.tvCreateAccount, R.id.tvToLogin, R.id.wxLogin, R.id.qqLogin})
+    @OnClick({ R.id.tvCreateAccount,  R.id.wxLogin, R.id.qqLogin})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tvGetVertify:
-                if(tvGetVertify.isSelected()){
-                    tvGetVertify.setSelected(false);
-                    mHandler.post(runnable);
-                    //获取验证码
-                    mPresenter.getVertifyCode(etPhone.getPhoneText());
-                }
-                break;
             case R.id.tvCreateAccount:
-                String phoneStr=etPhone.getPhoneText();
-                if(StringUtil.isBlank(phoneStr)){
-                    showMessage("手机号不能为空");
+                mobile=etPhone.getPhoneText();
+                if(StringUtil.isBlank(mobile)){
+                    showMessage("请输入手机号");
                     return;
                 }
-
-                if(!etPhone.isMobileNO()){
-                    showMessage("手机号格式不合法");
+                if(!StringUtil.isMobile(mobile)){
+                    showMessage("手机号输入不正确");
                     return;
                 }
-
-                String code_value=etVertifyCode.getText().toString();
-                if(StringUtil.isBlank(code_value)){
-                    showMessage("验证码不能为空");
-                    return;
-                }
-
-
-                mPresenter.validateCode(etPhone.getPhoneText(),code_value);
-                break;
-            case R.id.tvToLogin:
-                gotoActivity(LoginActivity.class);
+                mPresenter.checkRegisterStatus(mobile);
                 break;
             case R.id.wxLogin:
                 getThirdInfo(SHARE_MEDIA.WEIXIN);
@@ -190,14 +121,6 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     }
 
     @Override
-    public void validateSuccess() {
-        Bundle bundle=new Bundle();
-        bundle.putInt("type",1);
-        bundle.putString("phoneStr",etPhone.getPhoneText());
-        gotoActivity(SetPasswordActivity.class,bundle);
-    }
-
-    @Override
     public void gotoBind(int type) {
         //2微信，3qq
         Bundle bundle=new Bundle();
@@ -211,13 +134,25 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     }
 
     @Override
-    public void getVertifyCodeResult(boolean isSuccess) {
-        if(!isSuccess){
-            mHandler.removeCallbacks(runnable);
-            countDown=TOTAL_TIME;
-            tvGetVertify.setSelected(true);
-            tvGetVertify.setText(getResources().getString(R.string.get_vertify_code));
+    public void checkRegisterSuccess(int has_register) {
+        Bundle bundle=new Bundle();
+        bundle.putString("mobile",mobile);
+
+        if(has_register==0){
+            gotoActivity(RegisterActivity.class,bundle);
+        }else{
+            gotoActivity(LoginActivity.class,bundle);
         }
+    }
+
+    @Override
+    public void startLoad(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void endLoad() {
+        dialogDismiss();
     }
 
     private UMAuthListener umAuthListener = new UMAuthListener() {
@@ -310,5 +245,4 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

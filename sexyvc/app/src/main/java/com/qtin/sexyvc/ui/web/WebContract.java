@@ -3,7 +3,7 @@ package com.qtin.sexyvc.ui.web;
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
-import com.qtin.sexyvc.ui.demo.activity.bean.PageBean;
+import com.qtin.sexyvc.ui.bean.PageBean;
 import rx.Observable;
 
 /**

@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -22,10 +21,10 @@ import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.user.message.MessageActivity;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.ui.user.project.my.MyProjectActivity;
+import com.qtin.sexyvc.ui.user.sent.SentActivity;
 import com.qtin.sexyvc.ui.user.setting.SettingActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -59,6 +58,8 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     View lineProject;
     @BindView(R.id.ivMessage)
     ImageView ivMessage;
+    @BindView(R.id.ivRight)
+    ImageView ivRight;
 
     private UserInfoEntity userInfo;
 
@@ -80,7 +81,7 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
         tvTitle.setText(getResources().getString(R.string.title_my_center));
         ivLeft.setVisibility(View.GONE);
-
+        ivRight.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -115,26 +116,29 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
     }
 
-    @OnClick({R.id.myProjectContainer, R.id.messageContainer, R.id.settingContainer,R.id.cardViewInfo})
+    @OnClick({R.id.myProjectContainer, R.id.messageContainer, R.id.ivRight, R.id.cardViewInfo,R.id.mySentContainer})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.mySentContainer:
+                gotoActivity(SentActivity.class);
+                break;
             case R.id.cardViewInfo:
-                if(userInfo!=null){
-                    Bundle bundle=new Bundle();
-                    bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfo);
-                    bundle.putBoolean("isNeedGotoMain",false);
-                    gotoActivity(UserInfoActivity.class,bundle);
+                if (userInfo != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(UserInfoActivity.INTENT_USER, userInfo);
+                    bundle.putBoolean("isNeedGotoMain", false);
+                    gotoActivity(UserInfoActivity.class, bundle);
 
-                    
+
                 }
                 break;
             case R.id.myProjectContainer:
-                if(userInfo!=null){
-                    if(userInfo.getHas_project()==0){
-                        Bundle bundle=new Bundle();
-                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
-                        gotoActivity(AddProjectActivity.class,bundle);
-                    }else{
+                if (userInfo != null) {
+                    if (userInfo.getHas_project() == 0) {
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT, false);
+                        gotoActivity(AddProjectActivity.class, bundle);
+                    } else {
                         gotoActivity(MyProjectActivity.class);
                     }
                 }
@@ -142,7 +146,7 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
             case R.id.messageContainer:
                 gotoActivity(MessageActivity.class);
                 break;
-            case R.id.settingContainer:
+            case R.id.ivRight:
                 gotoActivity(SettingActivity.class);
                 break;
         }
@@ -150,50 +154,50 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
     @Override
     public void requestSuccess(UserInfoEntity entity) {
-        this.userInfo=entity;
+        this.userInfo = entity;
         //昵称
-        tvName.setText(StringUtil.isBlank(entity.getU_nickname())?getResources().getString(R.string.nick_defalut):entity.getU_nickname());
+        tvName.setText(StringUtil.isBlank(entity.getU_nickname()) ? getResources().getString(R.string.nick_defalut) : entity.getU_nickname());
         //自我介绍
-        if(StringUtil.isBlank(entity.getU_signature())){
+        if (StringUtil.isBlank(entity.getU_signature())) {
             lineIntroduce.setVisibility(View.GONE);
             tvIntroduce.setVisibility(View.GONE);
-        }else{
+        } else {
             lineIntroduce.setVisibility(View.VISIBLE);
             tvIntroduce.setVisibility(View.VISIBLE);
             tvIntroduce.setText(entity.getU_signature());
         }
         //公司及职位，身份认证，暂无
-        if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_PASS){
-            if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
+        if (entity.getU_auth_state() == ConstantUtil.AUTH_STATE_PASS) {
+            if (entity.getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                 ivIdentity.setImageResource(R.drawable.tag_approve_fc);
-            }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_INVESTOR){
+            } else if (entity.getU_auth_type() == ConstantUtil.AUTH_TYPE_INVESTOR) {
                 ivIdentity.setImageResource(R.drawable.tag_approve_vc);
-            }else if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FA){
+            } else if (entity.getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
                 ivIdentity.setImageResource(R.drawable.tag_approve_fa);
             }
-        }else if(entity.getU_auth_state()== ConstantUtil.AUTH_STATE_COMMITING){
+        } else if (entity.getU_auth_state() == ConstantUtil.AUTH_STATE_COMMITING) {
             ivIdentity.setImageResource(R.drawable.approve_reviewing);
-        }else{
+        } else {
             ivIdentity.setImageResource(R.drawable.approve_not_done);
         }
 
-        if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
+        if (entity.getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
             myProjectContainer.setVisibility(View.VISIBLE);
             lineProject.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             myProjectContainer.setVisibility(View.GONE);
             lineProject.setVisibility(View.GONE);
         }
 
-        if(StringUtil.isBlank(entity.getU_company())){
+        if (StringUtil.isBlank(entity.getU_company())) {
             tvCompany.setText(getResources().getString(R.string.compant_defalut));
-        }else{
+        } else {
             tvCompany.setText(entity.getU_company());
         }
 
-        if(StringUtil.isBlank(entity.getU_title())){
+        if (StringUtil.isBlank(entity.getU_title())) {
             tvPosition.setText(getResources().getString(R.string.position_defalut));
-        }else{
+        } else {
             tvPosition.setText(entity.getU_title());
         }
 
@@ -217,9 +221,9 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
     @Override
     public void queryUnReadSuccess(UnReadBean unReadBean) {
-        if(unReadBean.getTotal_no_read()>0){
+        if (unReadBean.getTotal_no_read() > 0) {
             ivMessage.setSelected(true);
-        }else{
+        } else {
             ivMessage.setSelected(false);
         }
     }

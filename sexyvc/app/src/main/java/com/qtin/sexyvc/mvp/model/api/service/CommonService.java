@@ -17,6 +17,7 @@ import com.qtin.sexyvc.ui.bean.IdBean;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
+import com.qtin.sexyvc.ui.bean.RegisterStatusBean;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UnReadBean;
@@ -24,7 +25,7 @@ import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.list.frag.bean.CommentItemsBean;
-import com.qtin.sexyvc.ui.demo.activity.bean.PageBean;
+import com.qtin.sexyvc.ui.bean.PageBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
@@ -92,6 +93,15 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("public/type/list")
     Observable<Typebean> getType(@Field("type_key") String type_key);
+
+    /**
+     * 91. 操作--验证手机是否注册
+     * @param mobile
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/mobile/check")
+    Observable<BaseEntity<RegisterStatusBean>> checkRegisterStatus(@Field("mobile")String mobile);
 
     /**
      * 注册

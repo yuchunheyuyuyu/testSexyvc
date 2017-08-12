@@ -92,13 +92,19 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         //选项内容
         holder.tvName.setText(StringUtil.formatString(bean.getOption_content()));
-        if(bean.isSelected()){
+
+
+        if(bean.getStatus()==0){
+            holder.viewDot.setVisibility(View.INVISIBLE);
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.black90));
+            holder.linkContainer.setVisibility(View.GONE);
+        }else if(bean.getStatus()==1){
             holder.viewDot.setVisibility(View.VISIBLE);
-            holder.tvName.setSelected(true);
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.barbie_pink_two));
             holder.linkContainer.setVisibility(View.VISIBLE);
         }else{
             holder.viewDot.setVisibility(View.INVISIBLE);
-            holder.tvName.setSelected(false);
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.black30));
             holder.linkContainer.setVisibility(View.GONE);
         }
         //添加题目
@@ -125,10 +131,19 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
         }
 
+        //关于line2间隔线
+        if((bean.getLink_question()==null||bean.getLink_question().getQuestion_id()==0)&&bean.getAdd_question()==0){
+            holder.line2.setVisibility(View.GONE);
+        }else{
+            holder.line2.setVisibility(View.VISIBLE);
+        }
+
         //link_question
-        if(bean.getLink_question()==null){
+        if(bean.getLink_question()==null||bean.getLink_question().getQuestion_id()==0){
             holder.tvLinkQuestionName.setVisibility(View.GONE);
             holder.linkOptionRecyclerView.setVisibility(View.GONE);
+            holder.tvAddLinkOption.setVisibility(View.GONE);
+
         }else{
             holder.tvLinkQuestionName.setVisibility(View.VISIBLE);
             holder.linkOptionRecyclerView.setVisibility(View.VISIBLE);
@@ -176,9 +191,11 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 for(int i=0;i<data.size();i++){
                     if(data.get(i) instanceof OptionFirstBean){
                         ((OptionFirstBean) data.get(i)).setSelected(false);
+                        ((OptionFirstBean) data.get(i)).setStatus(2);//2代表未选择
                     }
                 }
                 bean.setSelected(true);
+                bean.setStatus(1);
                 notifyDataSetChanged();
             }
         });
@@ -273,8 +290,6 @@ public class RoadQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
         }
-        //关于line2间隔线
-
     }
 
     private void setQuestion(QuestionBean bean,final QuestionHolder holder, final int position){

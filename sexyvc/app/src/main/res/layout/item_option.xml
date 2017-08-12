@@ -39,9 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:lineSpacingExtra="6sp"
             android:text="了解"
-            android:textColor="@color/black70_barbie_pink_two_color"
+            android:textColor="@color/black90_barbie_pink_two_color"
             android:textSize="14sp" />
 
     </LinearLayout>

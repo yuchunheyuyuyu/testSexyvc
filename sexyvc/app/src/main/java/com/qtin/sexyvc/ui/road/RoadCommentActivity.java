@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -29,6 +30,7 @@ import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
+import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.road.bean.AddQuestionBean;
 import com.qtin.sexyvc.ui.road.bean.OnOptionClickListener;
 import com.qtin.sexyvc.ui.road.bean.OptionFirstBean;
@@ -43,14 +45,14 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
-import com.zhy.autolayout.utils.AutoUtils;
+
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
+
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -80,7 +82,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     private EditText etInputAnswer;
     private Dialog answerDialog;
 
-    private ArrayList<String> normalQuestions=new ArrayList<>();
+    private ArrayList<TagEntity> normalQuestions=new ArrayList<>();
 
     @Nullable
     @Override
@@ -133,7 +135,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                     bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
                     bundle.putInt(ConstantUtil.INTENT_INDEX,index+1);
                     bundle.putParcelableArrayList(ConstantUtil.INTENT_PARCELABLE_ARRAY,questions);
-                    bundle.putStringArrayList(ConstantUtil.INTENT_STRING_ARRAY,normalQuestions);
+                    bundle.putParcelableArrayList(ConstantUtil.INTENT_STRING_ARRAY,normalQuestions);
                     gotoActivity(RoadCommentActivity.class,bundle);
                 }else{
                     //提交题目
@@ -206,7 +208,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
             mPresenter.queryRoadQuestion();
         }else{
             questions=getIntent().getExtras().getParcelableArrayList(ConstantUtil.INTENT_PARCELABLE_ARRAY);
-            normalQuestions=getIntent().getExtras().getStringArrayList(ConstantUtil.INTENT_STRING_ARRAY);
+            normalQuestions=getIntent().getExtras().getParcelableArrayList(ConstantUtil.INTENT_STRING_ARRAY);
             QuestionBean questionBean=questions.get(index);
             data.clear();
             data.add(questionBean);
@@ -299,7 +301,11 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     @Override
     public void queryNormalQuestionsSuccess(CommonBean commonBean) {
         if(commonBean!=null&&commonBean.getQuestions()!=null){
-            normalQuestions.addAll(commonBean.getQuestions());
+            for(String s:commonBean.getQuestions()){
+                TagEntity tagEntity=new TagEntity();
+                tagEntity.setTag_name(s);
+                normalQuestions.add(tagEntity);
+            }
         }
     }
 
@@ -316,26 +322,49 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
             normalQuestionContainer.setVisibility(View.GONE);
         }else{
             normalQuestionContainer.setVisibility(View.VISIBLE);
-            TagAdapter tagAdapter = new TagAdapter<String>(normalQuestions) {
+            final TagAdapter tagAdapter = new TagAdapter<TagEntity>(normalQuestions) {
                 @Override
-                public View getView(FlowLayout parent, int position, String s) {
-                    TextView tv = (TextView) LayoutInflater.from(RoadCommentActivity.this).inflate(R.layout.item_normal_question, flowLayout, false);
-                    AutoUtils.auto(tv);
-                    tv.setText("+ "+s);
-                    return tv;
+                public View getView(FlowLayout parent, int position, TagEntity tagEntity) {
+                    View view = LayoutInflater.from(RoadCommentActivity.this).inflate(R.layout.item_normal_question, flowLayout, false);
+                    TextView tv= (TextView) view.findViewById(R.id.tvContent);
+                    if(tagEntity.isSelected()){
+                        tv.setSelected(true);
+                    }else{
+                        tv.setSelected(false);
+                    }
+                    tv.setText(tagEntity.getTag_name());
+                    return view;
                 }
             };
-            flowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
+            flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+                @Override
+                public boolean onTagClick(View view, int position, FlowLayout parent) {
+
+                    if(!normalQuestions.get(position).isSelected()){
+                        for(TagEntity entity:normalQuestions){
+                            entity.setSelected(false);
+                        }
+                        normalQuestions.get(position).setSelected(true);
+                        tagAdapter.notifyDataChanged();
+                        etInputQuestion.setText(normalQuestions.get(position).getTag_name());
+                        etInputQuestion.setSelection(normalQuestions.get(position).getTag_name().length());
+                    }
+                    return false;
+                }
+            });
+
+            /**flowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
                 @Override
                 public void onSelected(Set<Integer> selectPosSet) {
                     Iterator<Integer> it=selectPosSet.iterator();
                     if (it.hasNext()){
-                        String str=normalQuestions.get(it.next());
+                        String str=normalQuestions.get(it.next()).getTag_name();
                         etInputQuestion.setText(str);
                         etInputQuestion.setSelection(str.length());
                     }
                 }
             });
+             */
             flowLayout.setMaxSelectCount(1);
             flowLayout.setAdapter(tagAdapter);
 

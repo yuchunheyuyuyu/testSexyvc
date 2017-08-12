@@ -1,24 +1,21 @@
 package com.qtin.sexyvc.ui.login.account.create;
 
 import android.app.Application;
-
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
-import com.qtin.sexyvc.ui.bean.BindEntity;
-import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
+import com.qtin.sexyvc.ui.bean.RegisterStatusBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
-
 import javax.inject.Inject;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
@@ -43,42 +40,32 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
         return mModel.isLogin();
     }
 
-    /**
-     * 获取验证码
-     */
-    public void getVertifyCode(String mobile){
-        mModel.getVertifyCode("",mobile,"register")
-                .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3,2))
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxUtils.<CodeEntity> bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+    public void checkRegisterStatus(String mobile){
+        mModel.checkRegisterStatus(mobile)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
                     @Override
-                    public void onNext(CodeEntity codeEntity) {
+                    public void call() {
+                        mRootView.startLoad("验证中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endLoad();
+                    }
+                }).compose(RxUtils.<BaseEntity<RegisterStatusBean>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<RegisterStatusBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<RegisterStatusBean> codeEntity) {
                         if(codeEntity.isSuccess()){
-
+                            mRootView.checkRegisterSuccess(codeEntity.getItems().getHas_register());
                         }
                     }
                 });
     }
 
-    public void validateCode(String mobile, String code_value){
-        mModel.validateCode(mobile,"register",code_value)
-                .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3,2))
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxUtils.<BaseEntity<BindEntity>> bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<BindEntity>>(mErrorHandler) {
-                    @Override
-                    public void onNext(BaseEntity<BindEntity> codeEntity) {
-                        if(codeEntity.isSuccess()){
-                            mRootView.validateSuccess();
-                        }else{
-                            //mRootView.showMessage("验证码错误");
-                        }
-                    }
-                });
-    }
 
     public void doRegister(final RegisterRequestEntity requestEntity){
         requestEntity.setClient_type(1);

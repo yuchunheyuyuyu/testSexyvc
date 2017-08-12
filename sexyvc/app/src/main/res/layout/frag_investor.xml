@@ -21,7 +21,7 @@
             android:layout_marginBottom="7dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:background="@drawable/shape_slate10_15"
             android:gravity="center"
             android:orientation="horizontal">
@@ -43,7 +43,7 @@
         <View
             android:id="@+id/homeLine"
             style="@style/line_style"
-            android:background="@color/silver_two0" />
+            android:background="@color/silver_two" />
     </LinearLayout>
 
     <include layout="@layout/swipe_recycleview" />

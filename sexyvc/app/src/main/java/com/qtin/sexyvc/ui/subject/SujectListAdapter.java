@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
@@ -22,7 +23,9 @@ import com.qtin.sexyvc.ui.subject.bean.SubjectListInterface;
 import com.qtin.sexyvc.ui.widget.BannerView;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.DateUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -109,7 +112,7 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             });
 
-
+            /**
 
             long lastStamp=0;
             if(position>0){
@@ -125,6 +128,11 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 holder.tvDate.setVisibility(View.VISIBLE);
                 holder.tvDate.setText("| "+DateUtil.getDateExpression(entity.getCreate_time()));
             }
+
+             */
+
+            holder.tvDate.setVisibility(View.GONE);
+            holder.tvDate2.setText(DateUtil.getDateExpression(entity.getCreate_time()));
         }
     }
 
@@ -157,7 +165,8 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView tvSubjectTitle;
         @BindView(R.id.tvSubjectAuther)
         TextView tvSubjectAuther;
-
+        @BindView(R.id.tvDate2)
+        TextView tvDate2;
         SubjectHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

@@ -15,6 +15,7 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.user.project.my.MyProjectActivity;
+import com.qtin.sexyvc.ui.widget.DeviceUtils;
 import com.qtin.sexyvc.utils.CommonUtil;
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -60,7 +61,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .transformation(new RoundedCornersTransformation(context,0,0))
+                .transformation(new RoundedCornersTransformation(context, DeviceUtils.dip2px(context,2),0))
                 .placeholder(R.drawable.logo_blank)
                 .errorPic(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(bean.getLogo()))

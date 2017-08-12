@@ -41,6 +41,16 @@
         android:textSize="14sp"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/ivRight"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:padding="8dp"
+        android:src="@drawable/icon_nav_setting" />
+
 
     <View
         android:id="@+id/viewLine"

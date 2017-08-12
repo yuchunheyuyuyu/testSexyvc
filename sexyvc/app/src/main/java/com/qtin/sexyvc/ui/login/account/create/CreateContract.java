@@ -3,11 +3,11 @@ package com.qtin.sexyvc.ui.login.account.create;
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
-import com.qtin.sexyvc.ui.bean.BindEntity;
-import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
+import com.qtin.sexyvc.ui.bean.RegisterStatusBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+
 import rx.Observable;
 
 /**
@@ -15,18 +15,18 @@ import rx.Observable;
  */
 public interface CreateContract {
     interface View extends BaseView{
-        void validateSuccess();
         void gotoBind(int platform_type);
         void notNeedBind();
-        void getVertifyCodeResult(boolean isSuccess);
+        void checkRegisterSuccess(int has_register);
+        void startLoad(String msg);
+        void endLoad();
     }
     interface Model extends IModel{
         void saveUser(UserEntity entity);
-        Observable<CodeEntity> getVertifyCode(String token,String mobile,String code_type);
-        Observable<BaseEntity<BindEntity>> validateCode(String mobile, String code_type, String code_value);
         Observable<BaseEntity<UserEntity>> doRegister(RegisterRequestEntity entity);
 
         boolean isLogin();
         void saveUsrInfo(UserInfoEntity entity);
+        Observable<BaseEntity<RegisterStatusBean>> checkRegisterStatus(String mobile);
     }
 }

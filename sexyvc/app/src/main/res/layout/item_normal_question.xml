@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginRight="40px"
-    android:layout_marginTop="28px"
-    android:orientation="vertical"
-    android:text="虎扑nba"
-    android:textColor="@color/barbie_pink_two_color_black30_checker"
-    android:textSize="28px">
+    android:orientation="vertical">
 
-</TextView>
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical"
+        android:text="虎扑nba"
+        android:textColor="@color/black30_barbie_pink_two_color_selector"
+        android:textSize="14sp" />
+
+</LinearLayout>

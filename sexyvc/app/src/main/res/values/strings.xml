@@ -73,8 +73,8 @@
     <string name="investor_join_comment">|  评论 </string>
     <string name="hint_input_vertify_code">请输入验证码</string>
     <string name="hint_input_password">请输入密码</string>
-    <string name="hint_password_rule">设置密码 (8-20位数字、字母组合)</string>
-    <string name="hint_new_password_rule">新密码 (8-20位数字、字母组合)</string>
+    <string name="hint_password_rule">设置密码 (8~20位字母数字组合)</string>
+    <string name="hint_new_password_rule">新密码 (8~20位字母数字组合)</string>
     <string name="hint_comfirm_password">确认密码</string>
 
     <string name="get_vertify_code">获取验证码</string>
@@ -107,6 +107,7 @@
     <string name="my_project">我的项目</string>
     <string name="my_message">消息通知</string>
     <string name="setting">设置</string>
+    <string name="my_sent">我发出的</string>
     <string name="avatar">头像</string>
     <string name="nick">昵称</string>
     <string name="sex">性别</string>
@@ -180,6 +181,7 @@
 
     <string name="telephone">电话</string>
     <string name="we_chat">微信</string>
+    <string name="hint_we_chat">请输入微信号</string>
     <string name="remarks">备注</string>
     <string name="detail">详情</string>
 
@@ -372,5 +374,15 @@
 
     <string name="system_download_component_disable">下载服务不可用,请您启用</string>
     <string name="system_download_description">版本更新</string>
+
+    <string name="guide_a">关于创投的新鲜事都在这里</string>
+    <string name="guide_b1">明天要见一个投资人？</string>
+    <string name="guide_b2">来这里看看其他创始人给他的评价</string>
+    <string name="guide_c">你关注的投资人都在这里</string>
+    <string name="guide_d1">你是谁？在做什么项目？</string>
+    <string name="guide_d2">完善你的信息，让投资人了解你</string>
+    <string name="guide_e1">路演太坑想吐槽？投资人靠谱想表扬？</string>
+    <string name="guide_e2">投资人行不行，你来评判！</string>
+    <string name="guide_finish">开启 SexyVC</string>
 
 </resources>

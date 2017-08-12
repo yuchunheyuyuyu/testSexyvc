@@ -12,6 +12,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
+        android:textStyle="bold"
         android:lineSpacingExtra="8sp"
         android:textColor="@color/black90"
         android:textSize="20sp" />

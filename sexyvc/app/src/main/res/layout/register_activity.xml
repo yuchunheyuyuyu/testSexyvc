@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pale_grey"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="left"
+        android:layout_marginTop="6dp"
+        android:padding="8dp"
+        android:src="@drawable/arrow_back" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:lineSpacingExtra="6sp"
+        android:text="@string/phone"
+        android:textColor="@color/slate90"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16px"
+        android:lineSpacingExtra="8sp"
+        android:text="123 4567 8910"
+        android:textColor="@color/slate90"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="270dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="36dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="5dp"
+        app:contentPaddingLeft="20dp">
+
+        <EditText
+            android:id="@+id/etVertifyCode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_vertify_code"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/slate"
+            android:textColorHint="@color/slate30"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|right"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="24dp"
+                android:background="@color/silver_two" />
+
+            <TextView
+                android:id="@+id/tvGetVertify"
+                android:layout_width="92dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/get_vertify_code"
+                android:textColor="@color/vertify_code_color"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="270dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="35dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="2dp"
+        app:contentPaddingLeft="20dp">
+
+        <EditText
+            android:id="@+id/etFirstPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:digits="@string/filter_vcode"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_password_rule"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:textColor="@color/slate"
+            android:textColorHint="@color/slate30"
+            android:textSize="14sp" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="270dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="2dp"
+        app:contentPaddingLeft="20dp">
+
+        <EditText
+            android:id="@+id/etSecondPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:digits="@string/filter_vcode"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_comfirm_password"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:textColor="@color/slate"
+            android:textColorHint="@color/slate30"
+            android:textSize="14sp" />
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvComplete"
+        android:layout_width="290dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_signup"
+        android:gravity="center"
+        android:text="@string/complete"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击完成即同意"
+            android:textColor="@color/slate_50"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvServiceProtocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《SexyVC用户服务协议》"
+            android:textColor="@color/barbie_pink_two"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>
