@@ -2,6 +2,7 @@ package com.qtin.sexyvc.mvp.test.share;
 
 import android.content.Intent;
 import android.view.View;
+
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -12,6 +13,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
 import butterknife.OnClick;
 
 /**
@@ -33,6 +35,12 @@ public class ShareActivity extends MyBaseActivity {
         web.setTitle(title);//标题
         web.setDescription(text);
         web.setThumb(new UMImage(this, R.drawable.umeng_socialize_wechat));  //缩略图
+
+        new ShareAction(ShareActivity.this)
+                .withText("hello")
+                .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN)
+                .setCallback(shareListener)
+                .open();
     }
 
     @Override
@@ -81,9 +89,14 @@ public class ShareActivity extends MyBaseActivity {
 
     private void share(SHARE_MEDIA platform){
         new ShareAction(ShareActivity.this)
+                .withText("hello")
+                .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN)
+                .setCallback(shareListener)
+                .open();
+        /**new ShareAction(ShareActivity.this)
                 .withMedia(web)
                 .setPlatform(platform)
-                .setCallback(shareListener).share();
+                .setCallback(shareListener).share();*/
     }
 
     private UMShareListener shareListener=new UMShareListener() {

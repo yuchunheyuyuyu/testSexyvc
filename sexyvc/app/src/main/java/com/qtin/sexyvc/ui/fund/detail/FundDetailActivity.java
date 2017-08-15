@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.fund.detail;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,17 +11,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.add.CommentObjectActivity;
+import com.qtin.sexyvc.ui.bean.DialogType;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.fund.detail.di.DaggerFundDetailComponent;
 import com.qtin.sexyvc.ui.fund.detail.di.FundDetailModule;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -50,6 +58,8 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     private long fund_id;
     private int mDistance;//滚动的距离
     private int maxDistance;//监测最大的
+
+    private boolean isFirstLoadData=true;//是不是本页面第一次加载数据
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -166,6 +176,31 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @Override
     public void querySuccess(FundDetailBackBean bean) {
+        if(isFirstLoadData){
+            UserInfoEntity entity=mPresenter.getUserInfo();
+            if(entity!=null){
+                if(entity.getHas_project()==1){
+                    int currentScore= DataHelper.getIntergerSF(this,"read_score");
+                    currentScore+=20;
+                    if(currentScore>=100){
+                        //清空分数
+                        DataHelper.SetIntergerSF(this,"read_score",0);
+                        showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                            @Override
+                            public void onComfirm() {
+                                Bundle bundle=new Bundle();
+                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,ConstantUtil.COMMENT_TYPE_NONE);
+                                gotoActivity(CommentObjectActivity.class,bundle);
+                            }
+                        });
+
+                    }else{
+                        DataHelper.SetIntergerSF(this,"read_score",currentScore);
+                    }
+                }
+            }
+            isFirstLoadData=false;
+        }
         data.clear();
         if(bean.getFund()!=null){
             data.add(bean.getFund());

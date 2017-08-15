@@ -51,6 +51,8 @@ public class CreateModel extends BaseModel<ServiceManager,CacheManager> implemen
         return false;
     }
 
+
+
     @Override
     public void saveUsrInfo(UserInfoEntity entity) {
         List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();

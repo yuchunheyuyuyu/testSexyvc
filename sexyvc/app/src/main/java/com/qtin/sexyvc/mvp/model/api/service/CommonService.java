@@ -14,6 +14,7 @@ import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.IdBean;
+import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
@@ -45,6 +46,7 @@ import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 import com.qtin.sexyvc.ui.user.bean.MsgItems;
 import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
+import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -706,5 +708,15 @@ public interface CommonService {
     @POST("api/action/version")
     Observable<BaseEntity<AndroidUpdateBean>> queryUpdate();
 
+    /**
+     * 92. 页面--我发出的
+     * @param token
+     * @param page_size
+     * @param record_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/sending")
+    Observable<BaseEntity<ListBean<SentBean>>> queryMySent(@Field("token")String token,@Field("page_size")int page_size,@Field("record_id")long record_id);
  }
 

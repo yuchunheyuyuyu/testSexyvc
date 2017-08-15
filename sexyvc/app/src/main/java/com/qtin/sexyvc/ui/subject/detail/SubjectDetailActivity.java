@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,11 +27,11 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
+import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
-import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.subject.detail.di.DaggerSubjectDetailComponent;
 import com.qtin.sexyvc.ui.subject.detail.di.SubjectDetailModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
@@ -334,6 +335,20 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
         etInputComment.setHint(hint);
         View tvPublishComment = view.findViewById(R.id.tvPublishComment);
+
+        View anonymousContainer=view.findViewById(R.id.anonymousContainer);
+        final ImageView ivAnonymous= (ImageView) view.findViewById(R.id.ivAnonymous);
+
+        anonymousContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ivAnonymous.isSelected()){
+                    ivAnonymous.setSelected(false);
+                }else{
+                    ivAnonymous.setSelected(true);
+                }
+            }
+        });
 
         tvPublishComment.setOnClickListener(new View.OnClickListener() {
             @Override

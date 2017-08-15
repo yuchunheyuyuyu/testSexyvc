@@ -7,6 +7,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 
 import javax.inject.Inject;
@@ -65,6 +66,10 @@ public class FundDetailPresent extends BasePresenter<FundDetailContract.Model,Fu
                     }
                 });
     }
+
+    public UserInfoEntity getUserInfo(){
+        return mModel.getUserInfo();
+    };
 
     @Override
     public void onDestroy() {

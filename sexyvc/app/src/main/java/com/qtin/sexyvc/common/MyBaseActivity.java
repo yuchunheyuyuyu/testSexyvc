@@ -13,14 +13,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.mvp.Presenter;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.mvp.test.progress.LoadingDialog;
+import com.qtin.sexyvc.ui.bean.DialogType;
 import com.umeng.message.PushAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -35,7 +37,6 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     private Dialog inputDialog;
     private Dialog selectPhotoDialog;
     private Dialog oneButtonDialog;
-
 
     @Override
     protected void ComponentInject() {
@@ -398,5 +399,92 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     public static interface InputListerner {
         void onComfirm(String content);
         void cancle();
+    }
+
+    protected void dismissHintDialog(){
+        if(dialog!=null&&dialog.isShowing()){
+            dialog.dismiss();
+            dialog=null;
+        }
+    }
+
+    private Dialog dialog;
+    protected void showHintDialog(final DialogType dialogType,final ComfirmListerner comfirmListerner){
+
+        int neverShow=-1;
+        if(dialogType==DialogType.TYPE_IDENTITY){
+            neverShow= DataHelper.getIntergerSF(this,"never_show_identity");
+        }else if(dialogType==DialogType.TYPE_PROJECT){
+            neverShow= DataHelper.getIntergerSF(this,"never_show_project");
+        }else if(dialogType==DialogType.TYPE_COMMENT){
+            neverShow= DataHelper.getIntergerSF(this,"never_show_comment");
+        }
+
+        if(neverShow==1){
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.app_hint_dialog, null);
+        view.findViewById(R.id.ivClose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissHintDialog();
+            }
+        });
+        view.findViewById(R.id.tvNeverShow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissHintDialog();
+                if(dialogType==DialogType.TYPE_IDENTITY){
+                    DataHelper.SetIntergerSF(MyBaseActivity.this,"never_show_identity",1);
+                }else if(dialogType==DialogType.TYPE_PROJECT){
+                    DataHelper.SetIntergerSF(MyBaseActivity.this,"never_show_project",1);
+                }else if(dialogType==DialogType.TYPE_COMMENT){
+                    DataHelper.SetIntergerSF(MyBaseActivity.this,"never_show_comment",1);
+                }
+            }
+        });
+
+        ImageView ivContent= (ImageView) view.findViewById(R.id.ivContent);
+        TextView tvTitle= (TextView) view.findViewById(R.id.tvTitle);
+        TextView tvWarn= (TextView) view.findViewById(R.id.tvWarn);
+        TextView tvAction= (TextView) view.findViewById(R.id.tvAction);
+
+        tvAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                comfirmListerner.onComfirm();
+                dismissHintDialog();
+            }
+        });
+
+        if(dialogType==DialogType.TYPE_IDENTITY){
+            ivContent.setImageResource(R.drawable.img_approve_fw);
+            tvTitle.setText(getString(R.string.dialog_identity_title));
+            tvWarn.setText(getString(R.string.dialog_identity_warn));
+            tvAction.setText(getString(R.string.dialog_identity_action));
+        }else if(dialogType==DialogType.TYPE_PROJECT){
+            ivContent.setImageResource(R.drawable.img_project_fw);
+            tvTitle.setText(getString(R.string.dialog_project_title));
+            tvWarn.setText(getString(R.string.dialog_project_warn));
+            tvAction.setText(getString(R.string.dialog_project_action));
+        }else if(dialogType==DialogType.TYPE_COMMENT){
+            ivContent.setImageResource(R.drawable.img_comment_fw);
+            tvTitle.setText(getString(R.string.dialog_comment_title));
+            tvWarn.setText(getString(R.string.dialog_comment_warn));
+            tvAction.setText(getString(R.string.dialog_comment_action));
+        }
+
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        Window regionWindow = dialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(false);
+        dialog.show();
     }
 }

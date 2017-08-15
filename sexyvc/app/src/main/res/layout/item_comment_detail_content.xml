@@ -5,15 +5,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingBottom="2dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:paddingTop="18dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <TextView
             android:id="@+id/tvCommentTag"
@@ -62,10 +62,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:lineSpacingExtra="6sp"
-        android:textStyle="bold"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="沟通效率很高推动性也很强的投资经理，是我喜欢的类型"
         android:textColor="@color/black90"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvContent"
@@ -73,6 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:lineSpacingExtra="6sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="很直接，反应很快，不先入为主，为创业者着想，很喜欢与这类投资人交流。聊的过程中他比较认真快速的记录，而且很明显是提前看过BP，因为项目的很多细节他都记住了，给人感觉比较舒服，现在提前认真看BP的投资人好少，基本就是临时提前看或者当场看，更不会认真去看。虽然最后没有跟创新工场合作，但是他也给了我不少建议，有收获。"
         android:textColor="@color/black70"
         android:textSize="14sp" />
@@ -81,7 +85,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <TextView
             android:id="@+id/tvDate"
@@ -121,9 +127,94 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="12dp"
-        android:paddingTop="12dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="12dp"
+        android:visibility="gone"></LinearLayout>
 
+    <View style="@style/line_style" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <FrameLayout
+            android:layout_width="36dp"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/ivTargetAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/avatar_blank" />
+
+            <ImageView
+                android:id="@+id/ivTargetAnthStatus"
+                android:layout_width="13dp"
+                android:layout_height="11dp"
+                android:layout_gravity="bottom|right"
+                android:src="@drawable/logo_approve_vc"
+                android:visibility="visible" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTargetName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="蒋舜"
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvTargetTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="\@梅花天使创投"
+                    android:textColor="@color/black50"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+                android:id="@+id/ratingTargetScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:emptyDrawable="@drawable/star_l_blank"
+                app:filledDrawable="@drawable/star_l_full"
+                app:isIndicator="true"
+                app:minAllowedStars="0"
+                app:numStarsValue="5"
+                app:ratingValue="3"
+                app:starMargin="0dp"
+                app:starSizeValue="12dp"
+                app:starSpacing="1dp"
+                app:stepSizeValue="1" />
+        </LinearLayout>
     </LinearLayout>
+
+    <View style="@style/line_style" />
+
 
     <TextView
         android:id="@+id/tvCommentCount"
@@ -132,6 +223,8 @@
         android:layout_marginBottom="13dp"
         android:layout_marginTop="13dp"
         android:lineSpacingExtra="6sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="4 条回复"
         android:textColor="@color/slate"
         android:textSize="12sp" />

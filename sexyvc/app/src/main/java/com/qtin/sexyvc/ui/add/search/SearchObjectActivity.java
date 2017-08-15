@@ -219,12 +219,39 @@ public class SearchObjectActivity extends MyBaseActivity<SearchObjectPresent> im
                                 }
                             });
                         }
-                    }else{
+                    }else if(typeComment==ConstantUtil.COMMENT_TYPE_EDIT){
                         if(investorBean.getHas_score()==0){
                             gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
                         }else{
                             gotoComment();
                         }
+                    }else if(typeComment==ConstantUtil.COMMENT_TYPE_NONE){
+                        showBottomDialog(null,getString(R.string.sent_road_comment), getString(R.string.sent_text_comment), getString(R.string.cancle), new SelecteListerner() {
+                            @Override
+                            public void onFirstClick() {
+                                dismissBottomDialog();
+                                if(investorBean.getHas_score()==0){
+                                    gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                                }else{
+                                    gotoRoad();
+                                }
+                            }
+
+                            @Override
+                            public void onSecondClick() {
+                                dismissBottomDialog();
+                                if(investorBean.getHas_score()==0){
+                                    gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
+                                }else{
+                                    gotoComment();
+                                }
+                            }
+
+                            @Override
+                            public void onCancle() {
+                                dismissBottomDialog();
+                            }
+                        });
                     }
                 } else {
                     if(investorBean.getHas_score()==0){

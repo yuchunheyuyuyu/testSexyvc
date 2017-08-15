@@ -30,6 +30,34 @@ public class CommentContentBean implements DataTypeInterface{
     private int has_praise;
     private String create_time;
 
+    private String investor_avatar;
+    private float investor_score;
+    private int whether_author;
+
+    public String getInvestor_avatar() {
+        return investor_avatar;
+    }
+
+    public void setInvestor_avatar(String investor_avatar) {
+        this.investor_avatar = investor_avatar;
+    }
+
+    public float getInvestor_score() {
+        return investor_score;
+    }
+
+    public void setInvestor_score(float investor_score) {
+        this.investor_score = investor_score;
+    }
+
+    public int getWhether_author() {
+        return whether_author;
+    }
+
+    public void setWhether_author(int whether_author) {
+        this.whether_author = whether_author;
+    }
+
     public String getU_nickname() {
         return u_nickname;
     }

@@ -59,9 +59,15 @@
 
         </activity>
 
-        <!--主页-->
+
+        <!--监测账号是否已经注册-->
         <activity
             android:name=".ui.login.account.create.CreateActivity"
+            android:screenOrientation="portrait" />
+
+        <!--选择身份-->
+        <activity
+            android:name=".ui.login.choose.ChooseIdentityActivity"
             android:screenOrientation="portrait" />
 
         <!--主页-->
@@ -299,10 +305,6 @@
             android:name=".mvp.test.upload.UploadActivity"
             android:screenOrientation="portrait" />-->
 
-        <!--分享-->
-        <activity
-            android:name=".mvp.test.share.ShareActivity"
-            android:screenOrientation="portrait" />
 
         <!--loading-->
         <activity

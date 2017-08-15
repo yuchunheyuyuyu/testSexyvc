@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,25 +17,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
+import com.qtin.sexyvc.ui.bean.DialogType;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentContentBean;
 import com.qtin.sexyvc.ui.comment.detail.di.CommentDetailModule;
 import com.qtin.sexyvc.ui.comment.detail.di.DaggerCommentDetailComponent;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -70,6 +73,8 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     private long reply_id;
 
     private final static long DEFALUT_REPLY_ID = 0;
+
+    private boolean isFirstLoadData=true;//是不是本页面第一次加载数据
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -207,7 +212,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             case R.id.ivShare:
                 break;
             case R.id.actionContainer:
-                showReplyDialog(-1, DEFALUT_REPLY_ID, "评论");
+                showReplyDialog(-1, DEFALUT_REPLY_ID, "回应评论");
                 break;
         }
     }
@@ -217,6 +222,19 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
         etInputComment.setHint(hint);
         View tvPublishComment = view.findViewById(R.id.tvPublishComment);
+        View anonymousContainer=view.findViewById(R.id.anonymousContainer);
+        final ImageView ivAnonymous= (ImageView) view.findViewById(R.id.ivAnonymous);
+
+        anonymousContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ivAnonymous.isSelected()){
+                    ivAnonymous.setSelected(false);
+                }else{
+                    ivAnonymous.setSelected(true);
+                }
+            }
+        });
 
         tvPublishComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +344,32 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     @Override
     public void querySuccess(long reply_id, CommentBean commentBean) {
+        if(isFirstLoadData){
+            UserInfoEntity entity=mPresenter.getUserInfo();
+            if(entity!=null){
+                if(entity.getHas_project()==1){
+                    int currentScore=DataHelper.getIntergerSF(this,"read_score");
+                    currentScore+=10;
+                    if(currentScore>=100){
+                        //清空分数
+                        DataHelper.SetIntergerSF(this,"read_score",0);
+                        showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                            @Override
+                            public void onComfirm() {
+                                Bundle bundle=new Bundle();
+                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,ConstantUtil.COMMENT_TYPE_NONE);
+                                gotoActivity(CommentObjectActivity.class,bundle);
+                            }
+                        });
+
+                    }else{
+                        DataHelper.SetIntergerSF(this,"read_score",currentScore);
+                    }
+                }
+            }
+
+            isFirstLoadData=false;
+        }
         if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
             if (commentBean.getDetail() != null) {

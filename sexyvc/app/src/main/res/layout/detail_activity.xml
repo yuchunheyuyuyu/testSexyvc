@@ -45,7 +45,7 @@
             android:layout_centerVertical="true"
             android:paddingBottom="24px"
             android:paddingLeft="16px"
-            android:visibility="gone"
+            android:visibility="visible"
             android:paddingRight="16px"
             android:paddingTop="24px"
             android:src="@drawable/share" />

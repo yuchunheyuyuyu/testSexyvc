@@ -81,52 +81,52 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder,final int position) {
-        if(viewHolder instanceof ContentHolder){
-            ContentHolder holder= (ContentHolder) viewHolder;
-            CommentContentBean bean= (CommentContentBean) data.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+        if (viewHolder instanceof ContentHolder) {
+            ContentHolder holder = (ContentHolder) viewHolder;
+            CommentContentBean bean = (CommentContentBean) data.get(position);
 
             //标签
-            if(StringUtil.isBlank(bean.getType_name())){
+            if (StringUtil.isBlank(bean.getType_name())) {
                 holder.tvCommentTag.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.tvCommentTag.setVisibility(View.VISIBLE);
                 holder.tvCommentTag.setText(bean.getType_name());
             }
 
             //追加评论
-            ArrayList<AdditionalBean> additional=bean.getAdditional();
-            if(additional==null||additional.isEmpty()){
+            ArrayList<AdditionalBean> additional = bean.getAdditional();
+            if (additional == null || additional.isEmpty()) {
                 holder.additionalContainer.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.additionalContainer.setVisibility(View.VISIBLE);
                 holder.additionalContainer.removeAllViews();
 
-                for(AdditionalBean a:additional){
+                for (AdditionalBean a : additional) {
                     //追加的内容
-                    TextView tvContent=new TextView(context);
+                    TextView tvContent = new TextView(context);
                     tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                    tvContent.setLineSpacing(DeviceUtils.sp2px(context,6),1);
+                    tvContent.setLineSpacing(DeviceUtils.sp2px(context, 6), 1);
 
-                    SpannableStringBuilder stringBuilder=new SpannableStringBuilder();
+                    SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
                     stringBuilder.append(context.getResources().getString(R.string.additional));
-                    int start=stringBuilder.length();
+                    int start = stringBuilder.length();
                     ForegroundColorSpan span = new ForegroundColorSpan(context.getResources().getColor(R.color.black70));
-                    stringBuilder.setSpan(span,0,start, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    stringBuilder.setSpan(span, 0, start, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
                     stringBuilder.append(a.getContent());
                     ForegroundColorSpan span2 = new ForegroundColorSpan(context.getResources().getColor(R.color.black90));
-                    stringBuilder.setSpan(span,start,stringBuilder.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    stringBuilder.setSpan(span, start, stringBuilder.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
 
                     tvContent.setText(stringBuilder);
 
                     //时间
-                    TextView tvTime=new TextView(context);
+                    TextView tvTime = new TextView(context);
                     tvTime.setTextColor(context.getResources().getColor(R.color.black30));
                     tvTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                    tvTime.setPadding(0,DeviceUtils.dip2px(context,3),0,DeviceUtils.dip2px(context,10));
+                    tvTime.setPadding(0, DeviceUtils.dip2px(context, 3), 0, DeviceUtils.dip2px(context, 10));
                     tvTime.setText(DateUtil.getSpecialDate(a.getCreate_time()));
 
                     holder.additionalContainer.addView(tvContent);
@@ -138,39 +138,52 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             //评分
             holder.ratingScore.setRating(bean.getScore());
             //点赞
-            if(bean.getHas_praise()==0){
+            if (bean.getHas_praise() == 0) {
                 holder.ivPraise.setSelected(false);
-            }else{
+            } else {
                 holder.ivPraise.setSelected(true);
             }
-            holder.tvPraiseNum.setText(""+bean.getPraise_count());
+            holder.tvPraiseNum.setText("" + bean.getPraise_count());
 
             holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
             holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
-            long time=0;
-            try{
-                time=Long.parseLong(bean.getCreate_time());
-            }catch(Exception e){
+            long time = 0;
+            try {
+                time = Long.parseLong(bean.getCreate_time());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             holder.tvDate.setText(DateUtil.getSpecialDate(time));
-            if(bean.getReply_count()==0){
+            if (bean.getReply_count() == 0) {
                 holder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_comment));
-            }else{
-                holder.tvCommentCount.setText(bean.getReply_count()+context.getResources().getString(R.string.reply_count));
+            } else {
+                holder.tvCommentCount.setText(bean.getReply_count() + context.getResources().getString(R.string.reply_count));
             }
 
             holder.ivPraise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickListener!=null){
+                    if (clickListener != null) {
                         clickListener.onClickDetailPraise(-1);
                     }
                 }
             });
 
-        }else if(viewHolder instanceof ReplyHolder){
+            mImageLoader.loadImage(mApplication, GlideImageConfig
+                    .builder()
+                    .placeholder(R.drawable.avatar_blank)
+                    .errorPic(R.drawable.avatar_blank)
+                    .transformation(new CropCircleTransformation(context))
+                    .url(CommonUtil.getAbsolutePath(bean.getInvestor_avatar()))
+                    .imageView(holder.ivTargetAvatar)
+                    .build());
+            holder.tvTargetName.setText(StringUtil.formatString(bean.getInvestor_name()));
+            holder.tvTargetTitle.setText(StringUtil.formatString(bean.getFund_name()));
+            holder.ratingTargetScore.setRating(bean.getInvestor_score());
+            //关于投资人是否已经认证，暂时缺少字段
+
+        } else if (viewHolder instanceof ReplyHolder) {
             ReplyHolder commentHolder = (ReplyHolder) viewHolder;
             final ReplyBean entity = (ReplyBean) data.get(position);
 
@@ -197,7 +210,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             commentHolder.ivPraise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickListener!=null){
+                    if (clickListener != null) {
                         clickListener.onClickItemPraise(position);
                     }
                 }
@@ -205,7 +218,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             commentHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(clickListener!=null){
+                    if (clickListener != null) {
                         clickListener.onClickItemReply(position);
                     }
                 }
@@ -218,7 +231,27 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         return data == null ? 0 : data.size();
     }
 
-    static class ContentHolder extends RecyclerView.ViewHolder {
+    static class ReplyHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivAvatar)
+        ImageView ivAvatar;
+        @BindView(R.id.tvNick)
+        TextView tvNick;
+        @BindView(R.id.tvTime)
+        TextView tvTime;
+        @BindView(R.id.tvPraiseNum)
+        TextView tvPraiseNum;
+        @BindView(R.id.ivPraise)
+        ImageView ivPraise;
+        @BindView(R.id.tvContent)
+        TextView tvContent;
+
+        ReplyHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ContentHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.tvCommentTag)
         TextView tvCommentTag;
         @BindView(R.id.tvFrom)
@@ -237,30 +270,20 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         ImageView ivPraise;
         @BindView(R.id.additionalContainer)
         LinearLayout additionalContainer;
+        @BindView(R.id.ivTargetAvatar)
+        ImageView ivTargetAvatar;
+        @BindView(R.id.ivTargetAnthStatus)
+        ImageView ivTargetAnthStatus;
+        @BindView(R.id.tvTargetName)
+        TextView tvTargetName;
+        @BindView(R.id.tvTargetTitle)
+        TextView tvTargetTitle;
+        @BindView(R.id.ratingTargetScore)
+        RatingBar ratingTargetScore;
         @BindView(R.id.tvCommentCount)
         TextView tvCommentCount;
 
         ContentHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    static class ReplyHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.ivAvatar)
-        ImageView ivAvatar;
-        @BindView(R.id.tvNick)
-        TextView tvNick;
-        @BindView(R.id.tvTime)
-        TextView tvTime;
-        @BindView(R.id.tvPraiseNum)
-        TextView tvPraiseNum;
-        @BindView(R.id.ivPraise)
-        ImageView ivPraise;
-        @BindView(R.id.tvContent)
-        TextView tvContent;
-
-        ReplyHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.main;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -28,6 +29,7 @@ import com.qtin.sexyvc.popupwindow.GuidePopupwindow;
 import com.qtin.sexyvc.popupwindow.OnPopupWindowClickListener;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.AppUpdateBean;
+import com.qtin.sexyvc.ui.bean.DialogType;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
@@ -36,6 +38,7 @@ import com.qtin.sexyvc.ui.main.fragInvestor.FragInvestor;
 import com.qtin.sexyvc.ui.main.fragconcern.FragConcern;
 import com.qtin.sexyvc.ui.main.fraghome.FragHome;
 import com.qtin.sexyvc.ui.main.fragmine.FragMine;
+import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.qtin.sexyvc.utils.update.updater.Updater;
@@ -109,18 +112,70 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
 
         ivTab1.setSelected(true);
         tvTab1.setSelected(true);
-
         mPresenter.queryUpdate();
 
-        Observable.just(1)
-                .delay(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        showGuideWindow();
+        SharedPreferences preferences=getSharedPreferences("app_start_time", Context.MODE_PRIVATE);
+        boolean isFirstTime=preferences.getBoolean("is_first_time",true);
+        //第一次显示引导，第二次显示弹窗
+        if(isFirstTime){
+            SharedPreferences.Editor editor=preferences.edit();
+            editor.putBoolean("is_first_time",false);
+            editor.commit();
+
+            Observable.just(1)
+                    .delay(300, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Integer>() {
+                        @Override
+                        public void call(Integer integer) {
+                            showGuideWindow();
+                        }
+                    });
+
+        }else{
+            final UserInfoEntity entity=mPresenter.getUserInfo();
+            if(entity!=null){
+                if(entity.getU_auth_state()==ConstantUtil.AUTH_STATE_UNPASS){
+                    Observable.just(1)
+                            .delay(300, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Action1<Integer>() {
+                                @Override
+                                public void call(Integer integer) {
+                                    showHintDialog(DialogType.TYPE_IDENTITY, new ComfirmListerner() {
+                                        @Override
+                                        public void onComfirm() {
+                                            Bundle bundle=new Bundle();
+                                            bundle.putParcelable(UserInfoActivity.INTENT_USER,entity);
+                                            gotoActivity(UserInfoActivity.class,bundle);
+                                        }
+                                    });
+                                }
+                            });
+
+                }else{
+                    if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER&&entity.getHas_project()==0){
+                        Observable.just(1)
+                                .delay(300, TimeUnit.MILLISECONDS)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Action1<Integer>() {
+                                    @Override
+                                    public void call(Integer integer) {
+                                        showHintDialog(DialogType.TYPE_PROJECT, new ComfirmListerner() {
+                                            @Override
+                                            public void onComfirm() {
+                                                dismissHintDialog();
+                                                Bundle bundle = new Bundle();
+                                                bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT, false);
+                                                gotoActivity(AddProjectActivity.class, bundle);
+                                            }
+                                        });
+                                    }
+                                });
                     }
-                });
+                }
+            }
+        }
     }
 
     private void showGuideWindow(){
@@ -387,7 +442,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
     }
 
     /**
-     * 是否清除缓存框
+     * app更新
      */
     protected void showTwoButtonDialog(final AppUpdateBean updateBean) {
 
@@ -451,6 +506,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
         updateDialog.setCancelable(false);
         updateDialog.show();
     }
+
 
     private void updateDialogDismiss(){
         if(updateDialog!=null&&updateDialog.isShowing()){

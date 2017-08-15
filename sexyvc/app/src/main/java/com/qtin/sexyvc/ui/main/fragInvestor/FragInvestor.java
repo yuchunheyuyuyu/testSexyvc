@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -71,6 +70,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     public void onPause() {
         super.onPause();
         swipeRefreshLayout.setRefreshing(false);
+        isLoadingMore=false;
     }
 
     private void configRecycleView() {

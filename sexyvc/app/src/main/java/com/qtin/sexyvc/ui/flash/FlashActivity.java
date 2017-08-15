@@ -15,6 +15,8 @@ import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashEntity;
 import com.qtin.sexyvc.ui.flash.di.DaggerFlashComponent;
 import com.qtin.sexyvc.ui.flash.di.FlashModule;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -40,6 +42,7 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
     private boolean hasLoadedAllItems;
     private Paginate mPaginate;
     private boolean isLoadingMore;
+    private long flash_id;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -62,7 +65,8 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(0,true);
+                flash_id=ConstantUtil.DEFALUT_ID;
+                mPresenter.query(flash_id,true);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -70,7 +74,7 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
         recyclerView.setAdapter(mAdapter);
 
         initPaginate();
-        mPresenter.query(0,true);
+        mPresenter.query(ConstantUtil.DEFALUT_ID,true);
     }
 
     private void initPaginate() {
@@ -78,10 +82,6 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    long flash_id=0;
-                    if(data.size()>0){
-                        flash_id=data.get(data.size()-1).getId();
-                    }
                     mPresenter.query(flash_id,false);
                 }
 
@@ -153,6 +153,9 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
             hasLoadedAllItems=false;
         }else{
             hasLoadedAllItems=true;
+        }
+        if(data.size()>0){
+            flash_id=data.get(data.size()-1).getId();
         }
         mAdapter.notifyDataSetChanged();
     }

@@ -12,17 +12,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
+import com.qtin.sexyvc.ui.bean.DialogType;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.bean.OnClickFundListener;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
 import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
@@ -92,6 +95,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
     private boolean isFromFund=false;
 
     private boolean isNeedRefresh=false;
+    private boolean isFirstLoadData=true;//是不是本页面第一次加载数据
 
     @Nullable
     @Override
@@ -235,7 +239,6 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
             mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
             isNeedRefresh=false;
         }
-
     }
 
     @Override
@@ -274,6 +277,33 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
     @Override
     public void querySuccess(CallBackBean backBean) {
+        if(isFirstLoadData){
+            UserInfoEntity entity=mPresenter.getUserInfo();
+            if(entity!=null){
+                if(entity.getHas_project()==1){
+                    int currentScore= DataHelper.getIntergerSF(this,"read_score");
+                    currentScore+=20;
+                    if(currentScore>=100){
+                        //清空分数
+                        DataHelper.SetIntergerSF(this,"read_score",0);
+                        showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                            @Override
+                            public void onComfirm() {
+                                Bundle bundle=new Bundle();
+                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,ConstantUtil.COMMENT_TYPE_NONE);
+                                gotoActivity(CommentObjectActivity.class,bundle);
+                            }
+                        });
+
+                    }else{
+                        DataHelper.SetIntergerSF(this,"read_score",currentScore);
+                    }
+                }
+            }
+
+            isFirstLoadData=false;
+        }
+
         data.clear();
         if (backBean.getInvestor() != null) {
             investorBean = backBean.getInvestor();

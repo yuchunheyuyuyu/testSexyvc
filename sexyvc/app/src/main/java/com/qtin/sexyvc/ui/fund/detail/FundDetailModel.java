@@ -6,6 +6,7 @@ import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,5 +35,14 @@ public class FundDetailModel extends BaseModel<ServiceManager,CacheManager> impl
             return list.get(0).getU_token();
         }
         return "";
+    }
+
+    @Override
+    public UserInfoEntity getUserInfo() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }

@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  */
 public class DataHelper {
     private static SharedPreferences mSharedPreferences;
-    public static final String SP_NAME = "config";
+    public static final String SP_NAME = "sexyvc_config";
 
     /**
      * 存储重要信息到sharedPreferences；
@@ -70,7 +70,7 @@ public class DataHelper {
         if (mSharedPreferences == null) {
             mSharedPreferences = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
         }
-        return mSharedPreferences.getInt(key, -1);
+        return mSharedPreferences.getInt(key, 0);
     }
 
     /**

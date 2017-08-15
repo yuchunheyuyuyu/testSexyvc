@@ -217,7 +217,7 @@
 
     <string name="reply_comment">回复评论</string>
     <string name="has_no_comment">还没有人评论，来抢沙发吧</string>
-    <string name="reply_count">条回复</string>
+    <string name="reply_count">条回应</string>
     <string name="comment_count">条评论</string>
     <string name="additional">追评：</string>
 
@@ -384,5 +384,23 @@
     <string name="guide_e1">路演太坑想吐槽？投资人靠谱想表扬？</string>
     <string name="guide_e2">投资人行不行，你来评判！</string>
     <string name="guide_finish">开启 SexyVC</string>
+
+    <string name="sent_road_comment">路演评价</string>
+    <string name="sent_text_comment">文字评论</string>
+
+    <string name="never_show">不再提示</string>
+    <string name="dialog_identity_title">您还没有进行身份认证</string>
+    <string name="dialog_identity_warn">认证您的身份信息，可以让我们为您提供更多定制化服务。</string>
+    <string name="dialog_identity_action">前往身份认证</string>
+
+    <string name="dialog_project_title">您还没有完善项目信息</string>
+    <string name="dialog_project_warn">完善您的项目可以让我们推荐合适的投资人给您，帮助投资人了解您，加速融资步伐。</string>
+    <string name="dialog_project_action">完善项目信息</string>
+
+    <string name="dialog_comment_title">写篇评价吧！</string>
+    <string name="dialog_comment_warn">为其他创始人提供你的融资经验，投资人到底行不行，由你说了算！</string>
+    <string name="dialog_comment_action">添加一条点评</string>
+
+    <string name="anonymous">匿名</string>
 
 </resources>
