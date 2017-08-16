@@ -76,6 +76,26 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             SubjectContentEntity subjectDetailEntity = (SubjectContentEntity) data.get(position);
             final WebHolder webHolder = (WebHolder) holder;
             webHolder.webViewContent.loadData(CommonUtil.getHtmlData(subjectDetailEntity.getContent()), "text/html; charset=UTF-8", "utf-8");
+
+            /**webHolder.webViewContent.loadUrl(Api.SUBJECT_URL+subjectDetailEntity.getSubject_id());
+            webHolder.webViewContent.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
+            webHolder.webViewContent.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    FrameLayout.LayoutParams params= (FrameLayout.LayoutParams) webHolder.webViewContent.getLayoutParams();
+                    params.width=FrameLayout.LayoutParams.MATCH_PARENT;
+                    params.height=FrameLayout.LayoutParams.WRAP_CONTENT;
+                    webHolder.webViewContent.setLayoutParams(params);
+                    webHolder.webViewContent.requestLayout();
+                }
+            });*/
+
             webHolder.itemView.requestFocus();
 
             TagAdapter tagAdapter = new TagAdapter<TagEntity>(subjectDetailEntity.getTags()) {

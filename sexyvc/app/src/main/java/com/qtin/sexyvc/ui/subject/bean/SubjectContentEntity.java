@@ -21,6 +21,15 @@ public class SubjectContentEntity implements DataTypeInterface {
     private int reply_count;
     private int praise_count;
     private int has_praise;
+    private String summary;
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
     public long getSubject_id() {
         return subject_id;

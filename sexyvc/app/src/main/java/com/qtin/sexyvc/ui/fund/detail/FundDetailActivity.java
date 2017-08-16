@@ -18,14 +18,22 @@ import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.DialogType;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
+import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBean;
 import com.qtin.sexyvc.ui.fund.detail.di.DaggerFundDetailComponent;
 import com.qtin.sexyvc.ui.fund.detail.di.FundDetailModule;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import java.util.ArrayList;
 
@@ -52,14 +60,17 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     View headerLine;
     @BindView(R.id.headContainer)
     RelativeLayout headContainer;
-    private ArrayList<DataTypeInterface> data=new ArrayList<>();
+    @BindView(R.id.ivShare)
+    ImageView ivShare;
+    private ArrayList<DataTypeInterface> data = new ArrayList<>();
     private FundDetailAdapter mAdapter;
 
     private long fund_id;
     private int mDistance;//滚动的距离
     private int maxDistance;//监测最大的
 
-    private boolean isFirstLoadData=true;//是不是本页面第一次加载数据
+    private boolean isFirstLoadData = true;//是不是本页面第一次加载数据
+    private FundDetailBean fundDetailBean;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -85,7 +96,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     @Override
     protected void initData() {
 
-        fund_id=getIntent().getExtras().getLong("fund_id");
+        fund_id = getIntent().getExtras().getLong("fund_id");
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -93,37 +104,42 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter=new FundDetailAdapter(this,data);
+        mAdapter = new FundDetailAdapter(this, data);
         recyclerView.setAdapter(mAdapter);
 
-        maxDistance= (int) DeviceUtils.dpToPixel(this,110);
+        maxDistance = (int) DeviceUtils.dpToPixel(this, 110);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                mDistance+=dy;
-                float percent=mDistance*1f/maxDistance>1?1:mDistance*1f/maxDistance;
+                mDistance += dy;
+                float percent = mDistance * 1f / maxDistance > 1 ? 1 : mDistance * 1f / maxDistance;
 
                 int alpha = (int) (percent * 255);
-                Log.e("透明度","=======透明度====="+percent);
+                Log.e("透明度", "=======透明度=====" + percent);
                 //整个背景
                 int argb = Color.argb(alpha, 255, 255, 255);
                 headContainer.setBackgroundColor(argb);
                 //间隔线
-                int lineColor=Color.argb(alpha,224,224,226);
+                int lineColor = Color.argb(alpha, 224, 224, 226);
                 headerLine.setBackgroundColor(lineColor);
                 //标题
-                int titleColor=Color.argb(alpha,59,67,87);
+                int titleColor = Color.argb(alpha, 59, 67, 87);
                 tvTitle.setTextColor(titleColor);
 
                 //返回键
-                if(mDistance==0){
+                if (mDistance == 0) {
                     ivLeft.setSelected(false);
                     ivLeft.setAlpha(255);
-                }else{
+                    ivShare.setSelected(false);
+                    ivShare.setAlpha(255);
+
+                } else {
                     ivLeft.setSelected(true);
                     ivLeft.setAlpha(alpha);
+                    ivShare.setSelected(true);
+                    ivShare.setAlpha(alpha);
                 }
             }
         });
@@ -170,44 +186,77 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                 finish();
                 break;
             case R.id.ivShare:
+                if(fundDetailBean!=null){
+                    UMWeb web = new UMWeb(Api.SHARE_FUND+fundDetailBean.getFund_id());
+                    web.setTitle("【SexyVC】"+fundDetailBean.getFund_name());//标题
+                    web.setDescription("对于"+fundDetailBean.getFund_name()+"，创业者们是这样评价的...");
+                    web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(fundDetailBean.getFund_logo())));  //缩略图
+
+                    new ShareAction(this)
+                            .withMedia(web)
+                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
+                            .setCallback(new UMShareListener() {
+                                @Override
+                                public void onStart(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onResult(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+
+                                }
+
+                                @Override
+                                public void onCancel(SHARE_MEDIA share_media) {
+
+                                }
+                            })
+                            .open();
+                }
                 break;
         }
     }
 
     @Override
     public void querySuccess(FundDetailBackBean bean) {
-        if(isFirstLoadData){
-            UserInfoEntity entity=mPresenter.getUserInfo();
-            if(entity!=null){
-                if(entity.getHas_project()==1){
-                    int currentScore= DataHelper.getIntergerSF(this,"read_score");
-                    currentScore+=20;
-                    if(currentScore>=100){
+        if (isFirstLoadData) {
+            UserInfoEntity entity = mPresenter.getUserInfo();
+            if (entity != null) {
+                if (entity.getHas_project() == 1) {
+                    int currentScore = DataHelper.getIntergerSF(this, "read_score");
+                    currentScore += 20;
+                    if (currentScore >= 100) {
                         //清空分数
-                        DataHelper.SetIntergerSF(this,"read_score",0);
+                        DataHelper.SetIntergerSF(this, "read_score", 0);
                         showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
-                                Bundle bundle=new Bundle();
-                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,ConstantUtil.COMMENT_TYPE_NONE);
-                                gotoActivity(CommentObjectActivity.class,bundle);
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT, ConstantUtil.COMMENT_TYPE_NONE);
+                                gotoActivity(CommentObjectActivity.class, bundle);
                             }
                         });
 
-                    }else{
-                        DataHelper.SetIntergerSF(this,"read_score",currentScore);
+                    } else {
+                        DataHelper.SetIntergerSF(this, "read_score", currentScore);
                     }
                 }
             }
-            isFirstLoadData=false;
+            isFirstLoadData = false;
         }
         data.clear();
-        if(bean.getFund()!=null){
+        if (bean.getFund() != null) {
+            fundDetailBean=bean.getFund();
             data.add(bean.getFund());
             tvTitle.setText(StringUtil.formatString(bean.getFund().getFund_name()));
         }
 
-        if(bean.getComments()!=null&&bean.getComments().getList()!=null){
+        if (bean.getComments() != null && bean.getComments().getList() != null) {
             data.addAll(bean.getComments().getList());
         }
         mAdapter.notifyDataSetChanged();

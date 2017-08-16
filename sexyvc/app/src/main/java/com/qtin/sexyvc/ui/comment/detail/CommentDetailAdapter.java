@@ -132,7 +132,6 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.additionalContainer.addView(tvContent);
                     holder.additionalContainer.addView(tvTime);
                 }
-
             }
 
             //评分
@@ -182,6 +181,11 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.tvTargetTitle.setText(StringUtil.formatString(bean.getFund_name()));
             holder.ratingTargetScore.setRating(bean.getInvestor_score());
             //关于投资人是否已经认证，暂时缺少字段
+            if(bean.getInvestor_uid()==0){
+                holder.ivTargetAnthStatus.setVisibility(View.GONE);
+            }else{
+                holder.ivTargetAnthStatus.setVisibility(View.VISIBLE);
+            }
 
         } else if (viewHolder instanceof ReplyHolder) {
             ReplyHolder commentHolder = (ReplyHolder) viewHolder;

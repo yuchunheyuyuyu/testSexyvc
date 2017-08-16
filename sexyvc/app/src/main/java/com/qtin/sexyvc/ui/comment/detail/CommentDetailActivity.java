@@ -26,17 +26,26 @@ import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.DialogType;
+import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentContentBean;
 import com.qtin.sexyvc.ui.comment.detail.di.CommentDetailModule;
 import com.qtin.sexyvc.ui.comment.detail.di.DaggerCommentDetailComponent;
+import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -57,6 +66,10 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.tvFooter)
     TextView tvFooter;
+    @BindView(R.id.ivLeft2)
+    ImageView ivLeft2;
+    @BindView(R.id.ivAddComment)
+    ImageView ivAddComment;
     private CommentContentBean detailBean;
 
     private long comment_id;
@@ -74,7 +87,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     private final static long DEFALUT_REPLY_ID = 0;
 
-    private boolean isFirstLoadData=true;//是不是本页面第一次加载数据
+    private boolean isFirstLoadData = true;//是不是本页面第一次加载数据
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -203,16 +216,64 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         finish();
     }
 
-    @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer})
+    @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer,R.id.ivAddComment})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
                 finish();
                 break;
             case R.id.ivShare:
+                if(detailBean!=null){
+                    UMWeb web = new UMWeb(Api.SHARE_COMMENT+detailBean.getComment_id());
+                    web.setTitle(detailBean.getTitle());//标题
+                    web.setDescription(detailBean.getInvestor_name()+"是被人这样评价的…");
+                    web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(detailBean.getInvestor_avatar())));  //缩略图
+
+                    new ShareAction(this)
+                            .withMedia(web)
+                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
+                            .setCallback(new UMShareListener() {
+                                @Override
+                                public void onStart(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onResult(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+
+                                }
+
+                                @Override
+                                public void onCancel(SHARE_MEDIA share_media) {
+
+                                }
+                            })
+                            .open();
+                }
                 break;
             case R.id.actionContainer:
                 showReplyDialog(-1, DEFALUT_REPLY_ID, "回应评论");
+                break;
+            case R.id.ivAddComment:
+                InvestorInfoBean investorInfoBean=new InvestorInfoBean();
+                investorInfoBean.setHas_score(1);
+                investorInfoBean.setScore_value(detailBean.getInvestor_score());
+                investorInfoBean.setHas_comment(1);
+                investorInfoBean.setComment_title(detailBean.getTitle());
+
+                investorInfoBean.setInvestor_name(detailBean.getInvestor_name());
+                investorInfoBean.setInvestor_id(detailBean.getInvestor_id());
+                investorInfoBean.setInvestor_uid(detailBean.getInvestor_uid());
+                investorInfoBean.setFund_id(detailBean.getFund_id());
+                investorInfoBean.setComment_id(detailBean.getComment_id());
+                Bundle bundle=new Bundle();
+                bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
+                gotoActivity(ReviewActivity.class,bundle);
                 break;
         }
     }
@@ -222,15 +283,15 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
         etInputComment.setHint(hint);
         View tvPublishComment = view.findViewById(R.id.tvPublishComment);
-        View anonymousContainer=view.findViewById(R.id.anonymousContainer);
-        final ImageView ivAnonymous= (ImageView) view.findViewById(R.id.ivAnonymous);
+        View anonymousContainer = view.findViewById(R.id.anonymousContainer);
+        final ImageView ivAnonymous = (ImageView) view.findViewById(R.id.ivAnonymous);
 
         anonymousContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ivAnonymous.isSelected()){
+                if (ivAnonymous.isSelected()) {
                     ivAnonymous.setSelected(false);
-                }else{
+                } else {
                     ivAnonymous.setSelected(true);
                 }
             }
@@ -344,31 +405,31 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     @Override
     public void querySuccess(long reply_id, CommentBean commentBean) {
-        if(isFirstLoadData){
-            UserInfoEntity entity=mPresenter.getUserInfo();
-            if(entity!=null){
-                if(entity.getHas_project()==1){
-                    int currentScore=DataHelper.getIntergerSF(this,"read_score");
-                    currentScore+=10;
-                    if(currentScore>=100){
+        if (isFirstLoadData) {
+            UserInfoEntity entity = mPresenter.getUserInfo();
+            if (entity != null) {
+                if (entity.getHas_project() == 1) {
+                    int currentScore = DataHelper.getIntergerSF(this, "read_score");
+                    currentScore += 10;
+                    if (currentScore >= 100) {
                         //清空分数
-                        DataHelper.SetIntergerSF(this,"read_score",0);
+                        DataHelper.SetIntergerSF(this, "read_score", 0);
                         showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
-                                Bundle bundle=new Bundle();
-                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,ConstantUtil.COMMENT_TYPE_NONE);
-                                gotoActivity(CommentObjectActivity.class,bundle);
+                                Bundle bundle = new Bundle();
+                                bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT, ConstantUtil.COMMENT_TYPE_NONE);
+                                gotoActivity(CommentObjectActivity.class, bundle);
                             }
                         });
 
-                    }else{
-                        DataHelper.SetIntergerSF(this,"read_score",currentScore);
+                    } else {
+                        DataHelper.SetIntergerSF(this, "read_score", currentScore);
                     }
                 }
             }
 
-            isFirstLoadData=false;
+            isFirstLoadData = false;
         }
         if (reply_id == DEFALUT_REPLY_ID) {
             data.clear();
@@ -378,6 +439,13 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                 data.add(detailBean);
                 String name = StringUtil.formatString(commentBean.getDetail().getInvestor_name());
                 tvTitle.setText(String.format(getResources().getString(R.string.title_comment_detail), name));
+                if (detailBean.getWhether_author() == 0) {
+                    ivAddComment.setVisibility(View.GONE);
+                    ivLeft2.setVisibility(View.GONE);
+                } else {
+                    ivAddComment.setVisibility(View.VISIBLE);
+                    ivLeft2.setVisibility(View.VISIBLE);
+                }
             }
         }
         if (commentBean.getReplies() != null) {

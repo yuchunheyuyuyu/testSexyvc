@@ -33,6 +33,24 @@ public class CommentContentBean implements DataTypeInterface{
     private String investor_avatar;
     private float investor_score;
     private int whether_author;
+    private long investor_uid;
+    private long fund_id;
+
+    public long getFund_id() {
+        return fund_id;
+    }
+
+    public void setFund_id(long fund_id) {
+        this.fund_id = fund_id;
+    }
+
+    public long getInvestor_uid() {
+        return investor_uid;
+    }
+
+    public void setInvestor_uid(long investor_uid) {
+        this.investor_uid = investor_uid;
+    }
 
     public String getInvestor_avatar() {
         return investor_avatar;

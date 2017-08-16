@@ -19,13 +19,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
@@ -34,7 +34,13 @@ import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
 import com.qtin.sexyvc.ui.subject.detail.di.DaggerSubjectDetailComponent;
 import com.qtin.sexyvc.ui.subject.detail.di.SubjectDetailModule;
+import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import java.util.ArrayList;
 
@@ -209,6 +215,38 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 finish();
                 break;
             case R.id.ivShare:
+                if(mDetailBean!=null){
+                    UMWeb web = new UMWeb(Api.SHARE_SUBJECT+mDetailBean.getSubject_id());
+                    web.setTitle(mDetailBean.getTitle());//标题
+                    web.setDescription(mDetailBean.getSummary());
+                    web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(mDetailBean.getImg_url())));  //缩略图
+
+                    new ShareAction(this)
+                            .withMedia(web)
+                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
+                            .setCallback(new UMShareListener() {
+                                @Override
+                                public void onStart(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onResult(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+
+                                }
+
+                                @Override
+                                public void onCancel(SHARE_MEDIA share_media) {
+
+                                }
+                            })
+                            .open();
+                }
                 break;
             case R.id.actionContainer:
                 showReplyDialog(-1, DEFALUT_REPLY_ID, "评论");

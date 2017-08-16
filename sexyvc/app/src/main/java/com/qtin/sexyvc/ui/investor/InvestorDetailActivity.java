@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
@@ -19,6 +20,7 @@ import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.DialogType;
@@ -39,7 +41,13 @@ import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
+import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -223,9 +231,13 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 if (mDistance == 0) {
                     ivLeft.setSelected(false);
                     ivLeft.setAlpha(255);
+                    ivShare.setSelected(false);
+                    ivShare.setAlpha(255);
                 } else {
                     ivLeft.setSelected(true);
                     ivLeft.setAlpha(alpha);
+                    ivShare.setSelected(true);
+                    ivShare.setAlpha(alpha);
                 }
             }
         });
@@ -565,6 +577,41 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 finish();
                 break;
             case R.id.ivShare:
+                if(investorBean!=null){
+                    UMWeb web = new UMWeb(Api.SHARE_INVESTOR+investorBean.getInvestor_id());
+                    web.setTitle("【SexyVC】"+investorBean.getInvestor_name());//标题
+                    web.setDescription("对于"+investorBean.getInvestor_name()+"，创业者们是这样评价的...");
+                    web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(investorBean.getInvestor_avatar())));  //缩略图
+
+                    new ShareAction(this)
+                            .withMedia(web)
+                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
+                            .setCallback(new UMShareListener() {
+                                @Override
+                                public void onStart(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onResult(SHARE_MEDIA share_media) {
+
+                                }
+
+                                @Override
+                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+
+                                }
+
+                                @Override
+                                public void onCancel(SHARE_MEDIA share_media) {
+
+                                }
+                            })
+                            .open();
+                }
+
+
+
                 break;
         }
     }

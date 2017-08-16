@@ -4,65 +4,85 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="88px"
+        android:layout_height="44dp"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/ivLeft"
-            android:layout_width="58px"
+            android:layout_width="29dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="30px"
-            android:paddingLeft="15px"
-            android:paddingRight="15px"
-            android:paddingTop="30px"
+            android:paddingBottom="15dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="8dp"
+            android:paddingTop="15dp"
             android:src="@drawable/arrow_back" />
+
+        <ImageView
+            android:id="@+id/ivLeft2"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ivShare"
+            android:padding="8dp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_centerVertical="true"
-            android:gravity="center"
-            android:layout_marginLeft="100px"
-            android:layout_marginRight="100px"
+            android:layout_weight="1"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@color/slate"
-            android:textSize="32px" />
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/ivAddComment"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ivShare"
+            android:padding="8dp"
+            android:src="@drawable/icon_nav_comment"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/ivShare"
-            android:layout_width="72px"
-            android:layout_height="match_parent"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="24px"
-            android:paddingLeft="16px"
-            android:visibility="visible"
-            android:paddingRight="16px"
-            android:paddingTop="24px"
-            android:src="@drawable/share" />
+            android:padding="8dp"
+            android:src="@drawable/icon_nav_share"
+            android:visibility="visible" />
 
 
-        <View
-            android:id="@+id/viewLine"
-            style="@style/line_style"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/viewLine"
+        style="@style/line_style"
+        android:layout_below="@+id/header" />
 
     <LinearLayout
         android:id="@+id/actionContainer"
         android:layout_width="match_parent"
         android:layout_height="41dp"
-        android:background="@color/white"
         android:layout_alignParentBottom="true"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <View style="@style/line_style" />
@@ -83,8 +103,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/actionContainer"
-        android:background="@color/white"
-        android:layout_below="@+id/header">
+        android:layout_below="@+id/viewLine"
+        android:background="@color/white">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"

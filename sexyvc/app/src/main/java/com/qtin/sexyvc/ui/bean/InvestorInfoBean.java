@@ -19,7 +19,7 @@ public class InvestorInfoBean implements Parcelable {
     private String fund_name;
     private String title;
     private ArrayList<TagEntity> tags;
-    private int score_value;
+    private float score_value;
     private int has_score;
     private int has_comment;
     private int has_roadshow;
@@ -92,11 +92,11 @@ public class InvestorInfoBean implements Parcelable {
         this.tags = tags;
     }
 
-    public int getScore_value() {
+    public float getScore_value() {
         return score_value;
     }
 
-    public void setScore_value(int score_value) {
+    public void setScore_value(float score_value) {
         this.score_value = score_value;
     }
 
@@ -163,7 +163,7 @@ public class InvestorInfoBean implements Parcelable {
         dest.writeString(this.fund_name);
         dest.writeString(this.title);
         dest.writeTypedList(this.tags);
-        dest.writeInt(this.score_value);
+        dest.writeFloat(this.score_value);
         dest.writeInt(this.has_score);
         dest.writeInt(this.has_comment);
         dest.writeInt(this.has_roadshow);
@@ -184,7 +184,7 @@ public class InvestorInfoBean implements Parcelable {
         this.fund_name = in.readString();
         this.title = in.readString();
         this.tags = in.createTypedArrayList(TagEntity.CREATOR);
-        this.score_value = in.readInt();
+        this.score_value = in.readFloat();
         this.has_score = in.readInt();
         this.has_comment = in.readInt();
         this.has_roadshow = in.readInt();
@@ -193,7 +193,7 @@ public class InvestorInfoBean implements Parcelable {
         this.intent = in.readInt();
     }
 
-    public static final Parcelable.Creator<InvestorInfoBean> CREATOR = new Parcelable.Creator<InvestorInfoBean>() {
+    public static final Creator<InvestorInfoBean> CREATOR = new Creator<InvestorInfoBean>() {
         @Override
         public InvestorInfoBean createFromParcel(Parcel source) {
             return new InvestorInfoBean(source);
