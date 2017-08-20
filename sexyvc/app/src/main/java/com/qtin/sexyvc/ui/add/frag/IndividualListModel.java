@@ -49,8 +49,8 @@ public class IndividualListModel extends BaseModel<ServiceManager,CacheManager> 
     }
 
     @Override
-    public Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size) {
-        return mServiceManager.getCommonService().queryInvestorDetail(token,investor_id,comment_id,page_size);
+    public Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size,int auth_state) {
+        return mServiceManager.getCommonService().queryInvestorDetail(token,investor_id,comment_id,page_size,auth_state);
     }
 
     @Override

@@ -135,6 +135,7 @@
     <View style="@style/line_style" />
 
     <LinearLayout
+        android:id="@+id/investorContainer"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginBottom="18dp"

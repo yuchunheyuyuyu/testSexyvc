@@ -80,8 +80,8 @@ public class SearchObjectPresent extends BasePresenter<SearchObjectContract.Mode
                 });
     }
 
-    public void queryDetail(long investor_id,long comment_id,int page_size){
-        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id,page_size)
+    public void queryDetail(long investor_id,long comment_id,int page_size,int auth_state){
+        mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id,page_size,auth_state)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {

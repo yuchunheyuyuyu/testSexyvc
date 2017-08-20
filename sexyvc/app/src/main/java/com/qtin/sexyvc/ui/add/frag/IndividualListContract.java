@@ -28,7 +28,7 @@ public interface IndividualListContract {
         Observable<BaseEntity<ConcernEntity>> queryGroupDetail(String token, long group_id, int page, int page_size);
         String getToken();
         List<LastBrowerBean> queryLastBrowers();
-        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size);
+        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size,int auth_state);
         UserInfoEntity getUserInfo();
 
     }

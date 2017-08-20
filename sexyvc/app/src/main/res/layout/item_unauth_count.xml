@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginBottom="10dp"
+    android:background="@color/white"
+    android:paddingLeft="16dp">
+
+    <TextView
+        android:id="@+id/tvUnauthCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="2 个未认证用户的评论"
+        android:textColor="@color/slate"
+        android:textSize="12sp" />
+
+    <View
+        style="@style/line_style"
+        android:layout_alignParentBottom="true" />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/arrow_disclosure_l" />
+
+</RelativeLayout>

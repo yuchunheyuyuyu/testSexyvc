@@ -2,7 +2,6 @@ package com.qtin.sexyvc.ui.investor.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 
 /**
@@ -26,6 +25,43 @@ public class CommentBean implements DataTypeInterface, Parcelable {
     private float score;
     private int has_praise;
     private long create_time;
+
+    private int u_auth_type;
+    private int u_auth_state;
+    private int is_anon;
+    private int like;
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public int getU_auth_type() {
+        return u_auth_type;
+    }
+
+    public void setU_auth_type(int u_auth_type) {
+        this.u_auth_type = u_auth_type;
+    }
+
+    public int getU_auth_state() {
+        return u_auth_state;
+    }
+
+    public void setU_auth_state(int u_auth_state) {
+        this.u_auth_state = u_auth_state;
+    }
+
+    public int getIs_anon() {
+        return is_anon;
+    }
+
+    public void setIs_anon(int is_anon) {
+        this.is_anon = is_anon;
+    }
 
     public long getCreate_time() {
         return create_time;
@@ -136,6 +172,7 @@ public class CommentBean implements DataTypeInterface, Parcelable {
         return DataTypeInterface.TYPE_COMMENT;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -155,6 +192,11 @@ public class CommentBean implements DataTypeInterface, Parcelable {
         dest.writeString(this.investor_name);
         dest.writeFloat(this.score);
         dest.writeInt(this.has_praise);
+        dest.writeLong(this.create_time);
+        dest.writeInt(this.u_auth_type);
+        dest.writeInt(this.u_auth_state);
+        dest.writeInt(this.is_anon);
+        dest.writeInt(this.like);
     }
 
     public CommentBean() {
@@ -173,9 +215,14 @@ public class CommentBean implements DataTypeInterface, Parcelable {
         this.investor_name = in.readString();
         this.score = in.readFloat();
         this.has_praise = in.readInt();
+        this.create_time = in.readLong();
+        this.u_auth_type = in.readInt();
+        this.u_auth_state = in.readInt();
+        this.is_anon = in.readInt();
+        this.like = in.readInt();
     }
 
-    public static final Parcelable.Creator<CommentBean> CREATOR = new Parcelable.Creator<CommentBean>() {
+    public static final Creator<CommentBean> CREATOR = new Creator<CommentBean>() {
         @Override
         public CommentBean createFromParcel(Parcel source) {
             return new CommentBean(source);

@@ -31,6 +31,7 @@
     <string name="title_contact_us">联系我们</string>
     <string name="title_privacy_policy">隐私政策</string>
     <string name="title_service_agreement">服务协议</string>
+    <string name="title_recommend">您可能感兴趣</string>
 
 
 
@@ -402,5 +403,15 @@
     <string name="dialog_comment_action">添加一条点评</string>
 
     <string name="anonymous">匿名</string>
+    <string name="concern_the_selected">关注选中</string>
+    <string name="skip">跳过</string>
+    <string name="defalut_nick">SexyVC用户</string>
+    <string name="format_unauth_count">%d 个未认证用户的评论</string>
+
+    <string name="has_load_all">已经没有了哦</string>
+
+    <string name="project_dialog_title">请先完善您的以下信息</string>
+    <string name="project_dialog_domain">您所在的行业</string>
+    <string name="project_dialog_stage">上轮融资</string>
 
 </resources>

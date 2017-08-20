@@ -19,7 +19,7 @@ public interface SubjectDetailContract {
         void querySuccess(long reply_id,DetailBean bean);
 
         void praiseSuccess(int position);
-        void replySuccess(int position,long reply_id,String content);
+        void replySuccess(int position,long reply_id,String content,int is_anon);
         void dialogWaitLoading();
         void dialogWaitDismiss();
 
@@ -28,7 +28,7 @@ public interface SubjectDetailContract {
     interface Model extends IModel{
         String getToken();
         Observable<BaseEntity<DetailBean>> querySubjectDetail(String token,long subject_id,int page_size,long reply_id);
-        Observable<BaseEntity<ReplyIdBean>> reply(String token,int object_type,long object_id,long reply_id,String reply_content);
+        Observable<BaseEntity<ReplyIdBean>> reply(String token,int object_type,long object_id,long reply_id,String reply_content,int is_anon);
         Observable<CodeEntity> praise(String token,int object_type,long object_id,int handle_type);
         UserInfoEntity getUserInfo();
     }

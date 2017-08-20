@@ -28,6 +28,7 @@ public class ConstantUtil {
     public static final String TYPE_INVESTOR_FUND_INTENT="TYPE_INVESTOR_FUND_INTENT";
     public static final int TYPE_INVESTOR=1;
     public static final int TYPE_FUND=2;
+    public static final int TYPE_UNAUTH=3;
 
     //关键字
     public static final String KEY_WORD_INTENT="key_word";

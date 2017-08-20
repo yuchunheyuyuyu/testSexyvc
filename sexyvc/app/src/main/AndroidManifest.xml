@@ -70,6 +70,11 @@
             android:name=".ui.login.choose.ChooseIdentityActivity"
             android:screenOrientation="portrait" />
 
+        <!--推荐关注-->
+        <activity
+            android:name=".ui.recommend.RecommendActivity"
+            android:screenOrientation="portrait" />
+
         <!--主页-->
         <activity
             android:name=".ui.main.MainActivity"

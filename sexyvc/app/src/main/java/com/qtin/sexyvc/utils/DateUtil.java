@@ -56,6 +56,25 @@ public class DateUtil {
         }
     }
 
+    public static String getSpecialDate2(long timestamp){
+        Calendar calendar1=Calendar.getInstance();
+        calendar1.setTimeInMillis(System.currentTimeMillis());
+        int year1=calendar1.get(Calendar.YEAR);
+
+        Calendar calendar2=Calendar.getInstance();
+        calendar2.setTimeInMillis(timestamp*1000);
+        int year2=calendar2.get(Calendar.YEAR);
+
+        //不在同一年
+        if(year1!=year2){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+            return format.format(new Date(timestamp*1000));
+        }else{
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd",Locale.getDefault());
+            return format.format(new Date(timestamp*1000));
+        }
+    }
+
     /**
      * 格式化时间
      * @return

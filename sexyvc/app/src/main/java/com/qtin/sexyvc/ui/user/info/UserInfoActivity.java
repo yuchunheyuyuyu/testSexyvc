@@ -45,14 +45,10 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -207,6 +203,14 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     }
 
+    @Override
+    protected boolean isNeedFinishAnim() {
+        if(isNeedGotoMain){
+            return false;
+        }
+        return true;
+    }
+
     @OnClick({R.id.ivLeft, R.id.avatarContainer, R.id.nickContainer, R.id.sexContainer, R.id.descriptionContainer, R.id.mobileContainer, R.id.emailContainer, R.id.positionContainer, R.id.identifyContainer})
     public void onClick(View view) {
         if(userInfo==null){
@@ -216,16 +220,6 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
             case R.id.ivLeft:
                 if(isNeedGotoMain){
                     gotoActivity(MainActivity.class);
-                    Observable.just(1)
-                            .delay(100, TimeUnit.MILLISECONDS)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Action1<Integer>() {
-                                @Override
-                                public void call(Integer integer) {
-                                    finish();
-                                }
-                            });
-
                 }else{
                     finish();
                 }
@@ -664,8 +658,6 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
             if(isNeedGotoMain){
                 gotoActivity(MainActivity.class);
-                finish();
-
             }else{
                 return super.onKeyDown(keyCode, event);
             }

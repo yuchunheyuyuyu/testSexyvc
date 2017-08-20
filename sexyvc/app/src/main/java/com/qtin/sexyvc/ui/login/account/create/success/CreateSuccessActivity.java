@@ -1,8 +1,10 @@
 package com.qtin.sexyvc.ui.login.account.create.success;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -43,17 +45,31 @@ public class CreateSuccessActivity extends MyBaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvContinueInfo:
-                Bundle bundle=new Bundle();
-                bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfoEntity);
-                bundle.putBoolean("isNeedGotoMain",true);
-                gotoActivity(UserInfoActivity.class,bundle);
-
+                if(userInfoEntity!=null){
+                    Bundle bundle=new Bundle();
+                    bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfoEntity);
+                    bundle.putBoolean("isNeedGotoMain",true);
+                    gotoActivity(UserInfoActivity.class,bundle);
+                }
                 finish();
-
                 break;
             case R.id.tvLookAround:
                 gotoActivity(MainActivity.class);
                 break;
         }
+    }
+
+    @Override
+    protected boolean isNeedFinishAnim() {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            UiUtils.exitApp();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

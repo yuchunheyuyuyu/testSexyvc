@@ -17,6 +17,15 @@ public class SentBean {
 
     private long comment_id;
     private int has_roadshow;
+    private String comment_title;
+
+    public String getComment_title() {
+        return comment_title;
+    }
+
+    public void setComment_title(String comment_title) {
+        this.comment_title = comment_title;
+    }
 
     public float getScore() {
         return score;

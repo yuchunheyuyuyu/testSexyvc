@@ -78,6 +78,12 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         overridePendingTransition(R.anim.activity_enter_from_right,R.anim.activity_exit_to_left);
     }
 
+    public void gotoActivityReverse(Class<? extends Activity> activityClass){
+        Intent intent=new Intent(this,activityClass);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_exit_to_left,R.anim.activity_exit_to_right);
+    }
+
     public void gotoActivityFade(Class<? extends Activity> activityClass,Bundle bundle){
         Intent intent=new Intent(this,activityClass);
         intent.putExtras(bundle);
@@ -137,7 +143,7 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     }
 
     /**
-     * 是否清除缓存框
+     * 两个按钮的dialog
      */
     protected void showTwoButtonDialog(String title, String stringLeft, String stringRight, final TwoButtonListerner listerner) {
 

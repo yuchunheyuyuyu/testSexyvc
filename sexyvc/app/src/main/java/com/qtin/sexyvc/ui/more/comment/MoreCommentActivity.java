@@ -42,6 +42,7 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
+    private int auth_state;
 
     private CommentAdapter mAdapter;
     private ArrayList<CommentBean> data=new ArrayList<>();
@@ -63,16 +64,12 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
 
     @Override
     protected void initData() {
+        auth_state=getIntent().getExtras().getInt("auth_state");
         type = getIntent().getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
         contentId=getIntent().getExtras().getLong(ConstantUtil.INTENT_ID);
         String title=getIntent().getExtras().getString(ConstantUtil.INTENT_TITLE);
         tvTitle.setText(title);
 
-        if (type == ConstantUtil.TYPE_FUND) {
-
-        } else if (type == ConstantUtil.TYPE_INVESTOR) {
-
-        }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -83,6 +80,7 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter=new CommentAdapter(this,data,type);
+        mAdapter.setContentId(contentId);
         recyclerView.setAdapter(mAdapter);
         initPaginate();
         query();
@@ -90,9 +88,9 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
 
     private void query(){
         if (type == ConstantUtil.TYPE_FUND) {
-            mPresenter.queryFundComment(contentId,comment_id);
+            mPresenter.queryFundComment(contentId,comment_id,auth_state);
         } else if (type == ConstantUtil.TYPE_INVESTOR) {
-            mPresenter.queryInvestorComment(contentId,comment_id);
+            mPresenter.queryInvestorComment(contentId,comment_id,auth_state);
         }
     }
 
@@ -172,6 +170,9 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
             if(!data.isEmpty()){
                 comment_id=data.get(data.size()-1).getComment_id();
             }
+            if(auth_state==1){
+                mAdapter.setUnauth_count(bean.getComments().getUnauth_count());
+            }
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -193,6 +194,9 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
 
             if(!data.isEmpty()){
                 comment_id=data.get(data.size()-1).getComment_id();
+            }
+            if(auth_state==1){
+                mAdapter.setUnauth_count(bean.getComments().getUnauth_count());
             }
         }
         mAdapter.notifyDataSetChanged();

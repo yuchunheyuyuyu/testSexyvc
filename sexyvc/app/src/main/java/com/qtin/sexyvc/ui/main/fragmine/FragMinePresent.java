@@ -53,7 +53,7 @@ public class FragMinePresent extends BasePresenter<FragMineContract.Model,FragMi
                                     mModel.saveUsrInfo(baseEntity.getItems());
                                 }
                             }else{
-                                //mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
+                                //mRootView.showMessage(AppStringUtil.formatString(baseEntity.getErrMsg()));
                             }
                         }
                     }

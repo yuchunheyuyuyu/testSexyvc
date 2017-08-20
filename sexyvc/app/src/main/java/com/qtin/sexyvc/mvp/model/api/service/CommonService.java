@@ -32,6 +32,7 @@ import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
+import com.qtin.sexyvc.ui.recommend.bean.RecommendBean;
 import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
 import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
 import com.qtin.sexyvc.ui.request.ChangeReadStatusRequest;
@@ -455,7 +456,7 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/action/reply")
     Observable<BaseEntity<ReplyIdBean>> reply(@Field("token")String token,@Field("object_type")int object_type,@Field("object_id")long object_id,
-                                              @Field("reply_id")long reply_id,@Field("reply_content")String reply_content);
+                                              @Field("reply_id")long reply_id,@Field("reply_content")String reply_content,@Field("is_anon")int is_anon);
 
     /**
      * 点赞
@@ -493,7 +494,8 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/page/investor/detail")
     Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,@Field("investor_id")long investor_id,
-                                                             @Field("comment_id")long comment_id,@Field("page_size")int page_size);
+                                                             @Field("comment_id")long comment_id,@Field("page_size")int page_size,
+                                                             @Field("auth_state")int auth_state);
 
     /**
      * 68. 我的投资人——投资人详情
@@ -514,7 +516,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/fund/detail")
-    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,@Field("fund_id")long fund_id,@Field("comment_id")long comment_id,@Field("page_size")int page_size);
+    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,@Field("fund_id")long fund_id,
+                                                               @Field("comment_id")long comment_id,@Field("page_size")int page_size,@Field("auth_state")int auth_state);
 
     /**
      * 搜索投资机构
@@ -718,5 +721,12 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/user/sending")
     Observable<BaseEntity<ListBean<SentBean>>> queryMySent(@Field("token")String token,@Field("page_size")int page_size,@Field("record_id")long record_id);
+
+    /**
+     * 93. 页面--推荐投资人
+     * @return
+     */
+    @POST("api/page/investor/recommend")
+    Observable<BaseEntity<ListBean<RecommendBean>>> queryRecommend();
  }
 

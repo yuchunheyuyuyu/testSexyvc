@@ -27,7 +27,7 @@ public interface SearchObjectContract {
         Observable<BaseEntity<InvestorBean>> queryInvestors(InvestorRequest request);
         //这里写Model中公开的方法，在present调用
         String getToken();
-        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size);
+        Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size,int auth_state);
         UserInfoEntity getUserInfo();
     }
 }

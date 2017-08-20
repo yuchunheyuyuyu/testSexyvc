@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -13,12 +14,13 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
-import com.qtin.sexyvc.ui.login.account.create.success.CreateSuccessActivity;
+import com.qtin.sexyvc.ui.login.choose.ChooseIdentityActivity;
 import com.qtin.sexyvc.ui.login.register.di.DaggerRegisterComponent;
 import com.qtin.sexyvc.ui.login.register.di.RegisterModule;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.web.WebActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -184,6 +186,6 @@ public class RegisterActivity extends MyBaseActivity<RegisterPresent> implements
     public void registerSuccess(UserInfoEntity entity) {
         Bundle bundle=new Bundle();
         bundle.putParcelable(UserInfoActivity.INTENT_USER,entity);
-        gotoActivity(CreateSuccessActivity.class,bundle);
+        gotoActivity(ChooseIdentityActivity.class,bundle);
     }
 }

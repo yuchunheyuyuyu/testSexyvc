@@ -37,6 +37,7 @@ import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.qtin.sexyvc.utils.SpaceItemDecoration;
@@ -112,6 +113,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
+        holder.praiseContainer.setVisibility(View.GONE);
         holder.ratingScore.setRating(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
@@ -163,7 +165,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.pbExperienceShare.setProgress(0);
         }
         //基本介绍
-        holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context, bean.getFund_intro()));
+        holder.tvIntroduce.setText(AppStringUtil.formatNoData(context, bean.getFund_intro()));
         //行业标签
         if (bean.getDomain_list() == null || bean.getDomain_list().isEmpty()) {
             holder.domainFlowLayout.setVisibility(View.GONE);
@@ -265,6 +267,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_FUND);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getFund_id());
                     bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getFund_name()+"的评论");
+                    bundle.putInt("auth_state",1);
                     activity.gotoActivity(MoreCommentActivity.class,bundle);
                 }
             });
@@ -422,6 +425,8 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView tvContent;
         @BindView(R.id.lineBottom)
         View lineBottom;
+        @BindView(R.id.praiseContainer)
+        View praiseContainer;
 
         CommentHolder(View view) {
             super(view);

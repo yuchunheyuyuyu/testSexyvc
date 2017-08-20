@@ -43,8 +43,8 @@ public class SubjectDetailModel extends BaseModel<ServiceManager,CacheManager> i
     }
 
     @Override
-    public Observable<BaseEntity<ReplyIdBean>> reply(String token, int object_type, long object_id, long reply_id, String reply_content) {
-        return mServiceManager.getCommonService().reply(token,object_type,object_id,reply_id,reply_content);
+    public Observable<BaseEntity<ReplyIdBean>> reply(String token, int object_type, long object_id, long reply_id, String reply_content,int is_anon) {
+        return mServiceManager.getCommonService().reply(token,object_type,object_id,reply_id,reply_content,is_anon);
     }
 
     @Override

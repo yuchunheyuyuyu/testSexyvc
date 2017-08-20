@@ -33,6 +33,7 @@ import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
@@ -108,6 +109,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private void dealComment(final CommentBean bean, CommentHolder holder) {
+
+        holder.praiseContainer.setVisibility(View.GONE);
         holder.ratingScore.setRating(bean.getScore());
         if (StringUtil.isBlank(bean.getDomain_name())) {
             holder.tvCommentTag.setVisibility(View.GONE);
@@ -116,6 +119,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.tvCommentTag.setText(bean.getDomain_name());
         }
         holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
+
+
         holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
         holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
 
@@ -127,6 +132,13 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 activity.gotoActivity(CommentDetailActivity.class, bundle);
             }
         });
+        //加v的图标
+        if(AppStringUtil.isShowVStatus(bean.getIs_anon(),bean.getU_auth_type(),bean.getU_auth_state())){
+            holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+            holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(bean.getU_auth_type()));
+        }else{
+            holder.ivIdentityStatus.setVisibility(View.GONE);
+        }
     }
 
     private void dealContent(final InvestorBean bean, final ContentHolder holder) {
@@ -141,8 +153,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         holder.tvName.setText(StringUtil.formatString(bean.getInvestor_name()));
 
-        holder.tvCompany.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context, bean.getFund_name()));
-        holder.tvPosition.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(context, bean.getInvestor_title()));
+        holder.tvCompany.setText(AppStringUtil.formatNoKnown(context, bean.getFund_name()));
+        holder.tvPosition.setText(AppStringUtil.formatNoKnown(context, bean.getInvestor_title()));
         //标签
         if (bean.getTags() == null || bean.getTags().isEmpty()) {
             holder.flowLayout.setVisibility(View.GONE);
@@ -159,7 +171,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.flowLayout.setAdapter(tagAdapter);
         }
 
-        holder.tvIntroduce.setText(com.qtin.sexyvc.utils.StringUtil.formatNoData(context, bean.getInvestor_intro()));
+        holder.tvIntroduce.setText(AppStringUtil.formatNoData(context, bean.getInvestor_intro()));
 
         if(bean.getInvestor_uid()==0){
             holder.ivAnthStatus.setVisibility(View.GONE);
@@ -280,7 +292,8 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     Bundle bundle=new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getInvestor_id());
-                    bundle.putString(ConstantUtil.INTENT_TITLE,bean.getInvestor_name());
+                    bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getInvestor_name()+"的评论");
+                    bundle.putInt("auth_state",1);
                     activity.gotoActivity(MoreCommentActivity.class,bundle);
                 }
             });
@@ -324,6 +337,10 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView tvContent;
         @BindView(R.id.lineBottom)
         View lineBottom;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
+        @BindView(R.id.praiseContainer)
+        View praiseContainer;
 
         CommentHolder(View view) {
             super(view);

@@ -38,7 +38,7 @@ public class FundDetailPresent extends BasePresenter<FundDetailContract.Model,Fu
     }
 
     public void query(long fund_id,long comment_id){
-        mModel.queryFundDetail(mModel.getToken(),fund_id,comment_id,3)
+        mModel.queryFundDetail(mModel.getToken(),fund_id,comment_id,3,1)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {

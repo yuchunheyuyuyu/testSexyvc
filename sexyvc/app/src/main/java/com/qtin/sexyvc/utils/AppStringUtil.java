@@ -8,7 +8,7 @@ import com.qtin.sexyvc.R;
  * Created by ls on 17/5/3.
  */
 
-public class StringUtil {
+public class AppStringUtil {
 
     public static String formatNoKnown(Context context,String str){
         if(isBlank(str)){
@@ -79,5 +79,33 @@ public class StringUtil {
             return true;
         }
         return false;
+    }
+
+    public static boolean isShowVStatus(int is_anon,int u_auth_type, int u_auth_state){
+        if(is_anon==1){
+            return false;
+        }else{
+            if(u_auth_state==ConstantUtil.AUTH_STATE_PASS){
+                if(u_auth_type==ConstantUtil.AUTH_TYPE_FOUNDER
+                        ||u_auth_type==ConstantUtil.AUTH_TYPE_INVESTOR
+                        ||u_auth_type==ConstantUtil.AUTH_TYPE_FA){
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+    }
+
+    public static int getVStatusResourceId(int u_auth_type){
+        if(u_auth_type==ConstantUtil.AUTH_TYPE_FOUNDER){
+            return R.drawable.logo_approve_fc;
+        }else if(u_auth_type==ConstantUtil.AUTH_TYPE_FOUNDER){
+            return R.drawable.logo_approve_vc;
+        }else{
+            return R.drawable.logo_approve_fa;
+        }
     }
 }

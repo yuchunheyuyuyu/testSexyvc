@@ -1,15 +1,21 @@
 package com.qtin.sexyvc.ui.login.choose;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.login.choose.di.ChooseIdentityModule;
 import com.qtin.sexyvc.ui.login.choose.di.DaggerChooseIdentityComponent;
-import com.qtin.sexyvc.ui.main.MainActivity;
+import com.qtin.sexyvc.ui.recommend.RecommendActivity;
+import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -25,9 +31,11 @@ public class ChooseIdentityActivity extends MyBaseActivity<ChooseIdentityPresent
     @BindView(R.id.ivTypeFA)
     ImageView ivTypeFA;
 
-    private int selectedType;
+    private int selectedType=ConstantUtil.AUTH_TYPE_UNKNOWN;
     private final int ALPHA_70= (int) (255*0.7f);
     private final int ALPHA_100=255;
+
+    private UserInfoEntity userInfoEntity;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -46,7 +54,7 @@ public class ChooseIdentityActivity extends MyBaseActivity<ChooseIdentityPresent
 
     @Override
     protected void initData() {
-
+        userInfoEntity=getIntent().getExtras().getParcelable(UserInfoActivity.INTENT_USER);
     }
 
     @Override
@@ -61,7 +69,7 @@ public class ChooseIdentityActivity extends MyBaseActivity<ChooseIdentityPresent
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -115,6 +123,10 @@ public class ChooseIdentityActivity extends MyBaseActivity<ChooseIdentityPresent
 
                 break;
             case R.id.tvNextStep:
+                if(selectedType==ConstantUtil.AUTH_TYPE_UNKNOWN){
+                    showMessage("请选择身份");
+                    return;
+                }
                 mPresenter.editPosition(selectedType,"","");
                 break;
         }
@@ -122,6 +134,8 @@ public class ChooseIdentityActivity extends MyBaseActivity<ChooseIdentityPresent
 
     @Override
     public void editSuccess() {
-        gotoActivity(MainActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfoEntity);
+        gotoActivity(RecommendActivity.class,bundle);
     }
 }

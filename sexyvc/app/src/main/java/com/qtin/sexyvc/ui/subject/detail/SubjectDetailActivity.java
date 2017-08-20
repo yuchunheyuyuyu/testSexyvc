@@ -143,6 +143,11 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 ReplyBean entity = (ReplyBean) data.get(position);
                 showReplyDialog(position, entity.getReply_id(), "回复@" + entity.getU_nickname());
             }
+
+            @Override
+            public void onClickInvestor() {
+
+            }
         });
         recyclerView.setAdapter(mAdapter);
         initPaginate();
@@ -218,7 +223,12 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 if(mDetailBean!=null){
                     UMWeb web = new UMWeb(Api.SHARE_SUBJECT+mDetailBean.getSubject_id());
                     web.setTitle(mDetailBean.getTitle());//标题
-                    web.setDescription(mDetailBean.getSummary());
+                    if(StringUtil.isBlank(mDetailBean.getSummary())){
+                        web.setDescription("点此查看");
+                    }else{
+                        web.setDescription(mDetailBean.getSummary());
+                    }
+
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(mDetailBean.getImg_url())));  //缩略图
 
                     new ShareAction(this)
@@ -316,7 +326,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     }
 
     @Override
-    public void replySuccess(int position, long reply_id, String content) {
+    public void replySuccess(int position, long reply_id, String content,int is_anon) {
 
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
@@ -328,7 +338,13 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         entity.setCreate_time(System.currentTimeMillis() / 1000);
         entity.setReply_id(reply_id);
         if (mPresenter.getUserInfo() != null) {
-            entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
+
+            if(is_anon==0){
+                entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
+            }else{
+                entity.setU_nickname(getString(R.string.defalut_nick));
+            }
+
             entity.setU_avatar(mPresenter.getUserInfo().getU_avatar());
         }
         if (position == -1) {
@@ -396,7 +412,13 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                mPresenter.reply(position, subject_id, reply_id, content);
+                int is_anon=0;
+                if(ivAnonymous.isSelected()){
+                    is_anon=1;
+                }else{
+                    is_anon=0;
+                }
+                mPresenter.reply(position, subject_id, reply_id, content,is_anon);
             }
         });
         replyDialog = new Dialog(this);

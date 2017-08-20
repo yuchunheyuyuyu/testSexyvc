@@ -15,6 +15,33 @@ public class ReplyBean implements DataTypeInterface {
     private int like;
     private int has_praise;
     private long create_time;
+    private int is_anon;
+    private int u_auth_type;
+    private int u_auth_state;
+
+    public int getIs_anon() {
+        return is_anon;
+    }
+
+    public void setIs_anon(int is_anon) {
+        this.is_anon = is_anon;
+    }
+
+    public int getU_auth_type() {
+        return u_auth_type;
+    }
+
+    public void setU_auth_type(int u_auth_type) {
+        this.u_auth_type = u_auth_type;
+    }
+
+    public int getU_auth_state() {
+        return u_auth_state;
+    }
+
+    public void setU_auth_state(int u_auth_state) {
+        this.u_auth_state = u_auth_state;
+    }
 
     public long getCreate_time() {
         return create_time;

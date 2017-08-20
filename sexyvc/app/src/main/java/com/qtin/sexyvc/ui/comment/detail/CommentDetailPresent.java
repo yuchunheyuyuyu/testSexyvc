@@ -84,8 +84,8 @@ public class CommentDetailPresent extends BasePresenter<CommentDetailContract.Mo
                 });
     }
 
-    public void reply(final int position, long object_id, long reply_id, final String reply_content){
-        mModel.reply(mModel.getToken(), ConstantUtil.OBJECT_TYPE_COMMENT,object_id,reply_id,reply_content)
+    public void reply(final int position, long object_id, long reply_id, final String reply_content,final int is_anon){
+        mModel.reply(mModel.getToken(), ConstantUtil.OBJECT_TYPE_COMMENT,object_id,reply_id,reply_content,is_anon)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override
@@ -105,7 +105,7 @@ public class CommentDetailPresent extends BasePresenter<CommentDetailContract.Mo
                     public void onNext(BaseEntity<ReplyIdBean> baseEntity) {
                         //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
-                            mRootView.replySuccess(position,baseEntity.getItems().getReply_id(),reply_content);
+                            mRootView.replySuccess(position,baseEntity.getItems().getReply_id(),reply_content,is_anon);
                         }
                     }
                 });

@@ -9,4 +9,5 @@ public interface DetailClickListener {
     void onClickDetailReply(int position);
     void onClickItemPraise(int position);
     void onClickItemReply(int position);
+    void onClickInvestor();
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/llHead"
+        layout="@layout/app_header" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llHead" />
+
+    <TextView
+        android:id="@+id/tvConcern"
+        android:layout_width="290dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_signup"
+        android:gravity="center"
+        android:text="@string/concern_the_selected"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>

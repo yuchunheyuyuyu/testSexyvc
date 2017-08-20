@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -16,7 +17,6 @@ import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
-import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
@@ -25,10 +25,13 @@ import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 import com.qtin.sexyvc.ui.user.sent.di.DaggerSentComponent;
 import com.qtin.sexyvc.ui.user.sent.di.SentModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -142,9 +145,19 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
                 if(data.get(position).getHas_comment()==0){
                     gotoComment(position);
                 }else{
+                    SentBean sentBean=data.get(position);
+
                     Bundle bundle=new Bundle();
-                    bundle.putLong("comment_id", data.get(position).getComment_id());
-                    gotoActivity(CommentDetailActivity.class, bundle);
+                    InvestorInfoBean investorInfoBean=new InvestorInfoBean();
+                    investorInfoBean.setHas_comment(1);
+                    investorInfoBean.setComment_title(sentBean.getComment_title());
+                    investorInfoBean.setScore_value(sentBean.getScore());
+                    investorInfoBean.setInvestor_name(sentBean.getInvestor_name());
+                    investorInfoBean.setComment_id(sentBean.getComment_id());
+                    investorInfoBean.setFund_id(sentBean.getFund_id());
+
+                    bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE, investorInfoBean);
+                    gotoActivity(ReviewActivity.class, bundle);
                 }
             }
         });

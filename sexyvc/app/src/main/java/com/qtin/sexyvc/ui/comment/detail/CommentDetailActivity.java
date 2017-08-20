@@ -37,6 +37,7 @@ import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentContentBean;
 import com.qtin.sexyvc.ui.comment.detail.di.CommentDetailModule;
 import com.qtin.sexyvc.ui.comment.detail.di.DaggerCommentDetailComponent;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.CommonUtil;
@@ -46,12 +47,15 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
 
 /**
  * Created by ls on 17/4/26.
@@ -151,6 +155,13 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             public void onClickItemReply(int position) {
                 ReplyBean entity = (ReplyBean) data.get(position);
                 showReplyDialog(position, entity.getReply_id(), "回复@" + entity.getU_nickname());
+            }
+
+            @Override
+            public void onClickInvestor() {
+                Bundle bundle = new Bundle();
+                bundle.putLong("investor_id", detailBean.getInvestor_id());
+                gotoActivity(InvestorDetailActivity.class, bundle);
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -305,7 +316,13 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                mPresenter.reply(position, comment_id, reply_id, content);
+                int is_anon=0;
+                if(ivAnonymous.isSelected()){
+                    is_anon=1;
+                }else{
+                    is_anon=0;
+                }
+                mPresenter.reply(position, comment_id, reply_id, content,is_anon);
             }
         });
         replyDialog = new Dialog(this);
@@ -362,7 +379,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     }
 
     @Override
-    public void replySuccess(int position, long reply_id, String content) {
+    public void replySuccess(int position, long reply_id, String content,int is_anon) {
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
         }
@@ -374,7 +391,11 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         entity.setReply_id(reply_id);
 
         if (mPresenter.getUserInfo() != null) {
-            entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
+            if(is_anon==0){
+                entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
+            }else{
+                entity.setU_nickname(getString(R.string.defalut_nick));
+            }
             entity.setU_avatar(mPresenter.getUserInfo().getU_avatar());
         }
         if (position == -1) {

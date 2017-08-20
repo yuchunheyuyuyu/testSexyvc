@@ -37,6 +37,15 @@
                 android:textColor="@color/black90"
                 android:textSize="12sp" />
 
+            <ImageView
+                android:id="@+id/ivIdentityStatus"
+                android:layout_width="16dp"
+                android:layout_height="14dp"
+                android:visibility="gone"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="2dp"
+                android:src="@drawable/logo_approve_vc" />
+
             <TextView
                 android:id="@+id/tvTime"
                 android:layout_width="0dp"
@@ -60,10 +69,10 @@
                 android:id="@+id/ivPraise"
                 android:layout_width="42dp"
                 android:layout_height="32dp"
-                android:paddingTop="6dp"
                 android:paddingBottom="6dp"
                 android:paddingLeft="6dp"
                 android:paddingRight="16dp"
+                android:paddingTop="6dp"
                 android:src="@drawable/good_selector" />
         </LinearLayout>
 
@@ -71,8 +80,8 @@
             android:id="@+id/tvContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="16dp"
             android:lineSpacingExtra="6sp"
+            android:paddingRight="16dp"
             android:text="超市买刀砍了人，责任就是超市的？这逻辑，好好反思一下自己的双重标准不是更好？"
             android:textColor="@color/black70"
             android:textSize="12sp" />

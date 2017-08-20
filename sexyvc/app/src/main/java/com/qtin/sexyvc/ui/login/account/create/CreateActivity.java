@@ -15,7 +15,6 @@ import com.qtin.sexyvc.ui.login.account.bind.BindActivity;
 import com.qtin.sexyvc.ui.login.account.create.di.CreateModule;
 import com.qtin.sexyvc.ui.login.account.create.di.DaggerCreateComponent;
 import com.qtin.sexyvc.ui.login.account.login.LoginActivity;
-import com.qtin.sexyvc.ui.login.choose.ChooseIdentityActivity;
 import com.qtin.sexyvc.ui.login.register.RegisterActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
@@ -57,8 +56,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     @Override
     protected void initData() {
         if(mPresenter.isLogin()){
-            gotoActivity(ChooseIdentityActivity.class);
-            //gotoActivity(MainActivity.class);
+            gotoActivity(MainActivity.class);
             return;
         }
     }

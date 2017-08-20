@@ -94,7 +94,7 @@ public class BindPresent extends BasePresenter<BindContract.Model,BindContract.V
                                     }
                                 }
                             }else{
-                                //mRootView.showMessage(StringUtil.formatString(baseEntity.getErrMsg()));
+                                //mRootView.showMessage(AppStringUtil.formatString(baseEntity.getErrMsg()));
                             }
                         }
                     }

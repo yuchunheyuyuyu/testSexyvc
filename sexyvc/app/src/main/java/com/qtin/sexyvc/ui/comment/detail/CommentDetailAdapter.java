@@ -26,6 +26,7 @@ import com.qtin.sexyvc.ui.comment.detail.bean.CommentContentBean;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.DeviceUtils;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.DateUtil;
 
@@ -168,6 +169,14 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 }
             });
+            holder.investorContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (clickListener != null) {
+                        clickListener.onClickInvestor();
+                    }
+                }
+            });
 
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
@@ -190,6 +199,14 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else if (viewHolder instanceof ReplyHolder) {
             ReplyHolder commentHolder = (ReplyHolder) viewHolder;
             final ReplyBean entity = (ReplyBean) data.get(position);
+
+            //加v的图标
+            if(AppStringUtil.isShowVStatus(entity.getIs_anon(),entity.getU_auth_type(),entity.getU_auth_state())){
+                commentHolder.ivIdentityStatus.setVisibility(View.VISIBLE);
+                commentHolder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(entity.getU_auth_type()));
+            }else{
+                commentHolder.ivIdentityStatus.setVisibility(View.GONE);
+            }
 
             if (entity.getHas_praise() == 0) {
                 commentHolder.ivPraise.setSelected(false);
@@ -248,6 +265,8 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         ImageView ivPraise;
         @BindView(R.id.tvContent)
         TextView tvContent;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         ReplyHolder(View view) {
             super(view);
@@ -286,6 +305,8 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         RatingBar ratingTargetScore;
         @BindView(R.id.tvCommentCount)
         TextView tvCommentCount;
+        @BindView(R.id.investorContainer)
+        View investorContainer;
 
         ContentHolder(View view) {
             super(view);

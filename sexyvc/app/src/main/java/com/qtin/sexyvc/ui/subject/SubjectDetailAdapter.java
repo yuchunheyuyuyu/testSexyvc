@@ -24,6 +24,7 @@ import com.qtin.sexyvc.ui.subject.bean.SubjectContentEntity;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.DateUtil;
 
@@ -155,6 +156,14 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             CommentHolder commentHolder = (CommentHolder) holder;
             final ReplyBean entity = (ReplyBean) data.get(position);
 
+            //加v的图标
+            if(AppStringUtil.isShowVStatus(entity.getIs_anon(),entity.getU_auth_type(),entity.getU_auth_state())){
+                commentHolder.ivIdentityStatus.setVisibility(View.VISIBLE);
+                commentHolder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(entity.getU_auth_type()));
+            }else{
+                commentHolder.ivIdentityStatus.setVisibility(View.GONE);
+            }
+
             if (entity.getHas_praise() == 0) {
                 commentHolder.ivPraise.setSelected(false);
             } else {
@@ -255,6 +264,8 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         ImageView ivPraise;
         @BindView(R.id.tvContent)
         TextView tvContent;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         CommentHolder(View view) {
             super(view);

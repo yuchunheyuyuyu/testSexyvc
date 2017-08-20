@@ -101,7 +101,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                mPresenter.queryDetail(data.get(position).getInvestor_id(),ConstantUtil.DEFALUT_ID);
+                mPresenter.queryDetail(data.get(position).getInvestor_id(),ConstantUtil.DEFALUT_ID,1);
             }
         });
         loadData();

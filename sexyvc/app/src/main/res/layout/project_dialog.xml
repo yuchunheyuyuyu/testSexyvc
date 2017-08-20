@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="295dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_white_dialog_back"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_marginTop="17dp"
+            android:gravity="center_horizontal"
+            android:text="@string/project_dialog_title"
+            android:textColor="@color/black90"
+            android:textSize="16sp" />
+
+        <View style="@style/line_style" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/project_dialog_domain"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvDomain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="游戏"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+        </LinearLayout>
+
+        <View
+            style="@style/line_style"
+            android:layout_marginLeft="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/project_dialog_stage"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvStage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="天使轮  500 万人民币"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+        </LinearLayout>
+
+        <View style="@style/line_style" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="@string/cancle"
+                android:textColor="@color/black50"
+                android:textSize="16sp" />
+
+            <View style="@style/line_vertical_style" />
+
+            <Button
+                android:id="@+id/btnRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="@string/comfirm"
+                android:textColor="@color/barbie_pink_two"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

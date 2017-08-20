@@ -39,6 +39,7 @@ import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
@@ -278,8 +279,8 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 .transformation(new CropCircleTransformation(this))
                 .imageView(ivAvatar)
                 .build());
-        tvCompany.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(this, contactBean.getFund_name()));
-        tvPosition.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(this, contactBean.getTitle()));
+        tvCompany.setText(AppStringUtil.formatNoKnown(this, contactBean.getFund_name()));
+        tvPosition.setText(AppStringUtil.formatNoKnown(this, contactBean.getTitle()));
 
         if (StringUtil.isBlank(contactBean.getPhone()) && StringUtil.isBlank(contactBean.getBackup_phone())) {
             tvTelephone.setText(getResources().getString(R.string.no_known));
@@ -292,9 +293,9 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                     + StringUtil.getFormatPhone(contactBean.getBackup_phone()));
         }
 
-        tvEmail.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(this, contactBean.getEmail()));
-        tvWechat.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(this, contactBean.getWechat()));
-        tvRemark.setText(com.qtin.sexyvc.utils.StringUtil.formatNoKnown(this, contactBean.getRemark()));
+        tvEmail.setText(AppStringUtil.formatNoKnown(this, contactBean.getEmail()));
+        tvWechat.setText(AppStringUtil.formatNoKnown(this, contactBean.getWechat()));
+        tvRemark.setText(AppStringUtil.formatNoKnown(this, contactBean.getRemark()));
 
         //标签
         if (contactBean.getTags() == null || contactBean.getTags().isEmpty()) {

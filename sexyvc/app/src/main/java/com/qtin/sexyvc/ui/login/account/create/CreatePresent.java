@@ -111,7 +111,7 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                                     mRootView.gotoBind(requestEntity.getAccount_type());
                                 }
                             }else{
-                                //mRootView.showMessage(StringUtil.formatString(userEntityBaseEntity.getErrMsg()));
+                                //mRootView.showMessage(AppStringUtil.formatString(userEntityBaseEntity.getErrMsg()));
                             }
                         }
                     }
