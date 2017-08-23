@@ -3,7 +3,6 @@ package com.qtin.sexyvc.ui.main;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,17 +18,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
+import com.qtin.sexyvc.common.AddProjectBaseActivity;
 import com.qtin.sexyvc.common.AppComponent;
-import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.popupwindow.GuidePopupwindow;
 import com.qtin.sexyvc.popupwindow.OnPopupWindowClickListener;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.AppUpdateBean;
 import com.qtin.sexyvc.ui.bean.DialogType;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.main.di.DaggerMainComponent;
@@ -45,6 +47,7 @@ import com.qtin.sexyvc.utils.update.updater.Updater;
 import com.qtin.sexyvc.utils.update.updater.UpdaterConfig;
 import com.zhy.autolayout.utils.AutoUtils;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -55,7 +58,7 @@ import rx.functions.Action1;
 /**
  * Created by ls on 17/4/14.
  */
-public class MainActivity extends MyBaseActivity<MainPresent> implements MainContract.View{
+public class MainActivity extends AddProjectBaseActivity<MainPresent> implements MainContract.View{
     @BindView(R.id.ivTab1)
     ImageView ivTab1;
     @BindView(R.id.tvTab1)
@@ -114,27 +117,32 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
         tvTab1.setSelected(true);
         mPresenter.queryUpdate();
 
-        SharedPreferences preferences=getSharedPreferences("app_start_time", Context.MODE_PRIVATE);
-        boolean isFirstTime=preferences.getBoolean("is_first_time",true);
-        //第一次显示引导，第二次显示弹窗
-        if(isFirstTime){
-            SharedPreferences.Editor editor=preferences.edit();
-            editor.putBoolean("is_first_time",false);
-            editor.commit();
+        //注册的用户显示
+        final UserInfoEntity entity=mPresenter.getUserInfo();
+        if(entity!=null){
+            int isFromRegister= DataHelper.getIntergerSF(this,entity.getU_phone()+"register");
 
-            Observable.just(1)
-                    .delay(300, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Integer>() {
-                        @Override
-                        public void call(Integer integer) {
-                            showGuideWindow();
-                        }
-                    });
+            if(isFromRegister==1){
+                DataHelper.SetIntergerSF(this,entity.getU_phone()+"register",0);
+                Observable.just(1)
+                        .delay(300, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Integer>() {
+                            @Override
+                            public void call(Integer integer) {
+                                showGuideWindow();
+                            }
+                        });
 
-        }else{
-            final UserInfoEntity entity=mPresenter.getUserInfo();
-            if(entity!=null){
+            }else{
+                //是不是该用户的第一次
+                int second_or_later=DataHelper.getIntergerSF(this,entity.getU_phone()+"second_or_later");
+                if(second_or_later==0){
+                    DataHelper.SetIntergerSF(this,entity.getU_phone()+"second_or_later",1);
+                }else{
+
+                }
+
                 if(entity.getU_auth_state()==ConstantUtil.AUTH_STATE_UNPASS){
                     Observable.just(1)
                             .delay(300, TimeUnit.MILLISECONDS)
@@ -142,7 +150,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                             .subscribe(new Action1<Integer>() {
                                 @Override
                                 public void call(Integer integer) {
-                                    showHintDialog(DialogType.TYPE_IDENTITY, new ComfirmListerner() {
+                                    showHintDialog(entity.getU_phone(), DialogType.TYPE_IDENTITY, new ComfirmListerner() {
                                         @Override
                                         public void onComfirm() {
                                             Bundle bundle=new Bundle();
@@ -161,7 +169,7 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                                 .subscribe(new Action1<Integer>() {
                                     @Override
                                     public void call(Integer integer) {
-                                        showHintDialog(DialogType.TYPE_PROJECT, new ComfirmListerner() {
+                                        showHintDialog(entity.getU_phone(),DialogType.TYPE_PROJECT, new ComfirmListerner() {
                                             @Override
                                             public void onComfirm() {
                                                 dismissHintDialog();
@@ -176,6 +184,13 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                 }
             }
         }
+
+
+        mPresenter.queryUserInfo();
+        //获取投资行业
+        mPresenter.getType("common_domain", TYPE_DOMAIN);
+        //获取投资阶段
+        mPresenter.getType("common_stage", TYPE_STAGE);
     }
 
     private void showGuideWindow(){
@@ -221,26 +236,36 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                     Bundle bundle=new Bundle();
                     bundle.putInt(ChooseActivity.AUTH_TYPE,userInfoEntity.getU_auth_type());
 
-                    if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
-                        if(mPresenter.getUserInfo().getHas_project()==0){
-                            showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
-                                    getResources().getString(R.string.cancle),
-                                    getResources().getString(R.string.comfirm),
-                                    new TwoButtonListerner() {
-                                        @Override
-                                        public void leftClick() {
-                                            dismissTwoButtonDialog();
-                                        }
+                    if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                            ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
 
-                                        @Override
-                                        public void rightClick() {
-                                            dismissTwoButtonDialog();
-                                            Bundle bundle=new Bundle();
-                                            bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
-                                            gotoActivity(AddProjectActivity.class,bundle);
-                                        }
-                                    });
-                            return;
+                        if(mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER){
+                            if(mPresenter.getUserInfo().getHas_project()==0){
+                                /**showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
+                                 getResources().getString(R.string.cancle),
+                                 getResources().getString(R.string.comfirm),
+                                 new TwoButtonListerner() {
+                                @Override
+                                public void leftClick() {
+                                dismissTwoButtonDialog();
+                                }
+
+                                @Override
+                                public void rightClick() {
+                                dismissTwoButtonDialog();
+                                Bundle bundle=new Bundle();
+                                bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                                gotoActivity(AddProjectActivity.class,bundle);
+                                }
+                                });*/
+                                showProjectDialog(new OnProjectComfirmListener() {
+                                    @Override
+                                    public void onComfirm(ProjectBean projectBean) {
+                                        mPresenter.createProject(projectBean);
+                                    }
+                                });
+                                return;
+                            }
                         }
                         gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
                     }else{
@@ -439,6 +464,45 @@ public class MainActivity extends MyBaseActivity<MainPresent> implements MainCon
                 showTwoButtonDialog(updateBean);
             }
         }
+    }
+
+    @Override
+    public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
+        switch (type) {
+            case TYPE_DOMAIN:
+                domainData.clear();
+                domainData.addAll(list);
+                break;
+            case TYPE_STAGE:
+                initStageData(list);
+                break;
+        }
+    }
+
+    @Override
+    public void onCreateSuccess(ProjectBean bean) {
+        dismissProjectDialog();
+        Observable.just(1)
+                .delay(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Bundle bundle=new Bundle();
+                        bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
+                        gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
+                    }
+                });
+    }
+
+    @Override
+    public void showProgress(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void hideProgress() {
+        dialogDismiss();
     }
 
     /**

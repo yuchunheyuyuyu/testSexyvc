@@ -135,6 +135,9 @@ public class ChooseIdentityActivity extends MyBaseActivity<ChooseIdentityPresent
     @Override
     public void editSuccess() {
         Bundle bundle=new Bundle();
+        userInfoEntity.setU_auth_type(selectedType);
+        mPresenter.saveUsrInfo(userInfoEntity);
+
         bundle.putParcelable(UserInfoActivity.INTENT_USER,userInfoEntity);
         gotoActivity(RecommendActivity.class,bundle);
     }

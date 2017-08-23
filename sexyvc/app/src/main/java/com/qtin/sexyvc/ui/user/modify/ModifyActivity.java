@@ -19,6 +19,7 @@ import com.qtin.sexyvc.ui.user.modify.di.DaggerModifyComponent;
 import com.qtin.sexyvc.ui.user.modify.di.ModifyModule;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
+import com.qtin.sexyvc.utils.NameLengthFilter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -164,7 +165,9 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             etTitle.setText(StringUtil.formatString(value2));
             etTitle.setSelection(StringUtil.formatString(value2).length());
 
-            etTitle.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+            InputFilter[] filters = { new NameLengthFilter(16) };
+            etTitle.setFilters(filters);
+            //etTitle.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
 
             tvRight.setText(getResources().getString(R.string.comfirm));
             tvTitle.setText(getResources().getString(R.string.title_institution));
@@ -192,7 +195,9 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             if (modifyType == MODIFY_NICK) {
                 etContent.setHint(getResources().getString(R.string.nick));
                 tvTitle.setText(getResources().getString(R.string.title_nick));
-                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+                InputFilter[] filters = { new NameLengthFilter(16) };
+                etContent.setFilters(filters);
+                //etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
             } else if (modifyType == MODIFY_PROJECT_NAME) {
                 etContent.setHint(getResources().getString(R.string.project_name));
                 tvTitle.setText(getResources().getString(R.string.project_name));

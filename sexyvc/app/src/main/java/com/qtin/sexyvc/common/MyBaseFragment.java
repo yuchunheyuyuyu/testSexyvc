@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.mvp.test.progress.LoadingDialog;
+import com.qtin.sexyvc.utils.NameLengthFilter;
 import com.squareup.leakcanary.RefWatcher;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -221,6 +223,10 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
         Button btnRight= (Button) view.findViewById(R.id.btnRight);
         final EditText etContent= (EditText) view.findViewById(R.id.etContent);
 
+        //etContent.setHint(getString(R.string.char_count_limit));
+        InputFilter[] filters = { new NameLengthFilter(16) };
+        etContent.setFilters(filters);
+
         tvTitle.setText(title);
         btnLeft.setText(warn);
         btnLeft.setText(stringLeft);
@@ -255,6 +261,7 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
         regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         inputDialog.setCanceledOnTouchOutside(true);
+        inputDialog.setCancelable(false);
         inputDialog.show();
     }
 

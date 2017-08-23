@@ -33,9 +33,9 @@ public class SubjectListPresent extends BasePresenter<SubjectListContract.Model,
         this.mApplication = mApplication;
     }
 
-    public void query(long subject_id,final int need_banner){
+    public void query(long subject_id,int page_size,final int need_banner){
 
-        mModel.querySubjectList(subject_id,15,need_banner)
+        mModel.querySubjectList(subject_id,page_size,need_banner)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {

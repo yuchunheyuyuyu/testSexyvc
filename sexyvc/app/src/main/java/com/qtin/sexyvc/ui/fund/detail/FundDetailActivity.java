@@ -187,12 +187,46 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                 break;
             case R.id.ivShare:
                 if(fundDetailBean!=null){
-                    UMWeb web = new UMWeb(Api.SHARE_FUND+fundDetailBean.getFund_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_FUND+fundDetailBean.getFund_id());
                     web.setTitle("【SexyVC】"+fundDetailBean.getFund_name());//标题
                     web.setDescription("对于"+fundDetailBean.getFund_name()+"，创业者们是这样评价的...");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(fundDetailBean.getFund_logo())));  //缩略图
 
-                    new ShareAction(this)
+                    showShareDialog(new onShareClick() {
+                        @Override
+                        public void onClickShare(int platForm) {
+
+                            dismissShareDialog();
+                            switch(platForm){
+                                case ConstantUtil.SHARE_WECHAT:
+                                    new ShareAction(FundDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_WX_CIRCLE:
+                                    new ShareAction(FundDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_QQ:
+                                    new ShareAction(FundDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.QQ)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_SINA:
+                                    new ShareAction(FundDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.SINA)
+                                            .setCallback(shareListener).share();
+                                    break;
+                            }
+                        }
+                    });
+
+                    /**new ShareAction(this)
                             .withMedia(web)
                             .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
                             .setCallback(new UMShareListener() {
@@ -216,7 +250,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
                                 }
                             })
-                            .open();
+                            .open();*/
                 }
                 break;
         }
@@ -227,13 +261,13 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
         if (isFirstLoadData) {
             UserInfoEntity entity = mPresenter.getUserInfo();
             if (entity != null) {
-                if (entity.getHas_project() == 1) {
+                if (entity.getHas_project() == 1&&entity.getHas_comment()==0&&entity.getHas_roadshow()==0) {
                     int currentScore = DataHelper.getIntergerSF(this, "read_score");
                     currentScore += 20;
                     if (currentScore >= 100) {
                         //清空分数
                         DataHelper.SetIntergerSF(this, "read_score", 0);
-                        showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                        showHintDialog(entity.getU_phone(),DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
                                 Bundle bundle = new Bundle();
@@ -261,4 +295,23 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
         }
         mAdapter.notifyDataSetChanged();
     }
+
+    private UMShareListener shareListener=new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+
+        }
+    };
 }

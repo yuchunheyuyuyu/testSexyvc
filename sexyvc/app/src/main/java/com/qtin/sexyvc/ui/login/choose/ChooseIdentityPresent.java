@@ -1,12 +1,16 @@
 package com.qtin.sexyvc.ui.login.choose;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -56,6 +60,10 @@ public class ChooseIdentityPresent extends BasePresenter<ChooseIdentityContract.
                         }
                     }
                 });
+    }
+
+    public void saveUsrInfo(UserInfoEntity entity){
+        mModel.saveUsrInfo(entity);
     }
 
     @Override

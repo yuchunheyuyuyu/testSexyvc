@@ -1,12 +1,15 @@
 package com.qtin.sexyvc.ui.login.account.bind;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -17,6 +20,7 @@ import com.qtin.sexyvc.ui.login.account.bind.di.DaggerBindComponent;
 import com.qtin.sexyvc.ui.login.password.set.SetPasswordActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -136,11 +140,17 @@ public class BindActivity extends MyBaseActivity<BindPresent> implements BindCon
     public void killMyself() {
 
     }
+    private void hideKeyBoard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etPhone.getWindowToken(), 0); //强制隐藏键盘
+    }
 
-
-    @OnClick({R.id.ivBack, R.id.tvGetVertify, R.id.tvBind})
+    @OnClick({R.id.ivBack, R.id.tvGetVertify, R.id.tvBind,R.id.llAllContent})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.llAllContent:
+                hideKeyBoard();
+                break;
             case R.id.ivBack:
                 finish();
                 break;

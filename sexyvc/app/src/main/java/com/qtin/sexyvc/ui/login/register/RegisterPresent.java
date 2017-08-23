@@ -65,14 +65,14 @@ public class RegisterPresent extends BasePresenter<RegisterContract.Model,Regist
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.showLoading();
+                        mRootView.startRefresh("正在验证");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.hideLoading();
+                        mRootView.endRefresh();
                     }
                 })
                 .compose(RxUtils.<BaseEntity<BindEntity>> bindToLifecycle(mRootView))
@@ -93,14 +93,14 @@ public class RegisterPresent extends BasePresenter<RegisterContract.Model,Regist
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.showLoading();
+                        mRootView.startRefresh("正在注册");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.hideLoading();
+                        mRootView.endRefresh();
                     }
                 })
                 .compose(RxUtils.<BaseEntity<UserEntity>> bindToLifecycle(mRootView))
@@ -109,6 +109,7 @@ public class RegisterPresent extends BasePresenter<RegisterContract.Model,Regist
                     public void onNext(BaseEntity<UserEntity> userEntityBaseEntity) {
                         if(userEntityBaseEntity.isSuccess()){
 
+                            userEntityBaseEntity.getItems().setBind_mobile(1);
                             mModel.saveUser(userEntityBaseEntity.getItems());
 
                             UserInfoEntity entity=new UserInfoEntity();

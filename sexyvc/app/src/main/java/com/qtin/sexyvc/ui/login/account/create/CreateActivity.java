@@ -1,9 +1,11 @@
 package com.qtin.sexyvc.ui.login.account.create;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -20,6 +22,7 @@ import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.widget.PhoneEditText;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.Map;
@@ -66,6 +69,11 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     }
 
+    private void hideKeyBoard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etPhone.getWindowToken(), 0); //强制隐藏键盘
+    }
+
     @Override
     public void hideLoading() {
 
@@ -86,17 +94,21 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
 
     }
 
-    @OnClick({ R.id.tvCreateAccount,  R.id.wxLogin, R.id.qqLogin})
+    @OnClick({ R.id.tvCreateAccount,  R.id.wxLogin, R.id.qqLogin,R.id.llAllContent})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.llAllContent:
+                hideKeyBoard();
+                break;
             case R.id.tvCreateAccount:
                 mobile=etPhone.getPhoneText();
                 if(StringUtil.isBlank(mobile)){
                     showMessage("请输入手机号");
                     return;
                 }
-                if(!StringUtil.isMobile(mobile)){
-                    showMessage("手机号输入不正确");
+
+                if(mobile.length()!=11){
+                    showMessage("手机号格式不正确");
                     return;
                 }
                 mPresenter.checkRegisterStatus(mobile);
@@ -113,7 +125,12 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
     private void getThirdInfo(SHARE_MEDIA media) {
         if (mShareAPI == null) {
             mShareAPI = UMShareAPI.get(CreateActivity.this);
+
+            UMShareConfig config = new UMShareConfig();
+            config.isNeedAuthOnGetUserInfo(true);
+            mShareAPI.setShareConfig(config);
         }
+
         if(!mShareAPI.isInstall(this,media)){
             UiUtils.showToastShort(getApplicationContext(),media.toString()+"暂未安装");
         }
@@ -181,7 +198,7 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
             entity.setUsername(data.get("openid"));
             entity.setNickname(data.get("name"));
             if (platform == SHARE_MEDIA.QQ) {
-                mShareAPI.deleteOauth(CreateActivity.this, SHARE_MEDIA.QQ, new UMAuthListener() {
+                /**mShareAPI.deleteOauth(CreateActivity.this, SHARE_MEDIA.QQ, new UMAuthListener() {
                     @Override
                     public void onStart(SHARE_MEDIA share_media) {
 
@@ -201,7 +218,8 @@ public class CreateActivity extends MyBaseActivity<CreatePresent> implements Cre
                     public void onCancel(SHARE_MEDIA share_media, int i) {
 
                     }
-                });
+                });*/
+
                 entity.setAccount_type(3);
             } else if (platform == SHARE_MEDIA.WEIXIN) {
                 entity.setAccount_type(2);

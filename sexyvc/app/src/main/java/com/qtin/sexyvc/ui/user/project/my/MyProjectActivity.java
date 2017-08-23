@@ -167,6 +167,13 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
                 break;
             case TYPE_STAGE:
                 stageData.clear();
+
+                FilterEntity entity=new FilterEntity();
+                entity.setType_id(0);
+                entity.setType_name("未融资");
+
+                stageData.add(entity);
+
                 stageData.addAll(list);
                 isStageDownload=true;
                 query();

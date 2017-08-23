@@ -55,6 +55,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private MyBaseActivity activity;
+    private int auth_state;
 
     private OnClickFundListener onClickFundListener;
 
@@ -62,9 +63,10 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.onClickFundListener = onClickFundListener;
     }
 
-    public InvestorDetailAdapter(Context context, ArrayList<DataTypeInterface> data) {
+    public InvestorDetailAdapter(Context context, ArrayList<DataTypeInterface> data,int auth_state) {
         this.context = context;
         this.data = data;
+        this.auth_state=auth_state;
         activity = (MyBaseActivity) context;
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
         mApplication = (CustomApplication) context.getApplicationContext();
@@ -293,7 +295,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getInvestor_id());
                     bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getInvestor_name()+"的评论");
-                    bundle.putInt("auth_state",1);
+                    bundle.putInt("auth_state",auth_state);
                     activity.gotoActivity(MoreCommentActivity.class,bundle);
                 }
             });

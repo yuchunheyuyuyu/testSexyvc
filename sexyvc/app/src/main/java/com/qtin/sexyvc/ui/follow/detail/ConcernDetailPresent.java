@@ -9,6 +9,8 @@ import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
 
@@ -102,6 +104,56 @@ public class ConcernDetailPresent extends BasePresenter<ConcernDetailContract.Mo
     public UserInfoEntity getUserInfo(){
         return mModel.getUserInfo();
     };
+
+    public void updateProjectState(){
+        mModel.updateProjectState();
+    }
+
+    public void getType(String type_key, final int type){
+        mModel.getType(type_key)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<Typebean> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<Typebean>(mErrorHandler) {
+                    @Override
+                    public void onNext(Typebean baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.requestTypeBack(type,baseEntity.getItems());
+                        }
+                    }
+                });
+    }
+
+    public void createProject(final ProjectBean bean){
+        bean.setToken(mModel.getToken());
+        mModel.createProject(bean)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("正在提交");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        //mRootView.showMessage(codeEntity.getErrMsg());
+                        if(codeEntity.isSuccess()){
+                            mRootView.showMessage("创建成功");
+                            updateProjectState();
+                            mRootView.onCreateSuccess(bean);
+                        }
+                    }
+                });
+    }
 
     @Override
     public void onDestroy() {

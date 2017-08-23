@@ -134,6 +134,14 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 activity.gotoActivity(CommentDetailActivity.class, bundle);
             }
         });
+
+        //加v的图标
+        if(AppStringUtil.isShowVStatus(bean.getIs_anon(),bean.getU_auth_type(),bean.getU_auth_state())){
+            holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+            holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(bean.getU_auth_type()));
+        }else{
+            holder.ivIdentityStatus.setVisibility(View.GONE);
+        }
     }
 
     private void dealContent(final FundDetailBean bean, ContentHolder holder) {
@@ -427,6 +435,8 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View lineBottom;
         @BindView(R.id.praiseContainer)
         View praiseContainer;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         CommentHolder(View view) {
             super(view);

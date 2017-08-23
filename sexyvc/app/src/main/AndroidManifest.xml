@@ -372,7 +372,7 @@
 
         <!-- 新浪微博：（精简版不需要） -->
         <activity
-            android:name="com.qtin.headlines.WBShareActivity"
+            android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">
             <intent-filter>

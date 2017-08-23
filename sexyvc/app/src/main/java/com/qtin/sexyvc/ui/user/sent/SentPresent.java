@@ -1,14 +1,18 @@
 package com.qtin.sexyvc.ui.user.sent;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ListBean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -67,6 +71,10 @@ public class SentPresent extends BasePresenter<SentContract.Model,SentContract.V
                         }
                     }
                 });
+    }
+
+    public UserInfoEntity getUserInfo() {
+        return mModel.getUserInfo();
     }
 
     @Override

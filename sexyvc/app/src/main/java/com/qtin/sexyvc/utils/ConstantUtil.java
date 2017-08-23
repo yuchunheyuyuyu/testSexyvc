@@ -107,4 +107,9 @@ public class ConstantUtil {
     public static int INTENT_ROAD_COMMENT=0;
     public static int INTENT_TEXT_COMMENT=1;
 
+    public static final int SHARE_WECHAT=0;
+    public static final int SHARE_WX_CIRCLE=1;
+    public static final int SHARE_QQ=2;
+    public static final int SHARE_SINA=3;
+
 }

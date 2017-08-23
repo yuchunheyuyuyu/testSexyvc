@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.mvp.Presenter;
 import com.jess.arms.utils.DataHelper;
@@ -23,6 +25,8 @@ import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.mvp.test.progress.LoadingDialog;
 import com.qtin.sexyvc.ui.bean.DialogType;
+import com.qtin.sexyvc.utils.ConstantUtil;
+import com.qtin.sexyvc.utils.NameLengthFilter;
 import com.umeng.message.PushAgent;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -37,6 +41,8 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     private Dialog inputDialog;
     private Dialog selectPhotoDialog;
     private Dialog oneButtonDialog;
+
+    private Dialog shareDialog;
 
     @Override
     protected void ComponentInject() {
@@ -183,6 +189,66 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         twoButtondialog.show();
     }
 
+    /**
+     * 分享的dialog
+     */
+    public static interface onShareClick{
+        void onClickShare(int platForm);
+    }
+
+    protected void showShareDialog(final onShareClick listerner) {
+
+        View view = View.inflate(this, R.layout.share_dialog, null);
+        view.findViewById(R.id.wechatContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onClickShare(ConstantUtil.SHARE_WECHAT);
+            }
+        });
+        view.findViewById(R.id.wxCircleContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onClickShare(ConstantUtil.SHARE_WX_CIRCLE);
+            }
+        });
+        view.findViewById(R.id.qqContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onClickShare(ConstantUtil.SHARE_QQ);
+            }
+        });
+        view.findViewById(R.id.sinaContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.onClickShare(ConstantUtil.SHARE_SINA);
+            }
+        });
+        view.findViewById(R.id.cancleShare).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissShareDialog();
+            }
+        });
+
+        shareDialog = new Dialog(this);
+        shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        shareDialog.setContentView(view);
+        Window regionWindow = shareDialog.getWindow();
+        regionWindow.setGravity(Gravity.BOTTOM);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.view_animation
+        );
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        shareDialog.setCanceledOnTouchOutside(true);
+        shareDialog.show();
+    }
+
+    protected void dismissShareDialog(){
+        if(shareDialog!=null&&shareDialog.isShowing()){
+            shareDialog.dismiss();
+        }
+    }
+
     protected void dismissTwoButtonDialog(){
         if(twoButtondialog!=null&&twoButtondialog.isShowing()){
             twoButtondialog.dismiss();
@@ -260,6 +326,10 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
         Button btnRight= (Button) view.findViewById(R.id.btnRight);
         final EditText etContent= (EditText) view.findViewById(R.id.etContent);
+
+        //etContent.setHint(getString(R.string.char_count_limit));
+        InputFilter[] filters = { new NameLengthFilter(16) };
+        etContent.setFilters(filters);
 
         tvTitle.setText(title);
         btnLeft.setText(warn);
@@ -415,15 +485,15 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
     }
 
     private Dialog dialog;
-    protected void showHintDialog(final DialogType dialogType,final ComfirmListerner comfirmListerner){
+    protected void showHintDialog(final String phone,final DialogType dialogType,final ComfirmListerner comfirmListerner){
 
         int neverShow=-1;
         if(dialogType==DialogType.TYPE_IDENTITY){
-            neverShow= DataHelper.getIntergerSF(this,"never_show_identity");
+            neverShow= DataHelper.getIntergerSF(this,phone+"never_show_identity");
         }else if(dialogType==DialogType.TYPE_PROJECT){
-            neverShow= DataHelper.getIntergerSF(this,"never_show_project");
+            neverShow= DataHelper.getIntergerSF(this,phone+"never_show_project");
         }else if(dialogType==DialogType.TYPE_COMMENT){
-            neverShow= DataHelper.getIntergerSF(this,"never_show_comment");
+            neverShow= DataHelper.getIntergerSF(this,phone+"never_show_comment");
         }
 
         if(neverShow==1){
@@ -442,11 +512,11 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
             public void onClick(View v) {
                 dismissHintDialog();
                 if(dialogType==DialogType.TYPE_IDENTITY){
-                    DataHelper.SetIntergerSF(MyBaseActivity.this,"never_show_identity",1);
+                    DataHelper.SetIntergerSF(MyBaseActivity.this,phone+"never_show_identity",1);
                 }else if(dialogType==DialogType.TYPE_PROJECT){
-                    DataHelper.SetIntergerSF(MyBaseActivity.this,"never_show_project",1);
+                    DataHelper.SetIntergerSF(MyBaseActivity.this,phone+"never_show_project",1);
                 }else if(dialogType==DialogType.TYPE_COMMENT){
-                    DataHelper.SetIntergerSF(MyBaseActivity.this,"never_show_comment",1);
+                    DataHelper.SetIntergerSF(MyBaseActivity.this,phone+"never_show_comment",1);
                 }
             }
         });

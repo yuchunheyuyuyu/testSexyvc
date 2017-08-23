@@ -72,7 +72,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }else{
                 holder.ivMsg.setImageResource(R.drawable.icon_msg_follow);
             }
-            holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
+            holder.tvTime.setText(DateUtil.getDateExpression3(bean.getCreate_time()));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

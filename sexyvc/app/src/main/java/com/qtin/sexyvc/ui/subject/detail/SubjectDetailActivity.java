@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -28,6 +29,7 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
@@ -79,6 +81,8 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     private final static long DEFALUT_REPLY_ID = 0;
 
+    private int page_size=15;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerSubjectDetailComponent.builder().appComponent(appComponent).subjectDetailModule(new SubjectDetailModule(this)).build().inject(this);
@@ -103,7 +107,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(subject_id, DEFALUT_REPLY_ID);
+                mPresenter.query(subject_id, DEFALUT_REPLY_ID,page_size);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -152,7 +156,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         recyclerView.setAdapter(mAdapter);
         initPaginate();
 
-        mPresenter.query(subject_id, DEFALUT_REPLY_ID);
+        mPresenter.query(subject_id, DEFALUT_REPLY_ID,page_size);
     }
 
     private void initPaginate() {
@@ -160,7 +164,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.query(subject_id, reply_id);
+                    mPresenter.query(subject_id, reply_id,page_size);
                 }
 
                 @Override
@@ -221,7 +225,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 break;
             case R.id.ivShare:
                 if(mDetailBean!=null){
-                    UMWeb web = new UMWeb(Api.SHARE_SUBJECT+mDetailBean.getSubject_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_SUBJECT+mDetailBean.getSubject_id());
                     web.setTitle(mDetailBean.getTitle());//标题
                     if(StringUtil.isBlank(mDetailBean.getSummary())){
                         web.setDescription("点此查看");
@@ -230,8 +234,40 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                     }
 
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(mDetailBean.getImg_url())));  //缩略图
+                    showShareDialog(new onShareClick() {
+                        @Override
+                        public void onClickShare(int platForm) {
 
-                    new ShareAction(this)
+                            dismissShareDialog();
+                            switch(platForm){
+                                case ConstantUtil.SHARE_WECHAT:
+                                    new ShareAction(SubjectDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_WX_CIRCLE:
+                                    new ShareAction(SubjectDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_QQ:
+                                    new ShareAction(SubjectDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.QQ)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_SINA:
+                                    new ShareAction(SubjectDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.SINA)
+                                            .setCallback(shareListener).share();
+                                    break;
+                            }
+                        }
+                    });
+                    /**new ShareAction(this)
                             .withMedia(web)
                             .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
                             .setCallback(new UMShareListener() {
@@ -255,7 +291,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
                                 }
                             })
-                            .open();
+                            .open();*/
                 }
                 break;
             case R.id.actionContainer:
@@ -292,7 +328,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             }
         }
 
-        if (data.size() - 1 < detailBean.getReplies().getTotal()) {
+        if (detailBean.getReplies().getTotal()>page_size ) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;
@@ -448,4 +484,23 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                     }
                 });
     }
+
+    private UMShareListener shareListener=new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+
+        }
+    };
 }

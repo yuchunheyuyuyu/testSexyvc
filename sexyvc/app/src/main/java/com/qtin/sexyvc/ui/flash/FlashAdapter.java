@@ -74,12 +74,12 @@ public class FlashAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         holder.tvTime.setText(DateUtil.getTime(entity.getCreate_time()));
 
-        String currentDate=DateUtil.getDate(entity.getCreate_time());
+        String currentDate=DateUtil.getDateExpression(entity.getCreate_time());
         if(position==0){
             holder.tvDate.setVisibility(View.VISIBLE);
             holder.tvDate.setText(currentDate);
         }else{
-            String lastDate=DateUtil.getDate(data.get(position-1).getCreate_time());
+            String lastDate=DateUtil.getDateExpression(data.get(position-1).getCreate_time());
             if(currentDate.equals(lastDate)){
                 holder.tvDate.setVisibility(View.GONE);
             }else{

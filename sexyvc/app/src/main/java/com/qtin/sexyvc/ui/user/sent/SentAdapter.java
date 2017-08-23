@@ -18,6 +18,8 @@ import com.qtin.sexyvc.ui.user.sent.bean.OnCommentClickListener;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +37,8 @@ public class SentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private OnItemClickListener onItemClickListener;
     private OnCommentClickListener onCommentClickListener;
 
+    private int u_auth_type;
+
     public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {
         this.onCommentClickListener = onCommentClickListener;
     }
@@ -43,9 +47,10 @@ public class SentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public SentAdapter(Context context, ArrayList<SentBean> data) {
+    public SentAdapter(Context context, ArrayList<SentBean> data,int u_auth_type) {
         this.context = context;
         this.data = data;
+        this.u_auth_type=u_auth_type;
         //可以在任何可以拿到Application的地方,拿到AppComponent,从而得到用Dagger管理的单例对象
         mApplication = (CustomApplication) context.getApplicationContext();
         mImageLoader = mApplication.getAppComponent().imageLoader();
@@ -63,8 +68,14 @@ public class SentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         SentBean bean=data.get(position);
 
         holder.tvName.setText(StringUtil.formatString(bean.getInvestor_name()));
-        holder.tvTitle.setText(StringUtil.formatString(bean.getFund_name()));
+        holder.tvTitle.setText(StringUtil.formatAtString(bean.getFund_name()));
         holder.ratingScore.setRating(bean.getScore());
+
+        if(u_auth_type== ConstantUtil.AUTH_TYPE_FOUNDER||u_auth_type== ConstantUtil.AUTH_TYPE_FA){
+            holder.roadContainer.setVisibility(View.VISIBLE);
+        }else{
+            holder.roadContainer.setVisibility(View.GONE);
+        }
 
         if(bean.getHas_roadshow()==0){
             holder.roadContainer.setSelected(true);

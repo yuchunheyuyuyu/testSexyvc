@@ -46,7 +46,7 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.startLoad("验证中");
+                        mRootView.startLoad("验证中...");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,6 +101,8 @@ public class CreatePresent extends BasePresenter<CreateContract.Model,CreateCont
                                 entity.setU_title(userEntityBaseEntity.getItems().getU_title());
                                 entity.setU_auth_state(userEntityBaseEntity.getItems().getU_auth_state());
                                 entity.setU_auth_type(userEntityBaseEntity.getItems().getU_auth_type());
+                                entity.setHas_comment(userEntityBaseEntity.getItems().getHas_comment());
+                                entity.setHas_roadshow(userEntityBaseEntity.getItems().getHas_roadshow());
 
                                 mModel.saveUsrInfo(entity);
 

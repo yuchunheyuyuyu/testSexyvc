@@ -47,6 +47,8 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
     private CommentAdapter mAdapter;
     private ArrayList<CommentBean> data=new ArrayList<>();
 
+    private int page_size=15;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMoreCommentComponent.builder().appComponent(appComponent).moreCommentModule(new MoreCommentModule(this)).build().inject(this);
@@ -88,9 +90,9 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
 
     private void query(){
         if (type == ConstantUtil.TYPE_FUND) {
-            mPresenter.queryFundComment(contentId,comment_id,auth_state);
+            mPresenter.queryFundComment(contentId,comment_id,page_size,auth_state);
         } else if (type == ConstantUtil.TYPE_INVESTOR) {
-            mPresenter.queryInvestorComment(contentId,comment_id,auth_state);
+            mPresenter.queryInvestorComment(contentId,comment_id,page_size,auth_state);
         }
     }
 
@@ -161,7 +163,7 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
             if (bean.getComments().getList()!=null) {
                 data.addAll(bean.getComments().getList());
             }
-            if (bean.getComments().getTotal() > data.size()) {
+            if (bean.getComments().getTotal() > page_size) {
                 hasLoadedAllItems = false;
             } else {
                 hasLoadedAllItems = true;

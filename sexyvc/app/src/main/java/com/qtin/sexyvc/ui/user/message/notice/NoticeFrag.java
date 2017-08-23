@@ -143,7 +143,7 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
         if(data.size()>0){
             id=data.get(data.size()-1).getId();
         }
-        if(data.size()<items.getTotal()){
+        if(page_size<items.getTotal()){
             hasLoadedAllItems=false;
         }else{
             hasLoadedAllItems=true;

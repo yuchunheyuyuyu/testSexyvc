@@ -191,7 +191,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         if (bean.getList() != null) {
             data.addAll(bean.getList());
         }
-        if (bean.getTotal() > data.size()) {
+        if (bean.getTotal() > page_size) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;

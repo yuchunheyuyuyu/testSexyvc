@@ -58,6 +58,13 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder,final int position) {
         ViewHolder holder= (ViewHolder) viewHolder;
         RecommendBean bean=data.get(position);
+
+        if(position==data.size()-1){
+            holder.bottomLine.setVisibility(View.VISIBLE);
+        }else{
+            holder.bottomLine.setVisibility(View.GONE);
+        }
+
         if(bean.isSelected()){
             holder.ivChoose.setSelected(true);
         }else{
@@ -68,8 +75,6 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         StringBuilder sb=new StringBuilder();
         sb.append("@");
         sb.append(StringUtil.formatString(bean.getFund_name()));
-        sb.append("  ");
-        sb.append(StringUtil.formatString(bean.getTitle()));
 
         holder.tvPosition.setText(sb.toString());
 
@@ -108,7 +113,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else {
             holder.ivAnthStatus.setVisibility(View.INVISIBLE);
         }
-        holder.ivChoose.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (itemClickListener != null) {
@@ -140,6 +145,8 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView tvScore;
         @BindView(R.id.flowLayout)
         TagFlowLayout flowLayout;
+        @BindView(R.id.bottomLine)
+        View bottomLine;
 
         ViewHolder(View view) {
             super(view);

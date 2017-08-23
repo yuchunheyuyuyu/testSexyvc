@@ -133,6 +133,17 @@
                     android:textColor="@color/black90"
                     android:textSize="14sp" />
 
+                <TextView
+                    android:id="@+id/tvProjectStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/not_fill"
+                    android:visibility="visible"
+                    android:layout_marginRight="4dp"
+                    android:textColor="@color/black50"
+                    android:textSize="14sp" />
+
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"

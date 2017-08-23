@@ -58,6 +58,7 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
     private ArrayList<SentBean> data=new ArrayList<>();
 
     private boolean isNeedRefresh=false;
+    private int u_auth_type;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -111,6 +112,10 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
     protected void initData() {
         tvTitle.setText(getResources().getString(R.string.my_sent));
 
+        if(mPresenter.getUserInfo()!=null){
+            u_auth_type=mPresenter.getUserInfo().getU_auth_type();
+        }
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -121,7 +126,7 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        adapter=new SentAdapter(this,data);
+        adapter=new SentAdapter(this,data,u_auth_type);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
@@ -278,7 +283,7 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
         if (listBean.getList() != null) {
             data.addAll(listBean.getList());
         }
-        if (listBean.getTotal() > data.size()) {
+        if (listBean.getTotal() > page_size) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;

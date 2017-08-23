@@ -137,6 +137,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
         }else{
             projectBean=new ProjectBean();
             projectBean.setLast_currency(1);
+            projectBean.setLast_stage_id(ConstantUtil.SPECIAL_ID);
             tvTitle.setText(getResources().getString(R.string.title_add_project));
         }
         setValue();
@@ -211,7 +212,7 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                     return;
                 }
 
-                if(projectBean.getLast_stage_id()==0){
+                if(projectBean.getLast_stage_id()==ConstantUtil.SPECIAL_ID){
                     showMessage("请选择轮次标签");
                     return;
                 }
@@ -478,14 +479,14 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             @Override
             public void onClick(View v) {
                 dismissStageDialog();
-                long stage_id=0;
+                long stage_id=ConstantUtil.SPECIAL_ID;
                 for(FilterEntity entity:stageData){
                     if(entity.isSelected()){
                         stage_id=entity.getType_id();
                         break;
                     }
                 }
-                if(stage_id==0){
+                if(stage_id==ConstantUtil.SPECIAL_ID){
                     showMessage("请选择轮次标签");
                     return;
                 }
@@ -653,7 +654,9 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             StringBuilder sb=new StringBuilder();
             sb.append(stage);
             sb.append("  ");
-            sb.append(money);
+            String moneyValue=money/10000f+"";
+            sb.append(moneyValue);
+            sb.append("万");
             if(projectBean.getLast_currency()==0){
                 sb.append(getResources().getString(R.string.dollar));
             }else{
@@ -690,6 +693,12 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                 break;
             case TYPE_STAGE:
                 stageData.clear();
+
+                FilterEntity entity=new FilterEntity();
+                entity.setType_id(0);
+                entity.setType_name("未融资");
+
+                stageData.add(entity);
                 stageData.addAll(list);
 
                 setStageText();

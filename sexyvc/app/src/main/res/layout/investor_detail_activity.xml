@@ -21,9 +21,9 @@
 
             <ImageView
                 android:id="@+id/ivConcern"
-                android:layout_width="10dp"
-                android:layout_height="12dp"
-                android:layout_marginRight="7dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="4dp"
                 android:src="@drawable/icon_bottom_menu_copy_2" />
 
             <TextView
@@ -51,11 +51,11 @@
 
             <ImageView
                 android:id="@+id/ivComent"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:visibility="gone"
-                android:layout_marginRight="7dp"
-                android:src="@drawable/plus_pink" />
+                android:layout_marginRight="4dp"
+                android:src="@drawable/icon_bottom_comment" />
 
             <TextView
                 android:id="@+id/tvComment"

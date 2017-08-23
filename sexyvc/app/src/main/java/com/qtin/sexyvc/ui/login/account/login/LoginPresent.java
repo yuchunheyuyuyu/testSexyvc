@@ -71,6 +71,8 @@ public class LoginPresent extends BasePresenter<LoginContract.Model, LoginContra
                                     entity.setU_title(userEntityBaseEntity.getItems().getU_title());
                                     entity.setU_auth_state(userEntityBaseEntity.getItems().getU_auth_state());
                                     entity.setU_auth_type(userEntityBaseEntity.getItems().getU_auth_type());
+                                    entity.setHas_comment(userEntityBaseEntity.getItems().getHas_comment());
+                                    entity.setHas_roadshow(userEntityBaseEntity.getItems().getHas_roadshow());
 
                                     mModel.saveUsrInfo(entity);
                                     mRootView.loginSuccess();

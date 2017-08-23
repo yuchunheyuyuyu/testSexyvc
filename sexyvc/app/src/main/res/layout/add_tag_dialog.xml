@@ -55,7 +55,6 @@
             android:focusableInTouchMode="true"
             android:gravity="top"
             android:singleLine="true"
-            android:maxLength="8"
             android:maxLines="1"
             android:padding="3dp"
             android:textColor="@color/black"

@@ -60,6 +60,8 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     ImageView ivMessage;
     @BindView(R.id.ivRight)
     ImageView ivRight;
+    @BindView(R.id.tvProjectStatus)
+    TextView tvProjectStatus;
 
     private UserInfoEntity userInfo;
 
@@ -199,6 +201,12 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
             tvPosition.setText(getResources().getString(R.string.position_defalut));
         } else {
             tvPosition.setText(entity.getU_title());
+        }
+
+        if(entity.getHas_project()==0){
+            tvProjectStatus.setText(getString(R.string.not_fill));
+        }else{
+            tvProjectStatus.setText("");
         }
 
         //头像

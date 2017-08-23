@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -19,6 +21,7 @@ import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.web.WebActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -140,6 +143,7 @@ public class SetPasswordActivity extends MyBaseActivity<SetPasswordPresent> impl
 
     @Override
     public void bindSuccess() {
+        DataHelper.SetIntergerSF(this,phoneStr+"register",1);
         gotoActivity(MainActivity.class);
     }
 }

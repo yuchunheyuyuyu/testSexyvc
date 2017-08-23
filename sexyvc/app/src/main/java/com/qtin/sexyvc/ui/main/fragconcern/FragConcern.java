@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -16,12 +17,15 @@ import com.qtin.sexyvc.ui.bean.ConcernGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.bean.OnLongItemClickListener;
+import com.qtin.sexyvc.ui.create.investor.CreateInvestorActivity;
 import com.qtin.sexyvc.ui.follow.list.ConcernListActivity;
 import com.qtin.sexyvc.ui.follow.search.ConcernSearchActivity;
 import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernGroupAdapter;
 import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernModule;
 import com.qtin.sexyvc.ui.main.fragconcern.di.DaggerConcernComponent;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -186,36 +190,56 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivAdd:
-                showInput(getResources().getString(R.string.add_group),
-                        getResources().getString(R.string.input_new_group_name),
-                        getResources().getString(R.string.cancle),
-                        getResources().getString(R.string.good),
-                        new InputListerner() {
+                showBottomDialog(getString(R.string.input_investor_by_hand), getString(R.string.add_group)
+                        , getString(R.string.cancle), new SelecteListerner() {
                             @Override
-                            public void onComfirm(String content) {
-                                if("全部关注".equals(content)){
-                                    showMessage("该组已存在");
-                                    return;
-                                }
-                                if(data!=null){
-                                    for(ConcernGroupEntity entity:data){
-                                        if(content.trim().equals(entity.getGroup_name())){
-                                            showMessage("该组已存在");
-                                            return;
+                            public void onFirstClick() {
+                                dismissBottomDialog();
+                                gotoActivity(CreateInvestorActivity.class);
+                            }
+
+                            @Override
+                            public void onSecondClick() {
+                                dismissBottomDialog();
+                                showInput(getResources().getString(R.string.add_group),
+                                        getResources().getString(R.string.input_new_group_name),
+                                        getResources().getString(R.string.cancle),
+                                        getResources().getString(R.string.good),
+                                        new InputListerner() {
+                                            @Override
+                                            public void onComfirm(String content) {
+                                                if("全部关注".equals(content)){
+                                                    showMessage("该组已存在");
+                                                    return;
+                                                }
+                                                if(data!=null){
+                                                    for(ConcernGroupEntity entity:data){
+                                                        if(content.trim().equals(entity.getGroup_name())){
+                                                            showMessage("该组已存在");
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+
+                                                dismissInputDialog();
+                                                mPresenter.add(content);
+                                            }
+
+                                            @Override
+                                            public void cancle() {
+                                                dismissInputDialog();
+                                            }
                                         }
-                                    }
-                                }
-
-                                dismissInputDialog();
-                                mPresenter.add(content);
+                                );
                             }
 
                             @Override
-                            public void cancle() {
-                                dismissInputDialog();
+                            public void onCancle() {
+                                dismissBottomDialog();
                             }
-                        }
-                );
+                        });
+
+
                 break;
             case R.id.searchContainer:
                 gotoActivity(ConcernSearchActivity.class);

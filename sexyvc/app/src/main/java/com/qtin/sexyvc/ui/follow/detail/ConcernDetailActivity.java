@@ -10,17 +10,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
 import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
+import com.qtin.sexyvc.common.AddProjectBaseActivity;
 import com.qtin.sexyvc.common.AppComponent;
-import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.ContactBean;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.detail.di.ConcernDetailModule;
@@ -34,7 +35,6 @@ import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
-import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
@@ -42,15 +42,12 @@ import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -61,7 +58,7 @@ import rx.functions.Action1;
 /**
  * Created by ls on 17/4/26.
  */
-public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> implements ConcernDetailContract.View {
+public class ConcernDetailActivity extends AddProjectBaseActivity<ConcernDetailPresent> implements ConcernDetailContract.View {
 
     @BindView(R.id.tvTitle)
     TextView tvTitle;
@@ -201,6 +198,11 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
         mImageLoader = customApplication.getAppComponent().imageLoader();
 
         mPresenter.query(contact_id);
+
+        //获取投资行业
+        mPresenter.getType("common_domain", TYPE_DOMAIN);
+        //获取投资阶段
+        mPresenter.getType("common_stage", TYPE_STAGE);
     }
 
     @Override
@@ -438,96 +440,7 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
 
                 break;
             case R.id.commentContainer:
-
-                if (mPresenter.getUserInfo() != null) {
-                    if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
-                        if(mPresenter.getUserInfo().getHas_project()==0){
-                            showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
-                                    getResources().getString(R.string.cancle),
-                                    getResources().getString(R.string.comfirm),
-                                    new TwoButtonListerner() {
-                                        @Override
-                                        public void leftClick() {
-                                            dismissTwoButtonDialog();
-                                        }
-
-                                        @Override
-                                        public void rightClick() {
-                                            dismissTwoButtonDialog();
-                                            Bundle bundle=new Bundle();
-                                            bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
-                                            gotoActivity(AddProjectActivity.class,bundle);
-                                        }
-                                    });
-                            return;
-                        }
-
-
-                        if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
-                            showBottomOneDialog(getResources().getString(R.string.plus_comment),
-                                    new OneButtonListerner() {
-                                        @Override
-                                        public void onOptionSelected() {
-                                            dismissBottomOneButtonDialog();
-                                            gotoComment();
-                                        }
-
-                                        @Override
-                                        public void onCancle() {
-                                            dismissBottomOneButtonDialog();
-                                        }
-                                    });
-                        } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
-                            gotoRoad();
-                        } else if (contactBean.getHas_comment() == 0 && contactBean.getHas_roadshow() == 1) {
-                            showBottomOneDialog(getResources().getString(R.string.comment),
-                                    new OneButtonListerner() {
-                                        @Override
-                                        public void onOptionSelected() {
-                                            dismissBottomOneButtonDialog();
-                                            if(contactBean.getHas_score()==0){
-                                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                                            }else{
-                                                gotoComment();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancle() {
-                                            dismissBottomOneButtonDialog();
-                                        }
-                                    });
-                        } else {
-                            Bundle bundle=new Bundle();
-                            bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
-                            gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
-                        }
-
-                    } else {
-                        if (contactBean.getHas_comment() == 0) {
-                            if(contactBean.getHas_score()==0){
-                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                            }else{
-                                gotoComment();
-                            }
-                        } else {
-                            showBottomOneDialog(getResources().getString(R.string.plus_comment),
-                                    new OneButtonListerner() {
-                                        @Override
-                                        public void onOptionSelected() {
-                                            dismissBottomOneButtonDialog();
-                                            gotoComment();
-                                        }
-
-                                        @Override
-                                        public void onCancle() {
-                                            dismissBottomOneButtonDialog();
-                                        }
-                                    });
-                        }
-                    }
-                }
-
+                doCommentLogic();
                 break;
             case R.id.telephoneContainer:
                 Bundle mobile = new Bundle();
@@ -559,6 +472,105 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                 remark.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_CONCERN_REMARK);
                 gotoActivityForResult(ModifyActivity.class, remark, ModifyActivity.MODIFY_CONCERN_REMARK);
                 break;
+        }
+    }
+
+    private void doCommentLogic(){
+        if (mPresenter.getUserInfo() != null) {
+            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                    ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
+                if(mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER){
+                    if(mPresenter.getUserInfo().getHas_project()==0){
+                        /**showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
+                         getResources().getString(R.string.cancle),
+                         getResources().getString(R.string.comfirm),
+                         new TwoButtonListerner() {
+                        @Override
+                        public void leftClick() {
+                        dismissTwoButtonDialog();
+                        }
+
+                        @Override
+                        public void rightClick() {
+                        dismissTwoButtonDialog();
+                        Bundle bundle=new Bundle();
+                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                        gotoActivity(AddProjectActivity.class,bundle);
+                        }
+                        });*/
+                        showProjectDialog(new OnProjectComfirmListener() {
+                            @Override
+                            public void onComfirm(ProjectBean projectBean) {
+                                mPresenter.createProject(projectBean);
+                            }
+                        });
+                        return;
+                    }
+                }
+
+                if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
+                    showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                            new OneButtonListerner() {
+                                @Override
+                                public void onOptionSelected() {
+                                    dismissBottomOneButtonDialog();
+                                    gotoComment();
+                                }
+
+                                @Override
+                                public void onCancle() {
+                                    dismissBottomOneButtonDialog();
+                                }
+                            });
+                } else if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 0) {
+                    gotoRoad();
+                } else if (contactBean.getHas_comment() == 0 && contactBean.getHas_roadshow() == 1) {
+                    showBottomOneDialog(getResources().getString(R.string.comment),
+                            new OneButtonListerner() {
+                                @Override
+                                public void onOptionSelected() {
+                                    dismissBottomOneButtonDialog();
+                                    if(contactBean.getHas_score()==0){
+                                        gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
+                                    }else{
+                                        gotoComment();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancle() {
+                                    dismissBottomOneButtonDialog();
+                                }
+                            });
+                } else {
+                    Bundle bundle=new Bundle();
+                    bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
+                    gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
+                }
+
+            } else {
+                if (contactBean.getHas_comment() == 0) {
+                    if(contactBean.getHas_score()==0){
+                        gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
+                    }else{
+                        gotoComment();
+                    }
+                } else {
+                    showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                            new OneButtonListerner() {
+                                @Override
+                                public void onOptionSelected() {
+                                    dismissBottomOneButtonDialog();
+                                    gotoComment();
+                                }
+
+                                @Override
+                                public void onCancle() {
+                                    dismissBottomOneButtonDialog();
+                                }
+                            });
+                }
+            }
         }
     }
 
@@ -688,6 +700,34 @@ public class ConcernDetailActivity extends MyBaseActivity<ConcernDetailPresent> 
                         intent.putExtra(ConstantUtil.INTENT_ID, investor_id);
                         setResult(0, intent);
                         finish();
+                    }
+                });
+    }
+
+    @Override
+    public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
+        switch (type) {
+            case TYPE_DOMAIN:
+                domainData.clear();
+                domainData.addAll(list);
+                break;
+            case TYPE_STAGE:
+                initStageData(list);
+                break;
+        }
+    }
+
+    @Override
+    public void onCreateSuccess(ProjectBean bean) {
+        dismissProjectDialog();
+
+        Observable.just(1)
+                .delay(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        doCommentLogic();
                     }
                 });
     }

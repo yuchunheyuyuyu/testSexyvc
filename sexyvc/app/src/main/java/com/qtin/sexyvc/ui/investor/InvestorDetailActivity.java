@@ -18,15 +18,17 @@ import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
+import com.qtin.sexyvc.common.AddProjectBaseActivity;
 import com.qtin.sexyvc.common.AppComponent;
-import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.DialogType;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.LastBrowerBean;
 import com.qtin.sexyvc.ui.bean.OnClickFundListener;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.choose.ChooseActivity;
 import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
@@ -40,7 +42,6 @@ import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
-import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.umeng.socialize.ShareAction;
@@ -55,6 +56,7 @@ import org.simple.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -65,7 +67,7 @@ import rx.functions.Action1;
 /**
  * Created by ls on 17/4/26.
  */
-public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent> implements InvestorDetailContract.View {
+public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetailPresent> implements InvestorDetailContract.View {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -104,6 +106,9 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
     private boolean isNeedRefresh=false;
     private boolean isFirstLoadData=true;//是不是本页面第一次加载数据
+
+    private int page_size=3;
+    private int auth_state=1;
 
     @Nullable
     @Override
@@ -185,11 +190,11 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+                mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID,page_size,auth_state);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new InvestorDetailAdapter(this, data);
+        mAdapter = new InvestorDetailAdapter(this, data,auth_state);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnClickFundListener(new OnClickFundListener() {
             @Override
@@ -241,14 +246,18 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 }
             }
         });
-        mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+        mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID,page_size,auth_state);
+        //获取投资行业
+        mPresenter.getType("common_domain", TYPE_DOMAIN);
+        //获取投资阶段
+        mPresenter.getType("common_stage", TYPE_STAGE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if(isNeedRefresh){
-            mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID);
+            mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID,page_size,auth_state);
             isNeedRefresh=false;
         }
     }
@@ -292,13 +301,13 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         if(isFirstLoadData){
             UserInfoEntity entity=mPresenter.getUserInfo();
             if(entity!=null){
-                if(entity.getHas_project()==1){
+                if(entity.getHas_project()==1&&entity.getHas_comment()==0&&entity.getHas_roadshow()==0){
                     int currentScore= DataHelper.getIntergerSF(this,"read_score");
                     currentScore+=20;
                     if(currentScore>=100){
                         //清空分数
                         DataHelper.SetIntergerSF(this,"read_score",0);
-                        showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                        showHintDialog(entity.getU_phone(),DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
                                 Bundle bundle=new Bundle();
@@ -376,9 +385,37 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
         setConcernStatus();
     }
 
+    @Override
+    public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
+        switch (type) {
+            case TYPE_DOMAIN:
+                domainData.clear();
+                domainData.addAll(list);
+                break;
+            case TYPE_STAGE:
+                initStageData(list);
+                break;
+        }
+    }
+
+    @Override
+    public void onCreateSuccess(ProjectBean bean) {
+        dismissProjectDialog();
+        Observable.just(1)
+                .delay(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        doCommentLogic();
+                    }
+                });
+
+    }
+
     private void setValue() {
         if (investorBean != null) {
-            tvTitle.setText(StringUtil.formatString(investorBean.getInvestor_name()));
+            tvTitle.setText(StringUtil.formatString(investorBean.getInvestor_name())+" ("+investorBean.getScore()+")");
             setConcernStatus();
             setCommentStatus();
         }
@@ -482,108 +519,54 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 if(investorBean==null){
                     return;
                 }
-                if (mPresenter.getUserInfo() != null) {
-                    if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
-                        if(mPresenter.getUserInfo().getHas_project()==0){
-                            showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
-                                    getResources().getString(R.string.cancle),
-                                    getResources().getString(R.string.comfirm),
-                                    new TwoButtonListerner() {
-                                        @Override
-                                        public void leftClick() {
-                                            dismissTwoButtonDialog();
-                                        }
 
-                                        @Override
-                                        public void rightClick() {
-                                            dismissTwoButtonDialog();
-                                            Bundle bundle=new Bundle();
-                                            bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
-                                            gotoActivity(AddProjectActivity.class,bundle);
-                                        }
-                                    });
-                            return;
-                        }
-
-
-                        if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
-                            showBottomOneDialog(getResources().getString(R.string.plus_comment),
-                                    new OneButtonListerner() {
-                                        @Override
-                                        public void onOptionSelected() {
-                                            dismissBottomOneButtonDialog();
-                                            gotoComment();
-                                        }
-
-                                        @Override
-                                        public void onCancle() {
-                                            dismissBottomOneButtonDialog();
-                                        }
-                                    });
-                        } else if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 0) {
-                            gotoRoad();
-                        } else if (investorBean.getHas_comment() == 0 && investorBean.getHas_roadshow() == 1) {
-                            showBottomOneDialog(getResources().getString(R.string.comment),
-                                    new OneButtonListerner() {
-                                        @Override
-                                        public void onOptionSelected() {
-                                            dismissBottomOneButtonDialog();
-                                            if(investorBean.getHas_score()==0){
-                                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                                            }else{
-                                                gotoComment();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancle() {
-                                            dismissBottomOneButtonDialog();
-                                        }
-                                    });
-                        } else {
-                            Bundle bundle=new Bundle();
-                            bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
-                            gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
-                        }
-
-                    } else {
-                        if (investorBean.getHas_comment() == 0) {
-                            if(investorBean.getHas_score()==0){
-                                gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                            }else{
-                                gotoComment();
-                            }
-                        } else {
-                            showBottomOneDialog(getResources().getString(R.string.plus_comment),
-                                    new OneButtonListerner() {
-                                        @Override
-                                        public void onOptionSelected() {
-                                            dismissBottomOneButtonDialog();
-                                            gotoComment();
-                                        }
-
-                                        @Override
-                                        public void onCancle() {
-                                            dismissBottomOneButtonDialog();
-                                        }
-                                    });
-                        }
-                    }
-                }
-
-
+                doCommentLogic();
                 break;
             case R.id.ivLeft:
                 finish();
                 break;
             case R.id.ivShare:
                 if(investorBean!=null){
-                    UMWeb web = new UMWeb(Api.SHARE_INVESTOR+investorBean.getInvestor_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_INVESTOR+investorBean.getInvestor_id());
                     web.setTitle("【SexyVC】"+investorBean.getInvestor_name());//标题
                     web.setDescription("对于"+investorBean.getInvestor_name()+"，创业者们是这样评价的...");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(investorBean.getInvestor_avatar())));  //缩略图
 
-                    new ShareAction(this)
+                    showShareDialog(new onShareClick() {
+                        @Override
+                        public void onClickShare(int platForm) {
+
+                            dismissShareDialog();
+                            switch(platForm){
+                                case ConstantUtil.SHARE_WECHAT:
+                                    new ShareAction(InvestorDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_WX_CIRCLE:
+                                    new ShareAction(InvestorDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_QQ:
+                                    new ShareAction(InvestorDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.QQ)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_SINA:
+                                    new ShareAction(InvestorDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.SINA)
+                                            .setCallback(shareListener).share();
+                                    break;
+                            }
+                        }
+                    });
+
+                    /**new ShareAction(this)
                             .withMedia(web)
                             .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
                             .setCallback(new UMShareListener() {
@@ -607,7 +590,7 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
 
                                 }
                             })
-                            .open();
+                            .open();*/
                 }
 
 
@@ -615,6 +598,109 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 break;
         }
     }
+
+    private void doCommentLogic(){
+        if (mPresenter.getUserInfo() != null) {
+            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                    ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
+
+                if(mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER){
+                    if(mPresenter.getUserInfo().getHas_project()==0){
+                        /**showTwoButtonDialog(getResources().getString(R.string.please_complete_project),
+                         getResources().getString(R.string.cancle),
+                         getResources().getString(R.string.comfirm),
+                         new TwoButtonListerner() {
+                        @Override
+                        public void leftClick() {
+                        dismissTwoButtonDialog();
+                        }
+
+                        @Override
+                        public void rightClick() {
+                        dismissTwoButtonDialog();
+                        Bundle bundle=new Bundle();
+                        bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT,false);
+                        gotoActivity(AddProjectActivity.class,bundle);
+                        }
+                        });*/
+                        showProjectDialog(new OnProjectComfirmListener() {
+                            @Override
+                            public void onComfirm(ProjectBean projectBean) {
+                                mPresenter.createProject(projectBean);
+                            }
+                        });
+                        return;
+                    }
+                }
+
+                if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
+                    showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                            new OneButtonListerner() {
+                                @Override
+                                public void onOptionSelected() {
+                                    dismissBottomOneButtonDialog();
+                                    gotoComment();
+                                }
+
+                                @Override
+                                public void onCancle() {
+                                    dismissBottomOneButtonDialog();
+                                }
+                            });
+                } else if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 0) {
+                    gotoRoad();
+                } else if (investorBean.getHas_comment() == 0 && investorBean.getHas_roadshow() == 1) {
+                    showBottomOneDialog(getResources().getString(R.string.comment),
+                            new OneButtonListerner() {
+                                @Override
+                                public void onOptionSelected() {
+                                    dismissBottomOneButtonDialog();
+                                    if(investorBean.getHas_score()==0){
+                                        gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
+                                    }else{
+                                        gotoComment();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancle() {
+                                    dismissBottomOneButtonDialog();
+                                }
+                            });
+                } else {
+                    Bundle bundle=new Bundle();
+                    bundle.putInt(ChooseActivity.AUTH_TYPE,mPresenter.getUserInfo().getU_auth_type());
+                    gotoActivityFadeForResult(ChooseActivity.class,bundle,REQUEST_CODE_SELECTED_TYPE);
+                }
+
+            } else {
+
+
+                if (investorBean.getHas_comment() == 0) {
+                    if(investorBean.getHas_score()==0){
+                        gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
+                    }else{
+                        gotoComment();
+                    }
+                } else {
+                    showBottomOneDialog(getResources().getString(R.string.plus_comment),
+                            new OneButtonListerner() {
+                                @Override
+                                public void onOptionSelected() {
+                                    dismissBottomOneButtonDialog();
+                                    gotoComment();
+                                }
+
+                                @Override
+                                public void onCancle() {
+                                    dismissBottomOneButtonDialog();
+                                }
+                            });
+                }
+            }
+        }
+    }
+
     /**
      * 进入评分
      */
@@ -687,4 +773,23 @@ public class InvestorDetailActivity extends MyBaseActivity<InvestorDetailPresent
                 break;
         }
     }
+
+    private UMShareListener shareListener=new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+
+        }
+    };
 }

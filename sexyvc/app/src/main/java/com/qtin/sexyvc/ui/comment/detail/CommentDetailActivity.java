@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -91,6 +92,8 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     private final static long DEFALUT_REPLY_ID = 0;
 
+    private int page_size=15;
+
     private boolean isFirstLoadData = true;//是不是本页面第一次加载数据
 
     @Override
@@ -116,7 +119,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(comment_id, DEFALUT_REPLY_ID);
+                mPresenter.query(comment_id, DEFALUT_REPLY_ID,page_size);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -166,7 +169,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         });
         recyclerView.setAdapter(mAdapter);
         initPaginate();
-        mPresenter.query(comment_id, DEFALUT_REPLY_ID);
+        mPresenter.query(comment_id, DEFALUT_REPLY_ID,page_size);
     }
 
     private void initPaginate() {
@@ -174,7 +177,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.query(comment_id, reply_id);
+                    mPresenter.query(comment_id, reply_id,page_size);
                 }
 
                 @Override
@@ -235,12 +238,45 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                 break;
             case R.id.ivShare:
                 if(detailBean!=null){
-                    UMWeb web = new UMWeb(Api.SHARE_COMMENT+detailBean.getComment_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_COMMENT+detailBean.getComment_id());
                     web.setTitle(detailBean.getTitle());//标题
                     web.setDescription(detailBean.getInvestor_name()+"是被人这样评价的…");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(detailBean.getInvestor_avatar())));  //缩略图
 
-                    new ShareAction(this)
+                    showShareDialog(new onShareClick() {
+                        @Override
+                        public void onClickShare(int platForm) {
+
+                            dismissShareDialog();
+                            switch(platForm){
+                                case ConstantUtil.SHARE_WECHAT:
+                                    new ShareAction(CommentDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_WX_CIRCLE:
+                                    new ShareAction(CommentDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_QQ:
+                                    new ShareAction(CommentDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.QQ)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_SINA:
+                                    new ShareAction(CommentDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.SINA)
+                                            .setCallback(shareListener).share();
+                                    break;
+                            }
+                        }
+                    });
+                    /**new ShareAction(this)
                             .withMedia(web)
                             .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
                             .setCallback(new UMShareListener() {
@@ -264,7 +300,8 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
                                 }
                             })
-                            .open();
+                            .open();*/
+
                 }
                 break;
             case R.id.actionContainer:
@@ -429,13 +466,13 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         if (isFirstLoadData) {
             UserInfoEntity entity = mPresenter.getUserInfo();
             if (entity != null) {
-                if (entity.getHas_project() == 1) {
+                if (entity.getHas_project() == 1&&entity.getHas_comment()==0&&entity.getHas_roadshow()==0) {
                     int currentScore = DataHelper.getIntergerSF(this, "read_score");
                     currentScore += 10;
                     if (currentScore >= 100) {
                         //清空分数
                         DataHelper.SetIntergerSF(this, "read_score", 0);
-                        showHintDialog(DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                        showHintDialog(entity.getU_phone(),DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
                                 Bundle bundle = new Bundle();
@@ -477,7 +514,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             }
         }
 
-        if (data.size() - 1 < commentBean.getReplies().getTotal()) {
+        if (page_size < commentBean.getReplies().getTotal()) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;
@@ -505,4 +542,22 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             }
         });
     }
+    private UMShareListener shareListener=new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+
+        }
+    };
 }

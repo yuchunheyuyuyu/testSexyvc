@@ -260,9 +260,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 break;
             case R.id.positionContainer:
                 if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
-                    showMessage("您的身份已经认证，暂时无法修改");
+                    showMessage(getString(R.string.warn_auth_pass));
                 }else if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_COMMITING){
-                    showMessage("正在审核您提交的身份信息，暂时无法修改");
+                    showMessage(getString(R.string.warn_auth_commiting));
                 }else{
                     gotoSetPosition();
                 }
@@ -271,7 +271,11 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
             case R.id.identifyContainer:
 
                 if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
-                    showMessage("您的身份已经认证，暂时无法修改");
+                    showMessage(getString(R.string.warn_auth_pass));
+                    return;
+                }
+                if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_COMMITING){
+                    showMessage(getString(R.string.warn_auth_commiting));
                     return;
                 }
 
@@ -611,6 +615,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     @Override
     public void editAvatarSuccess(String avatar) {
+        userInfo.setU_avatar(avatar);
         //头像
         mImageLoader.loadImage(customApplication, GlideImageConfig
                 .builder()
@@ -624,6 +629,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     @Override
     public void editSexSuccess(int u_gender) {
+        userInfo.setU_gender(u_gender);
         if(u_gender==0){
             tvSex.setText(getResources().getString(R.string.sex_female));
         }else{

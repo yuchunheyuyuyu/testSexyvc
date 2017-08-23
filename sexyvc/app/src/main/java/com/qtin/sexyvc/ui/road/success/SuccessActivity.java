@@ -80,7 +80,11 @@ public class SuccessActivity extends MyBaseActivity<RoadSuccessPresent> implemen
         tvRight.setText(getResources().getString(R.string.complete));
 
         tvName.setText(String.format(getResources().getString(R.string.format_road_success),""+investorInfoBean.getInvestor_name()));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         UserInfoEntity userInfoEntity=mPresenter.getUserInfo();
         if(userInfoEntity!=null){
             if(userInfoEntity.getU_auth_state()== ConstantUtil.AUTH_STATE_UNPASS){

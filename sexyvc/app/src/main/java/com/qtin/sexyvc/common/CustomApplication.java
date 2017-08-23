@@ -67,7 +67,7 @@ public class CustomApplication extends BaseApplication {
     {
         PlatformConfig.setWeixin("wxc4550761c07117f4", "feba0baec085cfdfb69de6c21f4d40a9");
         PlatformConfig.setQQZone("1105726586", "yCie49iiNXUnjBAu");
-        PlatformConfig.setSinaWeibo("3351202988", "c9efb278c7e754735b8a26daaddf2b47", "http://sns.whalecloud.com");
+        PlatformConfig.setSinaWeibo("281237870", "c7e49def47db1d3a4783a2ffe256f86f", "http://sns.whalecloud.com");
     }
 
     /**
@@ -110,7 +110,7 @@ public class CustomApplication extends BaseApplication {
     }
 
     private void initDataBase() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "sexyvc16-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "sexyvc17-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }

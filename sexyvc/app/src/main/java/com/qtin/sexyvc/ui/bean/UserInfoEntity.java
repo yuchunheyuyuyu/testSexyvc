@@ -31,6 +31,9 @@ public class UserInfoEntity implements Parcelable {
     private int u_auth_state;
     private int u_auth_type;//0未填写，1投资人，2创始人，3FA
 
+    private int has_comment;
+    private int has_roadshow;
+
     public String getToken() {
         return token;
     }
@@ -151,6 +154,22 @@ public class UserInfoEntity implements Parcelable {
         this.u_auth_type = u_auth_type;
     }
 
+    public int getHas_comment() {
+        return has_comment;
+    }
+
+    public void setHas_comment(int has_comment) {
+        this.has_comment = has_comment;
+    }
+
+    public int getHas_roadshow() {
+        return has_roadshow;
+    }
+
+    public void setHas_roadshow(int has_roadshow) {
+        this.has_roadshow = has_roadshow;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -173,6 +192,8 @@ public class UserInfoEntity implements Parcelable {
         dest.writeString(this.u_title);
         dest.writeInt(this.u_auth_state);
         dest.writeInt(this.u_auth_type);
+        dest.writeInt(this.has_comment);
+        dest.writeInt(this.has_roadshow);
     }
 
     public UserInfoEntity() {
@@ -194,12 +215,14 @@ public class UserInfoEntity implements Parcelable {
         this.u_title = in.readString();
         this.u_auth_state = in.readInt();
         this.u_auth_type = in.readInt();
+        this.has_comment = in.readInt();
+        this.has_roadshow = in.readInt();
     }
 
-    @Generated(hash = 1654280294)
+    @Generated(hash = 1050843249)
     public UserInfoEntity(String token, int has_project, String business_card, String u_nickname, int u_gender, String u_avatar, String u_signature,
             String u_phone, String u_email, String u_backup_phone, String u_backup_email, String u_company, String u_title, int u_auth_state,
-            int u_auth_type) {
+            int u_auth_type, int has_comment, int has_roadshow) {
         this.token = token;
         this.has_project = has_project;
         this.business_card = business_card;
@@ -215,9 +238,11 @@ public class UserInfoEntity implements Parcelable {
         this.u_title = u_title;
         this.u_auth_state = u_auth_state;
         this.u_auth_type = u_auth_type;
+        this.has_comment = has_comment;
+        this.has_roadshow = has_roadshow;
     }
 
-    public static final Parcelable.Creator<UserInfoEntity> CREATOR = new Parcelable.Creator<UserInfoEntity>() {
+    public static final Creator<UserInfoEntity> CREATOR = new Creator<UserInfoEntity>() {
         @Override
         public UserInfoEntity createFromParcel(Parcel source) {
             return new UserInfoEntity(source);

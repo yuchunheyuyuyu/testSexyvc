@@ -44,8 +44,8 @@ public class CommentDetailPresent extends BasePresenter<CommentDetailContract.Mo
         return mModel.getUserInfo();
     };
 
-    public void query(long comment_id,final long reply_id){
-        mModel.queryCommentDetail(mModel.getToken(),comment_id,15,reply_id)
+    public void query(long comment_id,final long reply_id,int page_size){
+        mModel.queryCommentDetail(mModel.getToken(),comment_id,page_size,reply_id)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {

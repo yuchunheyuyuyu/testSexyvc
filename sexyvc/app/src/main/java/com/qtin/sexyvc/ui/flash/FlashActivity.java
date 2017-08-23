@@ -44,6 +44,8 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
     private boolean isLoadingMore;
     private long flash_id;
 
+    private int total;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerFlashComponent.builder().appComponent(appComponent).flashModule(new FlashModule(this)).build().inject(this);
@@ -145,15 +147,20 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
     public void querySuccess(boolean pullToRefresh,FlashBean bean) {
         if(pullToRefresh){
             data.clear();
+            total=bean.getTotal();
         }
         if(bean.getList()!=null){
             data.addAll(bean.getList());
         }
-        if(data.size()<bean.getTotal()){
+        if(data.size()<total){
             hasLoadedAllItems=false;
         }else{
             hasLoadedAllItems=true;
         }
+        if(bean.getList()==null&&bean.getList().isEmpty()){
+            hasLoadedAllItems=true;
+        }
+
         if(data.size()>0){
             flash_id=data.get(data.size()-1).getId();
         }

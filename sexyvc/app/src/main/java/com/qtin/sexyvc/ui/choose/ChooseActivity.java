@@ -69,7 +69,7 @@ public class ChooseActivity extends Activity {
         mUnbinder = ButterKnife.bind(this);
         ivBackGround.setImageBitmap(FastBlur.getBlurByColor("#b3333333"));
 
-        if (u_auth_type == ConstantUtil.AUTH_TYPE_FOUNDER) {
+        if (u_auth_type == ConstantUtil.AUTH_TYPE_FOUNDER||u_auth_type==ConstantUtil.AUTH_TYPE_FA) {
             showTwoChoiceAnim();
         } else {
             showOneChoiceAnim();

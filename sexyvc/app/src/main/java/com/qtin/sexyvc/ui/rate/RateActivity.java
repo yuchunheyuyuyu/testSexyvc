@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.qtin.sexyvc.utils.NameLengthFilter;
 
 import org.simple.eventbus.EventBus;
 
@@ -274,6 +276,11 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
     public void showOptionDialog() {
         View view = LayoutInflater.from(this).inflate(R.layout.add_tag_dialog, null);
         etInput = (EditText) view.findViewById(R.id.etInput);
+        etInput.setHint(getString(R.string.char_count_limit));
+
+        InputFilter[] filters = { new NameLengthFilter(16) };
+        etInput.setFilters(filters);
+
         //etInputQuestion.setHint(hint);
         View tvAdd = view.findViewById(R.id.tvAdd);
         View normalContainer=view.findViewById(R.id.normalContainer);

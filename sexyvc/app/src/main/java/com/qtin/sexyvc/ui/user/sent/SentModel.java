@@ -7,6 +7,7 @@ import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 
 import java.util.List;
@@ -38,5 +39,14 @@ public class SentModel extends BaseModel<ServiceManager,CacheManager> implements
     @Override
     public Observable<BaseEntity<ListBean<SentBean>>> queryMySent(String token, int page_size, long record_id) {
         return mServiceManager.getCommonService().queryMySent(token,page_size,record_id);
+    }
+
+    @Override
+    public UserInfoEntity getUserInfo() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }

@@ -29,6 +29,7 @@ import com.qtin.sexyvc.ui.subject.bean.SubjectListInterface;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.ui.subject.list.di.DaggerSubjectListComponent;
 import com.qtin.sexyvc.ui.subject.list.di.SubjectListModule;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
 
@@ -68,6 +69,8 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
     private int mDistance;//滚动的距离
     private int maxDistance;//监测最大的
 
+    private int page_size=15;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerSubjectListComponent.builder().appComponent(appComponent).subjectListModule(new SubjectListModule(this)).build().inject(this);
@@ -89,7 +92,7 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(0, 1);
+                mPresenter.query(ConstantUtil.DEFALUT_ID,page_size, 1);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -126,7 +129,7 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
         recyclerView.setAdapter(mAdapter);
 
         initPaginate();
-        mPresenter.query(0, 1);
+        mPresenter.query(ConstantUtil.DEFALUT_ID,page_size, 1);
 
         maxDistance= (int) DeviceUtils.dpToPixel(this,140);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -182,7 +185,7 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.query(subject_id, 0);
+                    mPresenter.query(subject_id,page_size, 0);
                 }
 
                 @Override
@@ -268,7 +271,7 @@ public class SubjectListActivity extends MyBaseActivity<SubjectListPresent> impl
             }
         }
 
-        if (data.size() - 1 < subjectBean.getSubjects().getTotal()) {
+        if (subjectBean.getSubjects().getTotal()>page_size) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;

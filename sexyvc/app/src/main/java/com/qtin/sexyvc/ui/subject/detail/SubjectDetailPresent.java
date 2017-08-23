@@ -40,8 +40,8 @@ public class SubjectDetailPresent extends BasePresenter<SubjectDetailContract.Mo
         return mModel.getUserInfo();
     };
 
-    public void query(long subject_id,final long reply_id){
-        mModel.querySubjectDetail(mModel.getToken(),subject_id,15,reply_id)
+    public void query(long subject_id,final long reply_id,int page_size){
+        mModel.querySubjectDetail(mModel.getToken(),subject_id,page_size,reply_id)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {

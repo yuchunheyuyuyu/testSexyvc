@@ -62,6 +62,8 @@ public class GlideImageLoaderStrategy implements BaseImageLoaderStrategy<GlideIm
         if (config.getTransformation() != null) {//glide用它来改变图形的形状
             //requestBuilder.transform(config.getTransformation());
             requestBuilder.bitmapTransform(config.getTransformation());
+        }else{
+            //requestBuilder.fitCenter();
         }
 
 

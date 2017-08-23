@@ -6,6 +6,7 @@ import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -36,5 +37,14 @@ public class ChooseIdentityModel extends BaseModel<ServiceManager,CacheManager> 
     @Override
     public Observable<CodeEntity> editPosition(String token, int u_auth_type, String u_company, String u_title) {
         return mServiceManager.getCommonService().editPosition(token,u_auth_type,u_company,u_title);
+    }
+
+    @Override
+    public void saveUsrInfo(UserInfoEntity entity) {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
+        }
+        mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
 }

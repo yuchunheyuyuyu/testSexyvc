@@ -1,12 +1,15 @@
 package com.qtin.sexyvc.ui.login.register;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -20,7 +23,6 @@ import com.qtin.sexyvc.ui.login.register.di.RegisterModule;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.web.WebActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -125,9 +127,17 @@ public class RegisterActivity extends MyBaseActivity<RegisterPresent> implements
 
     }
 
-    @OnClick({R.id.ivBack, R.id.tvGetVertify, R.id.tvComplete, R.id.tvServiceProtocol})
+    private void hideKeyBoard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etVertifyCode.getWindowToken(), 0); //强制隐藏键盘
+    }
+
+    @OnClick({R.id.ivBack, R.id.tvGetVertify, R.id.tvComplete, R.id.tvServiceProtocol,R.id.llAllContent})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.llAllContent:
+                hideKeyBoard();
+                break;
             case R.id.ivBack:
                 finish();
                 break;
@@ -184,8 +194,21 @@ public class RegisterActivity extends MyBaseActivity<RegisterPresent> implements
 
     @Override
     public void registerSuccess(UserInfoEntity entity) {
+
+        DataHelper.SetIntergerSF(this,entity.getU_phone()+"register",1);
+
         Bundle bundle=new Bundle();
         bundle.putParcelable(UserInfoActivity.INTENT_USER,entity);
         gotoActivity(ChooseIdentityActivity.class,bundle);
+    }
+
+    @Override
+    public void startRefresh(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void endRefresh() {
+        dialogDismiss();
     }
 }

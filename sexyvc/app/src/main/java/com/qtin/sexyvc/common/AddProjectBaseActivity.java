@@ -18,7 +18,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.mvp.Presenter;
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
@@ -27,7 +29,10 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.CashierInputFilter;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,35 +47,105 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
     private TagAdapter domainAdapter;
     private TagAdapter stageAdapter;
 
-    private ArrayList<FilterEntity> domainData = new ArrayList<>();
-    private ArrayList<FilterEntity> stageData = new ArrayList<>();
+    protected ArrayList<FilterEntity> domainData = new ArrayList<>();
+    protected ArrayList<FilterEntity> stageData = new ArrayList<>();
 
-    private ProjectBean projectBean=new ProjectBean();
+    protected ProjectBean projectBean=new ProjectBean();
+
+    public static final int TYPE_DOMAIN = 0x001;//行业
+    public static final int TYPE_STAGE = 0x002;//阶段
+
+    public static interface OnProjectComfirmListener{
+        void onComfirm(ProjectBean projectBean);
+    }
+
+    public static interface OnDomainComfirmListener{
+        void onDomainComfirm();
+    }
+
+    public static interface OnStageComfirmListener{
+        void onStageComfirm();
+    }
+
+    protected void initStageData(ArrayList<FilterEntity> list){
+        stageData.clear();
+
+        FilterEntity entity=new FilterEntity();
+        entity.setType_id(0);
+        entity.setType_name("未融资");
+        stageData.add(entity);
+        if(list!=null){
+            stageData.addAll(list);
+        }
+    }
 
     @Nullable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        projectBean.setLast_currency(1);
+        reset();
     }
 
-    protected void showProjectDialog(final TwoButtonListerner listerner) {
+    private void reset(){
+        projectBean.setLast_currency(1);
+        projectBean.setLogo("");
+        projectBean.setProject_name("未填写");
+        projectBean.setLast_stage_id(ConstantUtil.SPECIAL_ID);
+        projectBean.setDomain_id(0);
+        projectBean.setShort_intro("未填写");
+        projectBean.setLast_financial_amount(0);
+    }
+
+    protected void showProjectDialog(final OnProjectComfirmListener listener) {
 
         View view = View.inflate(this, R.layout.project_dialog, null);
-        TextView tvDomain= (TextView) view.findViewById(R.id.tvDomain);
-        TextView tvStage= (TextView) view.findViewById(R.id.tvStage);
+        final TextView tvDomain= (TextView) view.findViewById(R.id.tvDomain);
+        final TextView tvStage= (TextView) view.findViewById(R.id.tvStage);
+
+        view.findViewById(R.id.llDomain).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDomainDialog(new OnDomainComfirmListener() {
+                    @Override
+                    public void onDomainComfirm() {
+                        setDomainText(tvDomain);
+                    }
+                });
+            }
+        });
+
+        view.findViewById(R.id.llStage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStageDialog(new OnStageComfirmListener() {
+                    @Override
+                    public void onStageComfirm() {
+                        setStageText(tvStage);
+                    }
+                });
+            }
+        });
 
         view.findViewById(R.id.btnLeft).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listerner.leftClick();
+                reset();
+                dismissProjectDialog();
             }
         });
 
         view.findViewById(R.id.btnRight).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listerner.rightClick();
+                if(projectBean.getDomain_id()==0){
+                    UiUtils.showToastShort(AddProjectBaseActivity.this,"行业不能为空");
+                    return;
+                }
+                if(projectBean.getLast_stage_id()==ConstantUtil.SPECIAL_ID){
+                    UiUtils.showToastShort(AddProjectBaseActivity.this,"请选择轮次标签");
+                    return;
+                }
+                listener.onComfirm(projectBean);
             }
         });
         projectDialog = new Dialog(this);
@@ -82,13 +157,14 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
         regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         projectDialog.setCanceledOnTouchOutside(true);
+        projectDialog.setCancelable(false);
         projectDialog.show();
     }
 
     /**
      * 显示行业的dialog
      */
-    private void showDomainDialog() {
+    private void showDomainDialog(final OnDomainComfirmListener listener) {
         View view = LayoutInflater.from(this).inflate(R.layout.domain_dialog, null);
         final DomainHolder holder = new DomainHolder(view);
         holder.tvCancleDomain.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +187,7 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
                     }
                 }
                 projectBean.setDomain_id(domain_id);
-                setDomainText();
+                listener.onDomainComfirm();
             }
         });
         domainAdapter = new TagAdapter<FilterEntity>(domainData) {
@@ -162,6 +238,7 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
         regionWindow.setWindowAnimations(R.style.view_animation);
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         domainDialog.setCanceledOnTouchOutside(true);
+        domainDialog.setCancelable(false);
         domainDialog.show();
     }
 
@@ -175,7 +252,7 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
     /**
      * 显示阶段的dialog
      */
-    public void showStageDialog() {
+    public void showStageDialog(final OnStageComfirmListener listener) {
         View view = LayoutInflater.from(this).inflate(R.layout.stage_dialog, null);
 
         final StageHolder holder=new StageHolder(view);
@@ -276,8 +353,7 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
                     e.printStackTrace();
                     projectBean.setLast_financial_amount(0);
                 }
-
-                setStageText();
+                listener.onStageComfirm();
             }
         });
 
@@ -294,6 +370,7 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
         inputWindow.setWindowAnimations(R.style.dialog_fade_animation);
         inputWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         stageDialog.setCanceledOnTouchOutside(true);
+        stageDialog.setCancelable(false);
         stageDialog.show();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -344,11 +421,11 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
         }
     }
 
-    private void setDomainText(){
+    private void setDomainText(TextView tvDomain){
         if(domainData!=null){
             for(int i=0;i<domainData.size();i++){
                 if(domainData.get(i).getType_id()==projectBean.getDomain_id()){
-                    //tvDomain.setText(domainData.get(i).getType_name());
+                    tvDomain.setText(domainData.get(i).getType_name());
                     domainData.get(i).setSelected(true);
                     break;
                 }
@@ -367,11 +444,11 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
         }
     }
 
-    private void setStageText(){
+    private void setStageText(TextView tvStage){
         if(stageData!=null){
             for(int i=0;i<stageData.size();i++){
                 if(stageData.get(i).getType_id()==projectBean.getLast_stage_id()){
-                    setStageValue(stageData.get(i).getType_name());
+                    setStageValue(tvStage,stageData.get(i).getType_name());
                     stageData.get(i).setSelected(true);
                     break;
                 }
@@ -379,21 +456,24 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
         }
     }
 
-    private void setStageValue(String stage){
+    private void setStageValue(TextView tvStage,String stage){
         long money=projectBean.getLast_financial_amount();
         if(money<=0){
-            //tvFinance.setText(StringUtil.formatString(stage));
+            tvStage.setText(StringUtil.formatString(stage));
         }else{
             StringBuilder sb=new StringBuilder();
             sb.append(stage);
             sb.append("  ");
-            sb.append(money);
+
+            String moneyValue=money/10000f+"";
+            sb.append(moneyValue);
+            sb.append("万");
             if(projectBean.getLast_currency()==0){
                 sb.append(getResources().getString(R.string.dollar));
             }else{
                 sb.append(getResources().getString(R.string.renminbi));
             }
-            //tvFinance.setText(sb.toString());
+            tvStage.setText(sb.toString());
         }
     }
 
@@ -405,6 +485,14 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
                     break;
                 }
             }
+        }
+    }
+
+
+    protected void dismissProjectDialog(){
+        if(projectDialog!=null&&projectDialog.isShowing()){
+            projectDialog.dismiss();
+            projectDialog=null;
         }
     }
 }

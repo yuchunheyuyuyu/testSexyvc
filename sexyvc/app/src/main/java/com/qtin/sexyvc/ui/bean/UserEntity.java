@@ -31,11 +31,15 @@ public class UserEntity {
     private int has_project;
     private String business_card;
 
-    @Generated(hash = 1265247949)
+    private int has_comment;
+    private int has_roadshow;
+
+    @Generated(hash = 349288142)
     public UserEntity(String u_token, long u_expire_time, int bind_mobile, String u_nickname,
             int u_gender, String u_avatar, String u_signature, String u_company, String u_title,
             String u_phone, String u_email, String u_backup_phone, String u_backup_email,
-            int u_auth_state, int u_auth_type, int has_project, String business_card) {
+            int u_auth_state, int u_auth_type, int has_project, String business_card, int has_comment,
+            int has_roadshow) {
         this.u_token = u_token;
         this.u_expire_time = u_expire_time;
         this.bind_mobile = bind_mobile;
@@ -53,6 +57,8 @@ public class UserEntity {
         this.u_auth_type = u_auth_type;
         this.has_project = has_project;
         this.business_card = business_card;
+        this.has_comment = has_comment;
+        this.has_roadshow = has_roadshow;
     }
 
     @Generated(hash = 1433178141)
@@ -193,6 +199,22 @@ public class UserEntity {
 
     public void setBusiness_card(String business_card) {
         this.business_card = business_card;
+    }
+
+    public int getHas_comment() {
+        return has_comment;
+    }
+
+    public void setHas_comment(int has_comment) {
+        this.has_comment = has_comment;
+    }
+
+    public int getHas_roadshow() {
+        return has_roadshow;
+    }
+
+    public void setHas_roadshow(int has_roadshow) {
+        this.has_roadshow = has_roadshow;
     }
 }
 /**

@@ -26,6 +26,7 @@
         <View style="@style/line_style" />
 
         <LinearLayout
+            android:id="@+id/llDomain"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical"
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:lineSpacingExtra="6sp"
-                android:text="游戏"
+                android:text="未填写"
                 android:textColor="@color/black50"
                 android:textSize="14sp" />
 
@@ -63,6 +64,7 @@
             android:layout_marginLeft="16dp" />
 
         <LinearLayout
+            android:id="@+id/llStage"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical"
@@ -84,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:lineSpacingExtra="6sp"
-                android:text="天使轮  500 万人民币"
+                android:text="未填写"
                 android:textColor="@color/black50"
                 android:textSize="14sp" />
 
@@ -103,7 +105,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <Button
+            <TextView
                 android:id="@+id/btnLeft"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -116,7 +118,7 @@
 
             <View style="@style/line_vertical_style" />
 
-            <Button
+            <TextView
                 android:id="@+id/btnRight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

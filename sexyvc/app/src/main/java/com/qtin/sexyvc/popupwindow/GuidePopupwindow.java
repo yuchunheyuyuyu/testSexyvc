@@ -5,7 +5,9 @@ import android.graphics.Rect;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
+
 import com.qtin.sexyvc.R;
 
 /**
@@ -46,6 +48,7 @@ public class GuidePopupwindow {
             }
         });
         popupWindow = new PopupWindow(view, width, height);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         popupWindow.setFocusable(true);
         View rootView = context.getWindow().getDecorView().findViewById(android.R.id.content);
         popupWindow.setAnimationStyle(R.style.popupwindow_fade_animation);

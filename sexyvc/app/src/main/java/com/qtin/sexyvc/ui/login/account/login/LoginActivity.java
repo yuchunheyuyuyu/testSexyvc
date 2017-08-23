@@ -1,7 +1,9 @@
 package com.qtin.sexyvc.ui.login.account.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -76,9 +78,18 @@ public class LoginActivity extends MyBaseActivity<LoginPresent> implements Login
 
     }
 
-    @OnClick({R.id.ivBack, R.id.tvLogin, R.id.tvForgetPassword})
+    private void hideKeyBoard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etPassword.getWindowToken(), 0); //强制隐藏键盘
+    }
+
+
+    @OnClick({R.id.ivBack, R.id.tvLogin, R.id.tvForgetPassword,R.id.llAllContent})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.llAllContent:
+                hideKeyBoard();
+                break;
             case R.id.ivBack:
                 finish();
                 break;

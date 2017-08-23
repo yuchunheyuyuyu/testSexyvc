@@ -207,7 +207,7 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
         if(data.size()>0){
             id=data.get(data.size()-1).getId();
         }
-        if(hasLoadedNum<items.getTotal()){
+        if(page_size<items.getTotal()){
             hasLoadedAllItems=false;
         }else{
             hasLoadedAllItems=true;

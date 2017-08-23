@@ -18,6 +18,8 @@ public interface RegisterContract {
     interface View extends BaseView{
         void validateSuccess();
         void registerSuccess(UserInfoEntity entity);
+        void startRefresh(String msg);
+        void endRefresh();
     }
     interface Model extends IModel{
         Observable<CodeEntity> getVertifyCode(String token, String mobile, String code_type);

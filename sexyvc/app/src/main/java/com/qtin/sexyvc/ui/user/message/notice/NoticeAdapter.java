@@ -62,7 +62,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             NoticeHolder holder = (NoticeHolder) viewHolder;
             MsgBean bean = data.get(position);
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
-            holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
+            holder.tvTime.setText(DateUtil.getDateExpression3(bean.getCreate_time()));
             if (bean.getRead_time() > 0) {
                 holder.contentContainer.setSelected(true);
             } else {
