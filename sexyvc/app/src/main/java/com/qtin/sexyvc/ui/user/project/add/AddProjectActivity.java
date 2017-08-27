@@ -490,14 +490,18 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
                     showMessage("请选择轮次标签");
                     return;
                 }
-                projectBean.setLast_stage_id(stage_id);
-                try{
-                    projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
-                }catch(Exception e){
-                    e.printStackTrace();
-                    projectBean.setLast_financial_amount(0);
-                }
 
+                projectBean.setLast_stage_id(stage_id);
+                if(stage_id==0){
+                    projectBean.setLast_financial_amount(0);
+                }else{
+                    try{
+                        projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        projectBean.setLast_financial_amount(0);
+                    }
+                }
                 setStageText();
             }
         });

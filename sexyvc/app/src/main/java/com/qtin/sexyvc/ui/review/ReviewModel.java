@@ -8,6 +8,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommentIdBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import java.util.List;
 
@@ -43,5 +44,14 @@ public class ReviewModel extends BaseModel<ServiceManager,CacheManager> implemen
     @Override
     public Observable<CodeEntity> appendInvestor(String token, String content, long comment_id) {
         return mServiceManager.getCommonService().appendInvestor(token,content,comment_id);
+    }
+
+    @Override
+    public void changeCommentStatus() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            list.get(0).setHas_comment(1);
+            mCacheManager.getDaoSession().getUserInfoEntityDao().update(list.get(0));
+        }
     }
 }

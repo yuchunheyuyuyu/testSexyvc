@@ -33,10 +33,18 @@
             android:id="@+id/tvFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="6dp"
             android:text="某 CEO 评论了"
             android:textColor="@color/black50"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ivIdentityStatus"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:visibility="gone"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/logo_approve_vc" />
 
         <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
             android:id="@+id/ratingScore"
@@ -196,21 +204,39 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
-                android:id="@+id/ratingTargetScore"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                app:emptyDrawable="@drawable/star_l_blank"
-                app:filledDrawable="@drawable/star_l_full"
-                app:isIndicator="true"
-                app:minAllowedStars="0"
-                app:numStarsValue="5"
-                app:ratingValue="3"
-                app:starMargin="0dp"
-                app:starSizeValue="12dp"
-                app:starSpacing="1dp"
-                app:stepSizeValue="1" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+                    android:id="@+id/ratingTargetScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:emptyDrawable="@drawable/star_l_blank"
+                    app:filledDrawable="@drawable/star_l_full"
+                    app:isIndicator="true"
+                    app:minAllowedStars="0"
+                    app:numStarsValue="5"
+                    app:ratingValue="3"
+                    app:starMargin="0dp"
+                    app:starSizeValue="12dp"
+                    app:starSpacing="1dp"
+                    app:stepSizeValue="1" />
+
+                <TextView
+                    android:id="@+id/tvTargetRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="0sp"
+                    android:layout_marginLeft="4dp"
+                    android:textStyle="bold"
+                    android:text="0.0"
+                    android:textColor="@color/barbie_pink_two"
+                    android:textSize="10sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

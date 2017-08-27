@@ -122,6 +122,10 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                 });
     }
 
+    public void changeRoadStatus(){
+        mModel.changeRoadStatus();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

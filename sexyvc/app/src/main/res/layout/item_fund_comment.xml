@@ -6,12 +6,12 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:paddingTop="18dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingRight="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:text="你大爷"
-            android:textColor="@color/black50_slate"
+            android:textColor="@color/slate"
             android:textSize="12sp" />
 
         <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
@@ -87,6 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:paddingRight="16dp"
         android:lineSpacingExtra="6sp"
         android:text="沟通效率很高推动性也很强的投资经理，是我喜欢的类型"
         android:textColor="@color/black90"
@@ -98,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
+        android:paddingRight="16dp"
         android:lineSpacingExtra="6sp"
         android:maxLines="3"
         android:text="很直接，反应很快，不先入为主，为创业者着想，很喜欢与这类投资人交流。聊的过程中他比较认真快速的记录，而且很明显是提前看过BP，因为项目的很多细节他都记住了，给人感觉比较…"
@@ -107,6 +109,7 @@
     <LinearLayout
         android:id="@+id/praiseContainer"
         android:layout_width="match_parent"
+        android:paddingRight="16dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center_vertical"
@@ -119,7 +122,7 @@
             android:layout_weight="1"
             android:lineSpacingExtra="6sp"
             android:text="16-12-27"
-            android:textColor="@color/black50"
+            android:textColor="@color/black30"
             android:textSize="12sp" />
 
         <TextView

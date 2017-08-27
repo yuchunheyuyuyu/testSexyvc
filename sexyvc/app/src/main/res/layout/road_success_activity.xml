@@ -27,10 +27,8 @@
 
     <TextView
         android:id="@+id/tvVertify"
-        android:layout_width="match_parent"
+        android:layout_width="270dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginRight="52dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/barbie_pink_round_shape"
         android:gravity="center"
@@ -40,10 +38,8 @@
 
     <TextView
         android:id="@+id/tvEditComment"
-        android:layout_width="match_parent"
+        android:layout_width="270dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginRight="52dp"
         android:layout_marginTop="16dp"
         android:visibility="gone"
         android:background="@drawable/barbie_pink_stroke_round_shape"

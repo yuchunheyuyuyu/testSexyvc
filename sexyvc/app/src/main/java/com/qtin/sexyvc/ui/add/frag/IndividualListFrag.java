@@ -238,8 +238,9 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         if (backBean.getInvestor() != null) {
             investorBean=backBean.getInvestor();
             if (mPresenter.getUserInfo() != null) {
-                //创始人逻辑
-                if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                //创始人逻辑或FA
+                if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                       ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA ) {
                     if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
                         if(investorBean.getHas_roadshow()==0){
                             if(investorBean.getHas_score()==0){
@@ -268,10 +269,16 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                             @Override
                             public void onFirstClick() {
                                 dismissBottomDialog();
-                                if(investorBean.getHas_score()==0){
-                                    gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                                if(investorBean.getHas_roadshow()==0){
+                                    if(investorBean.getHas_score()==0){
+                                        gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                                    }else{
+                                        gotoRoad();
+                                    }
                                 }else{
-                                    gotoRoad();
+                                    String format=getResources().getString(R.string.format_has_road);
+                                    String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
+                                    UiUtils.showToastShort(mActivity,title);
                                 }
                             }
 

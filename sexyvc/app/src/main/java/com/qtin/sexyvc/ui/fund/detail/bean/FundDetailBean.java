@@ -31,6 +31,15 @@ public class FundDetailBean implements DataTypeInterface{
     private RoadShowBean road_show;
     private ArrayList<TagEntity> tags;
     private String location;
+    private int score_count;
+
+    public int getScore_count() {
+        return score_count;
+    }
+
+    public void setScore_count(int score_count) {
+        this.score_count = score_count;
+    }
 
     public String getLocation() {
         return location;

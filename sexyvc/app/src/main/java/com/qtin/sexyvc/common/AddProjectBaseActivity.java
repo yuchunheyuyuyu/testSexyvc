@@ -335,23 +335,27 @@ public abstract class AddProjectBaseActivity<P extends Presenter> extends MyBase
             @Override
             public void onClick(View v) {
                 dismissStageDialog();
-                long stage_id=0;
+                long stage_id=ConstantUtil.SPECIAL_ID;
                 for(FilterEntity entity:stageData){
                     if(entity.isSelected()){
                         stage_id=entity.getType_id();
                         break;
                     }
                 }
-                if(stage_id==0){
+                if(stage_id==ConstantUtil.SPECIAL_ID){
                     UiUtils.showToastShort(AddProjectBaseActivity.this,"请选择轮次标签");
                     return;
                 }
                 projectBean.setLast_stage_id(stage_id);
-                try{
-                    projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
-                }catch(Exception e){
-                    e.printStackTrace();
+                if(stage_id==0){
                     projectBean.setLast_financial_amount(0);
+                }else{
+                    try{
+                        projectBean.setLast_financial_amount(Long.parseLong(holder.etMoney.getText().toString()));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        projectBean.setLast_financial_amount(0);
+                    }
                 }
                 listener.onStageComfirm();
             }

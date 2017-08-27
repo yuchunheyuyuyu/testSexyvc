@@ -172,7 +172,8 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         tagAdapter = new TagAdapter<TagEntity>(tags) {
             @Override
             public View getView(FlowLayout parent, int position, TagEntity o) {
-                TextView tv = (TextView) LayoutInflater.from(RateActivity.this).inflate(R.layout.item_filter_textview6, flowLayout, false);
+                View view = LayoutInflater.from(RateActivity.this).inflate(R.layout.item_filter_textview6, flowLayout, false);
+                TextView tv= (TextView) view.findViewById(R.id.tvContent);
 
                 StringBuilder sb = new StringBuilder();
                 sb.append(o.getTag_name());
@@ -193,7 +194,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
                     tv.setSelected(false);
                 }
 
-                return tv;
+                return view;
             }
         };
         flowLayout.setAdapter(tagAdapter);
@@ -418,6 +419,7 @@ public class RateActivity extends MyBaseActivity<RatePresent> implements RateCon
         Bundle bundle=new Bundle();
 
         bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
+
         if(investorInfoBean.getIntent()==ConstantUtil.INTENT_ROAD_COMMENT){
             bundle.putInt(ConstantUtil.INTENT_INDEX,0);
             gotoActivity(RoadCommentActivity.class, bundle);

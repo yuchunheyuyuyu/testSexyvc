@@ -55,9 +55,8 @@
                 android:imeOptions="actionSearch"
                 android:paddingLeft="8dp"
                 android:maxLength="20"
-                android:paddingRight="15dp"
                 android:singleLine="true"
-                android:textColor="@color/black30"
+                android:textColor="@color/black"
                 android:textColorHint="@color/black30"
                 android:textSize="14sp" />
         </LinearLayout>

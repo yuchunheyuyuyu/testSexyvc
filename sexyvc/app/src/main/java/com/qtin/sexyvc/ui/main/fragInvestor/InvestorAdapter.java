@@ -146,12 +146,19 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
 
         StringBuilder sb=new StringBuilder();
-        sb.append(StringUtil.formatString(entity.getFund_name()));
-        sb.append("  ");
-        sb.append(StringUtil.formatString(entity.getTitle()));
+        if(!StringUtil.isBlank(entity.getFund_name())){
+            sb.append(StringUtil.formatString(entity.getFund_name()));
+            sb.append("  ");
+        }
 
+
+        sb.append(StringUtil.formatString(entity.getTitle()));
+        sb.append("  ");
+        sb.append("|");
+        sb.append("  ");
+        sb.append("评论");
+        sb.append(entity.getComment_number());
         holder.tvPosition.setText(sb.toString());
-        holder.tvCommentNum.setText(context.getResources().getString(R.string.investor_join_comment) + entity.getComment_number());
         holder.tvScore.setText("" + entity.getScore());
 
         mImageLoader.loadImage(mApplication, GlideImageConfig
@@ -207,8 +214,6 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvName;
         @BindView(R.id.tvPosition)
         TextView tvPosition;
-        @BindView(R.id.tvCommentNum)
-        TextView tvCommentNum;
         @BindView(R.id.ratingScore)
         RatingBar ratingScore;
         @BindView(R.id.tvScore)

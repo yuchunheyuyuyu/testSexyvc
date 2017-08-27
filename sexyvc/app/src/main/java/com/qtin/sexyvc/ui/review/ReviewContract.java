@@ -21,5 +21,6 @@ public interface ReviewContract {
         String getToken();
         Observable<BaseEntity<CommentIdBean>> commentInvestor(String token, String title, String content, long investor_id, long fund_id, int is_anon);
         Observable<CodeEntity> appendInvestor(String token,String content,long comment_id);
+        void changeCommentStatus();
     }
 }

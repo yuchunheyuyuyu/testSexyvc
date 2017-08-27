@@ -3,7 +3,7 @@ package com.qtin.sexyvc.ui.login.password.reset.success;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
-import com.qtin.sexyvc.ui.login.account.login.LoginActivity;
+import com.qtin.sexyvc.ui.login.account.create.CreateActivity;
 import butterknife.OnClick;
 
 /**
@@ -34,6 +34,6 @@ public class ResetSuccessActivity extends MyBaseActivity {
 
     @OnClick(R.id.tvReLogin)
     public void onClick() {
-        gotoActivity(LoginActivity.class);
+        gotoActivity(CreateActivity.class);
     }
 }

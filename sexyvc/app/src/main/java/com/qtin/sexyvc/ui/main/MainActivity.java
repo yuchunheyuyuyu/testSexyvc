@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -46,9 +47,11 @@ import com.qtin.sexyvc.utils.ConstantUtil;
 import com.qtin.sexyvc.utils.update.updater.Updater;
 import com.qtin.sexyvc.utils.update.updater.UpdaterConfig;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -117,6 +120,14 @@ public class MainActivity extends AddProjectBaseActivity<MainPresent> implements
         tvTab1.setSelected(true);
         mPresenter.queryUpdate();
 
+        mPresenter.queryUserInfo();
+        //获取投资行业
+        mPresenter.getType("common_domain", TYPE_DOMAIN);
+        //获取投资阶段
+        mPresenter.getType("common_stage", TYPE_STAGE);
+    }
+
+    private void showIndentityOrInputProjectDialog(){
         //注册的用户显示
         final UserInfoEntity entity=mPresenter.getUserInfo();
         if(entity!=null){
@@ -144,53 +155,53 @@ public class MainActivity extends AddProjectBaseActivity<MainPresent> implements
                 }
 
                 if(entity.getU_auth_state()==ConstantUtil.AUTH_STATE_UNPASS){
-                    Observable.just(1)
-                            .delay(300, TimeUnit.MILLISECONDS)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Action1<Integer>() {
-                                @Override
-                                public void call(Integer integer) {
-                                    showHintDialog(entity.getU_phone(), DialogType.TYPE_IDENTITY, new ComfirmListerner() {
-                                        @Override
-                                        public void onComfirm() {
-                                            Bundle bundle=new Bundle();
-                                            bundle.putParcelable(UserInfoActivity.INTENT_USER,entity);
-                                            gotoActivity(UserInfoActivity.class,bundle);
-                                        }
-                                    });
-                                }
-                            });
-
+                    showIndentityDialog(entity);
                 }else{
-                    if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER&&entity.getHas_project()==0){
-                        Observable.just(1)
-                                .delay(300, TimeUnit.MILLISECONDS)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Action1<Integer>() {
-                                    @Override
-                                    public void call(Integer integer) {
-                                        showHintDialog(entity.getU_phone(),DialogType.TYPE_PROJECT, new ComfirmListerner() {
-                                            @Override
-                                            public void onComfirm() {
-                                                dismissHintDialog();
-                                                Bundle bundle = new Bundle();
-                                                bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT, false);
-                                                gotoActivity(AddProjectActivity.class, bundle);
-                                            }
-                                        });
-                                    }
-                                });
-                    }
+                    showProjectDialog(entity);
                 }
             }
         }
+    }
 
+    private void showIndentityDialog(final UserInfoEntity entity){
+        Observable.just(1)
+                .delay(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        showHintDialog(entity.getU_phone(), DialogType.TYPE_IDENTITY, new ComfirmListerner() {
+                            @Override
+                            public void onComfirm() {
+                                Bundle bundle=new Bundle();
+                                bundle.putParcelable(UserInfoActivity.INTENT_USER,entity);
+                                gotoActivity(UserInfoActivity.class,bundle);
+                            }
+                        });
+                    }
+                });
+    }
 
-        mPresenter.queryUserInfo();
-        //获取投资行业
-        mPresenter.getType("common_domain", TYPE_DOMAIN);
-        //获取投资阶段
-        mPresenter.getType("common_stage", TYPE_STAGE);
+    private void showProjectDialog(final UserInfoEntity entity){
+        if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER&&entity.getHas_project()==0){
+            Observable.just(1)
+                    .delay(300, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Integer>() {
+                        @Override
+                        public void call(Integer integer) {
+                            showHintDialog(entity.getU_phone(),DialogType.TYPE_PROJECT, new ComfirmListerner() {
+                                @Override
+                                public void onComfirm() {
+                                    dismissHintDialog();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putBoolean(ConstantUtil.INTENT_IS_EDIT, false);
+                                    gotoActivity(AddProjectActivity.class, bundle);
+                                }
+                            });
+                        }
+                    });
+        }
     }
 
     private void showGuideWindow(){
@@ -462,6 +473,8 @@ public class MainActivity extends AddProjectBaseActivity<MainPresent> implements
             int localCode=getAppVersionCode();
             if(updateBean.getVersion_code()>localCode){
                 showTwoButtonDialog(updateBean);
+            }else{
+                showIndentityOrInputProjectDialog();
             }
         }
     }

@@ -132,7 +132,7 @@ public class SujectListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
              */
 
             holder.tvDate.setVisibility(View.GONE);
-            holder.tvDate2.setText(DateUtil.getSpecialDate2(entity.getCreate_time()));
+            holder.tvDate2.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
         }
     }
 

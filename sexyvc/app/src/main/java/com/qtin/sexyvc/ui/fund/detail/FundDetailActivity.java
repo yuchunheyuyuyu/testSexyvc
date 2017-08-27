@@ -293,6 +293,10 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
         if (bean.getComments() != null && bean.getComments().getList() != null) {
             data.addAll(bean.getComments().getList());
         }
+
+        if (bean.getComments() != null){
+            fundDetailBean.setComment_number(bean.getComments().getTotal()+bean.getComments().getUnauth_count());
+        }
         mAdapter.notifyDataSetChanged();
     }
 

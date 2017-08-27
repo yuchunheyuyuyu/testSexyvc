@@ -112,7 +112,7 @@
             android:layout_weight="1"
             android:lineSpacingExtra="6sp"
             android:text="16-12-27"
-            android:textColor="@color/black50"
+            android:textColor="@color/black30"
             android:textSize="12sp" />
 
         <TextView

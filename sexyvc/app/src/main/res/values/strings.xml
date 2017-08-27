@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">头牌</string>
 
-    <!--<string name="app_name">头牌VC</string>-->
+    <!-- <string name="app_name">头牌VC</string> -->
 
     <!--<string name="app_name">SexyVC</string>-->
 
@@ -185,6 +185,7 @@
     <string name="hint_we_chat">请输入微信号</string>
     <string name="remarks">备注</string>
     <string name="detail">详情</string>
+    <string name="remark_concern">请输入备注，比如在哪里见到、有什么特点、喜欢什么样的项目等</string>
 
     <string name="select_action">选择您的操作</string>
     <string name="modify_group_name">修改组名</string>
@@ -249,12 +250,12 @@
 
     <string name="auth_type_founder">创始人</string>
     <string name="auth_type_investor">投资人</string>
-    <string name="auth_type_fa">投资顾问</string>
+    <string name="auth_type_fa">财务顾问</string>
     <string name="auth_type_other">其他</string>
     <string name="upload">上传</string>
     <string name="evaluate">评价</string>
 
-    <string name="what_question">他提出了什么问题？</string>
+    <string name="what_question">TA提出了什么问题？</string>
     <string name="hint_answer">你的回答是？</string>
     <string name="normal_question">常见问题</string>
     <string name="normal_tag">常见标签</string>
@@ -285,7 +286,7 @@
     <string name="filter_vcode">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="money_vcode">0123456789</string>
 
-    <string name="click_to_rate">他足够 sexy 吗？点击星星评分</string>
+    <string name="click_to_rate">TA足够 sexy 吗？点击星星评分</string>
     <string name="choose_tag">请选择印象标签吧</string>
 
     <string name="code_10000">IP超过单位时间内请求次数限制，IP将被屏蔽10分钟</string>
@@ -378,7 +379,7 @@
 
     <string name="guide_a">关于创投的新鲜事都在这里</string>
     <string name="guide_b1">明天要见一个投资人？</string>
-    <string name="guide_b2">来这里看看其他创始人给他的评价</string>
+    <string name="guide_b2">来这里看看其他创始人给TA的评价</string>
     <string name="guide_c">你关注的投资人都在这里</string>
     <string name="guide_d1">你是谁？在做什么项目？</string>
     <string name="guide_d2">完善你的信息，让投资人了解你</string>

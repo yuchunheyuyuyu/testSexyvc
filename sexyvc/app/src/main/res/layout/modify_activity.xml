@@ -11,7 +11,7 @@
         android:id="@+id/singLineContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40px"
+        android:layout_marginTop="20dp"
         android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone">
@@ -22,9 +22,9 @@
         <com.qtin.sexyvc.ui.widget.ClearableEditText
             android:id="@+id/etContent"
             android:layout_width="match_parent"
-            android:layout_height="96px"
-            android:layout_marginLeft="32px"
-            android:layout_marginRight="32px"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@null"
             android:singleLine="true"
             android:textColor="@color/black"
@@ -38,8 +38,8 @@
     <RelativeLayout
         android:id="@+id/introduceContainer"
         android:layout_width="match_parent"
-        android:layout_height="360px"
-        android:layout_marginTop="48px"
+        android:layout_height="180dp"
+        android:layout_marginTop="24dp"
         android:background="@color/white"
         android:visibility="gone">
 
@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="32px"
-            android:layout_marginRight="32px"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
             android:gravity="end"
             android:lineSpacingExtra="6sp"
             android:text="@string/input_count"
@@ -73,10 +73,10 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/tvCountDown"
             android:layout_below="@+id/topLine2"
-            android:layout_marginBottom="22px"
-            android:layout_marginLeft="32px"
-            android:layout_marginRight="32px"
-            android:layout_marginTop="22px"
+            android:layout_marginBottom="11dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="11dp"
             android:background="@null"
             android:gravity="top"
             android:hint="@string/hint_introduce"
@@ -91,7 +91,7 @@
         android:id="@+id/emailContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44px"
+        android:layout_marginTop="22dp"
         android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone">
@@ -102,10 +102,10 @@
         <com.qtin.sexyvc.ui.widget.ClearableEditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:layout_below="@+id/topLine3"
-            android:layout_marginLeft="32px"
-            android:layout_marginRight="32px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@null"
             android:hint="@string/input_email"
             android:inputType="textEmailAddress"
@@ -116,15 +116,15 @@
 
         <View
             style="@style/line_style"
-            android:layout_marginLeft="32px" />
+            android:layout_marginLeft="16dp" />
 
         <com.qtin.sexyvc.ui.widget.ClearableEditText
             android:id="@+id/etEmailAlternate"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:layout_below="@+id/topLine3"
-            android:layout_marginLeft="32px"
-            android:layout_marginRight="32px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@null"
             android:hint="@string/input_email_alternate"
             android:inputType="textEmailAddress"
@@ -141,7 +141,7 @@
         android:id="@+id/phoneContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44px"
+        android:layout_marginTop="22dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -150,34 +150,34 @@
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:background="@color/white"
             android:gravity="center_vertical"
-            android:paddingLeft="32px"
+            android:paddingLeft="16dp"
             android:textColor="@color/black90"
-            android:textSize="28px" />
+            android:textSize="14sp" />
 
         <View style="@style/line_style" />
 
         <View
             style="@style/line_style"
-            android:layout_marginTop="40px" />
+            android:layout_marginTop="20dp" />
 
         <com.qtin.sexyvc.ui.widget.PhoneEditText
             android:id="@+id/etPhoneBackup"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:background="@color/white"
             android:digits="@string/money_vcode"
             android:gravity="center_vertical"
             android:hint="@string/hint_input_backup_phone"
             android:inputType="phone"
             android:maxLength="13"
-            android:paddingLeft="32px"
-            android:paddingRight="32px"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:textColor="@color/black90"
             android:textColorHint="@color/black30"
-            android:textSize="28px" />
+            android:textSize="14dp" />
 
         <View style="@style/line_style" />
 
@@ -187,7 +187,7 @@
         android:id="@+id/phoneContainer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44px"
+        android:layout_marginTop="22dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -196,36 +196,34 @@
         <com.qtin.sexyvc.ui.widget.PhoneEditText
             android:id="@+id/etPhone2"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:hint="@string/hint_input_phone"
             android:inputType="phone"
-            android:paddingLeft="32px"
-            android:paddingRight="32px"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:textColor="@color/black90"
             android:textColorHint="@color/black30"
-            android:textSize="28px" />
-
-        <View style="@style/line_style" />
+            android:textSize="14sp" />
 
         <View
             style="@style/line_style"
-            android:layout_marginTop="40px" />
+            android:layout_marginLeft="16dp"/>
 
         <com.qtin.sexyvc.ui.widget.PhoneEditText
             android:id="@+id/etPhoneBackup2"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:hint="@string/hint_input_backup_phone"
             android:inputType="phone"
-            android:paddingLeft="32px"
-            android:paddingRight="32px"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:textColor="@color/black90"
             android:textColorHint="@color/black30"
-            android:textSize="28px" />
+            android:textSize="14sp" />
 
         <View style="@style/line_style" />
 
@@ -235,7 +233,7 @@
         android:id="@+id/positionContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44px"
+        android:layout_marginTop="22dp"
         android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone">
@@ -246,10 +244,10 @@
         <com.qtin.sexyvc.ui.widget.ClearableEditText
             android:id="@+id/etCompany"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:layout_below="@+id/topLine3"
-            android:layout_marginLeft="32px"
-            android:layout_marginRight="32px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@null"
             android:hint="@string/input_institution"
             android:inputType="text"
@@ -261,15 +259,15 @@
 
         <View
             style="@style/line_style"
-            android:layout_marginLeft="32px" />
+            android:layout_marginLeft="16dp" />
 
         <com.qtin.sexyvc.ui.widget.ClearableEditText
             android:id="@+id/etTitle"
             android:layout_width="match_parent"
-            android:layout_height="96px"
+            android:layout_height="48dp"
             android:layout_below="@+id/topLine3"
-            android:layout_marginLeft="32px"
-            android:layout_marginRight="32px"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="@null"
             android:hint="@string/input_position"
             android:inputType="text"

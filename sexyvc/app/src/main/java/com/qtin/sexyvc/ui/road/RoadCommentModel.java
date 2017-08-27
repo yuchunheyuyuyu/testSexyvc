@@ -9,6 +9,7 @@ import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.road.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.bean.RoadRequest;
 
@@ -51,5 +52,14 @@ public class RoadCommentModel extends BaseModel<ServiceManager,CacheManager> imp
     @Override
     public Observable<BaseEntity<CommonBean>> queryNormalQuestion() {
         return mServiceManager.getCommonService().queryNormalQuestion();
+    }
+
+    @Override
+    public void changeRoadStatus() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            list.get(0).setHas_roadshow(1);
+            mCacheManager.getDaoSession().getUserInfoEntityDao().update(list.get(0));
+        }
     }
 }

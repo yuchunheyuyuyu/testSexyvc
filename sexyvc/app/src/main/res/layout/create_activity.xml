@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/llAllContent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pale_grey_two"
     android:gravity="center_horizontal"
@@ -11,43 +11,60 @@
     <ImageView
         android:layout_width="177dp"
         android:layout_height="113dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginTop="68dp"
         android:src="@drawable/logo" />
 
-    <android.support.v7.widget.CardView
-        android:layout_width="270dp"
-        android:layout_height="52dp"
-        android:layout_margin="@dimen/card_elevation_margin"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="2dp"
-        app:contentPaddingLeft="20dp">
+    <com.qtin.sexyvc.ui.widget.PhoneEditText
+        android:id="@+id/etPhone"
+        android:layout_width="290dp"
+        android:layout_height="70dp"
+        android:background="@drawable/login_input_focus_selector"
+        android:digits="@string/money_vcode"
+        android:gravity="center_vertical"
+        android:hint="@string/hint_input_phone"
+        android:inputType="phone"
+        android:maxLength="13"
+        android:paddingBottom="4dp"
+        android:paddingLeft="30dp"
+        android:textColor="@color/slate"
+        android:textColorHint="@color/slate30"
+        android:textSize="14sp" />
 
-        <com.qtin.sexyvc.ui.widget.PhoneEditText
-            android:id="@+id/etPhone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:digits="@string/money_vcode"
-            android:gravity="center_vertical"
-            android:hint="@string/hint_input_phone"
-            android:inputType="phone"
-            android:maxLength="13"
-            android:textColor="@color/slate"
-            android:textColorHint="@color/slate30"
-            android:textSize="14sp" />
+    <!-- <android.support.v7.widget.CardView
+         android:layout_width="270dp"
+         android:layout_height="52dp"
+         android:layout_margin="@dimen/card_elevation_margin"
+         app:cardBackgroundColor="@color/white"
+         app:cardCornerRadius="25dp"
+         app:cardElevation="2dp"
+         app:contentPaddingLeft="20dp">
 
-    </android.support.v7.widget.CardView>
+         <com.qtin.sexyvc.ui.widget.PhoneEditText
+             android:id="@+id/etPhone"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@null"
+             android:digits="@string/money_vcode"
+             android:gravity="center_vertical"
+             android:hint="@string/hint_input_phone"
+             android:inputType="phone"
+             android:maxLength="13"
+             android:textColor="@color/slate"
+             android:textColorHint="@color/slate30"
+             android:textSize="14sp" />
+
+     </android.support.v7.widget.CardView>-->
 
 
     <TextView
         android:id="@+id/tvCreateAccount"
         android:layout_width="290dp"
         android:layout_height="70dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/btn_signup"
         android:gravity="center"
+        android:paddingBottom="4dp"
         android:text="@string/next_step"
         android:textColor="@color/white"
         android:textSize="16sp" />

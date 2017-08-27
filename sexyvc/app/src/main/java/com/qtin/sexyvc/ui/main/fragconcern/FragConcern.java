@@ -63,8 +63,6 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     @Override
     protected void init() {
         initView();
-        //获取数据
-        mPresenter.query(page, page_size);
     }
 
     private void initView() {
@@ -251,6 +249,13 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     public void onPause() {
         super.onPause();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //获取数据
+        mPresenter.query(page, page_size);
     }
 
     @Override

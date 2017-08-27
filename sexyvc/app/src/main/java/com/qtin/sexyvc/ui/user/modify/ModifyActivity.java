@@ -240,7 +240,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             } else if (modifyType == MODIFY_CONCERN_REMARK) {
                 wordNumber = 140;
                 tvTitle.setText(getResources().getString(R.string.remarks));
-                etIntroduce.setHint(getResources().getString(R.string.remarks));
+                etIntroduce.setHint(getResources().getString(R.string.remark_concern));
             }
 
 

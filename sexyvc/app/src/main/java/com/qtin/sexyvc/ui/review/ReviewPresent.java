@@ -90,6 +90,10 @@ public class ReviewPresent extends BasePresenter<ReviewContract.Model,ReviewCont
                 });
     }
 
+    public void changeCommentStatus(){
+        mModel.changeCommentStatus();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

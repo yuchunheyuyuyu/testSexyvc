@@ -220,6 +220,8 @@ public class BannerView extends FrameLayout {
             mImageLoader.loadImage(application, GlideImageConfig
                     .builder()
                     .url(CommonUtil.getAbsolutePath(data.get(i).getImg_url()))
+                    .placeholder(R.drawable.banner_loading)
+                    .errorPic(R.drawable.banner_loading)
                     .imageView(iv)
                     .build());
 

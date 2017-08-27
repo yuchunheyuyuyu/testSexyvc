@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -42,12 +43,15 @@ import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -307,9 +311,10 @@ public class ConcernDetailActivity extends AddProjectBaseActivity<ConcernDetailP
             TagAdapter tagAdapter = new TagAdapter<TagEntity>(contactBean.getTags()) {
                 @Override
                 public View getView(FlowLayout parent, int position, TagEntity o) {
-                    TextView tv = (TextView) LayoutInflater.from(ConcernDetailActivity.this).inflate(R.layout.item_filter_textview5, flowLayout, false);
+                    View view = LayoutInflater.from(ConcernDetailActivity.this).inflate(R.layout.item_filter_textview5_ll, flowLayout, false);
+                    TextView tv= (TextView) view.findViewById(R.id.tvContent);
                     tv.setText(o.getTag_name());
-                    return tv;
+                    return view;
                 }
             };
             flowLayout.setAdapter(tagAdapter);
@@ -338,15 +343,19 @@ public class ConcernDetailActivity extends AddProjectBaseActivity<ConcernDetailP
     }
 
     private int countRoadPercent(RoadShowItemBean itemBean) {
-        if (itemBean != null) {
-            int totle = itemBean.getAgree() + itemBean.getAgainst();
-            if (totle == 0) {
-                return 0;
-            } else {
-                return itemBean.getAgree() * 100 / totle;
-            }
+        if(itemBean==null){
+            itemBean=new RoadShowItemBean();
         }
-        return 0;
+
+        itemBean.setAgainst(itemBean.getAgainst()+5);
+        itemBean.setAgree(itemBean.getAgree()+5);
+
+        int totle = itemBean.getAgree() + itemBean.getAgainst();
+        if (totle == 0) {
+            return 0;
+        } else {
+            return itemBean.getAgree() * 100 / totle;
+        }
     }
 
     @Override

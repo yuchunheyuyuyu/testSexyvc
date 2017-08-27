@@ -8,9 +8,7 @@
     <LinearLayout
         android:id="@+id/moreCommentContainer"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="16dp"

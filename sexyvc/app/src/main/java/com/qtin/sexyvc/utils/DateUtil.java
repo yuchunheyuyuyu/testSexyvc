@@ -14,6 +14,11 @@ public class DateUtil {
         return format.format(new Date(timestamp*1000));
     }
 
+    public static String getWholeDate(long  timestamp) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss",Locale.getDefault());
+        return format.format(new Date(timestamp*1000));
+    }
+
     public static String getLongDate(long  timestamp) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日",Locale.getDefault());
         return format.format(new Date(timestamp*1000));
@@ -111,13 +116,13 @@ public class DateUtil {
 
         //不在同一年
         if(year1!=year2){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日",Locale.getDefault());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
             return format.format(new Date(timestamp*1000));
         }
 
         //在同一年,不同月份
         if(month1!=month2){
-            SimpleDateFormat format = new SimpleDateFormat("MM月dd日",Locale.getDefault());
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd",Locale.getDefault());
             return format.format(new Date(timestamp*1000));
         }
         //不同的日,区分是不是昨天
@@ -125,21 +130,21 @@ public class DateUtil {
             if(day2-day1==-1){
                 return "昨天";
             }else{
-                SimpleDateFormat format = new SimpleDateFormat("MM月dd日",Locale.getDefault());
+                SimpleDateFormat format = new SimpleDateFormat("MM-dd",Locale.getDefault());
                 return format.format(new Date(timestamp*1000));
             }
         }
 
-        //同一天内，不同小时
-        if(hour1!=hour2){
-            return hour1-hour2+"小时前";
-        }
+        long durMinute=(System.currentTimeMillis()-timestamp*1000)/(1000*60);
+        long durHour=(System.currentTimeMillis()-timestamp*1000)/(1000*60*60);
 
-        //同一小时
-        if(minute1!=minute2){
-            return minute1-minute2+"分钟前";
+        if(durMinute<60){
+            if(durMinute<1){
+                return "刚刚";
+            }
+            return durMinute+"分钟前";
         }else{
-            return "刚刚";
+            return durHour+"小时前";
         }
     }
 

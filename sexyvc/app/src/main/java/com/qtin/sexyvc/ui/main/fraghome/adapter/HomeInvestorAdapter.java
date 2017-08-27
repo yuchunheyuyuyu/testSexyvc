@@ -80,7 +80,7 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
         }else{
             holder.tvFundName.setText(StringUtil.formatString(entity.getFund_name()));
         }
-
+        holder.tvRatingScore.setText(""+entity.getScore());
         holder.ratingScore.setRating(entity.getScore());
         if(entity.getU_id()>0){
             holder.ivAnthStatus.setVisibility(View.VISIBLE);
@@ -115,6 +115,8 @@ public class HomeInvestorAdapter extends RecyclerView.Adapter<HomeInvestorAdapte
         TextView tvFundName;
         @BindView(R.id.ratingScore)
         RatingBar ratingScore;
+        @BindView(R.id.tvRatingScore)
+        TextView tvRatingScore;
 
         ViewHolder(View view) {
             super(view);

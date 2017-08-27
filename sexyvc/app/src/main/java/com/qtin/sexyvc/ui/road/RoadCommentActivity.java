@@ -282,6 +282,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
 
     @Override
     public void onUploadAnswersSuccess() {
+
+        mPresenter.changeRoadStatus();
         investorInfoBean.setHas_roadshow(1);
 
         Bundle bundle=new Bundle();

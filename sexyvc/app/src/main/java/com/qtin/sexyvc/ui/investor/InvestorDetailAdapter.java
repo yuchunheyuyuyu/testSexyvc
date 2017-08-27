@@ -165,9 +165,10 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             TagAdapter tagAdapter = new TagAdapter<TagEntity>(bean.getTags()) {
                 @Override
                 public View getView(FlowLayout parent, int position, TagEntity o) {
-                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview5, parent, false);
+                    View view = LayoutInflater.from(context).inflate(R.layout.item_filter_textview5_ll, parent, false);
+                    TextView tv= (TextView) view.findViewById(R.id.tvContent);
                     tv.setText(o.getTag_name());
-                    return tv;
+                    return view;
                 }
             };
             holder.flowLayout.setAdapter(tagAdapter);
@@ -314,15 +315,19 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private int countRoadPercent(RoadShowItemBean itemBean) {
-        if (itemBean != null) {
-            int totle = itemBean.getAgree() + itemBean.getAgainst();
-            if (totle == 0) {
-                return 0;
-            } else {
-                return itemBean.getAgree() * 100 / totle;
-            }
+        if(itemBean==null){
+            itemBean=new RoadShowItemBean();
         }
-        return 0;
+
+        itemBean.setAgainst(itemBean.getAgainst()+5);
+        itemBean.setAgree(itemBean.getAgree()+5);
+
+        int totle = itemBean.getAgree() + itemBean.getAgainst();
+        if (totle == 0) {
+            return 0;
+        } else {
+            return itemBean.getAgree() * 100 / totle;
+        }
     }
 
 

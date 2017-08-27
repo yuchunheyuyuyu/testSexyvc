@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
@@ -49,15 +48,12 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -315,7 +311,6 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
                                 gotoActivity(CommentObjectActivity.class,bundle);
                             }
                         });
-
                     }else{
                         DataHelper.SetIntergerSF(this,"read_score",currentScore);
                     }
@@ -336,6 +331,10 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
         if (backBean.getComments() != null && backBean.getComments().getList() != null) {
             data.addAll(backBean.getComments().getList());
         }
+        if(backBean.getComments() != null ){
+            investorBean.setComment_number(backBean.getComments().getTotal()+backBean.getComments().getUnauth_count());
+        }
+
         mAdapter.notifyDataSetChanged();
     }
 

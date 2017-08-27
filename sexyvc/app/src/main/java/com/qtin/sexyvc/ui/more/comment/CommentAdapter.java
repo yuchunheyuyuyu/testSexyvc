@@ -129,7 +129,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             holder.ivIdentityStatus.setVisibility(View.GONE);
         }
-        holder.tvTime.setText(DateUtil.getSpecialDate2(bean.getCreate_time()));
+        holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
         holder.tvPraiseNum.setText(""+bean.getLike());
         if(bean.getHas_praise()==0){
             holder.ivPraise.setSelected(false);
@@ -166,7 +166,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             holder.ivIdentityStatus.setVisibility(View.GONE);
         }
-        holder.tvTime.setText(DateUtil.getSpecialDate2(bean.getCreate_time()));
+        holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
         holder.tvPraiseNum.setText(""+bean.getLike());
         if(bean.getHas_praise()==0){
             holder.ivPraise.setSelected(false);

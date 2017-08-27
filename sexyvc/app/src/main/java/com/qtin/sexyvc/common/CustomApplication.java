@@ -145,6 +145,13 @@ public class CustomApplication extends BaseApplication {
         }
 
         final Activity activity = getAppManager().getCurrentActivity();
+        if(activity==null){
+            return;
+        }
+        if(activity instanceof CreateActivity){
+            return;
+        }
+
         View view = View.inflate(activity, R.layout.one_button_dialog, null);
         TextView tvDialogTitle = (TextView) view.findViewById(R.id.tvDialogTitle);
         Button btnRight = (Button) view.findViewById(R.id.btnRight);

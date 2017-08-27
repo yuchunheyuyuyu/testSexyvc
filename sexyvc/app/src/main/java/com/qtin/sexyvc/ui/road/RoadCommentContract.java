@@ -29,5 +29,7 @@ public interface RoadCommentContract {
         String getToken();
         Observable<CodeEntity> uploadAnswers(RoadRequest request);
         Observable<BaseEntity<CommonBean>> queryNormalQuestion();
+
+        void changeRoadStatus();
     }
 }

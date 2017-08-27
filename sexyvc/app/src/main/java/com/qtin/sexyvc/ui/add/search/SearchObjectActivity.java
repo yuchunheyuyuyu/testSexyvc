@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
 import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -25,7 +27,9 @@ import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.RoadCommentActivity;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -201,7 +205,8 @@ public class SearchObjectActivity extends MyBaseActivity<SearchObjectPresent> im
             investorBean=backBean.getInvestor();
             if (mPresenter.getUserInfo() != null) {
                 //创始人逻辑
-                if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+                if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                        ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
                     if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
                         if(investorBean.getHas_roadshow()==0){
                             if(investorBean.getHas_score()==0){
@@ -230,10 +235,16 @@ public class SearchObjectActivity extends MyBaseActivity<SearchObjectPresent> im
                             @Override
                             public void onFirstClick() {
                                 dismissBottomDialog();
-                                if(investorBean.getHas_score()==0){
-                                    gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                                if(investorBean.getHas_roadshow()==0){
+                                    if(investorBean.getHas_score()==0){
+                                        gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
+                                    }else{
+                                        gotoRoad();
+                                    }
                                 }else{
-                                    gotoRoad();
+                                    String format=getResources().getString(R.string.format_has_road);
+                                    String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
+                                    UiUtils.showToastShort(SearchObjectActivity.this,title);
                                 }
                             }
 

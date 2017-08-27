@@ -55,24 +55,43 @@
             android:layout_height="15dp"
             android:gravity="center_horizontal"
             android:text="棕泉资本"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/black50"
             android:textSize="10sp" />
 
-        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
-            android:id="@+id/ratingScore"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:minAllowedStars="0"
-            app:numStarsValue="5"
-            app:stepSizeValue="1"
-            app:starSizeValue="12dp"
-            app:ratingValue="3"
-            app:starMargin="0dp"
-            app:starSpacing="1dp"
-            app:isIndicator="true"
-            app:emptyDrawable="@drawable/star_l_blank"
-            app:filledDrawable="@drawable/star_l_full" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+                android:id="@+id/ratingScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:emptyDrawable="@drawable/star_l_blank"
+                app:filledDrawable="@drawable/star_l_full"
+                app:isIndicator="true"
+                app:minAllowedStars="0"
+                app:numStarsValue="5"
+                app:ratingValue="3"
+                app:starMargin="0dp"
+                app:starSizeValue="12dp"
+                app:starSpacing="1dp"
+                app:stepSizeValue="1" />
+
+            <TextView
+                android:id="@+id/tvRatingScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="0.0"
+                android:textColor="@color/barbie_pink_two"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
 

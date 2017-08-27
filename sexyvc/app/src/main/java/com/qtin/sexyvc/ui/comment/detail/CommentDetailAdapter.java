@@ -146,6 +146,15 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.tvPraiseNum.setText("" + bean.getPraise_count());
 
             holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
+
+            //加v的图标
+            /**if(AppStringUtil.isShowVStatus(bean.getIs_anon(),bean.getU_auth_type(),bean.getU_auth_state())){
+                holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+                holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(bean.getU_auth_type()));
+            }else{
+                holder.ivIdentityStatus.setVisibility(View.GONE);
+            }*/
+
             holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));
             long time = 0;
@@ -187,8 +196,10 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .imageView(holder.ivTargetAvatar)
                     .build());
             holder.tvTargetName.setText(StringUtil.formatString(bean.getInvestor_name()));
-            holder.tvTargetTitle.setText(StringUtil.formatString(bean.getFund_name()));
+            holder.tvTargetTitle.setText(StringUtil.formatAtString(bean.getFund_name()));
             holder.ratingTargetScore.setRating(bean.getInvestor_score());
+            holder.tvTargetRate.setText(""+bean.getInvestor_score());
+
             //关于投资人是否已经认证，暂时缺少字段
             if(bean.getInvestor_uid()==0){
                 holder.ivTargetAnthStatus.setVisibility(View.GONE);
@@ -307,6 +318,11 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView tvCommentCount;
         @BindView(R.id.investorContainer)
         View investorContainer;
+        @BindView(R.id.tvTargetRate)
+        TextView tvTargetRate;
+
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         ContentHolder(View view) {
             super(view);

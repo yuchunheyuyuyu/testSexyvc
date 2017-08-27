@@ -3,15 +3,17 @@ package com.qtin.sexyvc.ui.login.password.reset;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
+import com.jess.arms.utils.StringUtil;
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.login.password.reset.di.DaggerResetPasswordComponent;
 import com.qtin.sexyvc.ui.login.password.reset.di.ResetPasswordModule;
 import com.qtin.sexyvc.ui.login.password.reset.success.ResetSuccessActivity;
-
 import butterknife.BindView;
 import butterknife.OnClick;
+
 
 /**
  * Created by ls on 17/4/26.
@@ -60,7 +62,7 @@ public class ResetPasswordActivity extends MyBaseActivity<ResetPasswordPresent> 
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(this,message);
     }
 
     @Override
@@ -82,9 +84,17 @@ public class ResetPasswordActivity extends MyBaseActivity<ResetPasswordPresent> 
             case R.id.tvComplete:
                 String pwd1=etFirstPassword.getText().toString();
                 String pwd2=etSecondPassword.getText().toString();
-                if(pwd1.equals(pwd2)){
-                    mPresenter.resetPassword(code_value,phoneStr,pwd1);
+                if(!pwd1.equals(pwd2)){
+                    showMessage("两次密码输入不同");
                 }
+
+                if(StringUtil.checkPasswordFormat(pwd1)){
+                    showMessage("新密码长度范围在8-20位数字/字母");
+                    return;
+                }
+
+                mPresenter.resetPassword(code_value,phoneStr,pwd1);
+
                 break;
         }
     }

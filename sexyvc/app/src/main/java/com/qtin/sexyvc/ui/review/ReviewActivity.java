@@ -176,6 +176,8 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
 
     @Override
     public void onCommentSuccess(long comment_id, String comment_title) {
+        mPresenter.changeCommentStatus();
+
         CommentEvent event=new CommentEvent();
         event.setComment_id(comment_id);
         event.setComment_title(comment_title);

@@ -157,7 +157,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         holder.tvName.setText(StringUtil.formatString(bean.getFund_name()));
         holder.ratingScore.setRating(bean.getScore());
         holder.tvRating.setText("" + bean.getScore());
-        holder.tvRateNum.setText(bean.getComment_number()+" 人");
+        holder.tvRateNum.setText(bean.getScore_count()+" 人");
         holder.tvLocation.setText(StringUtil.formatString(bean.getLocation()));
 
         //路演评价
@@ -274,7 +274,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Bundle bundle=new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_FUND);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getFund_id());
-                    bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getFund_name()+"的评论");
+                    bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getFund_name()+"的评论"+"（"+bean.getComment_number()+"条）");
                     bundle.putInt("auth_state",1);
                     activity.gotoActivity(MoreCommentActivity.class,bundle);
                 }
@@ -309,9 +309,10 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             TagAdapter tagAdapter = new TagAdapter<TagEntity>(bean.getTags()) {
                 @Override
                 public View getView(FlowLayout parent, int position, TagEntity o) {
-                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.item_filter_textview5, parent, false);
+                    View view = LayoutInflater.from(context).inflate(R.layout.item_filter_textview5_ll, parent, false);
+                    TextView tv= (TextView) view.findViewById(R.id.tvContent);
                     tv.setText(o.getTag_name());
-                    return tv;
+                    return view;
                 }
             };
             holder.flowLayout.setAdapter(tagAdapter);
@@ -345,15 +346,19 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private int countRoadPercent(RoadShowItemBean itemBean) {
-        if (itemBean != null) {
-            int totle = itemBean.getAgree() + itemBean.getAgainst();
-            if (totle == 0) {
-                return 0;
-            } else {
-                return itemBean.getAgree() * 100 / totle;
-            }
+        if(itemBean==null){
+            itemBean=new RoadShowItemBean();
         }
-        return 0;
+
+        itemBean.setAgainst(itemBean.getAgainst()+5);
+        itemBean.setAgree(itemBean.getAgree()+5);
+
+        int totle = itemBean.getAgree() + itemBean.getAgainst();
+        if (totle == 0) {
+            return 0;
+        } else {
+            return itemBean.getAgree() * 100 / totle;
+        }
     }
 
     static class ContentHolder extends RecyclerView.ViewHolder {

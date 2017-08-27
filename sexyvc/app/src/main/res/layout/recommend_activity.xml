@@ -23,6 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:background="@drawable/btn_signup"
+        android:paddingBottom="4dp"
         android:gravity="center"
         android:text="@string/concern_the_selected"
         android:textColor="@color/white"

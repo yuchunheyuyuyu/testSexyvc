@@ -279,7 +279,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                     return;
                 }
 
-                if(userInfo.getU_auth_type()==ConstantUtil.AUTH_TYPE_UNKNOWN){
+                if(userInfo.getU_auth_type()==ConstantUtil.AUTH_TYPE_UNKNOWN
+                        ||StringUtil.isBlank(userInfo.getU_company())
+                        ||StringUtil.isBlank(userInfo.getU_title())){
                     showComfirmDialog("请先完善身份信息", null, "确定", new ComfirmListerner() {
                         @Override
                         public void onComfirm() {

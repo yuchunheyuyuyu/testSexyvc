@@ -189,14 +189,22 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
 
     public String getProjectInfo(int position){
         String unit=data.get(position).getLast_currency()==1?"人民币":"美金";
-        String info="";
-        if(data.get(position).getLast_financial_amount()==0){
-            info=getDomainText(position)+" | "+getStageText(position);
-        }else{
-           info=getDomainText(position)+" | "+getStageText(position)
-                    +"("+data.get(position).getLast_financial_amount()+" "+unit+")";
+
+        StringBuilder sb=new StringBuilder();
+        sb.append(getDomainText(position));
+        sb.append(" | ");
+        sb.append(getStageText(position));
+
+        if(data.get(position).getLast_financial_amount()>0){
+            sb.append("(");
+
+            String moneyValue=data.get(position).getLast_financial_amount()/10000f+"";
+            sb.append(moneyValue);
+            sb.append("万");
+            sb.append(unit);
+            sb.append(")");
         }
-        return info;
+        return sb.toString();
     }
 
     private String getDomainText(int position){
