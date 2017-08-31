@@ -728,5 +728,16 @@ public interface CommonService {
      */
     @POST("api/page/investor/recommend")
     Observable<BaseEntity<ListBean<RecommendBean>>> queryRecommend();
+
+    /**
+     * 76. 操作--反馈
+     * @param token
+     * @param report_type 反馈类型，1：报错；2：建议
+     * @param content
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/action/report")
+    Observable<CodeEntity> report(@Field("token")String token,@Field("report_type")int report_type,@Field("content")String content);
  }
 

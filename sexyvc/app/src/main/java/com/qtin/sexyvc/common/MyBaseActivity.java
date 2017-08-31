@@ -61,6 +61,34 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
         }
     }
 
+    public static interface OnClickErrorListener{
+        void onClick();
+    }
+
+    protected void showErrorView(final OnClickErrorListener onClickErrorListener){
+        findViewById(R.id.errorLayout).setVisibility(View.VISIBLE);
+        findViewById(R.id.emptyLayout).setVisibility(View.GONE);
+        findViewById(R.id.recyclerView).setVisibility(View.GONE);
+        findViewById(R.id.ivErrorStatus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickErrorListener.onClick();
+            }
+        });
+    }
+
+    protected void showEmptyView(){
+        findViewById(R.id.errorLayout).setVisibility(View.GONE);
+        findViewById(R.id.emptyLayout).setVisibility(View.VISIBLE);
+        findViewById(R.id.recyclerView).setVisibility(View.GONE);
+    }
+
+    protected void showNormalContentView(){
+        findViewById(R.id.errorLayout).setVisibility(View.GONE);
+        findViewById(R.id.emptyLayout).setVisibility(View.GONE);
+        findViewById(R.id.recyclerView).setVisibility(View.VISIBLE);
+    }
+
     @Nullable
     @Override
     protected void onCreate(Bundle savedInstanceState) {

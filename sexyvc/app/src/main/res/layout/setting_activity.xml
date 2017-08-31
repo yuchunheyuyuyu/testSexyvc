@@ -19,26 +19,26 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="220px"
-                android:layout_marginTop="60px"
-                android:src="@drawable/setting_topimg" />
+                android:layout_height="110dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/setting_icon" />
 
             <TextView
                 android:id="@+id/tvVersionName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8px"
+                android:layout_marginTop="4dp"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="6sp"
                 android:text="Ver 1.0.0"
                 android:textColor="@color/slate_50"
-                android:textSize="24px" />
+                android:textSize="12sp" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56px"
+                android:layout_marginTop="28dp"
                 android:background="@color/white"
                 android:orientation="vertical">
 
@@ -47,11 +47,11 @@
                 <LinearLayout
                     android:id="@+id/modifyPasswordContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -63,24 +63,24 @@
 
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
                     android:id="@+id/clearCacheContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                         android:id="@+id/tvCacheSize"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="32px"
+                        android:layout_marginLeft="16dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="end"
@@ -103,24 +103,24 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
                     android:id="@+id/aboutUsContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -132,9 +132,38 @@
 
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
+                        android:src="@drawable/arrow_disclosure_l" />
+                </LinearLayout>
+
+                <View
+                    style="@style/line_style"
+                    android:layout_marginLeft="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/feedBackContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/feedback"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
@@ -145,7 +174,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40px"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <View style="@style/line_style" />
@@ -153,7 +182,7 @@
                 <TextView
                     android:id="@+id/tvLogout"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:background="@color/white"
                     android:gravity="center"
                     android:text="@string/logout"

@@ -18,6 +18,7 @@ public interface SentContract {
         void querySuccess(long record_id,ListBean<SentBean> listBean);
         void startLoadMore();
         void endLoadMore();
+        void showNetErrorView();
     }
     interface Model extends IModel{
         String getToken();

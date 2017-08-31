@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by ls on 17/7/5.
@@ -56,7 +55,8 @@ public class CaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         CaseBean bean=data.get(position);
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .transformation(new RoundedCornersTransformation(context,0,0))
+                .isFitCenter(true)
+                //.transformation(new RoundedCornersTransformation(context,0,0))
                 .placeholder(R.drawable.logo_blank)
                 .errorPic(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(bean.getCase_logo()))

@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -63,13 +64,21 @@ public class NoticeFragPresent extends BasePresenter<NoticeFragContract.Model,No
                     }
                 })
                 .compose(RxUtils.<BaseEntity<MsgItems>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<MsgItems>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<MsgItems>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<MsgItems> baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

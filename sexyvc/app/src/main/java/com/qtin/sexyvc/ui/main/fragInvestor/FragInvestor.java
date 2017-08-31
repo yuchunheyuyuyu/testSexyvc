@@ -7,6 +7,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
+
+import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -20,7 +24,9 @@ import com.qtin.sexyvc.ui.main.fragInvestor.di.FragInvestorModule;
 import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -37,6 +43,8 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private int page = 1;
     private int page_size = 15;
     private Paginate mPaginate;
@@ -70,7 +78,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
     public void onPause() {
         super.onPause();
         swipeRefreshLayout.setRefreshing(false);
-        isLoadingMore=false;
+        isLoadingMore = false;
     }
 
     private void configRecycleView() {
@@ -97,9 +105,9 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
 
                  entity.setGroup_ids(group_ids);
                  entity.setInvestor_ids(investor_ids);*/
-                if(data.get(position) instanceof InvestorEntity){
+                if (data.get(position) instanceof InvestorEntity) {
                     Bundle bundle = new Bundle();
-                    bundle.putLong("investor_id", ((InvestorEntity)data.get(position)).getInvestor_id());
+                    bundle.putLong("investor_id", ((InvestorEntity) data.get(position)).getInvestor_id());
                     gotoActivity(InvestorDetailActivity.class, bundle);
                 }
             }
@@ -130,7 +138,7 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
             };
 
             mPaginate = Paginate.with(recyclerView, callbacks)
-                    .setLoadingTriggerThreshold(0)
+                    .setLoadingTriggerThreshold(1)
                     .build();
             mPaginate.setHasMoreDataToLoad(false);
         }
@@ -199,12 +207,41 @@ public class FragInvestor extends MyBaseFragment<FragInvestorPresent> implements
         mAdapter.notifyDataSetChanged();
     }
 
-    @OnClick(R.id.searchContainer)
-    public void onClick() {
-        Bundle bundle=new Bundle();
-        bundle.putString(ConstantUtil.KEY_WORD_INTENT,"");
-        bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT,false);
-        bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
-        gotoActivity(SearchActionActivity.class,bundle);
+    @Override
+    public void showNetErrorView() {
+        if(page==1){
+            errorLayout.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }else{
+            page--;
+            UiUtils.SnackbarText(getString(R.string.net_error_hint));
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @OnClick({R.id.searchContainer, R.id.ivErrorStatus})
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.ivErrorStatus:
+                page = 1;
+                mPresenter.getInvestorData(page, page_size);
+                break;
+            case R.id.searchContainer:
+                Bundle bundle = new Bundle();
+                bundle.putString(ConstantUtil.KEY_WORD_INTENT, "");
+                bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT, false);
+                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, ConstantUtil.TYPE_INVESTOR);
+                gotoActivity(SearchActionActivity.class, bundle);
+                break;
+        }
     }
 }

@@ -19,6 +19,10 @@ public interface NoticeFragContract {
         void startLoadMore();
         void endLoadMore();
         void changeStatusSuccess(int position);
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<MsgItems>> queryNotice(String token,long id,int page_size);

@@ -19,7 +19,8 @@ public interface MyProjectContract {
     interface View extends BaseView{
         void querySuccess(ProjectEntity entity);
         void requestTypeBack(int type,ArrayList<FilterEntity> list);
-
+        void showNetErrorView();
+        void showContentView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<ProjectEntity>> queryMyProject(String token);

@@ -279,7 +279,15 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
     public void querySuccess(long record_id, ListBean<SentBean> listBean) {
         if (record_id == ConstantUtil.DEFALUT_ID) {
             data.clear();
+            if(listBean.getList()==null||listBean.getList().isEmpty()){
+                showEmptyView();
+            }else{
+                showNormalContentView();
+            }
+        }else{
+            showNormalContentView();
         }
+
         if (listBean.getList() != null) {
             data.addAll(listBean.getList());
         }
@@ -299,5 +307,16 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
     @Override
     public void endLoadMore() {
         isLoadingMore = false;
+    }
+
+    @Override
+    public void showNetErrorView() {
+        showErrorView(new OnClickErrorListener() {
+            @Override
+            public void onClick() {
+                record_id= ConstantUtil.DEFALUT_ID;
+                mPresenter.queryMySent(page_size,record_id);
+            }
+        });
     }
 }

@@ -20,6 +20,10 @@ public interface MessageFragContract {
         void startRefresh(String msg);
         void endRefresh();
         void changeStatusSuccess(int position);
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<MsgItems>> queryMessage(String token,long id,int page_size);

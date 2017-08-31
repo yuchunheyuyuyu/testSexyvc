@@ -127,8 +127,6 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
                     public void onNext(BaseEntity<CallBackBean> baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

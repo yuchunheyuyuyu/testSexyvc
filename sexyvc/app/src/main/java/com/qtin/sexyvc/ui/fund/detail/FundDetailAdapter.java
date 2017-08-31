@@ -47,7 +47,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by ls on 17/7/6.
@@ -147,7 +146,8 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private void dealContent(final FundDetailBean bean, ContentHolder holder) {
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .transformation(new RoundedCornersTransformation(context, 0, 0))
+                .isFitCenter(true)
+                //.transformation(new RoundedCornersTransformation(context, 0, 0))
                 .placeholder(R.drawable.logo_blank)
                 .errorPic(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(bean.getFund_logo()))

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -24,6 +26,7 @@ import com.qtin.sexyvc.ui.user.message.message.di.MessageFragModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -38,12 +41,16 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private long id = ConstantUtil.DEFALUT_ID;
     private int page_size = 15;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
-    private ArrayList<MsgBean> data=new ArrayList<>();
+    private ArrayList<MsgBean> data = new ArrayList<>();
     private MessageAdapter mAdapter;
     private MessageActivity activity;
     private int hasLoadedNum;
@@ -60,69 +67,69 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     protected void init() {
-        activity= (MessageActivity) mActivity;
+        activity = (MessageActivity) mActivity;
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                id=ConstantUtil.DEFALUT_ID;
-                mPresenter.queryMessage(id,page_size);
+                id = ConstantUtil.DEFALUT_ID;
+                mPresenter.queryMessage(id, page_size);
             }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mAdapter=new MessageAdapter(data);
+        mAdapter = new MessageAdapter(data);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                try{
+                try {
 
-                    MsgBean bean=data.get(position);
-                    bean.setRead_time(System.currentTimeMillis()/1000);
+                    MsgBean bean = data.get(position);
+                    bean.setRead_time(System.currentTimeMillis() / 1000);
                     mAdapter.notifyDataSetChanged();
                     //设置为已读
-                    ChangeReadStatusRequest request=new ChangeReadStatusRequest();
-                    ArrayList<Long> ids=new ArrayList<Long>();
+                    ChangeReadStatusRequest request = new ChangeReadStatusRequest();
+                    ArrayList<Long> ids = new ArrayList<Long>();
                     ids.add(bean.getId());
                     request.setIds(ids);
                     request.setObject_type(1);
-                    mPresenter.changeReadStatus(request,position);
+                    mPresenter.changeReadStatus(request, position);
 
-                    long id=Long.parseLong(bean.getAction_content());
-                    Bundle bundle=new Bundle();
-                    if("investor_detail".equals(bean.getAction_type())){
-                        bundle.putLong("investor_id",id);
-                        gotoActivity(InvestorDetailActivity.class,bundle);
+                    long id = Long.parseLong(bean.getAction_content());
+                    Bundle bundle = new Bundle();
+                    if ("investor_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("investor_id", id);
+                        gotoActivity(InvestorDetailActivity.class, bundle);
 
-                    }else if("fund_detail".equals(bean.getAction_type())){
-                        bundle.putLong("fund_id",id);
-                        gotoActivity(FundDetailActivity.class,bundle);
+                    } else if ("fund_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("fund_id", id);
+                        gotoActivity(FundDetailActivity.class, bundle);
 
-                    }else if("comment_detail".equals(bean.getAction_type())){
-                        bundle.putLong("comment_id",id);
-                        gotoActivity(CommentDetailActivity.class,bundle);
+                    } else if ("comment_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("comment_id", id);
+                        gotoActivity(CommentDetailActivity.class, bundle);
 
-                    }else if("subject_detail".equals(bean.getAction_type())){
-                        bundle.putLong("subject_id",id);
-                        gotoActivity(SubjectDetailActivity.class,bundle);
+                    } else if ("subject_detail".equals(bean.getAction_type())) {
+                        bundle.putLong("subject_id", id);
+                        gotoActivity(SubjectDetailActivity.class, bundle);
 
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         initPaginate();
-        mPresenter.queryMessage(id,page_size);
+        mPresenter.queryMessage(id, page_size);
     }
 
-    public void changeAllReadStatus(){
-        ChangeReadStatusRequest request=new ChangeReadStatusRequest();
-        ArrayList<Long> ids=new ArrayList<Long>();
+    public void changeAllReadStatus() {
+        ChangeReadStatusRequest request = new ChangeReadStatusRequest();
+        ArrayList<Long> ids = new ArrayList<Long>();
         request.setIds(ids);
         request.setObject_type(1);
-        mPresenter.changeReadStatus(request,-1);
+        mPresenter.changeReadStatus(request, -1);
     }
 
     private void initPaginate() {
@@ -130,7 +137,7 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.queryMessage(id,page_size);
+                    mPresenter.queryMessage(id, page_size);
                 }
 
                 @Override
@@ -154,7 +161,7 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.queryMessageStatus(ConstantUtil.DEFALUT_ID,1);
+        mPresenter.queryMessageStatus(ConstantUtil.DEFALUT_ID, 1);
     }
 
     @Override
@@ -176,7 +183,7 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     public void showMessage(String message) {
-        UiUtils.showToastShort(mActivity,message);
+        UiUtils.showToastShort(mActivity, message);
     }
 
     @Override
@@ -191,26 +198,37 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     public void querySuccess(MsgItems items) {
-        if(id==ConstantUtil.DEFALUT_ID){
-            data.clear();
-            hasLoadedNum=0;
-        }
-        if(items.getList()!=null){
-            hasLoadedNum+=items.getList().size();
 
-            for(MsgBean bean:items.getList()){
-                if(bean.getMessage_type()==1||bean.getMessage_type()==2){
+        if(id==ConstantUtil.DEFALUT_ID){
+            if(items.getList()==null||items.getList().isEmpty()){
+                showEmptyView();
+            }else{
+                showContentView();
+            }
+        }else{
+            showContentView();
+        }
+
+        if (id == ConstantUtil.DEFALUT_ID) {
+            data.clear();
+            hasLoadedNum = 0;
+        }
+        if (items.getList() != null) {
+            hasLoadedNum += items.getList().size();
+
+            for (MsgBean bean : items.getList()) {
+                if (bean.getMessage_type() == 1 || bean.getMessage_type() == 2) {
                     data.add(bean);
                 }
             }
         }
-        if(data.size()>0){
-            id=data.get(data.size()-1).getId();
+        if (data.size() > 0) {
+            id = data.get(data.size() - 1).getId();
         }
-        if(page_size<items.getTotal()){
-            hasLoadedAllItems=false;
-        }else{
-            hasLoadedAllItems=true;
+        if (page_size < items.getTotal()) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
             mAdapter.setHasLoadMore(true);
         }
         mAdapter.notifyDataSetChanged();
@@ -218,9 +236,9 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     public void queryStatusSuccess(MsgItems items) {
-        if(items.getMsg_no_read()>0){
+        if (items.getMsg_no_read() > 0) {
             activity.setTvRightSelected(true);
-        }else{
+        } else {
             activity.setTvRightSelected(false);
         }
     }
@@ -241,7 +259,6 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
     }
 
 
-
     @Override
     public void endRefresh() {
         loadingDialogDismiss();
@@ -249,15 +266,59 @@ public class MessageFrag extends MyBaseFragment<MessageFragPresent> implements M
 
     @Override
     public void changeStatusSuccess(int position) {
-        if(position==-1){
-            for(MsgBean bean:data){
-                bean.setRead_time(System.currentTimeMillis()/1000);
+        if (position == -1) {
+            for (MsgBean bean : data) {
+                bean.setRead_time(System.currentTimeMillis() / 1000);
             }
             activity.setTvRightSelected(false);
-        }else{
+        } else {
 
         }
 
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
+    @OnClick(R.id.ivErrorStatus)
+    public void onClick() {
+        id = ConstantUtil.DEFALUT_ID;
+        mPresenter.queryMessage(id, page_size);
     }
 }

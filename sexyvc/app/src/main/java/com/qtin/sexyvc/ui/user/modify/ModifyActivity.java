@@ -90,6 +90,8 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     public static final int MODIFY_CONCERN_WECAHT = 0x01a;
     public static final int MODIFY_CONCERN_REMARK = 0x01b;
 
+    //建议反馈
+    public static final int MODIFY_FEED_BACK = 0x022;
 
     public static final String MODIFY_INTENT = "modify_type";
     public static final String MODIFY_INTENT_VALUE1 = "modify_value1";
@@ -222,7 +224,8 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
 
 
             tvTitle.setText(getResources().getString(R.string.title_email));
-        } else if (modifyType == MODIFY_INTRODUCE || modifyType == MODIFY_PROJECT_INTRODUCE || modifyType == MODIFY_CONCERN_REMARK) {
+        } else if (modifyType == MODIFY_INTRODUCE || modifyType == MODIFY_PROJECT_INTRODUCE
+                || modifyType == MODIFY_CONCERN_REMARK||modifyType==MODIFY_FEED_BACK) {
             value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
             etIntroduce.setText(StringUtil.formatString(value1));
             etIntroduce.setSelection(StringUtil.formatString(value1).length());
@@ -230,19 +233,23 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             introduceContainer.setVisibility(View.VISIBLE);
 
             if (modifyType == MODIFY_INTRODUCE) {
-                etIntroduce.setHint(getResources().getString(R.string.hint_introduce));
-                tvTitle.setText(getResources().getString(R.string.title_introduce));
+                etIntroduce.setHint(getString(R.string.hint_introduce));
+                tvTitle.setText(getString(R.string.title_introduce));
             } else if (modifyType == MODIFY_PROJECT_INTRODUCE) {
                 wordNumber = 140;
-                tvRight.setText(getResources().getString(R.string.comfirm));
-                tvTitle.setText(getResources().getString(R.string.project_introduce));
-                etIntroduce.setHint(getResources().getString(R.string.hint_introduce_project));
+                tvRight.setText(getString(R.string.comfirm));
+                tvTitle.setText(getString(R.string.project_introduce));
+                etIntroduce.setHint(getString(R.string.hint_introduce_project));
             } else if (modifyType == MODIFY_CONCERN_REMARK) {
                 wordNumber = 140;
                 tvTitle.setText(getResources().getString(R.string.remarks));
-                etIntroduce.setHint(getResources().getString(R.string.remark_concern));
+                etIntroduce.setHint(getString(R.string.remark_concern));
+            }else if(modifyType==MODIFY_FEED_BACK){
+                wordNumber=140;
+                tvRight.setText(getString(R.string.commit));
+                tvTitle.setText(getString(R.string.title_feed_back));
+                etIntroduce.setHint(getString(R.string.hint_feed_back));
             }
-
 
             tvCountDown.setText(String.format(getResources().getString(R.string.input_count), "" + (wordNumber - StringUtil.formatString(value1).length())));
 
@@ -427,6 +434,13 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         return;
                     }
                     mPresenter.editContactRemark(contact_id, contact_remark);
+                }else if(modifyType==MODIFY_FEED_BACK){
+                    String feedback = etIntroduce.getText().toString().trim();
+                    if (StringUtil.isBlank(feedback)) {
+                        showMessage("建议反馈不能为空");
+                        return;
+                    }
+                    mPresenter.report(feedback);
                 }
                 break;
         }
@@ -436,7 +450,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     public void editSuccess() {
         Observable.just(1)
                 .observeOn(AndroidSchedulers.mainThread())
-                .delay(500, TimeUnit.MILLISECONDS)
+                .delay(5, TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {

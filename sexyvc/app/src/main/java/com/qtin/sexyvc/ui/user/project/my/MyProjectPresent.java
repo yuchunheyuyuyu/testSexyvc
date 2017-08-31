@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -69,14 +70,21 @@ public class MyProjectPresent extends BasePresenter<MyProjectContract.Model,MyPr
                         mRootView.hideLoading();
                     }
                 }).compose(RxUtils.<BaseEntity<ProjectEntity>>bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<ProjectEntity>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<ProjectEntity>>() {
+                    @Override
+                    public void onCompleted() {
+                        mRootView.showContentView();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<ProjectEntity> baseEntity) {
-
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

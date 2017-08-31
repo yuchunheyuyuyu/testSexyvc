@@ -19,6 +19,8 @@ public interface FragHomeContract {
     interface View extends BaseView{
         Context getContext();
         void dataCallback(ArrayList<HomeInterface> data);
+        void showNetErrorView();
+        void showContentView();
     }
 
     interface Model extends IModel{

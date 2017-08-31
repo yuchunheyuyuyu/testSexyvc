@@ -1,24 +1,25 @@
 package com.qtin.sexyvc.ui.user.sent;
 
 import android.app.Application;
-
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.jess.arms.utils.UiUtils;
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
-
+import com.qtin.sexyvc.utils.ConstantUtil;
 import javax.inject.Inject;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
+import static android.R.attr.id;
 
 /**
  * Created by ls on 17/4/26.
@@ -63,7 +64,21 @@ public class SentPresent extends BasePresenter<SentContract.Model,SentContract.V
                     }
                 })
                 .compose(RxUtils.<BaseEntity<ListBean<SentBean>>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<ListBean<SentBean>>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<ListBean<SentBean>>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if(record_id== ConstantUtil.DEFALUT_ID){
+                            mRootView.showNetErrorView();
+                        }else{
+                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        }
+                    }
+
                     @Override
                     public void onNext(BaseEntity<ListBean<SentBean>> baseEntity) {
                         if(baseEntity.isSuccess()){

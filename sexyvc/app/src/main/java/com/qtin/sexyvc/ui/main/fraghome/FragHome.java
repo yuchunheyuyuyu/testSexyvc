@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -33,9 +32,7 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -63,6 +60,8 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     RelativeLayout headLogoContainer;
     @BindView(R.id.homeLine2)
     View homeLine2;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private int mDistance;//滚动的距离
     private int maxDistance;//监测最大的
 
@@ -234,16 +233,41 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
     }
 
     @Override
+    public void showNetErrorView() {
+        errorLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public void killMyself() {
 
     }
 
-    @OnClick(R.id.headContainer)
-    public void onClick() {
-        Bundle bundle = new Bundle();
-        bundle.putString(ConstantUtil.KEY_WORD_INTENT, "");
-        bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT, false);
-        bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, ConstantUtil.TYPE_INVESTOR);
-        gotoActivity(SearchActionActivity.class, bundle);
+    @OnClick({R.id.ivEmptyStatus, R.id.ivErrorStatus,R.id.headContainer})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ivEmptyStatus:
+                break;
+            case R.id.ivErrorStatus:
+                mPresenter.query();
+                break;
+            case R.id.headContainer:
+                Bundle bundle = new Bundle();
+                bundle.putString(ConstantUtil.KEY_WORD_INTENT, "");
+                bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT, false);
+                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, ConstantUtil.TYPE_INVESTOR);
+                gotoActivity(SearchActionActivity.class, bundle);
+                break;
+        }
     }
 }

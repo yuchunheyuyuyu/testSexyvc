@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by ls on 17/6/9.
@@ -124,7 +123,8 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .transformation(new RoundedCornersTransformation(context, 0, 0))
+                //.transformation(new RoundedCornersTransformation(context, 0, 0))
+                .isFitCenter(true)
                 .placeholder(R.drawable.logo_blank)
                 .errorPic(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(entity.getFund_logo()))

@@ -16,8 +16,8 @@ import com.qtin.sexyvc.ui.main.fraghome.entity.ItemNewsEntity;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -58,7 +58,17 @@ public class FragHomePresent extends BasePresenter<FragHomeContract.Model,FragHo
                     }
                 })
                 .compose(RxUtils.<BaseEntity<HomeBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<HomeBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<HomeBean>>() {
+                    @Override
+                    public void onCompleted() {
+                        mRootView.showContentView();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<HomeBean> baseEntity) {
                         if(baseEntity.isSuccess()){
@@ -113,6 +123,11 @@ public class FragHomePresent extends BasePresenter<FragHomeContract.Model,FragHo
                         }
                     }
                 });
+                /**.subscribe(new ErrorHandleSubscriber<BaseEntity<HomeBean>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<HomeBean> baseEntity) {
+                    }
+                });*/
     }
 
     @Override

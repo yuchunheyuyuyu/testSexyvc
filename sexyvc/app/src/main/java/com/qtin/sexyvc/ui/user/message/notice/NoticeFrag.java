@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -15,8 +18,11 @@ import com.qtin.sexyvc.ui.user.bean.MsgItems;
 import com.qtin.sexyvc.ui.user.message.notice.di.DaggerNoticeFragComponent;
 import com.qtin.sexyvc.ui.user.message.notice.di.NoticeFragModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -30,13 +36,17 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
 
     private long id = ConstantUtil.DEFALUT_ID;
     private int page_size = 15;
     private Paginate mPaginate;
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
-    private ArrayList<MsgBean> data=new ArrayList<>();
+    private ArrayList<MsgBean> data = new ArrayList<>();
     private NoticeAdapter mAdapter;
 
     @Override
@@ -54,24 +64,24 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                id=ConstantUtil.DEFALUT_ID;
-                mPresenter.queryNotice(id,page_size);
+                id = ConstantUtil.DEFALUT_ID;
+                mPresenter.queryNotice(id, page_size);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mAdapter=new NoticeAdapter(data);
+        mAdapter = new NoticeAdapter(data);
         recyclerView.setAdapter(mAdapter);
 
         initPaginate();
-        mPresenter.queryNotice(id,page_size);
+        mPresenter.queryNotice(id, page_size);
     }
 
-    public void changeAllReadStatus(){
-        ChangeReadStatusRequest request=new ChangeReadStatusRequest();
-        ArrayList<Long> ids=new ArrayList<Long>();
+    public void changeAllReadStatus() {
+        ChangeReadStatusRequest request = new ChangeReadStatusRequest();
+        ArrayList<Long> ids = new ArrayList<Long>();
         request.setIds(ids);
         request.setObject_type(2);
-        mPresenter.changeReadStatus(request,-1);
+        mPresenter.changeReadStatus(request, -1);
     }
 
     private void initPaginate() {
@@ -79,7 +89,7 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.queryNotice(id,page_size);
+                    mPresenter.queryNotice(id, page_size);
                 }
 
                 @Override
@@ -119,7 +129,7 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
 
     @Override
     public void showMessage(String message) {
-        UiUtils.showToastShort(mActivity,message);
+        UiUtils.showToastShort(mActivity, message);
     }
 
     @Override
@@ -134,19 +144,27 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
 
     @Override
     public void querySuccess(MsgItems items) {
-        if(id==ConstantUtil.DEFALUT_ID){
+        if (id == ConstantUtil.DEFALUT_ID) {
             data.clear();
+
+            if(items.getList()==null||items.getList().isEmpty()){
+                showEmptyView();
+            }else{
+                showContentView();
+            }
+        }else{
+            showContentView();
         }
-        if(items.getList()!=null){
+        if (items.getList() != null) {
             data.addAll(items.getList());
         }
-        if(data.size()>0){
-            id=data.get(data.size()-1).getId();
+        if (data.size() > 0) {
+            id = data.get(data.size() - 1).getId();
         }
-        if(page_size<items.getTotal()){
-            hasLoadedAllItems=false;
-        }else{
-            hasLoadedAllItems=true;
+        if (page_size < items.getTotal()) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
             mAdapter.setHasLoadMore(true);
         }
         mAdapter.notifyDataSetChanged();
@@ -166,5 +184,50 @@ public class NoticeFrag extends MyBaseFragment<NoticeFragPresent> implements Not
     @Override
     public void changeStatusSuccess(int position) {
 
+    }
+
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if(emptyLayout.getVisibility()==View.VISIBLE){
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if(emptyLayout.getVisibility()==View.VISIBLE){
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if(emptyLayout.getVisibility()==View.GONE){
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @OnClick(R.id.ivErrorStatus)
+    public void onClick() {
+        id = ConstantUtil.DEFALUT_ID;
+        mPresenter.queryNotice(id, page_size);
     }
 }

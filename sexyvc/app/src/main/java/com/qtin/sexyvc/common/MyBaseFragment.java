@@ -55,6 +55,7 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
             watcher.watch(this);
         }
         this.customApplication =null;
+
     }
 
     protected void showLoadingDialog(String msg){

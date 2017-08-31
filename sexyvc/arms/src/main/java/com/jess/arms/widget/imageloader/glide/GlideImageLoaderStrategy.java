@@ -41,8 +41,14 @@ public class GlideImageLoaderStrategy implements BaseImageLoaderStrategy<GlideIm
         manager = Glide.with(ctx);//如果context是activity则自动使用Activity的生命周期
 
         DrawableRequestBuilder<String> requestBuilder = manager.load(config.getUrl())
-                .crossFade()
-                .centerCrop();
+                //.crossFade();
+                .dontAnimate();
+
+        if(config.isFitCenter()){
+            requestBuilder.fitCenter();
+        }else{
+            requestBuilder.centerCrop();
+        }
 
         switch (config.getCacheStrategy()) {//缓存策略
             case 0:
@@ -65,7 +71,6 @@ public class GlideImageLoaderStrategy implements BaseImageLoaderStrategy<GlideIm
         }else{
             //requestBuilder.fitCenter();
         }
-
 
         if (config.getPlaceholder() != 0)//设置占位符
             requestBuilder.placeholder(config.getPlaceholder());

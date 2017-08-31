@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -13,6 +14,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.login.account.create.CreateActivity;
+import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
 import com.qtin.sexyvc.ui.user.password.ModifyPasswordActivity;
 import com.qtin.sexyvc.ui.user.setting.di.DaggerSettingComponent;
 import com.qtin.sexyvc.ui.user.setting.di.SettingModule;
@@ -81,7 +83,8 @@ public class SettingActivity extends MyBaseActivity<SettingPresent> implements S
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.modifyPasswordContainer, R.id.clearCacheContainer, R.id.aboutUsContainer,R.id.tvLogout})
+    @OnClick({R.id.ivLeft, R.id.modifyPasswordContainer, R.id.clearCacheContainer, R.id.aboutUsContainer,
+            R.id.tvLogout,R.id.feedBackContainer})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
@@ -106,6 +109,12 @@ public class SettingActivity extends MyBaseActivity<SettingPresent> implements S
                                 }
                             }
                         });
+                break;
+            case R.id.feedBackContainer:
+                Bundle feedback=new Bundle();
+                feedback.putInt(ModifyActivity.MODIFY_INTENT,ModifyActivity.MODIFY_FEED_BACK);
+                feedback.putString(ModifyActivity.MODIFY_INTENT_VALUE1,"");
+                gotoActivity(ModifyActivity.class,feedback);
                 break;
             case R.id.aboutUsContainer:
                 Bundle bundle=new Bundle();

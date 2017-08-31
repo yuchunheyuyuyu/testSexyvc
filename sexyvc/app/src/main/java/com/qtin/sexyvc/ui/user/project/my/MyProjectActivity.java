@@ -181,6 +181,21 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
         }
     }
 
+    @Override
+    public void showNetErrorView() {
+        showErrorView(new OnClickErrorListener() {
+            @Override
+            public void onClick() {
+                mPresenter.query();
+            }
+        });
+    }
+
+    @Override
+    public void showContentView() {
+        showNormalContentView();
+    }
+
     private void query(){
         if(isStageDownload&&isDomainDownload){
             mPresenter.query();

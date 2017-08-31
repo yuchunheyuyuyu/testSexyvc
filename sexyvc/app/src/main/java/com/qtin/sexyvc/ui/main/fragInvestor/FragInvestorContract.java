@@ -19,6 +19,9 @@ public interface FragInvestorContract {
         void startLoadMore();
         void endLoadMore();
         void querySuccess(InvestorBean bean);
+
+        void showNetErrorView();
+        void showContentView();
     }
     interface Model extends IModel{
         //这里写Model中公开的方法，在present调用

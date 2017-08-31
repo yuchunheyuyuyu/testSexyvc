@@ -25,5 +25,7 @@ public interface ModifyContract {
         Observable<CodeEntity> editContactEmail(String token,long contact_id,String email,String backup_email);
         Observable<CodeEntity> editContactWechat(String token,long contact_id,String wechat);
         Observable<CodeEntity> editContactemark(String token,long contact_id,String remark);
+
+        Observable<CodeEntity> report(String token,int report_type,String content);
     }
 }
