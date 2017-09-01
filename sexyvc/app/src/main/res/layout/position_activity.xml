@@ -63,7 +63,118 @@
         android:layout_marginTop="20dp" />
 
     <LinearLayout
-        android:id="@+id/positionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/institutionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fund_name"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="*"
+                android:textColor="@color/barbie_pink_two"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvInstitution"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+        <View
+            style="@style/line_style"
+            android:layout_marginLeft="16dp" />
+
+        <LinearLayout
+            android:id="@+id/dutiesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assume_office"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="*"
+                android:textColor="@color/barbie_pink_two"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvDuties"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View style="@style/line_style" />
+
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="20dp" />
+
+    <LinearLayout
+        android:id="@+id/identifyContainer"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/white"
@@ -72,32 +183,25 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/auth_position"
+            android:layout_weight="1"
+            android:text="@string/indentify"
             android:textColor="@color/black90"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tvPosition"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="end"
-            android:maxLines="1"
-            android:textColor="@color/black50"
-            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/ivIdentity"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:src="@drawable/approve_not_done_red" />
 
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginLeft="4dp"
             android:src="@drawable/arrow_disclosure_l" />
-
     </LinearLayout>
 
     <View style="@style/line_style" />

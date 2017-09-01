@@ -117,7 +117,7 @@
     <string name="sex_female">女</string>
     <string name="my_description">自我介绍</string>
     <string name="email">邮箱</string>
-    <string name="position">机构职务</string>
+    <string name="position">身份</string>
     <string name="indentify">身份认证</string>
     <string name="save">保存</string>
     <string name="input_count">还可以输入 (%s) 字</string>
@@ -130,6 +130,7 @@
 
     <string name="nick_defalut">sexyvc用户</string>
     <string name="position_defalut">担任职位</string>
+    <string name="assume_office">担任职务</string>
     <string name="compant_defalut">所在公司</string>
     <string name="sex_defalut">男</string>
     <string name="input_defalut">未填写</string>
@@ -428,5 +429,18 @@
     <string name="warn_auth_pass">您的身份已经认证，暂时无法修改</string>
     <string name="warn_auth_commiting">正在审核您提交的身份信息，暂时无法修改</string>
 
+    <string name="concern_domain">关注行业</string>
+    <string name="finance_stage">融资阶段</string>
+    <string name="cancle_identity">取消认证</string>
 
+    <string name="status_no_pass">您尚未认证</string>
+    <string name="status_no_pass_hint">认证后将获得「V」标识及更多认证用户特权。</string>
+
+    <string name="status_commiting_pass">审核中</string>
+    <string name="status_commiting_hint">我们将在自提交之日起 3 个工作日内完成审核。</string>
+
+    <string name="status_pass">已完成认证</string>
+    <string name="want_cancle_identity">要取消认证吗？</string>
+    <string name="warn_commiting">我们的工作人员正在为您审核，请再耐心等等吧。</string>
+    <string name="warn_pass">取消后您将失去「V」标识并无法使用认证用户功能。</string>
 </resources>

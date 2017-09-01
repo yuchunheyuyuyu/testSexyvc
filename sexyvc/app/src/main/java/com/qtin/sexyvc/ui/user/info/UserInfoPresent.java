@@ -14,6 +14,7 @@ import com.qiniu.android.storage.UploadOptions;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import org.json.JSONObject;
@@ -48,6 +49,22 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
         uploadManager = new UploadManager();
     }
 
+    public void getType(String type_key, final int type){
+        mModel.getType(type_key)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<Typebean> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<Typebean>(mErrorHandler) {
+                    @Override
+                    public void onNext(Typebean baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.requestTypeBack(type,baseEntity.getItems());
+                        }
+                    }
+                });
+    }
+
     public void editSex(final int u_gender) {
         mModel.editSex(mModel.getToken(), u_gender).subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
@@ -71,44 +88,6 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                         if(codeEntity.isSuccess()){
                             //mRootView.showMessage("性别修改成功");
                             mRootView.editSexSuccess(u_gender);
-                        }
-                    }
-                });
-    }
-
-    public void uploadVertifyPhoto(final String img_url) {
-        mModel.uploadVertifyPhoto(mModel.getToken(), img_url)
-                .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        //mRootView.showLoading();
-                    }
-                }).subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate(new Action0() {
-                    @Override
-                    public void call() {
-
-                    }
-                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
-                .subscribe(new Observer<CodeEntity>() {
-                    @Override
-                    public void onCompleted() {
-                        mRootView.hideLoading();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mRootView.hideLoading();
-                    }
-
-                    @Override
-                    public void onNext(CodeEntity codeEntity) {
-                        if(codeEntity.isSuccess()){
-                            mRootView.showMessage("上传成功");
-                            mRootView.uploadSuccess(img_url);
                         }
                     }
                 });
@@ -152,7 +131,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 });
     }
 
-    public void upload(String path, String token,final boolean isUpdateAvatar) {
+    public void upload(String path, String token) {
         String key = mModel.getToken()+System.currentTimeMillis() + ".png";
         UploadOptions uploadOptions = new UploadOptions(null, null, false,
                 new UpProgressHandler() {
@@ -166,17 +145,13 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
         uploadManager.put(path, key, token, new UpCompletionHandler() {
             @Override
             public void complete(String key, ResponseInfo info, JSONObject response) {
-                if(isUpdateAvatar){
-                    editAvatar(key);
-                }else{
-                    uploadVertifyPhoto(key);
-                }
+                editAvatar(key);
             }
 
         }, uploadOptions);
     }
 
-    public void getQiNiuToken(final String path,final boolean isUpdateAvatar){
+    public void getQiNiuToken(final String path){
         mModel.getQiniuToken(0)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3,2))
@@ -202,7 +177,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                     @Override
                     public void onNext(BaseEntity<QiniuTokenEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
-                            upload(path,baseEntity.getItems().getQiniu_token(),isUpdateAvatar);
+                            upload(path,baseEntity.getItems().getQiniu_token());
                         }
                     }
                 });

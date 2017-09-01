@@ -8,10 +8,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
@@ -35,7 +38,6 @@ import java.util.Date;
 import java.util.Locale;
 import butterknife.BindView;
 import butterknife.OnClick;
-import uk.co.senab.photoview.PhotoView;
 
 /**
  * Created by ls on 17/4/26.
@@ -47,10 +49,15 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
     @BindView(R.id.tvRight)
     TextView tvRight;
     @BindView(R.id.photoView)
-    PhotoView photoView;
+    ImageView photoView;
+    @BindView(R.id.tvStatus)
+    TextView tvStatus;
+    @BindView(R.id.tvStatusHint)
+    TextView tvStatusHint;
 
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private String url;
+    private int u_auth_state;
 
     private Dialog selectPhotoDialog;
     // 调用系统相册或者相机
@@ -58,6 +65,8 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
     private final int ALBUM_REQUEST_CODE = 0x004;
     // 拍照地址
     private String path;
+
+    private Dialog warnDialog;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -76,18 +85,47 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
     @Override
     protected void initData() {
-        url=getIntent().getExtras().getString(ConstantUtil.INTENT_URL);
+        url = getIntent().getExtras().getString(ConstantUtil.INTENT_URL);
+        u_auth_state = getIntent().getExtras().getInt("u_auth_state");
         tvTitle.setText(getResources().getString(R.string.title_vertify_position));
         tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText(getResources().getString(R.string.upload));
-
+        tvRight.setText(getResources().getString(R.string.cancle_identity));
+        setText();
         mImageLoader = customApplication.getAppComponent().imageLoader();
         //加载图片
         mImageLoader.loadImage(customApplication, GlideImageConfig
                 .builder()
+                .placeholder(R.drawable.add_business_card)
+                .errorPic(R.drawable.add_business_card)
                 .url(CommonUtil.getAbsolutePath(url))
                 .imageView(photoView)
                 .build());
+
+    }
+
+    private void setText(){
+        boolean isBold=false;
+        if(u_auth_state==ConstantUtil.AUTH_STATE_PASS){
+            tvStatus.setText(getString(R.string.status_pass));
+            tvStatus.setTextColor(getResources().getColor(R.color.dusk90));
+            tvStatusHint.setText("");
+            tvRight.setVisibility(View.VISIBLE);
+
+        }else if(u_auth_state==ConstantUtil.AUTH_STATE_COMMITING){
+            isBold=true;
+            tvStatus.setText(getString(R.string.status_commiting_pass));
+            tvStatusHint.setText(getString(R.string.status_commiting_hint));
+            tvStatus.setTextColor(getResources().getColor(R.color.dusk));
+            tvRight.setVisibility(View.VISIBLE);
+        }else{
+            tvStatus.setText(getString(R.string.status_no_pass));
+            tvStatusHint.setText(getString(R.string.status_no_pass_hint));
+            tvStatus.setTextColor(getResources().getColor(R.color.dusk90));
+            tvRight.setVisibility(View.GONE);
+        }
+
+        TextPaint paint = tvStatus.getPaint();
+        paint.setFakeBoldText(isBold);
     }
 
     @Override
@@ -115,14 +153,23 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
     }
 
-    @OnClick({R.id.ivLeft, R.id.tvRight})
+    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.photoView})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
                 finish();
                 break;
             case R.id.tvRight:
-                showPhotoDialog();
+                if(u_auth_state==ConstantUtil.AUTH_STATE_PASS){
+
+                }else if(u_auth_state==ConstantUtil.AUTH_STATE_COMMITING){
+
+                }
+                break;
+            case R.id.photoView:
+                if(u_auth_state==ConstantUtil.AUTH_STATE_UNPASS){
+                    showPhotoDialog();
+                }
                 break;
         }
     }
@@ -140,8 +187,8 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
                     int columnIndex = c.getColumnIndex(filePathColumns[0]);
                     String picturePath = c.getString(columnIndex);
                     c.close();
-                    File file=new File(picturePath);
-                    if(file!=null&&file.exists()){
+                    File file = new File(picturePath);
+                    if (file != null && file.exists()) {
                         Bitmap bitmapOriginal = UploadPhotoUtil.getUpLoadImage(
                                 picturePath, BaseApplication.screenSize.x,
                                 BaseApplication.screenSize.y, true);
@@ -200,9 +247,9 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
         View view = View.inflate(this, R.layout.select_photo_dialog, null);
         AutoUtils.autoSize(view);
-        View btn_report =view.findViewById(R.id.btn_report);
-        View btn_error =view.findViewById(R.id.btn_error);
-        View cancleSelected =view.findViewById(R.id.cancleSelected);
+        View btn_report = view.findViewById(R.id.btn_report);
+        View btn_error = view.findViewById(R.id.btn_error);
+        View cancleSelected = view.findViewById(R.id.cancleSelected);
         btn_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,14 +312,14 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
     @Override
     public void uploadSuccess(String url) {
-        Intent intent=new Intent();
-        intent.putExtra(ConstantUtil.INTENT_URL,url);
+        Intent intent = new Intent();
+        intent.putExtra(ConstantUtil.INTENT_URL, url);
         mImageLoader.loadImage(customApplication, GlideImageConfig
                 .builder()
                 .url(CommonUtil.getAbsolutePath(url))
                 .imageView(photoView)
                 .build());
-        setResult(0,intent);
+        setResult(0, intent);
         showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
             @Override
             public void onComfirm() {
@@ -281,5 +328,46 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
             }
         });
+    }
+
+    /**
+     * 两个按钮的dialog
+     */
+    protected void showTwoButtonDialog(String title, String stringLeft, String stringRight, final TwoButtonListerner listerner) {
+
+        View view = View.inflate(this, R.layout.two_button_dialog, null);
+        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
+        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+
+        tvDialogTitle.setText(title);
+        btnLeft.setText(stringLeft);
+        btnRight.setText(stringRight);
+
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.leftClick();
+            }
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listerner.rightClick();
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        warnDialog = new Dialog(this);
+        warnDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        warnDialog.setContentView(view);
+        Window regionWindow = warnDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        warnDialog.setCanceledOnTouchOutside(true);
+        warnDialog.show();
     }
 }

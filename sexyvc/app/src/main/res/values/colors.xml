@@ -47,6 +47,9 @@
     <color name="slate_10">#1a3b4357</color>
     <color name="silver">#e6e6e8</color>
 
+    <color name="dusk">#434b6e</color>
+    <color name="dusk90">#e6434b6e</color>
+
     <color name="banner_text_back">#80000000</color>
 <!-- 100% — FF
     95% — F2

@@ -4,9 +4,11 @@ import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
-
+import java.util.ArrayList;
 import rx.Observable;
 
 /**
@@ -16,7 +18,8 @@ public interface UserInfoContract {
     interface View extends BaseView{
         void editAvatarSuccess(String avatar);
         void editSexSuccess(int u_gender);
-        void uploadSuccess(String url);
+
+        void requestTypeBack(int type,ArrayList<FilterEntity> list);
     }
     interface Model extends IModel{
         Observable<CodeEntity> editAvatar(String token,String u_avatar);
@@ -26,5 +29,8 @@ public interface UserInfoContract {
 
         String getToken();
         void saveUsrInfo(UserInfoEntity entity);
+
+        //这里写Model中公开的方法，在present调用
+        Observable<Typebean> getType(String type_key);
     }
 }

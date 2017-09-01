@@ -7,6 +7,7 @@ import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
@@ -14,7 +15,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.rx_cache.DynamicKey;
+import io.rx_cache.Reply;
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by ls on 17/4/26.
@@ -62,5 +66,17 @@ public class UserInfoModel extends BaseModel<ServiceManager,CacheManager> implem
             mCacheManager.getDaoSession().getUserInfoEntityDao().deleteAll();
         }
         mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
+    }
+
+    @Override
+    public Observable<Typebean> getType(String type_key) {
+        Observable<Typebean> types=mServiceManager.getCommonService().getType(type_key);
+        return mCacheManager.getCommonCache().getType(types,new DynamicKey(type_key))
+                .flatMap(new Func1<Reply<Typebean>, Observable<Typebean>>() {
+                    @Override
+                    public Observable<Typebean> call(Reply<Typebean> typebeanReply) {
+                        return Observable.just(typebeanReply.getData());
+                    }
+                });
     }
 }

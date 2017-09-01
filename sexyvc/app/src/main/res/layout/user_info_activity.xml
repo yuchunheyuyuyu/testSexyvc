@@ -18,22 +18,23 @@
 
             <View
                 style="@style/line_style"
-                android:layout_marginTop="42px" />
+                android:layout_marginTop="20dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:id="@+id/avatarContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="160px"
+                    android:layout_height="80dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -45,29 +46,29 @@
 
                     <ImageView
                         android:id="@+id/ivAvatar"
-                        android:layout_width="112px"
-                        android:layout_height="112px"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:src="@drawable/avatar_user_s" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
                     android:id="@+id/nickContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -88,24 +89,24 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
                     android:id="@+id/sexContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -125,24 +126,24 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
                     android:id="@+id/descriptionContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -155,19 +156,19 @@
                         android:id="@+id/tvMyDescription"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="end"
-                        android:layout_marginLeft="32px"
                         android:maxLines="1"
                         android:text="@string/input_defalut"
                         android:textColor="@color/black50"
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
@@ -176,7 +177,7 @@
 
             <View
                 style="@style/line_style"
-                android:layout_marginTop="42px" />
+                android:layout_marginTop="20dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,11 +188,11 @@
                 <LinearLayout
                     android:id="@+id/mobileContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -211,24 +212,24 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
                     android:id="@+id/emailContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -248,9 +249,9 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
@@ -260,7 +261,7 @@
 
             <View
                 style="@style/line_style"
-                android:layout_marginTop="42px" />
+                android:layout_marginTop="21dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -271,11 +272,11 @@
                 <LinearLayout
                     android:id="@+id/positionContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -295,51 +296,136 @@
                         android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
+                        android:src="@drawable/arrow_disclosure_l" />
+                </LinearLayout>
+
+                <View style="@style/line_style" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/investorInfoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <View style="@style/line_style" />
+
+                <LinearLayout
+                    android:id="@+id/domainContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/concern_domain"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvDomainNum"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black50"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View
                     style="@style/line_style"
-                    android:layout_marginLeft="32px" />
+                    android:layout_marginLeft="16dp" />
 
                 <LinearLayout
-                    android:id="@+id/identifyContainer"
+                    android:id="@+id/stageContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="96px"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="32px"
-                    android:paddingRight="32px">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/indentify"
+                        android:text="@string/finance_stage"
                         android:textColor="@color/black90"
                         android:textSize="14sp" />
 
-                    <ImageView
-                        android:id="@+id/ivIdentity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36px"
-                        android:src="@drawable/approve_not_done_red" />
+                    <TextView
+                        android:id="@+id/tvStageNum"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black50"
+                        android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="32px"
-                        android:layout_height="32px"
-                        android:layout_marginLeft="8px"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
+                        android:src="@drawable/arrow_disclosure_l" />
+                </LinearLayout>
+
+                <View
+                    style="@style/line_style"
+                    android:layout_marginLeft="16dp" />
+
+                <LinearLayout
+                    android:id="@+id/caseContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/investor_case"
+                        android:textColor="@color/black90"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvCaseNum"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="0"
+                        android:textColor="@color/black50"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="4dp"
                         android:src="@drawable/arrow_disclosure_l" />
                 </LinearLayout>
 
                 <View style="@style/line_style" />
 
-
             </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>

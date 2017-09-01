@@ -1,10 +1,13 @@
 package com.qtin.sexyvc.ui.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ls on 17/6/9.
  * 筛选条件
  */
-public class FilterEntity {
+public class FilterEntity implements Parcelable {
     private int key_id;
     private String type_name;
     private long type_id;
@@ -42,4 +45,38 @@ public class FilterEntity {
         this.type_name = type_name;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.key_id);
+        dest.writeString(this.type_name);
+        dest.writeLong(this.type_id);
+        dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+    }
+
+    public FilterEntity() {
+    }
+
+    protected FilterEntity(Parcel in) {
+        this.key_id = in.readInt();
+        this.type_name = in.readString();
+        this.type_id = in.readLong();
+        this.isSelected = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<FilterEntity> CREATOR = new Parcelable.Creator<FilterEntity>() {
+        @Override
+        public FilterEntity createFromParcel(Parcel source) {
+            return new FilterEntity(source);
+        }
+
+        @Override
+        public FilterEntity[] newArray(int size) {
+            return new FilterEntity[size];
+        }
+    };
 }

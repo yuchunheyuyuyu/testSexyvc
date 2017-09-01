@@ -2,9 +2,13 @@ package com.qtin.sexyvc.ui.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
+
+import java.util.ArrayList;
 
 /**
  * Created by ls on 17/6/15.
@@ -34,140 +38,88 @@ public class UserInfoEntity implements Parcelable {
     private int has_comment;
     private int has_roadshow;
 
-    public String getToken() {
-        return token;
+    @Transient
+    private ListEntity domain_list;
+    @Transient
+    private ListEntity stage_list;
+    @Transient
+    private ListEntity investment_list;
+
+    public ListEntity getDomain_list() {
+        return domain_list;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setDomain_list(ListEntity domain_list) {
+        this.domain_list = domain_list;
     }
 
-    public int getHas_project() {
-        return has_project;
+    public ListEntity getStage_list() {
+        return stage_list;
     }
 
-    public void setHas_project(int has_project) {
-        this.has_project = has_project;
+    public void setStage_list(ListEntity stage_list) {
+        this.stage_list = stage_list;
     }
 
-    public String getBusiness_card() {
-        return business_card;
+    public ListEntity getInvestment_list() {
+        return investment_list;
     }
 
-    public void setBusiness_card(String business_card) {
-        this.business_card = business_card;
+    public void setInvestment_list(ListEntity investment_list) {
+        this.investment_list = investment_list;
     }
 
-    public String getU_nickname() {
-        return u_nickname;
-    }
+    public static class ListEntity implements Parcelable {
+        private int total;
+        private ArrayList<FilterEntity> list;
 
-    public void setU_nickname(String u_nickname) {
-        this.u_nickname = u_nickname;
-    }
+        public int getTotal() {
+            return total;
+        }
 
-    public int getU_gender() {
-        return u_gender;
-    }
+        public void setTotal(int total) {
+            this.total = total;
+        }
 
-    public void setU_gender(int u_gender) {
-        this.u_gender = u_gender;
-    }
+        public ArrayList<FilterEntity> getList() {
+            return list;
+        }
 
-    public String getU_avatar() {
-        return u_avatar;
-    }
+        public void setList(ArrayList<FilterEntity> list) {
+            this.list = list;
+        }
 
-    public void setU_avatar(String u_avatar) {
-        this.u_avatar = u_avatar;
-    }
+        @Override
+        public int describeContents() {
+            return 0;
+        }
 
-    public String getU_signature() {
-        return u_signature;
-    }
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.total);
+            dest.writeList(this.list);
+        }
 
-    public void setU_signature(String u_signature) {
-        this.u_signature = u_signature;
-    }
+        public ListEntity() {
+        }
 
-    public String getU_phone() {
-        return u_phone;
-    }
+        protected ListEntity(Parcel in) {
+            this.total = in.readInt();
+            this.list = new ArrayList<FilterEntity>();
+            in.readList(this.list, FilterEntity.class.getClassLoader());
+        }
 
-    public void setU_phone(String u_phone) {
-        this.u_phone = u_phone;
-    }
+        public static final Creator<ListEntity> CREATOR = new Creator<ListEntity>() {
+            @Override
+            public ListEntity createFromParcel(Parcel source) {
+                return new ListEntity(source);
+            }
 
-    public String getU_email() {
-        return u_email;
-    }
-
-    public void setU_email(String u_email) {
-        this.u_email = u_email;
-    }
-
-    public String getU_backup_phone() {
-        return u_backup_phone;
-    }
-
-    public void setU_backup_phone(String u_backup_phone) {
-        this.u_backup_phone = u_backup_phone;
-    }
-
-    public String getU_backup_email() {
-        return u_backup_email;
-    }
-
-    public void setU_backup_email(String u_backup_email) {
-        this.u_backup_email = u_backup_email;
-    }
-
-    public String getU_company() {
-        return u_company;
-    }
-
-    public void setU_company(String u_company) {
-        this.u_company = u_company;
-    }
-
-    public String getU_title() {
-        return u_title;
-    }
-
-    public void setU_title(String u_title) {
-        this.u_title = u_title;
-    }
-
-    public int getU_auth_state() {
-        return u_auth_state;
-    }
-
-    public void setU_auth_state(int u_auth_state) {
-        this.u_auth_state = u_auth_state;
-    }
-
-    public int getU_auth_type() {
-        return u_auth_type;
-    }
-
-    public void setU_auth_type(int u_auth_type) {
-        this.u_auth_type = u_auth_type;
-    }
-
-    public int getHas_comment() {
-        return has_comment;
-    }
-
-    public void setHas_comment(int has_comment) {
-        this.has_comment = has_comment;
-    }
-
-    public int getHas_roadshow() {
-        return has_roadshow;
-    }
-
-    public void setHas_roadshow(int has_roadshow) {
-        this.has_roadshow = has_roadshow;
+            @Override
+            public ListEntity[] newArray(int size) {
+                return new ListEntity[size];
+            }
+        };
     }
 
     @Override
@@ -194,6 +146,145 @@ public class UserInfoEntity implements Parcelable {
         dest.writeInt(this.u_auth_type);
         dest.writeInt(this.has_comment);
         dest.writeInt(this.has_roadshow);
+        dest.writeParcelable(this.domain_list, flags);
+        dest.writeParcelable(this.stage_list, flags);
+        dest.writeParcelable(this.investment_list, flags);
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public int getHas_project() {
+        return this.has_project;
+    }
+
+    public void setHas_project(int has_project) {
+        this.has_project = has_project;
+    }
+
+    public String getBusiness_card() {
+        return this.business_card;
+    }
+
+    public void setBusiness_card(String business_card) {
+        this.business_card = business_card;
+    }
+
+    public String getU_nickname() {
+        return this.u_nickname;
+    }
+
+    public void setU_nickname(String u_nickname) {
+        this.u_nickname = u_nickname;
+    }
+
+    public int getU_gender() {
+        return this.u_gender;
+    }
+
+    public void setU_gender(int u_gender) {
+        this.u_gender = u_gender;
+    }
+
+    public String getU_avatar() {
+        return this.u_avatar;
+    }
+
+    public void setU_avatar(String u_avatar) {
+        this.u_avatar = u_avatar;
+    }
+
+    public String getU_signature() {
+        return this.u_signature;
+    }
+
+    public void setU_signature(String u_signature) {
+        this.u_signature = u_signature;
+    }
+
+    public String getU_phone() {
+        return this.u_phone;
+    }
+
+    public void setU_phone(String u_phone) {
+        this.u_phone = u_phone;
+    }
+
+    public String getU_email() {
+        return this.u_email;
+    }
+
+    public void setU_email(String u_email) {
+        this.u_email = u_email;
+    }
+
+    public String getU_backup_phone() {
+        return this.u_backup_phone;
+    }
+
+    public void setU_backup_phone(String u_backup_phone) {
+        this.u_backup_phone = u_backup_phone;
+    }
+
+    public String getU_backup_email() {
+        return this.u_backup_email;
+    }
+
+    public void setU_backup_email(String u_backup_email) {
+        this.u_backup_email = u_backup_email;
+    }
+
+    public String getU_company() {
+        return this.u_company;
+    }
+
+    public void setU_company(String u_company) {
+        this.u_company = u_company;
+    }
+
+    public String getU_title() {
+        return this.u_title;
+    }
+
+    public void setU_title(String u_title) {
+        this.u_title = u_title;
+    }
+
+    public int getU_auth_state() {
+        return this.u_auth_state;
+    }
+
+    public void setU_auth_state(int u_auth_state) {
+        this.u_auth_state = u_auth_state;
+    }
+
+    public int getU_auth_type() {
+        return this.u_auth_type;
+    }
+
+    public void setU_auth_type(int u_auth_type) {
+        this.u_auth_type = u_auth_type;
+    }
+
+    public int getHas_comment() {
+        return this.has_comment;
+    }
+
+    public void setHas_comment(int has_comment) {
+        this.has_comment = has_comment;
+    }
+
+    public int getHas_roadshow() {
+        return this.has_roadshow;
+    }
+
+    public void setHas_roadshow(int has_roadshow) {
+        this.has_roadshow = has_roadshow;
     }
 
     public UserInfoEntity() {
@@ -217,6 +308,9 @@ public class UserInfoEntity implements Parcelable {
         this.u_auth_type = in.readInt();
         this.has_comment = in.readInt();
         this.has_roadshow = in.readInt();
+        this.domain_list = in.readParcelable(ListEntity.class.getClassLoader());
+        this.stage_list = in.readParcelable(ListEntity.class.getClassLoader());
+        this.investment_list = in.readParcelable(ListEntity.class.getClassLoader());
     }
 
     @Generated(hash = 1050843249)

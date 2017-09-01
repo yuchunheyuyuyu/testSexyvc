@@ -34,6 +34,7 @@ public class UserEntity {
     private int has_comment;
     private int has_roadshow;
 
+
     @Generated(hash = 349288142)
     public UserEntity(String u_token, long u_expire_time, int bind_mobile, String u_nickname,
             int u_gender, String u_avatar, String u_signature, String u_company, String u_title,
@@ -64,6 +65,7 @@ public class UserEntity {
     @Generated(hash = 1433178141)
     public UserEntity() {
     }
+
 
     public String getU_token() {
         return u_token;
