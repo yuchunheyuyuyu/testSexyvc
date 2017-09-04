@@ -14,9 +14,13 @@ import com.qiniu.android.storage.UploadOptions;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
+
 import org.json.JSONObject;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -126,6 +130,33 @@ public class PhotoPresent extends BasePresenter<PhotoContract.Model,PhotoContrac
                     public void onNext(BaseEntity<QiniuTokenEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
                             upload(path,baseEntity.getItems().getQiniu_token());
+                        }
+                    }
+                });
+    }
+
+    //取消认证
+    public void cancelAuth(){
+        mModel.cancelAuth(mModel.getToken())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        if(codeEntity.isSuccess()){
+                            mRootView.cancleAuthSuccess();
                         }
                     }
                 });

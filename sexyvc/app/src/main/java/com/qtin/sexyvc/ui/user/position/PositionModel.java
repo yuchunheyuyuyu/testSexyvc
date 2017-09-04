@@ -34,7 +34,7 @@ public class PositionModel extends BaseModel<ServiceManager,CacheManager> implem
     }
 
     @Override
-    public Observable<CodeEntity> editPosition(String token, int u_auth_type, String u_company, String u_title) {
-        return mServiceManager.getCommonService().editPosition(token,u_auth_type,u_company,u_title);
+    public Observable<CodeEntity> editAuthType(String token, int u_auth_type) {
+        return mServiceManager.getCommonService().editAuthType(token,u_auth_type);
     }
 }

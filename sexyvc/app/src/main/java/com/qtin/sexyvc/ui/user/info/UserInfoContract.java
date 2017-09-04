@@ -8,7 +8,10 @@ import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.request.EditTypeRequest;
+
 import java.util.ArrayList;
+
 import rx.Observable;
 
 /**
@@ -18,8 +21,9 @@ public interface UserInfoContract {
     interface View extends BaseView{
         void editAvatarSuccess(String avatar);
         void editSexSuccess(int u_gender);
-
+        void requestSuccess(UserInfoEntity entity);
         void requestTypeBack(int type,ArrayList<FilterEntity> list);
+        void editTypeSuccess(EditTypeRequest entity);
     }
     interface Model extends IModel{
         Observable<CodeEntity> editAvatar(String token,String u_avatar);
@@ -32,5 +36,7 @@ public interface UserInfoContract {
 
         //这里写Model中公开的方法，在present调用
         Observable<Typebean> getType(String type_key);
+        Observable<BaseEntity<UserInfoEntity>>  getUserInfo(String token);
+        Observable<CodeEntity> editType(EditTypeRequest entity);
     }
 }

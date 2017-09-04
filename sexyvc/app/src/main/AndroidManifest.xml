@@ -300,6 +300,11 @@
             android:name=".ui.web.WebActivity"
             android:screenOrientation="portrait" />
 
+        <!--我的案例-->
+        <activity
+            android:name=".ui.mycase.MyCaseActivity"
+            android:screenOrientation="portrait" />
+
 
         <activity
             android:name=".mvp.test.user.UserActivity"

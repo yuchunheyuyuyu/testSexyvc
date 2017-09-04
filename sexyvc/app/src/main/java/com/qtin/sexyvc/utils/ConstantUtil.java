@@ -112,4 +112,7 @@ public class ConstantUtil {
     public static final int SHARE_QQ=2;
     public static final int SHARE_SINA=3;
 
+    public static String TYPE_KEY_DOMAIN="domain";
+    public static String TYPE_KEY_STAGE="stage";
+
 }

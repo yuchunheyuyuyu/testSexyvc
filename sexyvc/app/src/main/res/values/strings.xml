@@ -443,4 +443,8 @@
     <string name="want_cancle_identity">要取消认证吗？</string>
     <string name="warn_commiting">我们的工作人员正在为您审核，请再耐心等等吧。</string>
     <string name="warn_pass">取消后您将失去「V」标识并无法使用认证用户功能。</string>
+
+    <string name="think_later">再想想</string>
+
+
 </resources>

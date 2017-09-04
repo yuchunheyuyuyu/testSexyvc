@@ -5,12 +5,14 @@ import com.qtin.sexyvc.ui.bean.AndroidUpdateBean;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
+import com.qtin.sexyvc.ui.bean.CaseBean;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommentIdBean;
 import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
+import com.qtin.sexyvc.ui.bean.DeleteCaseRequest;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.IdBean;
@@ -37,6 +39,7 @@ import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
 import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
 import com.qtin.sexyvc.ui.request.ChangeReadStatusRequest;
 import com.qtin.sexyvc.ui.request.CreateInvestorRequest;
+import com.qtin.sexyvc.ui.request.EditTypeRequest;
 import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.request.RateRequest;
@@ -214,14 +217,31 @@ public interface CommonService {
      * 修改机构职位
      * @param token
      * @param u_auth_type
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/info/edit")
+    Observable<CodeEntity> editAuthType(@Field("token")String token,@Field("u_auth_type")int u_auth_type);
+
+    /**
+     * 修改机构
+     * @param token
      * @param u_company
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/info/edit")
+    Observable<CodeEntity> editUCompany(@Field("token")String token,@Field("u_company")String u_company);
+
+    /**
+     * 修改职务
+     * @param token
      * @param u_title
      * @return
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editPosition(@Field("token")String token,@Field("u_auth_type")int u_auth_type,
-                                        @Field("u_company")String u_company,@Field("u_title")String u_title);
+    Observable<CodeEntity> editUTitle(@Field("token")String token,@Field("u_title")String u_title);
 
     /**
      * 修改头像
@@ -739,5 +759,40 @@ public interface CommonService {
     @FormUrlEncoded
     @POST("api/action/report")
     Observable<CodeEntity> report(@Field("token")String token,@Field("report_type")int report_type,@Field("content")String content);
+
+    /**
+     * 取消认证
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/auth/cancel")
+    Observable<CodeEntity> cancelAuth(@Field("token")String token);
+
+    /**
+     * 104. 操作--认领投资人行业阶段更新
+     * @param entity
+     * @return
+     */
+    @POST("api/action/investor/type/edit")
+    Observable<CodeEntity> editType(@Body EditTypeRequest entity);
+
+    /**
+     * 101. 页面--认领投资人投资项目列表
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/investor/investment/list")
+    Observable<BaseEntity<ListBean<CaseBean>>> queryMyCase(@Field("token")String token);
+
+    /**
+     * 103. 页面--认领投资人投资项目移除
+     * @param request
+     * @return
+     */
+    @POST("api/action/investor/investment/remove")
+    Observable<CodeEntity> deleteCase(@Body DeleteCaseRequest request);
+
  }
 

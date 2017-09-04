@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_white_dialog_back"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="26dp"
+            android:gravity="center"
+            android:text="@string/want_cancle_identity"
+            android:textColor="#030303"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/warn_commiting"
+            android:textColor="#030303"
+            android:textSize="13sp" />
+
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="19dp" />
+
+        <TextView
+            android:id="@+id/tvCancle"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:text="@string/think_later"
+            android:textColor="#0076ff"
+            android:textSize="17sp" />
+
+        <View style="@style/line_style" />
+
+        <TextView
+            android:id="@+id/tvComfirm"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="@string/cancle_identity"
+            android:textColor="#fe3824"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -74,4 +74,14 @@ public class ModifyModel extends BaseModel<ServiceManager,CacheManager> implemen
     public Observable<CodeEntity> report(String token, int report_type, String content) {
         return mServiceManager.getCommonService().report(token,report_type,content);
     }
+
+    @Override
+    public Observable<CodeEntity> editUCompany(String token, String u_company) {
+        return mServiceManager.getCommonService().editUCompany(token,u_company);
+    }
+
+    @Override
+    public Observable<CodeEntity> editUTitle(String token, String u_title) {
+        return mServiceManager.getCommonService().editUTitle(token,u_title);
+    }
 }

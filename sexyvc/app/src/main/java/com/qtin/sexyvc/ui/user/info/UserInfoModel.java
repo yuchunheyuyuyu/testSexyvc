@@ -10,6 +10,7 @@ import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.request.EditTypeRequest;
 
 import java.util.List;
 
@@ -78,5 +79,15 @@ public class UserInfoModel extends BaseModel<ServiceManager,CacheManager> implem
                         return Observable.just(typebeanReply.getData());
                     }
                 });
+    }
+
+    @Override
+    public Observable<BaseEntity<UserInfoEntity>> getUserInfo(String token) {
+        return mServiceManager.getCommonService().getUserInfo(token);
+    }
+
+    @Override
+    public Observable<CodeEntity> editType(EditTypeRequest entity) {
+        return mServiceManager.getCommonService().editType(entity);
     }
 }

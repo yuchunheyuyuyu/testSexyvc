@@ -80,6 +80,10 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
     public static final int MODIFY_PHONE = 0x015;
     public static final int MODIFY_POSITION = 0x020;
 
+    public static final int MODIFY_COMPANY=0x024;
+    public static final int MODIFY_TITLE=0x026;
+
+
     //来源于添加项目
     public static final int MODIFY_PROJECT_NAME = 0x016;
     public static final int MODIFY_PROJECT_INTRODUCE = 0x017;
@@ -187,7 +191,9 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
 
             tvTitle.setText(getResources().getString(R.string.title_phone));
 
-        } else if (modifyType == MODIFY_NICK || modifyType == MODIFY_PROJECT_NAME || modifyType == MODIFY_CONCERN_WECAHT) {
+        } else if (modifyType == MODIFY_NICK || modifyType == MODIFY_PROJECT_NAME
+                || modifyType == MODIFY_CONCERN_WECAHT
+                ||modifyType==MODIFY_COMPANY||modifyType==MODIFY_TITLE) {
             singLineContainer.setVisibility(View.VISIBLE);
             value1 = getIntent().getExtras().getString(MODIFY_INTENT_VALUE1);
             String nick = StringUtil.formatString(value1);
@@ -209,6 +215,16 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 etContent.setHint(getResources().getString(R.string.hint_we_chat));
                 tvTitle.setText(getResources().getString(R.string.we_chat));
                 etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+            }else if(modifyType==MODIFY_COMPANY){
+                etContent.setHint(getResources().getString(R.string.input_institution));
+                tvTitle.setText(getResources().getString(R.string.fund_name));
+                InputFilter[] filters = { new NameLengthFilter(16) };
+                etContent.setFilters(filters);
+            }else if(modifyType==MODIFY_TITLE){
+                etContent.setHint(getResources().getString(R.string.input_position));
+                tvTitle.setText(getResources().getString(R.string.assume_office));
+                InputFilter[] filters = { new NameLengthFilter(16) };
+                etContent.setFilters(filters);
             }
 
         } else if (modifyType == MODIFY_EMAIL || modifyType == MODIFY_CONCERN_EMAIL) {
@@ -324,8 +340,23 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                 finish();
                 break;
             case R.id.tvRight:
+                if(modifyType==MODIFY_TITLE){
+                    u_title=etContent.getText().toString().trim();
+                    if (StringUtil.isBlank(u_title)) {
+                        showMessage("担任职务不能为空");
+                        return;
+                    }
+                    mPresenter.editUTitle(u_title);
 
-                if(modifyType==MODIFY_POSITION){
+                }else if(modifyType==MODIFY_COMPANY){
+                    u_company=etContent.getText().toString().trim();
+                    if (StringUtil.isBlank(u_company)) {
+                        showMessage("所在机构不能为空");
+                        return;
+                    }
+                    mPresenter.editUCompany(u_company);
+
+                }else if(modifyType==MODIFY_POSITION){
                     u_company=etCompany.getText().toString();
                     u_title=etTitle.getText().toString();
                     if (StringUtil.isBlank(u_company)) {
@@ -484,6 +515,10 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
                         }else if(modifyType==MODIFY_POSITION){
                             intent.putExtra(MODIFY_INTENT_VALUE1, u_company);
                             intent.putExtra(MODIFY_INTENT_VALUE2, u_title);
+                        }else if(modifyType==MODIFY_COMPANY){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, u_company);
+                        }else if(modifyType==MODIFY_TITLE){
+                            intent.putExtra(MODIFY_INTENT_VALUE1, u_title);
                         }
                         setResult(0, intent);
                         finish();

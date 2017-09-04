@@ -36,7 +36,7 @@ public class ChooseIdentityModel extends BaseModel<ServiceManager,CacheManager> 
 
     @Override
     public Observable<CodeEntity> editPosition(String token, int u_auth_type, String u_company, String u_title) {
-        return mServiceManager.getCommonService().editPosition(token,u_auth_type,u_company,u_title);
+        return mServiceManager.getCommonService().editAuthType(token,u_auth_type);
     }
 
     @Override

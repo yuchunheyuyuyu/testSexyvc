@@ -110,7 +110,7 @@ public class CustomApplication extends BaseApplication {
     }
 
     private void initDataBase() {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "sexyvc17-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "sexyvc18-db");
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }
@@ -280,10 +280,13 @@ public class CustomApplication extends BaseApplication {
                                                     .subscribe(new Action1<Integer>() {
                                                         @Override
                                                         public void call(Integer integer) {
-                                                            String strName="code_"+errCode;
-                                                            String errorStr=getString(getResources().getIdentifier(strName, "string", getPackageName()));
-                                                            UiUtils.showToastShort(getContext(),errorStr);
-                                                            //UiUtils.SnackbarText(errorStr);
+                                                            try{
+                                                                String strName="code_"+errCode;
+                                                                String errorStr=getString(getResources().getIdentifier(strName, "string", getPackageName()));
+                                                                UiUtils.showToastShort(getContext(),errorStr);
+                                                            }catch(Exception e){
+                                                                e.printStackTrace();
+                                                            }
                                                         }
                                                     });
                                         }

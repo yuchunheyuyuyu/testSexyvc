@@ -11,10 +11,10 @@ import rx.Observable;
 
 public interface PositionContract {
     interface View extends BaseView{
-        void editSuccess();
+        void editAuthTypeSuccess(int u_auth_type);
     }
     interface Model extends IModel{
         String getToken();
-        Observable<CodeEntity> editPosition(String token,int u_auth_type,String u_company,String u_title);
+        Observable<CodeEntity> editAuthType(String token,int u_auth_type);
     }
 }

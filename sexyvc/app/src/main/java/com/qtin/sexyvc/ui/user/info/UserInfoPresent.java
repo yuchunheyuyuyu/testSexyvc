@@ -16,6 +16,7 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.request.EditTypeRequest;
 
 import org.json.JSONObject;
 
@@ -49,6 +50,30 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
         uploadManager = new UploadManager();
     }
 
+    public void getUserInfo(){
+        mModel.getUserInfo(mModel.getToken())
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<BaseEntity<UserInfoEntity>> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<UserInfoEntity>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<UserInfoEntity> baseEntity) {
+                        if(baseEntity!=null){
+                            if(baseEntity.isSuccess()){
+                                if(baseEntity.getItems()!=null){
+                                    mRootView.requestSuccess(baseEntity.getItems());
+                                    baseEntity.getItems().setToken(mModel.getToken());
+                                    mModel.saveUsrInfo(baseEntity.getItems());
+                                }
+                            }else{
+                                //mRootView.showMessage(AppStringUtil.formatString(baseEntity.getErrMsg()));
+                            }
+                        }
+                    }
+                });
+    }
+
     public void getType(String type_key, final int type){
         mModel.getType(type_key)
                 .subscribeOn(Schedulers.io())
@@ -78,7 +103,7 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.hideLoading();
+                        //mRootView.hideLoading();
                     }
                 }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
@@ -88,6 +113,33 @@ public class UserInfoPresent extends BasePresenter<UserInfoContract.Model, UserI
                         if(codeEntity.isSuccess()){
                             //mRootView.showMessage("性别修改成功");
                             mRootView.editSexSuccess(u_gender);
+                        }
+                    }
+                });
+    }
+
+    public void editType(final EditTypeRequest entity) {
+        entity.setToken(mModel.getToken());
+        mModel.editType(entity).subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        //mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        if(codeEntity.isSuccess()){
+                            mRootView.editTypeSuccess(entity);
                         }
                     }
                 });

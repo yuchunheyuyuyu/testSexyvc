@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
@@ -32,6 +33,8 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.main.MainActivity;
+import com.qtin.sexyvc.ui.mycase.MyCaseActivity;
+import com.qtin.sexyvc.ui.request.EditTypeRequest;
 import com.qtin.sexyvc.ui.user.info.di.DaggerUserInfoComponent;
 import com.qtin.sexyvc.ui.user.info.di.UserInfoModule;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
@@ -49,6 +52,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -146,15 +150,23 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         mPresenter.getType("common_domain", TYPE_DOMAIN);
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_STAGE);
+        //mPresenter.getUserInfo();暂时不需要重新请求数据
     }
 
-    private void setValue(UserInfoEntity entity) {
-
-        if(userInfo.getU_auth_type()== ConstantUtil.AUTH_TYPE_INVESTOR){
+    private void setInvestorInfo(UserInfoEntity entity){
+        if(userInfo.getU_auth_type()== ConstantUtil.AUTH_TYPE_INVESTOR
+                &&userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
             investorInfoContainer.setVisibility(View.VISIBLE);
+            tvDomainNum.setText(""+entity.getDomain_list().size());
+            tvStageNum.setText(""+entity.getStage_list().size());
+            tvCaseNum.setText(""+entity.getCase_number());
         }else{
             investorInfoContainer.setVisibility(View.GONE);
         }
+    }
+
+    private void setValue(UserInfoEntity entity) {
+        setInvestorInfo(entity);
         //头像
         mImageLoader.loadImage(customApplication, GlideImageConfig
                 .builder()
@@ -282,7 +294,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 showStageDialog();
                 break;
             case R.id.caseContainer:
-
+                gotoActivity(MyCaseActivity.class);
                 break;
         }
     }
@@ -412,20 +424,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         switch (requestCode) {
             case ModifyActivity.MODIFY_POSITION:
                 if (data != null) {
-                    /**
-                     *
-                     *  intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE1, u_auth_type);
-                     intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE2, u_company);
-                     intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE3, u_title);
-                     */
-                    int u_auth_type = data.getExtras().getInt(ModifyActivity.MODIFY_INTENT_VALUE1);
-                    String u_company = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2);
-                    String u_title = data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE3);
-
-                    userInfo.setU_auth_type(u_auth_type);
-                    userInfo.setU_company(u_company);
-                    userInfo.setU_title(u_title);
-                    setPosition(u_company, u_title);
+                    userInfo=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
+                    setPosition(userInfo.getU_company(), userInfo.getU_title());
+                    setInvestorInfo(userInfo);
                 }
                 break;
             case ModifyActivity.MODIFY_NICK:
@@ -587,6 +588,14 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     }
 
     @Override
+    public void requestSuccess(UserInfoEntity entity) {
+        if(entity!=null){
+            userInfo=entity;
+            setValue(userInfo);
+        }
+    }
+
+    @Override
     public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
         switch (type) {
             case TYPE_DOMAIN:
@@ -598,6 +607,32 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 stageData.addAll(list);
                 break;
         }
+    }
+
+    @Override
+    public void editTypeSuccess(EditTypeRequest entity) {
+        if(entity.getType_key().equals(ConstantUtil.TYPE_KEY_DOMAIN)){
+            //更新本地用户数据
+            List<FilterEntity> domain_list=new ArrayList<>();
+            for(FilterEntity filterEntity:domainData){
+                if(filterEntity.isSelected()){
+                    domain_list.add(filterEntity);
+                }
+            }
+            userInfo.setDomain_list(domain_list);
+
+        }else if(entity.getType_key().equals(ConstantUtil.TYPE_KEY_STAGE)){
+            //更新本地用户数据
+            List<FilterEntity> stage_list=new ArrayList<>();
+            for(FilterEntity filterEntity:stageData){
+                if(filterEntity.isSelected()){
+                    stage_list.add(filterEntity);
+                }
+            }
+            userInfo.setStage_list(stage_list);
+        }
+        mPresenter.saveUsrInfo(userInfo);
+        setInvestorInfo(userInfo);
     }
 
     @Override
@@ -640,14 +675,17 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
             @Override
             public void onClick(View v) {
                 dismissDomainDialog();
-                long domain_id=0;
+                //构建请求数据
+                EditTypeRequest request=new EditTypeRequest();
+                request.setType_key(ConstantUtil.TYPE_KEY_DOMAIN);
+                ArrayList<Long> type_ids=new ArrayList<Long>();
                 for(FilterEntity entity:domainData){
                     if(entity.isSelected()){
-                        domain_id=entity.getType_id();
-                        break;
+                        type_ids.add(entity.getType_id());
                     }
                 }
-                //setDomainText();
+                request.setType_ids(type_ids);
+                mPresenter.editType(request);
             }
         });
         domainAdapter = new TagAdapter<FilterEntity>(domainData) {
@@ -709,10 +747,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     }
 
     private void setDomainStatus(){
-        if(userInfo.getDomain_list()!=null&&userInfo.getDomain_list().getList()!=null
-                &&!userInfo.getDomain_list().getList().isEmpty()){
+        if(userInfo.getDomain_list()!=null&&!userInfo.getDomain_list().isEmpty()){
 
-            for(FilterEntity f2:userInfo.getDomain_list().getList()){
+            for(FilterEntity f2:userInfo.getDomain_list()){
                 for(FilterEntity f1:domainData){
                     if(f2.getType_id()==f1.getType_id()){
                         f1.setSelected(true);
@@ -762,14 +799,17 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
             @Override
             public void onClick(View v) {
                 dismissStageDialog();
-                long domain_id=0;
-                for(FilterEntity entity:domainData){
+                //构建请求数据
+                EditTypeRequest request=new EditTypeRequest();
+                request.setType_key(ConstantUtil.TYPE_KEY_STAGE);
+                ArrayList<Long> type_ids=new ArrayList<Long>();
+                for(FilterEntity entity:stageData){
                     if(entity.isSelected()){
-                        domain_id=entity.getType_id();
-                        break;
+                        type_ids.add(entity.getType_id());
                     }
                 }
-                //setDomainText();
+                request.setType_ids(type_ids);
+                mPresenter.editType(request);
             }
         });
         stageAdapter = new TagAdapter<FilterEntity>(stageData) {
@@ -831,10 +871,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     }
 
     private void setStageStatus(){
-        if(userInfo.getStage_list()!=null&&userInfo.getStage_list().getList()!=null
-                &&!userInfo.getStage_list().getList().isEmpty()){
+        if(userInfo.getStage_list()!=null&&!userInfo.getStage_list().isEmpty()){
 
-            for(FilterEntity f2:userInfo.getStage_list().getList()){
+            for(FilterEntity f2:userInfo.getStage_list()){
                 for(FilterEntity f1:stageData){
                     if(f2.getType_id()==f1.getType_id()){
                         f1.setSelected(true);

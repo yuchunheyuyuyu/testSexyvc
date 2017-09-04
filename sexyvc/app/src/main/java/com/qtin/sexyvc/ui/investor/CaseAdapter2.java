@@ -33,6 +33,22 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final CustomApplication mApplication;
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private MyBaseActivity activity;
+    private OnDeleteCaseListener onDeleteCaseListener;
+
+    public void setOnDeleteCaseListener(OnDeleteCaseListener onDeleteCaseListener) {
+        this.onDeleteCaseListener = onDeleteCaseListener;
+    }
+
+    public static interface OnDeleteCaseListener{
+        void onClickDelete(int position);
+    }
+
+    private boolean isShowDelete;
+
+    public void setShowDelete(boolean showDelete) {
+        isShowDelete = showDelete;
+        notifyDataSetChanged();
+    }
 
     public CaseAdapter2(Context context, ArrayList<CaseBean> data) {
         this.context = context;
@@ -50,7 +66,7 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         ViewHolder holder= (ViewHolder) viewHolder;
         CaseBean bean=data.get(position);
         mImageLoader.loadImage(mApplication, GlideImageConfig
@@ -63,6 +79,20 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 .imageView(holder.ivLogo)
                 .build());
         holder.tvName.setText(StringUtil.formatString(bean.getCase_name()));
+
+        if(isShowDelete){
+            holder.ivDelete.setVisibility(View.VISIBLE);
+            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onDeleteCaseListener!=null){
+                        onDeleteCaseListener.onClickDelete(position);
+                    }
+                }
+            });
+        }else{
+            holder.ivDelete.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -75,6 +105,8 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ImageView ivLogo;
         @BindView(R.id.tvName)
         TextView tvName;
+        @BindView(R.id.ivDelete)
+        ImageView ivDelete;
 
         ViewHolder(View view) {
             super(view);

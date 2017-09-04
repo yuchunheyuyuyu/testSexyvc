@@ -34,20 +34,20 @@ public class PositionPresent extends BasePresenter<PositionContract.Model,Positi
         this.mApplication = mApplication;
     }
 
-    public void editPosition(int u_auth_type, String u_company, String u_title){
-        mModel.editPosition(mModel.getToken(),u_auth_type,u_company,u_title)
+    public void editAuthType(final int u_auth_type){
+        mModel.editAuthType(mModel.getToken(),u_auth_type)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.showLoading();
+                        //mRootView.showLoading();
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.hideLoading();
+                        //mRootView.hideLoading();
                     }
                 }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
@@ -55,7 +55,7 @@ public class PositionPresent extends BasePresenter<PositionContract.Model,Positi
                     public void onNext(CodeEntity codeEntity) {
                         //mRootView.showMessage(codeEntity.getErrMsg());
                         if(codeEntity.isSuccess()){
-                            mRootView.editSuccess();
+                            mRootView.editAuthTypeSuccess(u_auth_type);
                         }
                     }
                 });

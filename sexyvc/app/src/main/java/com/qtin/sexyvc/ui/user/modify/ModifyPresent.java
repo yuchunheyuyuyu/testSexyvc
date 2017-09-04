@@ -30,6 +30,61 @@ public class ModifyPresent extends BasePresenter<ModifyContract.Model,ModifyCont
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
     }
+
+    public void editUCompany(String u_company){
+        mModel.editUCompany(mModel.getToken(),u_company)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+
+                        if(codeEntity.isSuccess()){
+                            mRootView.editSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void editUTitle(String u_title){
+        mModel.editUTitle(mModel.getToken(),u_title)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+
+                        if(codeEntity.isSuccess()){
+                            mRootView.editSuccess();
+                        }
+                    }
+                });
+    }
+
     //建议反馈
     public void report(String content){
         mModel.report(mModel.getToken(),2,content)

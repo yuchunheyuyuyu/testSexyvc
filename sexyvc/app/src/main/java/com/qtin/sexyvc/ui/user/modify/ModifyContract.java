@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.user.modify;
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+
 import rx.Observable;
 
 /**
@@ -27,5 +28,8 @@ public interface ModifyContract {
         Observable<CodeEntity> editContactemark(String token,long contact_id,String remark);
 
         Observable<CodeEntity> report(String token,int report_type,String content);
+
+        Observable<CodeEntity> editUCompany(String token,String u_company);
+        Observable<CodeEntity> editUTitle(String token,String u_title);
     }
 }

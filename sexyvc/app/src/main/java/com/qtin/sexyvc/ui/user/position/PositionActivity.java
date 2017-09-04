@@ -6,11 +6,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -24,12 +26,9 @@ import com.qtin.sexyvc.ui.user.position.di.DaggerPositionComponent;
 import com.qtin.sexyvc.ui.user.position.di.PositionModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by ls on 17/4/26.
@@ -54,7 +53,7 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     private UserInfoEntity userInfo;
 
     private Dialog dialog;
-    public static final int INDENTITY_VERTIFY_CODE=0x01a;
+    public static final int INDENTITY_VERTIFY_CODE = 0x01a;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -77,14 +76,17 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
         userInfo = getIntent().getExtras().getParcelable(UserInfoActivity.INTENT_USER);
 
         tvTitle.setText(getResources().getString(R.string.title_position));
-        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setVisibility(View.GONE);
         tvRight.setText(getResources().getString(R.string.save));
 
         tvAuthType.setText(getAuthType(userInfo.getU_auth_type()));
 
         setPosition();
+        setAuthState();
+    }
 
-        //设置认证状态
+    //设置认证状态
+    private void setAuthState() {
         if (userInfo.getU_auth_state() == ConstantUtil.AUTH_STATE_PASS) {
             if (userInfo.getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
                 ivIdentity.setImageResource(R.drawable.tag_approve_fc);
@@ -104,15 +106,15 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     }
 
     private void setPosition() {
-        if(StringUtil.isBlank(userInfo.getU_company())){
+        if (StringUtil.isBlank(userInfo.getU_company())) {
             tvInstitution.setText(getString(R.string.not_fill));
-        }else{
+        } else {
             tvInstitution.setText(userInfo.getU_company());
         }
 
-        if(StringUtil.isBlank(userInfo.getU_title())){
+        if (StringUtil.isBlank(userInfo.getU_title())) {
             tvDuties.setText(getString(R.string.not_fill));
-        }else{
+        } else {
             tvDuties.setText(userInfo.getU_title());
         }
     }
@@ -123,16 +125,16 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
             case ConstantUtil.AUTH_TYPE_UNKNOWN:
                 break;
             case ConstantUtil.AUTH_TYPE_FOUNDER:
-                typeStr =getString(R.string.auth_type_founder);
+                typeStr = getString(R.string.auth_type_founder);
                 break;
             case ConstantUtil.AUTH_TYPE_INVESTOR:
-                typeStr =getString(R.string.auth_type_investor);
+                typeStr = getString(R.string.auth_type_investor);
                 break;
             case ConstantUtil.AUTH_TYPE_FA:
-                typeStr =getString(R.string.auth_type_fa);
+                typeStr = getString(R.string.auth_type_fa);
                 break;
             case ConstantUtil.AUTH_TYPE_OTHER:
-                typeStr =getString(R.string.auth_type_other);
+                typeStr = getString(R.string.auth_type_other);
                 break;
         }
         return typeStr;
@@ -166,19 +168,44 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
         switch (requestCode) {
             case INDENTITY_VERTIFY_CODE:
-
-
+                int u_auth_state = data.getExtras().getInt("u_auth_state");
+                String url = data.getExtras().getString("url");
+                userInfo.setU_auth_state(u_auth_state);
+                userInfo.setBusiness_card(url);
+                setAuthState();
                 break;
-            case ModifyActivity.MODIFY_POSITION:
-                if (data != null) {
-                    //userInfo.getU_company()=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
-                    //u_title=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2));
-                    setPosition();
-                }
+            case ModifyActivity.MODIFY_TITLE:
+                String u_title=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2));
+                userInfo.setU_title(u_title);
+                setPosition();
+                break;
+            case ModifyActivity.MODIFY_COMPANY:
+                String u_company=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
+                userInfo.setU_company(u_company);
+                setPosition();
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void goBack(){
+        Intent intent=new Intent();
+        intent.putExtra(ConstantUtil.INTENT_PARCELABLE,userInfo);
+        setResult(0,intent);
+        finish();
     }
 
     @OnClick({R.id.ivLeft, R.id.tvRight, R.id.authTypeContainer, R.id.institutionContainer,
@@ -186,54 +213,59 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
-                finish();
+                goBack();
                 break;
             case R.id.tvRight:
                 if (userInfo.getU_auth_type() == 0) {
                     showMessage("请选择身份");
                     return;
                 }
-                mPresenter.editPosition(userInfo.getU_auth_type(), userInfo.getU_company(), userInfo.getU_title());
+                mPresenter.editAuthType(userInfo.getU_auth_type());
                 break;
             case R.id.authTypeContainer:
                 chooseTypeDialog();
                 break;
             case R.id.institutionContainer:
-
+                Bundle institution = new Bundle();
+                institution.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_COMPANY);
+                institution.putString(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_company());
+                gotoActivityForResult(ModifyActivity.class, institution, ModifyActivity.MODIFY_COMPANY);
                 break;
             case R.id.dutiesContainer:
-
+                Bundle duties = new Bundle();
+                duties.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_TITLE);
+                duties.putString(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_title());
+                gotoActivityForResult(ModifyActivity.class, duties, ModifyActivity.MODIFY_TITLE);
                 break;
             case R.id.identifyContainer:
-                {
-                    Bundle bundle=new Bundle();
-                    bundle.putString(ConstantUtil.INTENT_URL,userInfo.getBusiness_card());
-                    bundle.putInt("u_auth_state",userInfo.getU_auth_state());
-                    gotoActivityForResult(PhotoActivity.class,bundle,INDENTITY_VERTIFY_CODE);
-                }
+                Bundle identify = new Bundle();
+                identify.putString(ConstantUtil.INTENT_URL, userInfo.getBusiness_card());
+                identify.putInt("u_auth_state", userInfo.getU_auth_state());
+                gotoActivityForResult(PhotoActivity.class, identify, INDENTITY_VERTIFY_CODE);
                 break;
         }
     }
 
     @Override
-    public void editSuccess() {
-        Observable.just(1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .delay(10, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        Intent intent = new Intent();
-                        intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_auth_type());
-                        intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE2, userInfo.getU_company());
-                        intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE3, userInfo.getU_title());
+    public void editAuthTypeSuccess(int u_auth_type) {
+        userInfo.setU_auth_type(u_auth_type);
+        tvAuthType.setText(getAuthType(userInfo.getU_auth_type()));
 
-                        setResult(0, intent);
-                        finish();
-                    }
-                });
+        /**  Observable.just(1)
+         .observeOn(AndroidSchedulers.mainThread())
+         .delay(10, TimeUnit.MILLISECONDS)
+         .subscribe(new Action1<Integer>() {
+        @Override public void call(Integer integer) {
+        Intent intent = new Intent();
+        intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_auth_type());
+        intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE2, userInfo.getU_company());
+        intent.putExtra(ModifyActivity.MODIFY_INTENT_VALUE3, userInfo.getU_title());
+
+        setResult(0, intent);
+        finish();
+        }
+        });*/
     }
-
     /**
      * 性别
      */
@@ -245,35 +277,30 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
         view.findViewById(R.id.tvTypeFounder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userInfo.setU_auth_type(ConstantUtil.AUTH_TYPE_FOUNDER);
-                tvAuthType.setText(getAuthType(userInfo.getU_auth_type()));
                 dialog.dismiss();
+                mPresenter.editAuthType(ConstantUtil.AUTH_TYPE_FOUNDER);
             }
         });
         view.findViewById(R.id.tvTypeInvestor).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userInfo.setU_auth_type(ConstantUtil.AUTH_TYPE_INVESTOR);
-                tvAuthType.setText(getAuthType(userInfo.getU_auth_type()));
                 dialog.dismiss();
+                mPresenter.editAuthType(ConstantUtil.AUTH_TYPE_INVESTOR);
             }
         });
         ;
         view.findViewById(R.id.tvTypeFA).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userInfo.setU_auth_type(ConstantUtil.AUTH_TYPE_FA);
-                tvAuthType.setText(getAuthType(userInfo.getU_auth_type()));
                 dialog.dismiss();
+                mPresenter.editAuthType(ConstantUtil.AUTH_TYPE_FA);
             }
         });
         ;
         view.findViewById(R.id.tvTypeOther).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userInfo.setU_auth_type(ConstantUtil.AUTH_TYPE_OTHER);
-                tvAuthType.setText(getAuthType(userInfo.getU_auth_type()));
-                dialog.dismiss();
+
             }
         });
         ;

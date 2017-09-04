@@ -13,9 +13,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.base.BaseApplication;
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
@@ -30,12 +30,14 @@ import com.qtin.sexyvc.ui.user.photo.di.PhotoModule;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -90,38 +92,50 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
         tvTitle.setText(getResources().getString(R.string.title_vertify_position));
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.cancle_identity));
-        setText();
         mImageLoader = customApplication.getAppComponent().imageLoader();
-        //加载图片
-        mImageLoader.loadImage(customApplication, GlideImageConfig
-                .builder()
-                .placeholder(R.drawable.add_business_card)
-                .errorPic(R.drawable.add_business_card)
-                .url(CommonUtil.getAbsolutePath(url))
-                .imageView(photoView)
-                .build());
-
+        setText();
     }
 
-    private void setText(){
-        boolean isBold=false;
-        if(u_auth_state==ConstantUtil.AUTH_STATE_PASS){
+    private void setText() {
+        boolean isBold = false;
+        if (u_auth_state == ConstantUtil.AUTH_STATE_PASS) {
             tvStatus.setText(getString(R.string.status_pass));
             tvStatus.setTextColor(getResources().getColor(R.color.dusk90));
             tvStatusHint.setText("");
             tvRight.setVisibility(View.VISIBLE);
 
-        }else if(u_auth_state==ConstantUtil.AUTH_STATE_COMMITING){
-            isBold=true;
+            //加载图片
+            mImageLoader.loadImage(customApplication, GlideImageConfig
+                    .builder()
+                    .placeholder(R.drawable.add_business_card)
+                    .errorPic(R.drawable.add_business_card)
+                    .url(CommonUtil.getAbsolutePath(url))
+                    .imageView(photoView)
+                    .build());
+
+        } else if (u_auth_state == ConstantUtil.AUTH_STATE_COMMITING) {
+            isBold = true;
             tvStatus.setText(getString(R.string.status_commiting_pass));
             tvStatusHint.setText(getString(R.string.status_commiting_hint));
             tvStatus.setTextColor(getResources().getColor(R.color.dusk));
             tvRight.setVisibility(View.VISIBLE);
-        }else{
+
+            //加载图片
+            mImageLoader.loadImage(customApplication, GlideImageConfig
+                    .builder()
+                    .placeholder(R.drawable.add_business_card)
+                    .errorPic(R.drawable.add_business_card)
+                    .url(CommonUtil.getAbsolutePath(url))
+                    .imageView(photoView)
+                    .build());
+
+        } else {
             tvStatus.setText(getString(R.string.status_no_pass));
             tvStatusHint.setText(getString(R.string.status_no_pass_hint));
             tvStatus.setTextColor(getResources().getColor(R.color.dusk90));
             tvRight.setVisibility(View.GONE);
+
+            photoView.setImageResource(R.drawable.add_business_card);
         }
 
         TextPaint paint = tvStatus.getPaint();
@@ -153,6 +167,13 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
     }
 
+    private void setResultBack(){
+        Intent intent = new Intent();
+        intent.putExtra("u_auth_state", u_auth_state);
+        intent.putExtra("url", url);
+        setResult(0, intent);
+    }
+
     @OnClick({R.id.ivLeft, R.id.tvRight, R.id.photoView})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -160,14 +181,14 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
                 finish();
                 break;
             case R.id.tvRight:
-                if(u_auth_state==ConstantUtil.AUTH_STATE_PASS){
-
-                }else if(u_auth_state==ConstantUtil.AUTH_STATE_COMMITING){
-
+                if (u_auth_state == ConstantUtil.AUTH_STATE_PASS) {
+                    showCancleDialog(getString(R.string.warn_pass));
+                } else if (u_auth_state == ConstantUtil.AUTH_STATE_COMMITING) {
+                    showCancleDialog(getString(R.string.warn_commiting));
                 }
                 break;
             case R.id.photoView:
-                if(u_auth_state==ConstantUtil.AUTH_STATE_UNPASS){
+                if (u_auth_state == ConstantUtil.AUTH_STATE_UNPASS) {
                     showPhotoDialog();
                 }
                 break;
@@ -312,53 +333,64 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
 
     @Override
     public void uploadSuccess(String url) {
-        Intent intent = new Intent();
-        intent.putExtra(ConstantUtil.INTENT_URL, url);
-        mImageLoader.loadImage(customApplication, GlideImageConfig
-                .builder()
-                .url(CommonUtil.getAbsolutePath(url))
-                .imageView(photoView)
-                .build());
-        setResult(0, intent);
+        u_auth_state = ConstantUtil.AUTH_STATE_COMMITING;
+        this.url=url;
+        setResultBack();
+        setText();
         showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
             @Override
             public void onComfirm() {
                 dismissComfirmDialog();
                 finish();
-
             }
         });
     }
 
+    @Override
+    public void cancleAuthSuccess() {
+        u_auth_state = ConstantUtil.AUTH_STATE_UNPASS;
+        url = "";
+        setResultBack();
+        setText();
+    }
+
+    @Override
+    public void startRefresh(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void endRefresh() {
+        dialogDismiss();
+    }
+
     /**
-     * 两个按钮的dialog
+     * 取消认证diglog
      */
-    protected void showTwoButtonDialog(String title, String stringLeft, String stringRight, final TwoButtonListerner listerner) {
+    protected void showCancleDialog(String content) {
 
-        View view = View.inflate(this, R.layout.two_button_dialog, null);
-        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
-        Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
-        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        View view = View.inflate(this, R.layout.warn_dialog, null);
+        TextView tvContent = (TextView) view.findViewById(R.id.tvContent);
+        tvContent.setText(content);
 
-        tvDialogTitle.setText(title);
-        btnLeft.setText(stringLeft);
-        btnRight.setText(stringRight);
-
-        btnLeft.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.tvCancle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listerner.leftClick();
+                if (warnDialog != null && warnDialog.isShowing()) {
+                    warnDialog.dismiss();
+                }
             }
         });
 
-        btnRight.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.tvComfirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listerner.rightClick();
+                if (warnDialog != null && warnDialog.isShowing()) {
+                    warnDialog.dismiss();
+                }
+                mPresenter.cancelAuth();
             }
         });
-
-        AutoUtils.autoSize(view);
         warnDialog = new Dialog(this);
         warnDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         warnDialog.setContentView(view);
@@ -370,4 +402,5 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
         warnDialog.setCanceledOnTouchOutside(true);
         warnDialog.show();
     }
+
 }

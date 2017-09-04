@@ -15,10 +15,14 @@ import rx.Observable;
 public interface PhotoContract {
     interface View extends BaseView{
         void uploadSuccess(String url);
+        void cancleAuthSuccess();
+        void startRefresh(String msg);
+        void endRefresh();
     }
     interface Model extends IModel{
         Observable<BaseEntity<QiniuTokenEntity>> getQiniuToken(int is_protected);
         String getToken();
         Observable<CodeEntity> uploadVertifyPhoto(String token,String img_url);
+        Observable<CodeEntity> cancelAuth(String token);
     }
 }

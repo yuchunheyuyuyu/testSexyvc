@@ -44,4 +44,9 @@ public class PhotoModel extends BaseModel<ServiceManager,CacheManager> implement
     public Observable<CodeEntity> uploadVertifyPhoto(String token, String img_url) {
         return mServiceManager.getCommonService().uploadVertifyPhoto(token,img_url);
     }
+
+    @Override
+    public Observable<CodeEntity> cancelAuth(String token) {
+        return mServiceManager.getCommonService().cancelAuth(token);
+    }
 }
