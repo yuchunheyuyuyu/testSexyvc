@@ -18,7 +18,16 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:scaleType="fitCenter"
+            android:visibility="visible"
             android:src="@drawable/logo_blank" />
+
+        <ImageView
+            android:id="@+id/ivAddCase"
+            android:layout_width="16dp"
+            android:layout_gravity="center"
+            android:layout_height="16dp"
+            android:visibility="gone"
+            android:src="@drawable/plus" />
 
         <ImageView
             android:id="@+id/ivDelete"

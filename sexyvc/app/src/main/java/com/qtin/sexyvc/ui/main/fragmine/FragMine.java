@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -13,10 +14,12 @@ import com.jess.arms.widget.imageloader.glide.GlideImageConfig;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
+import com.qtin.sexyvc.ui.bean.InfluencyBean;
 import com.qtin.sexyvc.ui.bean.UnReadBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.main.fragmine.di.DaggerFragMineComponent;
 import com.qtin.sexyvc.ui.main.fragmine.di.FragmineModule;
+import com.qtin.sexyvc.ui.user.influency.InfluencyActivity;
 import com.qtin.sexyvc.ui.user.info.UserInfoActivity;
 import com.qtin.sexyvc.ui.user.message.MessageActivity;
 import com.qtin.sexyvc.ui.user.project.add.AddProjectActivity;
@@ -25,6 +28,7 @@ import com.qtin.sexyvc.ui.user.sent.SentActivity;
 import com.qtin.sexyvc.ui.user.setting.SettingActivity;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -62,6 +66,16 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
     ImageView ivRight;
     @BindView(R.id.tvProjectStatus)
     TextView tvProjectStatus;
+    @BindView(R.id.tvInfluencyNum)
+    TextView tvInfluencyNum;
+    @BindView(R.id.influencyContainer)
+    LinearLayout influencyContainer;
+    @BindView(R.id.lineInfluency)
+    View lineInfluency;
+    @BindView(R.id.messageContainer)
+    LinearLayout messageContainer;
+    @BindView(R.id.mySentContainer)
+    LinearLayout mySentContainer;
 
     private UserInfoEntity userInfo;
 
@@ -118,9 +132,17 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
     }
 
-    @OnClick({R.id.myProjectContainer, R.id.messageContainer, R.id.ivRight, R.id.cardViewInfo,R.id.mySentContainer})
+    @OnClick({R.id.myProjectContainer, R.id.messageContainer, R.id.ivRight, R.id.cardViewInfo,
+            R.id.mySentContainer,R.id.influencyContainer})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.influencyContainer:
+                if (userInfo != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE, userInfo);
+                    gotoActivity(InfluencyActivity.class,bundle);
+                }
+                break;
             case R.id.mySentContainer:
                 gotoActivity(SentActivity.class);
                 break;
@@ -154,6 +176,11 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
 
     @Override
     public void requestSuccess(UserInfoEntity entity) {
+        //只有创始人才有影响值
+        if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER){
+            mPresenter.queryInfluency();
+        }
+
         this.userInfo = entity;
         //昵称
         tvName.setText(StringUtil.isBlank(entity.getU_nickname()) ? getResources().getString(R.string.nick_defalut) : entity.getU_nickname());
@@ -184,9 +211,16 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
         if (entity.getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
             myProjectContainer.setVisibility(View.VISIBLE);
             lineProject.setVisibility(View.VISIBLE);
+
+            influencyContainer.setVisibility(View.VISIBLE);
+            lineInfluency.setVisibility(View.VISIBLE);
+
         } else {
             myProjectContainer.setVisibility(View.GONE);
             lineProject.setVisibility(View.GONE);
+
+            influencyContainer.setVisibility(View.GONE);
+            lineInfluency.setVisibility(View.GONE);
         }
 
         if (StringUtil.isBlank(entity.getU_company())) {
@@ -201,9 +235,9 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
             tvPosition.setText(entity.getU_title());
         }
 
-        if(entity.getHas_project()==0){
+        if (entity.getHas_project() == 0) {
             tvProjectStatus.setText(getString(R.string.not_fill));
-        }else{
+        } else {
             tvProjectStatus.setText("");
         }
 
@@ -232,5 +266,20 @@ public class FragMine extends MyBaseFragment<FragMinePresent> implements FragMin
         } else {
             ivMessage.setSelected(false);
         }
+    }
+
+    @Override
+    public void queryInfluencySuccess(InfluencyBean influencyBean) {
+        int influencyScore=0;
+        if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
+            influencyScore+=100;
+        }
+        if(userInfo.getHas_project()==1){
+            influencyScore+=100;
+        }
+        influencyScore+=(20*influencyBean.getComment_number()+20*influencyBean.getRoadshow_number());
+        influencyScore+=(5*influencyBean.getComment_praised_number());
+
+        tvInfluencyNum.setText(""+influencyScore);
     }
 }

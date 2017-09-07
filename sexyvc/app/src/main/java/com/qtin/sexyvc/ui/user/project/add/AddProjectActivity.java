@@ -723,6 +723,9 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
     @Override
     public void onCreateSuccess(ProjectBean bean) {
         mPresenter.updateProjectState();
+        Intent intent=new Intent();
+        intent.putExtra("has_project",1);
+        setResult(0,intent);
         finish();
     }
 

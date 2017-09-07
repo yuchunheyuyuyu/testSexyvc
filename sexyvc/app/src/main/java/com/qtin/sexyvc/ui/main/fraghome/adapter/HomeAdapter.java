@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -35,12 +34,11 @@ import com.qtin.sexyvc.ui.subject.list.SubjectListActivity;
 import com.qtin.sexyvc.ui.widget.AutoTextView;
 import com.qtin.sexyvc.ui.widget.BannerView;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.SpaceItemDecoration;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -186,8 +184,21 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final CommentEntity entity= (CommentEntity) data.get(position);
         if(entity.isFirst()){
             holder.moreCommentContainer.setVisibility(View.VISIBLE);
+            holder.topicContainer.setVisibility(View.VISIBLE);
+
+           mImageLoader.loadImage(mApplication, GlideImageConfig
+                    .builder()
+                    .placeholder(R.drawable.logo_blank)
+                    .errorPic(R.drawable.logo_blank)
+                    .url(CommonUtil.getAbsolutePath(entity.getHomeInfoBean().getCover_pic()))
+                    //.transformation(new RoundedCornersTransformation(context, 40, 0))
+                    .imageView(holder.ivTopic)
+                    .build());
+            holder.tvTopicTitle.setText(StringUtil.formatString(entity.getHomeInfoBean().getTitle()));
+            holder.tvTopicSummary.setText(StringUtil.formatString(entity.getHomeInfoBean().getSummary()));
         }else{
             holder.moreCommentContainer.setVisibility(View.GONE);
+            holder.topicContainer.setVisibility(View.GONE);
         }
 
         if(entity.isLast()){
@@ -204,11 +215,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.tvCommentTag.setText(entity.getDomain_name());
         }
 
-        holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
-        holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
-        holder.ratingScore.invalidate();
+        //holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
+        String name=entity.getInvestor_name()+"@"+entity.getFund_name();
+        holder.tvTarget.setText(AppStringUtil.getLimitString(name));
+
         holder.ratingScore.setRating(entity.getScore());
-        holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
+        holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
+        holder.tvComentContent.setText(StringUtil.formatString(entity.getContent()));
         holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,8 +247,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ItemInvestorEntity entity= (ItemInvestorEntity) data.get(position);
         holder.investorRecyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
 
-        holder.investorRecyclerView.removeItemDecoration(decoration);
-        holder.investorRecyclerView.addItemDecoration(decoration);
+        //holder.investorRecyclerView.removeItemDecoration(decoration);
+        //holder.investorRecyclerView.addItemDecoration(decoration);
+
+        //GalleryLayoutManager galleryLayoutManager = new GalleryLayoutManager(GalleryLayoutManager.HORIZONTAL);
+        //galleryLayoutManager.attach(holder.investorRecyclerView, 0);
+        //galleryLayoutManager.setItemTransformer(new ScaleTransformer());
+
         HomeInvestorAdapter adapter=new HomeInvestorAdapter(context,entity.getList());
         holder.investorRecyclerView.setAdapter(adapter);
 
@@ -243,7 +261,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View v) {
                 if(onClickMoreInvestorListener!=null){
-                    onClickMoreInvestorListener.onClick();
+                    //onClickMoreInvestorListener.onClick();
                 }
             }
         });
@@ -286,6 +304,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout moreInvestorContainer;
         @BindView(R.id.investorRecyclerView)
         RecyclerView investorRecyclerView;
+        @BindView(R.id.tvInvestorIndex)
+        TextView tvInvestorIndex;
 
         InvestorHolder(View view) {
             super(view);
@@ -299,18 +319,26 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout moreCommentContainer;
         @BindView(R.id.tvCommentTag)
         TextView tvCommentTag;
-        @BindView(R.id.tvFrom)
-        TextView tvFrom;
-        @BindView(R.id.tvTo)
-        TextView tvTo;
+        @BindView(R.id.tvTarget)
+        TextView tvTarget;
         @BindView(R.id.ratingScore)
         RatingBar ratingScore;
+        @BindView(R.id.tvCommentTitle)
+        TextView tvCommentTitle;
         @BindView(R.id.tvComentContent)
         TextView tvComentContent;
         @BindView(R.id.marginLine)
         View marginLine;
         @BindView(R.id.wholeLine)
         View wholeLine;
+        @BindView(R.id.topicContainer)
+        View topicContainer;
+        @BindView(R.id.ivTopic)
+        ImageView ivTopic;
+        @BindView(R.id.tvTopicTitle)
+        TextView tvTopicTitle;
+        @BindView(R.id.tvTopicSummary)
+        TextView tvTopicSummary;
 
         CommentHolder(View view) {
             super(view);

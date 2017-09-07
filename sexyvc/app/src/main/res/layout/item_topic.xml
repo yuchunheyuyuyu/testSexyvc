@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:gravity="bottom"
+        android:paddingBottom="4dp"
+        android:text="07-29"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
+
+    <RelativeLayout
+        android:id="@+id/topicContainer"
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:visibility="visible">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/ivTopic"
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/banner_loading"
+            app:riv_border_width="0dp"
+            app:riv_corner_radius="4dp" />
+
+        <TextView
+            android:id="@+id/tvTopicTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6sp"
+            android:maxLength="2"
+            android:text="约见投资圈名人是一种什么体验？"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTopicSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTopicTitle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6sp"
+            android:maxLength="2"
+            android:text="和大佬谈融资的正确姿势"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

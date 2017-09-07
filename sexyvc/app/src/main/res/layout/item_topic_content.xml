@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:contentPaddingBottom="16dp"
+    app:cardMaxElevation="5dp"
+    app:contentPaddingLeft="16dp"
+    app:contentPaddingRight="16dp"
+    app:contentPaddingTop="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/topicContainer"
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:visibility="visible">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivTopic"
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/banner_loading"
+                app:riv_border_width="0dp"
+                app:riv_corner_radius="4dp" />
+
+            <TextView
+                android:id="@+id/tvTopicTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="6sp"
+                android:maxLength="2"
+                android:text="约见投资圈名人是一种什么体验？"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTopicSummary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTopicTitle"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="6sp"
+                android:maxLength="2"
+                android:text="和大佬谈融资的正确姿势"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvTopicIntro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="6sp"
+            android:text="想约见投资圈大佬，基础条件是什么？该重点聊什么？哪些大佬看重人，哪些又看重数据？看完不慌系列尽在本篇！"
+            android:textColor="@color/black90"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

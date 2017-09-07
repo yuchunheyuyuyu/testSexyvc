@@ -73,6 +73,20 @@ public class DateUtil {
         }
     }
 
+    public static String getDateExpression4(long  timestamp) {
+
+        if(isSameDate(timestamp, System.currentTimeMillis()/1000)){
+            return "今天";
+        }else if(isSameDate(timestamp, (System.currentTimeMillis()-24*60*60*1000)/1000)){
+            return "昨天";
+        }else if(System.currentTimeMillis()/1000-timestamp>3*30*24*60*60){
+            return "更早以前";
+        }else{
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd",Locale.getDefault());
+            return format.format(new Date(timestamp*1000));
+        }
+    }
+
     public static String getSpecialDate2(long timestamp){
         Calendar calendar1=Calendar.getInstance();
         calendar1.setTimeInMillis(System.currentTimeMillis());

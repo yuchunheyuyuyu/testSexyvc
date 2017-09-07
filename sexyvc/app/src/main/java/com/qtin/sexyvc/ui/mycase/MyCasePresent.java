@@ -69,14 +69,14 @@ public class MyCasePresent extends BasePresenter<MyCaseContract.Model,MyCaseCont
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        //mRootView.showLoading();
+                        mRootView.showLoading();
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        //mRootView.hideLoading();
+                        mRootView.hideLoading();
                     }
                 }).compose(RxUtils.<BaseEntity<ListBean<CaseBean>>>bindToLifecycle(mRootView))
                 .subscribe(new Subscriber<BaseEntity<ListBean<CaseBean>>>() {
@@ -93,14 +93,8 @@ public class MyCasePresent extends BasePresenter<MyCaseContract.Model,MyCaseCont
                     @Override
                     public void onNext(BaseEntity<ListBean<CaseBean>> listBeanBaseEntity) {
                         if(listBeanBaseEntity.isSuccess()){
-                            if(listBeanBaseEntity.getItems()!=null&&listBeanBaseEntity.getItems().getList()!=null){
-                                if(listBeanBaseEntity.getItems().getList().isEmpty()){
-                                    mRootView.showEmptyView();
-                                }else{
-                                    mRootView.showContentView();
-                                    mRootView.querySuccess(listBeanBaseEntity.getItems());
-                                }
-                            }
+                            mRootView.showContentView();
+                            mRootView.querySuccess(listBeanBaseEntity.getItems());
                         }
                     }
                 });

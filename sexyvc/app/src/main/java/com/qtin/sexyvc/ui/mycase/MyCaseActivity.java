@@ -15,8 +15,10 @@ import com.qtin.sexyvc.ui.bean.CaseBean;
 import com.qtin.sexyvc.ui.bean.DeleteCaseRequest;
 import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.investor.CaseAdapter2;
+import com.qtin.sexyvc.ui.mycase.add.AddCaseActivity;
 import com.qtin.sexyvc.ui.mycase.di.DaggerMyCaseComponent;
 import com.qtin.sexyvc.ui.mycase.di.MyCaseModule;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,8 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
     private ArrayList<CaseBean> data=new ArrayList<>();
     private CaseAdapter2 mAdapter;
 
+    public static final int REQUEST_CODE_ADD_CASE=0x002b;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMyCaseComponent.builder().appComponent(appComponent).myCaseModule(new MyCaseModule(this)).build().inject(this);
@@ -66,6 +70,7 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
     protected void initData() {
         tvTitle.setText("我的投资案例");
         tvRight.setSelected(false);
+        tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getString(R.string.edit));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -80,15 +85,36 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
         mAdapter.setOnDeleteCaseListener(new CaseAdapter2.OnDeleteCaseListener() {
             @Override
             public void onClickDelete(int position) {
-                DeleteCaseRequest request=new DeleteCaseRequest();
-                ArrayList<Long> case_ids=new ArrayList<Long>();
-                case_ids.add(data.get(position).getCase_id());
-                request.setCase_ids(case_ids);
-                mPresenter.deleteCase(request);
+                if(position==data.size()){
+                    gotoActivityForResult(AddCaseActivity.class,REQUEST_CODE_ADD_CASE);
+                }else{
+                    DeleteCaseRequest request=new DeleteCaseRequest();
+                    ArrayList<Long> case_ids=new ArrayList<Long>();
+                    case_ids.add(data.get(position).getCase_id());
+                    request.setCase_ids(case_ids);
+                    mPresenter.deleteCase(request);
+                }
             }
         });
         recyclerView.setAdapter(mAdapter);
         mPresenter.queryMyCase();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            return;
+        }
+        switch(requestCode){
+            case REQUEST_CODE_ADD_CASE:
+                CaseBean bean=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
+                if(bean!=null){
+                    this.data.add(bean);
+                    mAdapter.notifyDataSetChanged();
+                }
+                break;
+        }
     }
 
     @Override
@@ -135,9 +161,23 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void finish() {
+        Intent intent=new Intent();
+        intent.putExtra(ConstantUtil.INTENT_NUM,data.size());
+        setResult(0,intent);
+        super.finish();
+    }
+
+    @Override
     public void querySuccess(ListBean<CaseBean> listBean) {
         data.clear();
         data.addAll(listBean.getList());
+        mAdapter.setNeedAdd(true);
         mAdapter.notifyDataSetChanged();
     }
 

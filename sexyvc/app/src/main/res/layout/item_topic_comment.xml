@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tvCommentTag"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:background="@drawable/tag_shape_selector"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="本地生活"
+            android:textColor="@color/black30"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:text="刘昊@Korea Investment Part…"
+            android:textColor="@color/dusk"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="@string/join_acquire_comment"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+
+        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+            android:id="@+id/ratingScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="2dp"
+            app:emptyDrawable="@drawable/star_l_blank"
+            app:filledDrawable="@drawable/star_l_full"
+            app:isIndicator="true"
+            app:minAllowedStars="0"
+            app:numStarsValue="5"
+            app:ratingValue="3"
+            app:starMargin="0dp"
+            app:starSizeValue="10dp"
+            app:starSpacing="1dp"
+            app:stepSizeValue="1" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCommentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="2"
+        android:text="沟通效率很高推动性也很强的投资经理，是我喜欢的类型"
+        android:textColor="@color/black90"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvComentContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="2"
+        android:text="很直接，反应很快，不先入为主，为创业者着想，很喜欢与这类投资人交流。聊的过程中他比较认真快速的记录，而且很明显 聊的过程中他比较认真快速的记录"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lineSpacingExtra="6sp"
+            android:text="07-26"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvPraiseNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:lineSpacingExtra="6sp"
+            android:text="56"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ivPraise"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/good_selector" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/marginLine"
+        style="@style/line_style"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="17dp" />
+
+</LinearLayout>

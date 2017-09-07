@@ -48,7 +48,7 @@ public class RoadRequest {
         private long question_id;
         private long option_id;
         private ArrayList<AddQuestionBean> add_questions;
-        private long sub_questionid;
+        private long sub_question_id;
         private ArrayList<OptionSecondBean> sub_options;
 
         public long getQuestion_id() {
@@ -76,11 +76,11 @@ public class RoadRequest {
         }
 
         public long getSub_questionid() {
-            return sub_questionid;
+            return sub_question_id;
         }
 
         public void setSub_questionid(long sub_questionid) {
-            this.sub_questionid = sub_questionid;
+            this.sub_question_id = sub_questionid;
         }
 
         public ArrayList<OptionSecondBean> getSub_options() {

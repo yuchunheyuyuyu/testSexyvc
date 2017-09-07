@@ -29,24 +29,26 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tvInvestorIndex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="@string/more"
-            android:textColor="@color/black50"
-            android:textSize="12sp" />
+            android:text="2"
+            android:textColor="@color/slate"
+            android:textSize="16sp" />
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/arrow_disclosure" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/4"
+            android:textColor="@color/slate_50"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/investorRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="160dp" />
+        android:layout_height="188dp" />
 
     <View
         style="@style/line_style"

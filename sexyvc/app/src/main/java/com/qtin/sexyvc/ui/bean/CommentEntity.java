@@ -21,6 +21,52 @@ public class CommentEntity implements HomeInterface{
     private long investor_id;
     private String investor_name;
     private float score;
+    private String content;
+    private int like;
+    private int has_praise;
+    private long create_time;
+
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public int getHas_praise() {
+        return has_praise;
+    }
+
+    public void setHas_praise(int has_praise) {
+        this.has_praise = has_praise;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    private HomeInfoBean homeInfoBean;
+
+    public HomeInfoBean getHomeInfoBean() {
+        return homeInfoBean;
+    }
+
+    public void setHomeInfoBean(HomeInfoBean homeInfoBean) {
+        this.homeInfoBean = homeInfoBean;
+    }
 
     public String getU_title() {
         return u_title;

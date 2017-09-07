@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:gravity="center_vertical"
-            android:text="@string/last_comment"
+            android:text="@string/selected_comment"
             android:textColor="@color/slate"
             android:textSize="16sp" />
 
@@ -34,7 +34,7 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/selected_comment"
+            android:text="@string/last_comment"
             android:textColor="@color/black30"
             android:textSize="16sp" />
 
@@ -53,10 +53,59 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/topicContainer"
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:visibility="visible">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/ivTopic"
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:layout_marginTop="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/banner_loading"
+            app:riv_border_width="0dp"
+            app:riv_corner_radius="4dp" />
+
+        <TextView
+            android:id="@+id/tvTopicTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6sp"
+            android:maxLength="2"
+            android:text="约见投资圈名人是一种什么体验？"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTopicSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTopicTitle"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="6sp"
+            android:maxLength="2"
+            android:text="和大佬谈融资的正确姿势"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
@@ -65,7 +114,6 @@
             android:id="@+id/tvCommentTag"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
-            android:layout_marginRight="5dp"
             android:background="@drawable/tag_shape_selector"
             android:gravity="center"
             android:lineSpacingExtra="0sp"
@@ -76,42 +124,54 @@
             android:textSize="10sp" />
 
         <TextView
-            android:id="@+id/tvFrom"
+            android:id="@+id/tvTarget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="某 CEO 评论了"
-            android:textColor="@color/black50"
+            android:layout_marginLeft="7dp"
+            android:text="刘昊@Korea Investment Part…"
+            android:textColor="@color/dusk"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/tvTo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
-            android:text="刘芹@晨兴资本"
-            android:textColor="@color/slate"
+            android:text="@string/join_acquire_comment"
+            android:textColor="@color/black50"
             android:textSize="12sp" />
+
+        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+            android:id="@+id/ratingScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="2dp"
+            app:emptyDrawable="@drawable/star_l_blank"
+            app:filledDrawable="@drawable/star_l_full"
+            app:isIndicator="true"
+            app:minAllowedStars="0"
+            app:numStarsValue="5"
+            app:ratingValue="3"
+            app:starMargin="0dp"
+            app:starSizeValue="10dp"
+            app:starSpacing="1dp"
+            app:stepSizeValue="1" />
 
     </LinearLayout>
 
-    <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
-        android:id="@+id/ratingScore"
+    <TextView
+        android:id="@+id/tvCommentTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
-        app:emptyDrawable="@drawable/star_l_blank"
-        app:filledDrawable="@drawable/star_l_full"
-        app:isIndicator="true"
-        app:minAllowedStars="0"
-        app:numStarsValue="5"
-        app:ratingValue="3"
-        app:starMargin="0dp"
-        app:starSizeValue="10dp"
-        app:starSpacing="1dp"
-        app:stepSizeValue="1" />
-
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6sp"
+        android:maxLines="2"
+        android:text="沟通效率很高推动性也很强的投资经理，是我喜欢的类型"
+        android:textColor="@color/black90"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvComentContent"
@@ -119,20 +179,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:lineSpacingExtra="6sp"
-        android:singleLine="true"
-        android:text="这投资人太逗了！特老实！哈哈"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:maxLines="2"
+        android:text="很直接，反应很快，不先入为主，为创业者着想，很喜欢与这类投资人交流。聊的过程中他比较认真快速的记录，而且很明显 聊的过程中他比较认真快速的记录"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
 
 
     <View
         android:id="@+id/marginLine"
         style="@style/line_style"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="11dp" />
+        android:layout_marginTop="17dp" />
 
     <View
         android:id="@+id/wholeLine"

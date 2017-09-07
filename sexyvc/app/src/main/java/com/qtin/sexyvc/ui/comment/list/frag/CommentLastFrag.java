@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -17,7 +20,9 @@ import com.qtin.sexyvc.ui.comment.list.frag.bean.CommentItemsBean;
 import com.qtin.sexyvc.ui.comment.list.frag.di.CommentLastModule;
 import com.qtin.sexyvc.ui.comment.list.frag.di.DaggerCommentLastComponent;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -33,23 +38,27 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
 
     private boolean hasLoadedAllItems;
     private Paginate mPaginate;
     private boolean isLoadingMore;
 
 
-    private int page=1;
-    private int page_size=15;
+    private int page = 1;
+    private int page_size = 15;
 
     private CommentListAdapter mAdapter;
-    private ArrayList<CommentBean> data=new ArrayList<>();
+    private ArrayList<CommentBean> data = new ArrayList<>();
     private int hot_comment;
 
-    public static CommentLastFrag getInstance(int hot_comment){
-        CommentLastFrag frag=new CommentLastFrag();
-        Bundle bundle=new Bundle();
-        bundle.putInt("hot_comment",hot_comment);
+    public static CommentLastFrag getInstance(int hot_comment) {
+        CommentLastFrag frag = new CommentLastFrag();
+        Bundle bundle = new Bundle();
+        bundle.putInt("hot_comment", hot_comment);
         frag.setArguments(bundle);
         return frag;
     }
@@ -57,7 +66,7 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hot_comment=getArguments().getInt("hot_comment");
+        hot_comment = getArguments().getInt("hot_comment");
     }
 
     @Override
@@ -76,23 +85,23 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page=1;
-                mPresenter.queryCommentList(page,page_size,hot_comment);
+                page = 1;
+                mPresenter.queryCommentList(page, page_size, hot_comment);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mAdapter=new CommentListAdapter(data);
+        mAdapter = new CommentListAdapter(data);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                Bundle bundle=new Bundle();
-                bundle.putLong("comment_id",data.get(position).getComment_id());
-                gotoActivity(CommentDetailActivity.class,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putLong("comment_id", data.get(position).getComment_id());
+                gotoActivity(CommentDetailActivity.class, bundle);
             }
         });
         initPaginate();
-        mPresenter.queryCommentList(page,page_size,hot_comment);
+        mPresenter.queryCommentList(page, page_size, hot_comment);
     }
 
     @Override
@@ -114,7 +123,7 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
 
     @Override
     public void showMessage(String message) {
-        UiUtils.showToastShort(mActivity,message);
+        UiUtils.showToastShort(mActivity, message);
     }
 
     @Override
@@ -133,7 +142,7 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
                 @Override
                 public void onLoadMore() {
                     page++;
-                    mPresenter.queryCommentList(page,page_size,hot_comment);
+                    mPresenter.queryCommentList(page, page_size, hot_comment);
                 }
 
                 @Override
@@ -172,12 +181,50 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
 
     @Override
     public void startLoadMore() {
-        isLoadingMore=true;
+        isLoadingMore = true;
     }
 
     @Override
     public void endLoadMore() {
-        isLoadingMore=false;
+        isLoadingMore = false;
     }
 
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
 }

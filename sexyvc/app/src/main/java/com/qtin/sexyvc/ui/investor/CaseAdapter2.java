@@ -43,7 +43,13 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void onClickDelete(int position);
     }
 
-    private boolean isShowDelete;
+    private boolean isNeedAdd;//是否显示添加选项
+
+    public void setNeedAdd(boolean needAdd) {
+        isNeedAdd = needAdd;
+    }
+
+    private boolean isShowDelete;//是否显示删除
 
     public void setShowDelete(boolean showDelete) {
         isShowDelete = showDelete;
@@ -68,21 +74,13 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         ViewHolder holder= (ViewHolder) viewHolder;
-        CaseBean bean=data.get(position);
-        mImageLoader.loadImage(mApplication, GlideImageConfig
-                .builder()
-                //.transformation(new RoundedCornersTransformation(context,0,0))
-                .isFitCenter(true)
-                .placeholder(R.drawable.logo_blank)
-                .errorPic(R.drawable.logo_blank)
-                .url(CommonUtil.getAbsolutePath(bean.getCase_logo()))
-                .imageView(holder.ivLogo)
-                .build());
-        holder.tvName.setText(StringUtil.formatString(bean.getCase_name()));
-
-        if(isShowDelete){
-            holder.ivDelete.setVisibility(View.VISIBLE);
-            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+        if(position==data.size()){
+            holder.ivAddCase.setVisibility(View.VISIBLE);
+            holder.ivLogo.setVisibility(View.GONE);
+            holder.ivDelete.setVisibility(View.GONE);
+            holder.tvName.setText(context.getString(R.string.add_case));
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.black50));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(onDeleteCaseListener!=null){
@@ -90,14 +88,50 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 }
             });
+
         }else{
-            holder.ivDelete.setVisibility(View.GONE);
+            holder.ivAddCase.setVisibility(View.GONE);
+            holder.ivLogo.setVisibility(View.VISIBLE);
+            CaseBean bean=data.get(position);
+            mImageLoader.loadImage(mApplication, GlideImageConfig
+                    .builder()
+                    //.transformation(new RoundedCornersTransformation(context,0,0))
+                    .isFitCenter(true)
+                    .placeholder(R.drawable.logo_blank)
+                    .errorPic(R.drawable.logo_blank)
+                    .url(CommonUtil.getAbsolutePath(bean.getCase_logo()))
+                    .imageView(holder.ivLogo)
+                    .build());
+            holder.tvName.setText(StringUtil.formatString(bean.getCase_name()));
+
+            if(isShowDelete){
+                holder.ivDelete.setVisibility(View.VISIBLE);
+                holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(onDeleteCaseListener!=null){
+                            onDeleteCaseListener.onClickDelete(position);
+                        }
+                    }
+                });
+            }else{
+                holder.ivDelete.setVisibility(View.GONE);
+            }
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.black90));
         }
     }
 
     @Override
     public int getItemCount() {
-        return data == null ? 0 : data.size();
+        if(isNeedAdd){
+            if(isShowDelete){
+                return data == null ? 0 : data.size();
+            }else{
+                return data == null ? 1 : data.size()+1;
+            }
+        }else{
+            return data == null ? 0 : data.size();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -107,6 +141,8 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView tvName;
         @BindView(R.id.ivDelete)
         ImageView ivDelete;
+        @BindView(R.id.ivAddCase)
+        ImageView ivAddCase;
 
         ViewHolder(View view) {
             super(view);

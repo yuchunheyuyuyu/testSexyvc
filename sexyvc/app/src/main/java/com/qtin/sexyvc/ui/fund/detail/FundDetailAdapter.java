@@ -28,10 +28,10 @@ import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBean;
 import com.qtin.sexyvc.ui.investor.CaseAdapter;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
-import com.qtin.sexyvc.ui.main.fraghome.adapter.HomeInvestorAdapter;
+import com.qtin.sexyvc.ui.main.fraghome.adapter.HorizonInvestorAdapter;
 import com.qtin.sexyvc.ui.more.MoreCaseActivity;
 import com.qtin.sexyvc.ui.more.MoreInvestorActivity;
-import com.qtin.sexyvc.ui.more.comment.MoreCommentActivity;
+import com.qtin.sexyvc.ui.more.object.activity.ObjectCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
@@ -276,7 +276,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getFund_id());
                     bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getFund_name()+"的评论"+"（"+bean.getComment_number()+"条）");
                     bundle.putInt("auth_state",1);
-                    activity.gotoActivity(MoreCommentActivity.class,bundle);
+                    activity.gotoActivity(ObjectCommentActivity.class,bundle);
                 }
             });
         }
@@ -330,7 +330,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             List<InvestorEntity> tem= bean.getInvestor_list().size()>3? bean.getInvestor_list().subList(0, 3) :bean.getInvestor_list();
             ArrayList<InvestorEntity> investorEntities=new ArrayList<>();
             investorEntities.addAll(tem);
-            HomeInvestorAdapter adapter = new HomeInvestorAdapter(context, investorEntities);
+            HorizonInvestorAdapter adapter = new HorizonInvestorAdapter(context, investorEntities);
             adapter.setFromFund(true);
             adapter.setShowTitle(true);
             holder.recyclerViewInvestor.setAdapter(adapter);

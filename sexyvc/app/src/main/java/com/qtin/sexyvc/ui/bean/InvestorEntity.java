@@ -23,48 +23,11 @@ public class InvestorEntity implements DataTypeInterface, Parcelable {
     private long comment_number;
     private long fund_id;
     private String investor_title;
-
-    public String getInvestor_title() {
-        return investor_title;
-    }
-
-    public void setInvestor_title(String investor_title) {
-        this.investor_title = investor_title;
-    }
-
+    private long investor_uid;
+    private int follow_number;
+    private int feedback_agree;
+    private int feedback_against;
     private ArrayList<TagEntity> tags;
-
-    public long getComment_number() {
-        return comment_number;
-    }
-
-    public void setComment_number(long comment_number) {
-        this.comment_number = comment_number;
-    }
-
-    public long getFund_id() {
-        return fund_id;
-    }
-
-    public void setFund_id(long fund_id) {
-        this.fund_id = fund_id;
-    }
-
-    public ArrayList<TagEntity> getTags() {
-        return tags;
-    }
-
-    public void setTags(ArrayList<TagEntity> tags) {
-        this.tags = tags;
-    }
-
-    public long getU_id() {
-        return u_id;
-    }
-
-    public void setU_id(long u_id) {
-        this.u_id = u_id;
-    }
 
     public long getInvestor_id() {
         return investor_id;
@@ -114,6 +77,78 @@ public class InvestorEntity implements DataTypeInterface, Parcelable {
         this.score = score;
     }
 
+    public long getU_id() {
+        return u_id;
+    }
+
+    public void setU_id(long u_id) {
+        this.u_id = u_id;
+    }
+
+    public long getComment_number() {
+        return comment_number;
+    }
+
+    public void setComment_number(long comment_number) {
+        this.comment_number = comment_number;
+    }
+
+    public long getFund_id() {
+        return fund_id;
+    }
+
+    public void setFund_id(long fund_id) {
+        this.fund_id = fund_id;
+    }
+
+    public String getInvestor_title() {
+        return investor_title;
+    }
+
+    public void setInvestor_title(String investor_title) {
+        this.investor_title = investor_title;
+    }
+
+    public long getInvestor_uid() {
+        return investor_uid;
+    }
+
+    public void setInvestor_uid(long investor_uid) {
+        this.investor_uid = investor_uid;
+    }
+
+    public int getFollow_number() {
+        return follow_number;
+    }
+
+    public void setFollow_number(int follow_number) {
+        this.follow_number = follow_number;
+    }
+
+    public int getFeedback_agree() {
+        return feedback_agree;
+    }
+
+    public void setFeedback_agree(int feedback_agree) {
+        this.feedback_agree = feedback_agree;
+    }
+
+    public int getFeedback_against() {
+        return feedback_against;
+    }
+
+    public void setFeedback_against(int feedback_against) {
+        this.feedback_against = feedback_against;
+    }
+
+    public ArrayList<TagEntity> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<TagEntity> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public int getType() {
         return DataTypeInterface.TYPE_INVESTOR;
@@ -136,7 +171,11 @@ public class InvestorEntity implements DataTypeInterface, Parcelable {
         dest.writeLong(this.comment_number);
         dest.writeLong(this.fund_id);
         dest.writeString(this.investor_title);
-        dest.writeList(this.tags);
+        dest.writeLong(this.investor_uid);
+        dest.writeInt(this.follow_number);
+        dest.writeInt(this.feedback_agree);
+        dest.writeInt(this.feedback_against);
+        dest.writeTypedList(this.tags);
     }
 
     public InvestorEntity() {
@@ -153,11 +192,14 @@ public class InvestorEntity implements DataTypeInterface, Parcelable {
         this.comment_number = in.readLong();
         this.fund_id = in.readLong();
         this.investor_title = in.readString();
-        this.tags = new ArrayList<TagEntity>();
-        in.readList(this.tags, TagEntity.class.getClassLoader());
+        this.investor_uid = in.readLong();
+        this.follow_number = in.readInt();
+        this.feedback_agree = in.readInt();
+        this.feedback_against = in.readInt();
+        this.tags = in.createTypedArrayList(TagEntity.CREATOR);
     }
 
-    public static final Parcelable.Creator<InvestorEntity> CREATOR = new Parcelable.Creator<InvestorEntity>() {
+    public static final Creator<InvestorEntity> CREATOR = new Creator<InvestorEntity>() {
         @Override
         public InvestorEntity createFromParcel(Parcel source) {
             return new InvestorEntity(source);

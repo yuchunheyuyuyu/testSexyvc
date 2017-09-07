@@ -33,6 +33,7 @@
     <string name="title_privacy_policy">隐私政策</string>
     <string name="title_service_agreement">服务协议</string>
     <string name="title_recommend">您可能感兴趣</string>
+    <string name="title_influency">我的影响值</string>
 
 
 
@@ -68,8 +69,8 @@
     <string name="news">快讯 |</string>
     <string name="more">更多</string>
     <string name="week_investor">本周头牌</string>
-    <string name="last_comment">最新评论</string>
-    <string name="selected_comment">| 精选热评</string>
+    <string name="last_comment">| 最新评论</string>
+    <string name="selected_comment">精选热评</string>
     <string name="subject_string">专栏文章</string>
     <string name="hint_input_phone">请输入手机号</string>
     <string name="investor_join_comment">|  评论 </string>
@@ -107,6 +108,7 @@
     <string name="wx_bind">微信已授权，请绑定手机号</string>
     <string name="get_vertify_ing">已发送 (%s)</string>
     <string name="my_project">我的项目</string>
+    <string name="my_influency">我的影响值</string>
     <string name="my_message">消息通知</string>
     <string name="setting">设置</string>
     <string name="my_sent">我发出的</string>
@@ -135,6 +137,9 @@
     <string name="sex_defalut">男</string>
     <string name="input_defalut">未填写</string>
     <string name="not_fill">未填写</string>
+    <string name="not_complete">未完成</string>
+    <string name="has_complete">已完成</string>
+    <string name="now_completing">审核中</string>
 
     <string name="take_photo">拍摄</string>
     <string name="from_album">从相册选择</string>
@@ -329,8 +334,9 @@
     <string name="code_20024">联系人不存在</string>
     <string name="code_20025">编辑联系人失败</string>
     <string name="code_20026">删除联系人失败</string>
-    <string name="code_30001">项目不存在</string>
+    <string name="code_20027">FA机构不存在</string>
 
+    <string name="code_30001">项目不存在</string>
     <string name="code_30002">项目团队创始人创建失败</string>
     <string name="code_30003">不属于这个项目</string>
     <string name="code_30004">创建项目基本信息失败</string>
@@ -364,6 +370,16 @@
     <string name="code_30030">项目编辑融资历史失败</string>
     <string name="code_30031">消息不存在</string>
     <string name="code_30032">消息类型不存在</string>
+
+    <string name="code_30033">精彩热评不存在</string>
+    <string name="code_30034">用户尚未认证</string>
+    <string name="code_30035">用户取消认证失败</string>
+    <string name="code_30036">用户未认领投资人</string>
+    <string name="code_30037">认领投资人添加案例失败</string>
+    <string name="code_30038">认领投资人删除案例失败</string>
+    <string name="code_30039">认领投资人更新行业阶段失败</string>
+    <string name="code_30040">认领投资人已添加同名项目</string>
+
     <string name="code_40001">评论不存在</string>
     <string name="code_40002">专栏不存在</string>
     <string name="code_40003">回复失败</string>
@@ -445,6 +461,25 @@
     <string name="warn_pass">取消后您将失去「V」标识并无法使用认证用户功能。</string>
 
     <string name="think_later">再想想</string>
+    <string name="add_case">添加项目</string>
+    <string name="influency_introduce">影响值体现你在 SexyVC 对其它创始人的贡献</string>
 
+    <string name="influency_identity">完成身份认证</string>
+    <string name="influency_project">填写项目信息</string>
+    <string name="influency_road">评价一次路演</string>
+    <string name="influency_comment">撰写一条评论</string>
+    <string name="influency_praise">评论获得一次点赞</string>
+
+    <string name="my_page">我的主页</string>
+    <string name="acquire_comment">获得评论</string>
+    <string name="acquire_follow">获得关注</string>
+
+    <string name="join_acquire_comment">获得评论:</string>
+
+    <string name="home_whole_best">全场最佳</string>
+    <string name="home_most_funs">粉丝成群</string>
+    <string name="home_whole_focus">舆论聚焦</string>
+    <string name="home_feedback_fastest">极速反馈</string>
+    <string name="past_hot_comment">往期热评</string>
 
 </resources>

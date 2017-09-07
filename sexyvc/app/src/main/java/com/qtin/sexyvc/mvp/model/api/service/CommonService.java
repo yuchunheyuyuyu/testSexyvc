@@ -15,23 +15,27 @@ import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.DeleteCaseRequest;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
+import com.qtin.sexyvc.ui.bean.HomeCommentBean;
 import com.qtin.sexyvc.ui.bean.IdBean;
+import com.qtin.sexyvc.ui.bean.InfluencyBean;
 import com.qtin.sexyvc.ui.bean.ListBean;
+import com.qtin.sexyvc.ui.bean.PageBean;
 import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.QiniuTokenEntity;
 import com.qtin.sexyvc.ui.bean.RegisterRequestEntity;
 import com.qtin.sexyvc.ui.bean.RegisterStatusBean;
 import com.qtin.sexyvc.ui.bean.ReplyIdBean;
+import com.qtin.sexyvc.ui.bean.TopicBean;
 import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.bean.UnReadBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.list.frag.bean.CommentItemsBean;
-import com.qtin.sexyvc.ui.bean.PageBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
+import com.qtin.sexyvc.ui.investor.bean.CommentListBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.main.fraghome.bean.HomeBean;
 import com.qtin.sexyvc.ui.recommend.bean.RecommendBean;
@@ -127,8 +131,11 @@ public interface CommonService {
 
     @FormUrlEncoded
     @POST("api/user/login")
-    Observable<BaseEntity<UserEntity>> login(@Field("client_type")int client_type,@Field("username")String username, @Field("account_type")int account_type,
-                    @Field("password")String password,@Field("device_token")String device_token);
+    Observable<BaseEntity<UserEntity>> login(@Field("client_type")int client_type,
+                                             @Field("username")String username,
+                                             @Field("account_type")int account_type,
+                                             @Field("password")String password,
+                                             @Field("device_token")String device_token);
 
     /**
      * 获取验证码
@@ -138,7 +145,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/mobile/code")
-    Observable<CodeEntity> getVertifyCode(@Field("token")String token,@Field("mobile")String mobile, @Field("code_type")String code_type);
+    Observable<CodeEntity> getVertifyCode(@Field("token")String token,
+                                          @Field("mobile")String mobile,
+                                          @Field("code_type")String code_type);
 
     /**
      * 验证验证码的正确性
@@ -149,7 +158,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/mobile/check")
-    Observable<BaseEntity<BindEntity>> validateCode(@Field("mobile")String mobile, @Field("code_type")String code_type, @Field("code_value")String code_value);
+    Observable<BaseEntity<BindEntity>> validateCode(@Field("mobile")String mobile,
+                                                    @Field("code_type")String code_type,
+                                                    @Field("code_value")String code_value);
 
     /**
      * 绑定手机号
@@ -160,7 +171,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/bind")
-    Observable<CodeEntity> bindMobile(@Field("token")String token,@Field("mobile") String mobile,@Field("password") String password);
+    Observable<CodeEntity> bindMobile(@Field("token")String token,
+                                      @Field("mobile") String mobile,
+                                      @Field("password") String password);
 
     /**
      * 重置密码
@@ -171,7 +184,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/forget")
-    Observable<CodeEntity> resetPassword(@Field("code_value")String code_value,@Field("mobile")String mobile,@Field("password")String password);
+    Observable<CodeEntity> resetPassword(@Field("code_value")String code_value,
+                                         @Field("mobile")String mobile,
+                                         @Field("password")String password);
 
     /**
      * 修改密码
@@ -182,7 +197,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/reset")
-    Observable<CodeEntity> modifyPassword(@Field("token")String token,@Field("old_password")String old_password,@Field("new_password")String new_password);
+    Observable<CodeEntity> modifyPassword(@Field("token")String token,
+                                          @Field("old_password")String old_password,
+                                          @Field("new_password")String new_password);
 
     /**
      * 获取个人信息
@@ -201,7 +218,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editNick(@Field("token")String token,@Field("u_nickname")String u_nickname);
+    Observable<CodeEntity> editNick(@Field("token")String token,
+                                    @Field("u_nickname")String u_nickname);
 
     /**
      * 修改性别
@@ -211,7 +229,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editSex(@Field("token")String token,@Field("u_gender")int u_gender);
+    Observable<CodeEntity> editSex(@Field("token")String token,
+                                   @Field("u_gender")int u_gender);
 
     /**
      * 修改机构职位
@@ -221,7 +240,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editAuthType(@Field("token")String token,@Field("u_auth_type")int u_auth_type);
+    Observable<CodeEntity> editAuthType(@Field("token")String token,
+                                        @Field("u_auth_type")int u_auth_type);
 
     /**
      * 修改机构
@@ -231,7 +251,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editUCompany(@Field("token")String token,@Field("u_company")String u_company);
+    Observable<CodeEntity> editUCompany(@Field("token")String token,
+                                        @Field("u_company")String u_company);
 
     /**
      * 修改职务
@@ -241,7 +262,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editUTitle(@Field("token")String token,@Field("u_title")String u_title);
+    Observable<CodeEntity> editUTitle(@Field("token")String token,
+                                      @Field("u_title")String u_title);
 
     /**
      * 修改头像
@@ -251,7 +273,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editAvatar(@Field("token")String token,@Field("u_avatar")String u_avatar);
+    Observable<CodeEntity> editAvatar(@Field("token")String token,
+                                      @Field("u_avatar")String u_avatar);
 
     /**
      * 修改个性签名
@@ -261,7 +284,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editSignature(@Field("token")String token,@Field("u_signature")String u_signature);
+    Observable<CodeEntity> editSignature(@Field("token")String token,
+                                         @Field("u_signature")String u_signature);
 
     /**
      * 修改备用手机号
@@ -271,7 +295,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editMobile(@Field("token")String token,@Field("u_backup_phone")String u_backup_phone);
+    Observable<CodeEntity> editMobile(@Field("token")String token,
+                                      @Field("u_backup_phone")String u_backup_phone);
 
     /**
      * 修改邮箱
@@ -281,7 +306,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/info/edit")
-    Observable<CodeEntity> editEmail(@Field("token")String token,@Field("u_email")String u_email,@Field("u_backup_email")String u_backup_email);
+    Observable<CodeEntity> editEmail(@Field("token")String token,
+                                     @Field("u_email")String u_email,
+                                     @Field("u_backup_email")String u_backup_email);
 
     /**
      * 投资人分组
@@ -292,7 +319,11 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/group")
-    Observable<BaseEntity<GroupEntity>> queryInvestorGroup(@Field("token")String token,@Field("investor_id")long investor_id,@Field("contact_id")long contact_id,@Field("page")int page,@Field("page_size")int page_size);
+    Observable<BaseEntity<GroupEntity>> queryInvestorGroup(@Field("token")String token,
+                                                           @Field("investor_id")long investor_id,
+                                                           @Field("contact_id")long contact_id,
+                                                           @Field("page")int page,
+                                                           @Field("page_size")int page_size);
 
     /**
      * 创建投资人分组
@@ -302,7 +333,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/group/add")
-    Observable<BaseEntity<CreateGroupEntity>> addInvestorGroup(@Field("token")String token,@Field("group_name")String group_name);
+    Observable<BaseEntity<CreateGroupEntity>> addInvestorGroup(@Field("token")String token,
+                                                               @Field("group_name")String group_name);
 
     /**
      * 编辑投资人分组
@@ -314,7 +346,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/group/edit")
-    Observable<CodeEntity> updateInvestorGroup(@Field("token")String token,@Field("group_id")long group_id,@Field("group_name")String group_name,@Field("status")int status);
+    Observable<CodeEntity> updateInvestorGroup(@Field("token")String token,
+                                               @Field("group_id")long group_id,
+                                               @Field("group_name")String group_name,
+                                               @Field("status")int status);
 
     /**
      * 投资人分组详情
@@ -324,13 +359,16 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/group/detail")
-    Observable<BaseEntity<ConcernEntity>> queryGroupDetail(@Field("token")String token, @Field("group_id")long group_id, @Field("page")int page, @Field("page_size")int page_size);
+    Observable<BaseEntity<ConcernEntity>> queryGroupDetail(@Field("token")String token,
+                                                           @Field("group_id")long group_id,
+                                                           @Field("page")int page,
+                                                           @Field("page_size")int page_size);
 
     /**
      * 首页信息
      * @return
      */
-    @POST("api/page/index")
+    @POST("api/page/index/v2")
     Observable<BaseEntity<HomeBean>> queryHome();
 
     /**
@@ -342,7 +380,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/investor/list")
-    Observable<BaseEntity<InvestorBean>> querySelectedInvestor(@Field("token")String token,@Field("page")int page,@Field("page_size")int page_size);
+    Observable<BaseEntity<InvestorBean>> querySelectedInvestor(@Field("token")String token,
+                                                               @Field("page")int page,
+                                                               @Field("page_size")int page_size);
 
     /**
      * 关注投资人
@@ -359,7 +399,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/unfollow")
-    Observable<CodeEntity> unFollowInvestor(@Field("token")String token,@Field("investor_id")long investor_id);
+    Observable<CodeEntity> unFollowInvestor(@Field("token")String token,
+                                            @Field("investor_id")long investor_id);
 
     /**
      * 37. 删除投资人，取消关注联系人
@@ -392,7 +433,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/flash")
-    Observable<BaseEntity<FlashBean>> queryFlashList(@Field("flash_id")long flash_id,@Field("page_size")int page_size);
+    Observable<BaseEntity<FlashBean>> queryFlashList(@Field("flash_id")long flash_id,
+                                                     @Field("page_size")int page_size);
 
     /**
      * 编辑联系人手机号码
@@ -404,7 +446,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/edit")
-    Observable<CodeEntity> editContactPhone(@Field("token")String token,@Field("contact_id")long contact_id,@Field("phone")String phone,@Field("backup_phone")String backup_phone);
+    Observable<CodeEntity> editContactPhone(@Field("token")String token,
+                                            @Field("contact_id")long contact_id,
+                                            @Field("phone")String phone,
+                                            @Field("backup_phone")String backup_phone);
 
     /**
      * 编辑联系人邮箱
@@ -416,7 +461,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/edit")
-    Observable<CodeEntity> editContactEmail(@Field("token")String token,@Field("contact_id")long contact_id,@Field("email")String email,@Field("backup_email")String backup_email);
+    Observable<CodeEntity> editContactEmail(@Field("token")String token,
+                                            @Field("contact_id")long contact_id,
+                                            @Field("email")String email,
+                                            @Field("backup_email")String backup_email);
 
     /**
      * 编辑联系人微信号
@@ -427,7 +475,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/edit")
-    Observable<CodeEntity> editContactWechat(@Field("token")String token,@Field("contact_id")long contact_id,@Field("wechat")String wechat);
+    Observable<CodeEntity> editContactWechat(@Field("token")String token,
+                                             @Field("contact_id")long contact_id,
+                                             @Field("wechat")String wechat);
 
     /**
      * 编辑联系人备注
@@ -438,7 +488,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/edit")
-    Observable<CodeEntity> editContactemark(@Field("token")String token,@Field("contact_id")long contact_id,@Field("remark")String remark);
+    Observable<CodeEntity> editContactemark(@Field("token")String token,
+                                            @Field("contact_id")long contact_id,
+                                            @Field("remark")String remark);
 
     /**
      * 专题列表页
@@ -449,7 +501,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/subject")
-    Observable<BaseEntity<SubjectBean>> querySubjectList(@Field("subject_id")long subject_id,@Field("page_size")int page_size,@Field("need_banner")int need_banner);
+    Observable<BaseEntity<SubjectBean>> querySubjectList(@Field("subject_id")long subject_id,
+                                                         @Field("page_size")int page_size,
+                                                         @Field("need_banner")int need_banner);
 
     /**
      * 专题详情页
@@ -461,8 +515,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/subject/detail")
-    Observable<BaseEntity<DetailBean>> querySubjectDetail(@Field("token")String token,@Field("subject_id")long subject_id,
-                                                          @Field("page_size")int page_size,@Field("reply_id")long reply_id);
+    Observable<BaseEntity<DetailBean>> querySubjectDetail(@Field("token")String token,
+                                                          @Field("subject_id")long subject_id,
+                                                          @Field("page_size")int page_size,
+                                                          @Field("reply_id")long reply_id);
 
     /**
      * 回复
@@ -475,8 +531,12 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/action/reply")
-    Observable<BaseEntity<ReplyIdBean>> reply(@Field("token")String token,@Field("object_type")int object_type,@Field("object_id")long object_id,
-                                              @Field("reply_id")long reply_id,@Field("reply_content")String reply_content,@Field("is_anon")int is_anon);
+    Observable<BaseEntity<ReplyIdBean>> reply(@Field("token")String token,
+                                              @Field("object_type")int object_type,
+                                              @Field("object_id")long object_id,
+                                              @Field("reply_id")long reply_id,
+                                              @Field("reply_content")String reply_content,
+                                              @Field("is_anon")int is_anon);
 
     /**
      * 点赞
@@ -488,8 +548,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/action/praise")
-    Observable<CodeEntity> praise(@Field("token")String token,@Field("object_type")int object_type,
-                                  @Field("object_id")long object_id,@Field("handle_type")int handle_type);
+    Observable<CodeEntity> praise(@Field("token")String token,
+                                  @Field("object_type")int object_type,
+                                  @Field("object_id")long object_id,
+                                  @Field("handle_type")int handle_type);
 
     /**
      * 评论详情页
@@ -501,8 +563,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/comment/detail")
-    Observable<BaseEntity<CommentBean>> queryCommentDetail(@Field("token")String token,@Field("comment_id")long comment_id,
-                                                           @Field("page_size")int page_size,@Field("reply_id")long reply_id);
+    Observable<BaseEntity<CommentBean>> queryCommentDetail(@Field("token")String token,
+                                                           @Field("comment_id")long comment_id,
+                                                           @Field("page_size")int page_size,
+                                                           @Field("reply_id")long reply_id);
 
     /**
      * 投资人详情页
@@ -513,8 +577,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/investor/detail")
-    Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,@Field("investor_id")long investor_id,
-                                                             @Field("comment_id")long comment_id,@Field("page_size")int page_size,
+    Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,
+                                                             @Field("investor_id")long investor_id,
+                                                             @Field("comment_id")long comment_id,
+                                                             @Field("page_size")int page_size,
                                                              @Field("auth_state")int auth_state);
 
     /**
@@ -525,7 +591,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/detail")
-    Observable<BaseEntity<ContactBean>> queryContactDetail(@Field("token")String token,@Field("contact_id")long contact_id);
+    Observable<BaseEntity<ContactBean>> queryContactDetail(@Field("token")String token,
+                                                           @Field("contact_id")long contact_id);
 
     /**
      * 投资机构详情
@@ -536,8 +603,11 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/fund/detail")
-    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,@Field("fund_id")long fund_id,
-                                                               @Field("comment_id")long comment_id,@Field("page_size")int page_size,@Field("auth_state")int auth_state);
+    Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,
+                                                               @Field("fund_id")long fund_id,
+                                                               @Field("comment_id")long comment_id,
+                                                               @Field("page_size")int page_size,
+                                                               @Field("auth_state")int auth_state);
 
     /**
      * 搜索投资机构
@@ -561,7 +631,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/auth")
-    Observable<CodeEntity> uploadVertifyPhoto(@Field("token")String token,@Field("img_url")String img_url);
+    Observable<CodeEntity> uploadVertifyPhoto(@Field("token")String token,
+                                              @Field("img_url")String img_url);
 
     /**
      * 新建项目
@@ -596,7 +667,8 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/contact/investor/search")
-    Observable<BaseEntity<ConcernEntity>> searchConcern(@Field("token")String token,@Field("keyword")String keyword);
+    Observable<BaseEntity<ConcernEntity>> searchConcern(@Field("token")String token,
+                                                        @Field("keyword")String keyword);
 
     /**
      * 70. 路演评价——问卷列表
@@ -641,8 +713,12 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/action/comment")
-    Observable<BaseEntity<CommentIdBean>> commentInvestor(@Field("token")String token, @Field("title")String title, @Field("content")String content,
-                                                          @Field("investor_id")long investor_id, @Field("fund_id")long fund_id, @Field("is_anon")int is_anon);
+    Observable<BaseEntity<CommentIdBean>> commentInvestor(@Field("token")String token,
+                                                          @Field("title")String title,
+                                                          @Field("content")String content,
+                                                          @Field("investor_id")long investor_id,
+                                                          @Field("fund_id")long fund_id,
+                                                          @Field("is_anon")int is_anon);
 
     /**
      * 操作——追评
@@ -653,7 +729,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/action/append")
-    Observable<CodeEntity> appendInvestor(@Field("token")String token,@Field("content")String content,@Field("comment_id")long comment_id);
+    Observable<CodeEntity> appendInvestor(@Field("token")String token,
+                                          @Field("content")String content,
+                                          @Field("comment_id")long comment_id);
 
     /**
      * 35. 新建投资人
@@ -673,8 +751,10 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/page/comment/list")
-    Observable<BaseEntity<CommentItemsBean>> queryCommentList(@Field("token")String token,@Field("page")int page,
-                                                                 @Field("page_size")int page_size,@Field("hot_comment")int hot_comment);
+    Observable<BaseEntity<CommentItemsBean>> queryCommentList(@Field("token")String token,
+                                                              @Field("page")int page,
+                                                              @Field("page_size")int page_size,
+                                                              @Field("hot_comment")int hot_comment);
 
     /**
      * 消息--通知列表
@@ -685,7 +765,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/notice")
-    Observable<BaseEntity<MsgItems>> queryNotice(@Field("token")String token,@Field("id")long id,@Field("page_size")int page_size);
+    Observable<BaseEntity<MsgItems>> queryNotice(@Field("token")String token,
+                                                 @Field("id")long id,
+                                                 @Field("page_size")int page_size);
 
     /**
      * 消息--消息列表
@@ -696,7 +778,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/message")
-    Observable<BaseEntity<MsgItems>> queryMessage(@Field("token")String token,@Field("id")long id,@Field("page_size")int page_size);
+    Observable<BaseEntity<MsgItems>> queryMessage(@Field("token")String token,
+                                                  @Field("id")long id,
+                                                  @Field("page_size")int page_size);
 
     /**
      * 操作--更改已读
@@ -740,7 +824,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/user/sending")
-    Observable<BaseEntity<ListBean<SentBean>>> queryMySent(@Field("token")String token,@Field("page_size")int page_size,@Field("record_id")long record_id);
+    Observable<BaseEntity<ListBean<SentBean>>> queryMySent(@Field("token")String token,
+                                                           @Field("page_size")int page_size,
+                                                           @Field("record_id")long record_id);
 
     /**
      * 93. 页面--推荐投资人
@@ -758,7 +844,9 @@ public interface CommonService {
      */
     @FormUrlEncoded
     @POST("api/action/report")
-    Observable<CodeEntity> report(@Field("token")String token,@Field("report_type")int report_type,@Field("content")String content);
+    Observable<CodeEntity> report(@Field("token")String token,
+                                  @Field("report_type")int report_type,
+                                  @Field("content")String content);
 
     /**
      * 取消认证
@@ -793,6 +881,93 @@ public interface CommonService {
      */
     @POST("api/action/investor/investment/remove")
     Observable<CodeEntity> deleteCase(@Body DeleteCaseRequest request);
+
+    /**
+     * 102. 页面--认领投资人投资项目添加
+     * @param token
+     * @param case_name
+     * @param case_logo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/action/investor/investment/add")
+    Observable<BaseEntity<CaseBean>> addMyCase(@Field("token")String token,
+                                               @Field("case_name")String case_name,
+                                               @Field("case_logo")String case_logo);
+
+    /**
+     * 106. 页面--用户统计数据
+     * @param token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/stats/data")
+    Observable<BaseEntity<InfluencyBean>> queryInfluency(@Field("token")String token);
+
+    /**
+     * 98. 精彩热评列表
+     * @param keyword
+     * @param page
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/topic/list")
+    Observable<BaseEntity<ListBean<TopicBean>>> queryTopics(@Field("keyword")String keyword,
+                                                            @Field("page")int page,
+                                                            @Field("page_size")int page_size);
+
+    /**
+     * 99. 精彩热评详情
+     * @param topic_id
+     * @param page
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/topic/detail")
+    Observable<BaseEntity<HomeCommentBean>> queryTopicDetail(@Field("token")String token,
+                                                             @Field("topic_id")long topic_id,
+                                                             @Field("page")int page,
+                                                             @Field("page_size")int page_size);
+
+    /**
+     * 107. 页面--投资人评论&路演列表
+     * @param token
+     * @param investor_id
+     * @param data_type
+     * @param page_type
+     * @param page_size
+     * @param last_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/investor/comment/list")
+    Observable<BaseEntity<CommentListBean>> queryInvestorComment(@Field("token")String token,
+                                                                 @Field("investor_id")long investor_id,
+                                                                 @Field("data_type")String data_type,
+                                                                 @Field("page_type")String page_type,
+                                                                 @Field("page_size")int page_size,
+                                                                 @Field("last_id")long last_id);
+
+    /**
+     * 108. 页面--投资机构评论&路演列表
+     * @param token
+     * @param fund_id
+     * @param data_type
+     * @param page_type
+     * @param page_size
+     * @param last_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/fund/comment/list")
+    Observable<BaseEntity<CommentListBean>> queryFundComment(@Field("token")String token,
+                                                             @Field("fund_id")long fund_id,
+                                                             @Field("data_type")String data_type,
+                                                             @Field("page_type")String page_type,
+                                                             @Field("page_size")int page_size,
+                                                             @Field("last_id")long last_id);
 
  }
 

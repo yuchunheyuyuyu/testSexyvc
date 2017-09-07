@@ -62,14 +62,19 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //R.layout.item_has_load_all
         View view = null;
         if (viewType == ConstantUtil.TYPE_INVESTOR) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_investor_comment, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_investor_text_comment, parent, false);
             return new InvestorHolder(view);
         } else if (viewType == ConstantUtil.TYPE_FUND) {
             view = LayoutInflater.from(context).inflate(R.layout.item_fund_comment, parent, false);
             return new FundHolder(view);
+        } else if (viewType == ConstantUtil.TYPE_INVESTOR_ROAD) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_investor_road_comment, parent, false);
+            return new InvestorRoadHolder(view);
+        } else if (viewType == ConstantUtil.TYPE_FUND_ROAD) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_fund_road_comment, parent, false);
+            return new FundRoadHolder(view);
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.item_unauth_count, parent, false);
             return new UnAuthHolder(view);
@@ -89,14 +94,20 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bundle bundle=new Bundle();
-                    bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,type);
-                    bundle.putLong(ConstantUtil.INTENT_ID,contentId);
-                    bundle.putInt("auth_state",0);
-                    bundle.putString(ConstantUtil.INTENT_TITLE,String.format(context.getString(R.string.format_unauth_count),unauth_count));
-                    activity.gotoActivity(MoreCommentActivity.class,bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, type);
+                    bundle.putLong(ConstantUtil.INTENT_ID, contentId);
+                    bundle.putInt("auth_state", 0);
+                    bundle.putString(ConstantUtil.INTENT_TITLE, String.format(context.getString(R.string.format_unauth_count), unauth_count));
+                    activity.gotoActivity(MoreCommentActivity.class, bundle);
                 }
             });
+        }else if(viewHolder instanceof FundRoadHolder){
+
+
+        }else if(viewHolder instanceof InvestorRoadHolder){
+
+
         }
     }
 
@@ -130,10 +141,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.ivIdentityStatus.setVisibility(View.GONE);
         }
         holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
-        holder.tvPraiseNum.setText(""+bean.getLike());
-        if(bean.getHas_praise()==0){
+        holder.tvPraiseNum.setText("" + bean.getLike());
+        if (bean.getHas_praise() == 0) {
             holder.ivPraise.setSelected(false);
-        }else{
+        } else {
             holder.ivPraise.setSelected(true);
         }
     }
@@ -167,10 +178,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.ivIdentityStatus.setVisibility(View.GONE);
         }
         holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
-        holder.tvPraiseNum.setText(""+bean.getLike());
-        if(bean.getHas_praise()==0){
+        holder.tvPraiseNum.setText("" + bean.getLike());
+        if (bean.getHas_praise() == 0) {
             holder.ivPraise.setSelected(false);
-        }else{
+        } else {
             holder.ivPraise.setSelected(true);
         }
     }
@@ -251,6 +262,60 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView tvUnauthCount;
 
         UnAuthHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class InvestorRoadHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvStageTag)
+        TextView tvStageTag;
+        @BindView(R.id.tvDomainTag)
+        TextView tvDomainTag;
+        @BindView(R.id.tvFrom)
+        TextView tvFrom;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
+        @BindView(R.id.ratingScore)
+        RatingBar ratingScore;
+        @BindView(R.id.tvSource)
+        TextView tvSource;
+        @BindView(R.id.tvTime)
+        TextView tvTime;
+        @BindView(R.id.tvPraiseNum)
+        TextView tvPraiseNum;
+        @BindView(R.id.ivPraise)
+        ImageView ivPraise;
+
+        InvestorRoadHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class FundRoadHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tvStageTag)
+        TextView tvStageTag;
+        @BindView(R.id.tvDomainTag)
+        TextView tvDomainTag;
+        @BindView(R.id.tvFrom)
+        TextView tvFrom;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
+        @BindView(R.id.tvTo)
+        TextView tvTo;
+        @BindView(R.id.ratingScore)
+        RatingBar ratingScore;
+        @BindView(R.id.tvSource)
+        TextView tvSource;
+        @BindView(R.id.tvTime)
+        TextView tvTime;
+        @BindView(R.id.tvPraiseNum)
+        TextView tvPraiseNum;
+        @BindView(R.id.ivPraise)
+        ImageView ivPraise;
+
+        FundRoadHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

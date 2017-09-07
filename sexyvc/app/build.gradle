@@ -108,6 +108,8 @@ dependencies {
     compile 'jp.wasabeef:glide-transformations:2.0.0'
     //compile 'com.yanzhenjie:permission:1.0.8'
     //compile 'com.qianwen:update-app:3.3.0'
-
     //compile 'com.github.oneQuanta:ErrorView:V1.1'
+
+    compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2@aar'
+    compile 'com.makeramen:roundedimageview:2.3.0'
 }

@@ -4,17 +4,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.DateUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -38,7 +37,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_topic_comment, parent, false);
         return new ViewHolder(view  );
     }
 
@@ -53,12 +52,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.tvCommentTag.setVisibility(View.VISIBLE);
             holder.tvCommentTag.setText(entity.getDomain_name());
         }
-        holder.tvTime.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
-        holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
-        holder.tvTo.setText(entity.getInvestor_name()+"@"+entity.getFund_name());
-        holder.ratingScore.invalidate();
+
+        String name=entity.getInvestor_name()+"@"+entity.getFund_name();
+        holder.tvTarget.setText(AppStringUtil.getLimitString(name));
+
         holder.ratingScore.setRating(entity.getScore());
-        holder.tvComentContent.setText(StringUtil.formatString(entity.getTitle()));
+        holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
+        holder.tvComentContent.setText(StringUtil.formatString(entity.getContent()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +67,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             }
         });
+        holder.tvPraiseNum.setText(""+entity.getLike());
+        if(entity.getHas_praise()==0){
+            holder.ivPraise.setSelected(false);
+        }else{
+            holder.ivPraise.setSelected(true);
+        }
+        holder.tvDate.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
     }
 
     @Override
@@ -77,16 +84,20 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.tvCommentTag)
         TextView tvCommentTag;
-        @BindView(R.id.tvFrom)
-        TextView tvFrom;
-        @BindView(R.id.tvTo)
-        TextView tvTo;
+        @BindView(R.id.tvTarget)
+        TextView tvTarget;
         @BindView(R.id.ratingScore)
         RatingBar ratingScore;
+        @BindView(R.id.tvCommentTitle)
+        TextView tvCommentTitle;
         @BindView(R.id.tvComentContent)
         TextView tvComentContent;
-        @BindView(R.id.tvTime)
-        TextView tvTime;
+        @BindView(R.id.tvDate)
+        TextView tvDate;
+        @BindView(R.id.tvPraiseNum)
+        TextView tvPraiseNum;
+        @BindView(R.id.ivPraise)
+        ImageView ivPraise;
 
         ViewHolder(View view) {
             super(view);

@@ -19,10 +19,16 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:singleLine="true"
         android:text="设置"
         android:textColor="@color/slate"
         android:textSize="16sp" />
@@ -31,11 +37,11 @@
         android:id="@+id/tvRight"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:paddingRight="8dp"
+        android:gravity="center_vertical"
         android:paddingLeft="20dp"
+        android:paddingRight="8dp"
         android:text="@string/save"
         android:textColor="@color/barbie_pink_two"
         android:textSize="14sp"
@@ -46,10 +52,10 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_alignParentRight="true"
-        android:visibility="gone"
         android:layout_centerVertical="true"
         android:padding="8dp"
-        android:src="@drawable/icon_nav_setting" />
+        android:src="@drawable/icon_nav_setting"
+        android:visibility="gone" />
 
 
     <View

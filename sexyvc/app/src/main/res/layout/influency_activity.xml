@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:background="@drawable/influency_top_back">
+
+
+        <ImageView
+            android:id="@+id/ivLeft"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="6dp"
+            android:padding="8dp"
+            android:src="@drawable/arrow_back_selector" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:gravity="center_horizontal"
+            android:text="@string/title_influency"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvInfluencyNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:lineSpacingExtra="0sp"
+            android:text="0"
+            android:textColor="#ffffff"
+            android:textSize="34sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:text="@string/influency_introduce"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+    </RelativeLayout>
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/identityContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/influency_identity"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="+100"
+                android:textColor="@color/dodger_blue_two"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvIdentityStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/not_complete"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+        </LinearLayout>
+
+        <View
+            style="@style/line_style"
+            android:layout_marginLeft="16dp" />
+
+        <LinearLayout
+            android:id="@+id/projectContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/influency_project"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="+100"
+                android:textColor="@color/dodger_blue_two"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvProjectStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/not_complete"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+        </LinearLayout>
+
+        <View style="@style/line_style" />
+
+    </LinearLayout>
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/roadContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/influency_road"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="+20"
+                android:textColor="@color/dodger_blue_two"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+        </LinearLayout>
+
+        <View
+            style="@style/line_style"
+            android:layout_marginLeft="16dp" />
+
+        <LinearLayout
+            android:id="@+id/commentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/influency_comment"
+                android:textColor="@color/black90"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="+20"
+                android:textColor="@color/dodger_blue_two"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textColor="@color/black50"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/arrow_disclosure_l" />
+        </LinearLayout>
+
+        <View style="@style/line_style" />
+
+    </LinearLayout>
+
+    <View
+        style="@style/line_style"
+        android:layout_marginTop="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/influency_praise"
+            android:textColor="@color/black90"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="+5"
+            android:textColor="@color/dodger_blue_two"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textColor="@color/black50"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/arrow_disclosure_l"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View style="@style/line_style" />
+
+
+</LinearLayout>

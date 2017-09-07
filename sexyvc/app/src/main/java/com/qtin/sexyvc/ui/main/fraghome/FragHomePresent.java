@@ -94,16 +94,30 @@ public class FragHomePresent extends BasePresenter<FragHomeContract.Model,FragHo
                             data.add(itemInvestorEntity);
 
                             //评论
-                            ArrayList<CommentEntity> commentList=homeBean.getComments();
-                            for(int i=0;i<commentList.size();i++){
-                                if(i==0){
-                                    commentList.get(i).setFirst(true);
+                            ArrayList<CommentEntity> commentList=homeBean.getComments().getList();
+
+                            commentList.get(0).setHomeInfoBean(homeBean.getComments().getInfo());
+                            if(commentList.size()>=3){
+                                for(int i=0;i<commentList.size();i++){
+                                    if(i==0){
+                                        commentList.get(i).setFirst(true);
+                                    }
+                                    if(i==2){
+                                        commentList.get(i).setLast(true);
+                                    }
                                 }
-                                if(i==commentList.size()-1){
-                                    commentList.get(i).setLast(true);
+                                data.addAll(commentList.subList(0,3));
+                            }else{
+                                for(int i=0;i<commentList.size();i++){
+                                    if(i==0){
+                                        commentList.get(i).setFirst(true);
+                                    }
+                                    if(i==commentList.size()-1){
+                                        commentList.get(i).setLast(true);
+                                    }
                                 }
+                                data.addAll(commentList);
                             }
-                            data.addAll(commentList);
 
                             //专题
                             ArrayList<SubjectEntity> subjectList=homeBean.getSubjects();

@@ -32,6 +32,7 @@ import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
 import com.qtin.sexyvc.ui.mycase.MyCaseActivity;
 import com.qtin.sexyvc.ui.request.EditTypeRequest;
@@ -81,6 +82,9 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     TextView tvEmail;
     @BindView(R.id.tvPosition)
     TextView tvPosition;
+    @BindView(R.id.tvRight)
+    TextView tvRight;
+
 
     public static final String INTENT_USER = "user_info";
     @BindView(R.id.tvDomainNum)
@@ -119,6 +123,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     private final static int MAX_DOMAIN_NUM=100;
     private final static int MAX_STAGE_NUM=100;
 
+    private final static int REQUEST_CODE_CASE=0x11c;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerUserInfoComponent.builder().appComponent(appComponent).userInfoModule(new UserInfoModule(this)).build().inject(this);
@@ -143,7 +149,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        tvRight.setText(getString(R.string.my_page));
         tvTitle.setText(getResources().getString(R.string.title_user_info));
         setValue(userInfo);
         //获取投资行业
@@ -202,6 +208,14 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 getResources().getString(R.string.input_defalut) : entity.getU_email());
         //设置职位
         setPosition(entity.getU_company(), entity.getU_title());
+
+        if(entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_INVESTOR
+                &&entity.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS
+                &&entity.getInvestor_id()!=0){
+            tvRight.setVisibility(View.VISIBLE);
+        }else{
+            tvRight.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -238,12 +252,19 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     }
 
     @OnClick({R.id.ivLeft, R.id.avatarContainer, R.id.nickContainer, R.id.sexContainer, R.id.descriptionContainer, R.id.mobileContainer,
-            R.id.emailContainer, R.id.positionContainer,R.id.domainContainer, R.id.stageContainer, R.id.caseContainer})
+            R.id.emailContainer, R.id.positionContainer,R.id.domainContainer, R.id.stageContainer, R.id.caseContainer,R.id.tvRight})
     public void onClick(View view) {
         if (userInfo == null) {
             return;
         }
         switch (view.getId()) {
+            case R.id.tvRight:
+                if(userInfo!=null){
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("investor_id", userInfo.getInvestor_id());
+                    gotoActivity(InvestorDetailActivity.class, bundle);
+                }
+                break;
             case R.id.ivLeft:
                 if (isNeedGotoMain) {
                     gotoActivity(MainActivity.class);
@@ -294,7 +315,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 showStageDialog();
                 break;
             case R.id.caseContainer:
-                gotoActivity(MyCaseActivity.class);
+                gotoActivityForResult(MyCaseActivity.class,REQUEST_CODE_CASE);
                 break;
         }
     }
@@ -422,6 +443,13 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case REQUEST_CODE_CASE:
+                if(data!=null){
+                    int num=data.getExtras().getInt(ConstantUtil.INTENT_NUM);
+                    userInfo.setCase_number(num);
+                    tvCaseNum.setText(""+num);
+                }
+                break;
             case ModifyActivity.MODIFY_POSITION:
                 if (data != null) {
                     userInfo=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);

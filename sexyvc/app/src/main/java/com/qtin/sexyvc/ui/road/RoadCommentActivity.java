@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -45,14 +44,11 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;

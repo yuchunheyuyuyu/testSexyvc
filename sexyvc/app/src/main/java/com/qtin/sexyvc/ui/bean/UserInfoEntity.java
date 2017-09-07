@@ -39,6 +39,9 @@ public class UserInfoEntity implements Parcelable {
     private int has_comment;
     private int has_roadshow;
 
+    private long investor_id;
+    private String investor_name;
+
     @ToMany(referencedJoinProperty = "type_id")
     private List<FilterEntity> domain_list;
     @ToMany(referencedJoinProperty = "type_id")
@@ -180,6 +183,22 @@ public class UserInfoEntity implements Parcelable {
     public void setHas_roadshow(int has_roadshow) {
         this.has_roadshow = has_roadshow;
     }
+
+    public long getInvestor_id() {
+        return investor_id;
+    }
+
+    public void setInvestor_id(long investor_id) {
+        this.investor_id = investor_id;
+    }
+
+    public String getInvestor_name() {
+        return investor_name;
+    }
+
+    public void setInvestor_name(String investor_name) {
+        this.investor_name = investor_name;
+    }
     @Keep
     public List<FilterEntity> getDomain_list() {
         return domain_list;
@@ -229,6 +248,8 @@ public class UserInfoEntity implements Parcelable {
         dest.writeInt(this.u_auth_type);
         dest.writeInt(this.has_comment);
         dest.writeInt(this.has_roadshow);
+        dest.writeLong(this.investor_id);
+        dest.writeString(this.investor_name);
         dest.writeTypedList(this.domain_list);
         dest.writeTypedList(this.stage_list);
         dest.writeInt(this.case_number);
@@ -291,7 +312,7 @@ public class UserInfoEntity implements Parcelable {
 
     public UserInfoEntity() {
     }
-    @Keep
+
     protected UserInfoEntity(Parcel in) {
         this.token = in.readString();
         this.has_project = in.readInt();
@@ -310,15 +331,17 @@ public class UserInfoEntity implements Parcelable {
         this.u_auth_type = in.readInt();
         this.has_comment = in.readInt();
         this.has_roadshow = in.readInt();
+        this.investor_id = in.readLong();
+        this.investor_name = in.readString();
         this.domain_list = in.createTypedArrayList(FilterEntity.CREATOR);
         this.stage_list = in.createTypedArrayList(FilterEntity.CREATOR);
         this.case_number = in.readInt();
     }
 
-    @Generated(hash = 816654869)
+    @Generated(hash = 1648464340)
     public UserInfoEntity(String token, int has_project, String business_card, String u_nickname, int u_gender, String u_avatar, String u_signature,
             String u_phone, String u_email, String u_backup_phone, String u_backup_email, String u_company, String u_title, int u_auth_state,
-            int u_auth_type, int has_comment, int has_roadshow, int case_number) {
+            int u_auth_type, int has_comment, int has_roadshow, long investor_id, String investor_name, int case_number) {
         this.token = token;
         this.has_project = has_project;
         this.business_card = business_card;
@@ -336,6 +359,8 @@ public class UserInfoEntity implements Parcelable {
         this.u_auth_type = u_auth_type;
         this.has_comment = has_comment;
         this.has_roadshow = has_roadshow;
+        this.investor_id = investor_id;
+        this.investor_name = investor_name;
         this.case_number = case_number;
     }
 

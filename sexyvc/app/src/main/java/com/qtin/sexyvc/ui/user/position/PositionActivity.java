@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -193,19 +192,11 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-            goBack();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    private void goBack(){
+    public void finish() {
         Intent intent=new Intent();
         intent.putExtra(ConstantUtil.INTENT_PARCELABLE,userInfo);
         setResult(0,intent);
-        finish();
+        super.finish();
     }
 
     @OnClick({R.id.ivLeft, R.id.tvRight, R.id.authTypeContainer, R.id.institutionContainer,
@@ -213,7 +204,7 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeft:
-                goBack();
+                finish();
                 break;
             case R.id.tvRight:
                 if (userInfo.getU_auth_type() == 0) {

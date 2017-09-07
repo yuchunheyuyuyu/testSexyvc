@@ -2,6 +2,7 @@ package com.qtin.sexyvc.utils;
 
 import android.content.Context;
 
+import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 
 /**
@@ -106,6 +107,49 @@ public class AppStringUtil {
             return R.drawable.logo_approve_vc;
         }else{
             return R.drawable.logo_approve_fa;
+        }
+    }
+
+    /**
+     * 判断字符是否为全角字符
+     *
+     * @param ch
+     *            待判断的字符
+     * @return true：全角； false：半角
+     */
+    public static boolean isFullwidthCharacter(final char ch) {
+        if (ch >= 32 && ch <= 127) {
+            // 基本拉丁字母（即键盘上可见的，空格、数字、字母、符号）
+            return false;
+        } else if (ch >= 65377 && ch <= 65439) {
+            // 日文半角片假名和符号
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public static final int MAX_STRING_LENGTH=26;
+
+    public static String getLimitString(String string){
+        if(StringUtil.isBlank(string)){
+             return "";
+        }
+        int tmp=0;//全角算2，半角算1
+        int index=0;//截断的位置
+        for (int i = 0; i <string.length(); i++) {
+            if (isFullwidthCharacter(string.charAt(i))) {
+                tmp += 2;
+            } else {
+                tmp += 1;
+            }
+            if(tmp<=MAX_STRING_LENGTH){
+                index++;
+            }
+        }
+        if(tmp<=MAX_STRING_LENGTH){
+            return string;
+        }else{
+            return string.substring(0,index-1)+"...";
         }
     }
 }

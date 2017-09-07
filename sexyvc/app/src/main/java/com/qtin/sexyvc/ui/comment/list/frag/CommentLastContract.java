@@ -15,6 +15,10 @@ public interface CommentLastContract {
         void querySuccess(CommentItemsBean bean);
         void startLoadMore();
         void endLoadMore();
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         String getToken();

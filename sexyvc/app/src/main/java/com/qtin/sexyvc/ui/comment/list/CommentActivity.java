@@ -9,6 +9,7 @@ import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.comment.chosen.frag.CommentChosenFrag;
 import com.qtin.sexyvc.ui.comment.list.frag.CommentLastFrag;
 import com.qtin.sexyvc.ui.user.message.MyViewPagerAdapter;
 
@@ -53,8 +54,8 @@ public class CommentActivity extends MyBaseActivity {
         StringUtil.setTextStyle(tvComentNew,lineNew,true);
 
         ArrayList<Fragment> frags=new ArrayList<>();
+        frags.add(new CommentChosenFrag());
         frags.add(CommentLastFrag.getInstance(0));
-        frags.add(CommentLastFrag.getInstance(1));
         MyViewPagerAdapter adapter=new MyViewPagerAdapter(getSupportFragmentManager(),frags);
         viewPager.setAdapter(adapter);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

@@ -1,22 +1,21 @@
 package com.qtin.sexyvc.ui.main.fraghome.bean;
 
 import com.qtin.sexyvc.ui.bean.BannerEntity;
-import com.qtin.sexyvc.ui.bean.CommentEntity;
+import com.qtin.sexyvc.ui.bean.HomeCommentBean;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
+
 import java.util.ArrayList;
 
 /**
  * Created by ls on 17/6/10.
  */
-
 public class HomeBean {
 
     private ArrayList<BannerEntity> banners;
     private ArrayList<NewsBean> flashes;
     private ArrayList<InvestorEntity> investors;
-    private ArrayList<CommentEntity> comments;
-
+    private HomeCommentBean comments;
     private ArrayList<SubjectEntity> subjects;
 
     public ArrayList<BannerEntity> getBanners() {
@@ -43,11 +42,11 @@ public class HomeBean {
         this.investors = investors;
     }
 
-    public ArrayList<CommentEntity> getComments() {
+    public HomeCommentBean getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<CommentEntity> comments) {
+    public void setComments(HomeCommentBean comments) {
         this.comments = comments;
     }
 

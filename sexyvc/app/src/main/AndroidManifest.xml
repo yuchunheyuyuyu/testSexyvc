@@ -47,13 +47,14 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="SexyVC"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <data android:host="x.sexyvc.com/open"
-                    />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="SexyVC" />
+
+                <data android:host="x.sexyvc.com/open" />
 
             </intent-filter>
 
@@ -303,6 +304,26 @@
         <!--我的案例-->
         <activity
             android:name=".ui.mycase.MyCaseActivity"
+            android:screenOrientation="portrait" />
+
+        <!--添加我的案例-->
+        <activity
+            android:name=".ui.mycase.add.AddCaseActivity"
+            android:screenOrientation="portrait" />
+
+        <!--我的影响值-->
+        <activity
+            android:name=".ui.user.influency.InfluencyActivity"
+            android:screenOrientation="portrait" />
+
+        <!--精选热评-->
+        <activity
+            android:name=".ui.comment.chosen.detail.ChosenDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <!--对投资人或者投资机构的评论-->
+        <activity
+            android:name=".ui.more.object.activity.ObjectCommentActivity"
             android:screenOrientation="portrait" />
 
 

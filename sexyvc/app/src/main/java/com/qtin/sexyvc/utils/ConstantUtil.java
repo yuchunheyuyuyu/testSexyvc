@@ -29,6 +29,8 @@ public class ConstantUtil {
     public static final int TYPE_INVESTOR=1;
     public static final int TYPE_FUND=2;
     public static final int TYPE_UNAUTH=3;
+    public static final int TYPE_INVESTOR_ROAD=4;
+    public static final int TYPE_FUND_ROAD=5;
 
     //关键字
     public static final String KEY_WORD_INTENT="key_word";
@@ -45,6 +47,9 @@ public class ConstantUtil {
     public static final String INTENT_INDEX="index";
     //title
     public static final String INTENT_TITLE="title";
+
+    public static final String INTENT_NUM="number";
+
     //地址
     public static final String INTENT_URL="url";
     //ParcelableArray

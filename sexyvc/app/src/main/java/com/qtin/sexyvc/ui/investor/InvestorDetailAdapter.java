@@ -27,7 +27,7 @@ import com.qtin.sexyvc.ui.investor.bean.CommentBean;
 import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
 import com.qtin.sexyvc.ui.more.MoreCaseActivity;
-import com.qtin.sexyvc.ui.more.comment.MoreCommentActivity;
+import com.qtin.sexyvc.ui.more.object.activity.ObjectCommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
@@ -81,7 +81,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             view = LayoutInflater.from(context).inflate(R.layout.item_investor_top, parent, false);
             return new ContentHolder(view);
         } else if (viewType == DataTypeInterface.TYPE_COMMENT) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_investor_comment, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_investor_text_comment, parent, false);
             return new CommentHolder(view);
         }
         return null;
@@ -297,7 +297,7 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getInvestor_id());
                     bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getInvestor_name()+"的评论");
                     bundle.putInt("auth_state",auth_state);
-                    activity.gotoActivity(MoreCommentActivity.class,bundle);
+                    activity.gotoActivity(ObjectCommentActivity.class,bundle);
                 }
             });
         }
