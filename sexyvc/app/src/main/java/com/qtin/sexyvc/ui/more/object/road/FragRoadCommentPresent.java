@@ -5,13 +5,15 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.jess.arms.utils.UiUtils;
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.investor.bean.CommentListBean;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -34,8 +36,8 @@ public class FragRoadCommentPresent extends BasePresenter<FragRoadCommentContrac
         this.mApplication = mApplication;
     }
 
-    public void queryFundComment(long fund_id, String data_type, String page_type, int page_size,final long last_id){
-        mModel.queryFundComment(mModel.getToken(),fund_id,data_type,page_type,page_size,last_id)
+    public void queryFundComment(long fund_id, String data_type, String page_type, int page_size,final long last_id,int auth_state){
+        mModel.queryFundComment(mModel.getToken(),fund_id,data_type,page_type,page_size,last_id,auth_state)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -60,18 +62,32 @@ public class FragRoadCommentPresent extends BasePresenter<FragRoadCommentContrac
                     }
                 })
                 .compose(RxUtils.<BaseEntity<CommentListBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<CommentListBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<CommentListBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if(last_id== ConstantUtil.DEFALUT_ID){
+                            mRootView.showNetErrorView();
+                        }else{
+                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        }
+                    }
+
                     @Override
                     public void onNext(BaseEntity<CommentListBean> baseEntity) {
                         if(baseEntity.isSuccess()){
-                            //mRootView.querySuccess(baseEntity.getItems());
+                            mRootView.querySuccess(baseEntity.getItems());
                         }
                     }
                 });
     }
 
-    public void queryInvestorComment(long investor_id, String data_type, String page_type, int page_size,final long last_id){
-        mModel.queryInvestorComment(mModel.getToken(),investor_id,data_type,page_type,page_size,last_id)
+    public void queryInvestorComment(long investor_id, String data_type, String page_type, int page_size,final long last_id,int auth_state){
+        mModel.queryInvestorComment(mModel.getToken(),investor_id,data_type,page_type,page_size,last_id,auth_state)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
@@ -96,11 +112,25 @@ public class FragRoadCommentPresent extends BasePresenter<FragRoadCommentContrac
                     }
                 })
                 .compose(RxUtils.<BaseEntity<CommentListBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<CommentListBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<CommentListBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if(last_id== ConstantUtil.DEFALUT_ID){
+                            mRootView.showNetErrorView();
+                        }else{
+                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        }
+                    }
+
                     @Override
                     public void onNext(BaseEntity<CommentListBean> baseEntity) {
                         if(baseEntity.isSuccess()){
-                            //mRootView.querySuccess(baseEntity.getItems());
+                            mRootView.querySuccess(baseEntity.getItems());
                         }
                     }
                 });

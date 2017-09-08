@@ -1,12 +1,13 @@
 package com.qtin.sexyvc.ui.more.object.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -15,9 +16,10 @@ import com.qtin.sexyvc.ui.more.object.activity.di.ObjectCommentModule;
 import com.qtin.sexyvc.ui.more.object.road.FragRoadComment;
 import com.qtin.sexyvc.ui.user.message.MyViewPagerAdapter;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+import org.simple.eventbus.ThreadMode;
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -45,6 +47,33 @@ public class ObjectCommentActivity extends MyBaseActivity<ObjectCommentPresent> 
     ViewPager viewPager;
     @BindView(R.id.viewLine)
     View viewLine;
+
+    private static final int auth_state=1;
+    private int textCount=0;
+    private int roadCount=0;
+
+    @Nullable
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscriber(tag = ConstantUtil.QUERY_SUCCESS, mode = ThreadMode.MAIN)
+    public void receiveCount(CountEvent event){
+        if(event.getType()==ConstantUtil.TYPE_INVESTOR||event.getType()==ConstantUtil.TYPE_FUND){
+            textCount=event.getCount();
+        }else if(event.getType()==ConstantUtil.TYPE_INVESTOR_ROAD||event.getType()==ConstantUtil.TYPE_FUND_ROAD){
+            roadCount=event.getCount();
+        }
+        setSelectStatus(viewPager.getCurrentItem());
+    }
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -74,11 +103,11 @@ public class ObjectCommentActivity extends MyBaseActivity<ObjectCommentPresent> 
 
         ArrayList<Fragment> frags = new ArrayList<>();
         if(type==ConstantUtil.TYPE_INVESTOR){
-            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_INVESTOR, contentId,false));
-            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_INVESTOR_ROAD, contentId,true));
+            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_INVESTOR, contentId,auth_state));
+            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_INVESTOR_ROAD, contentId,auth_state));
         }else{
-            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_FUND, contentId,false));
-            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_FUND_ROAD, contentId,true));
+            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_FUND, contentId,auth_state));
+            frags.add(FragRoadComment.getInstance(ConstantUtil.TYPE_FUND_ROAD, contentId,auth_state));
         }
 
         MyViewPagerAdapter adapter = new MyViewPagerAdapter(getSupportFragmentManager(), frags);
@@ -104,14 +133,18 @@ public class ObjectCommentActivity extends MyBaseActivity<ObjectCommentPresent> 
 
     private void setSelectStatus(int currentItem) {
         if (currentItem == 0) {
+            tvTextComment.setText(String.format(getString(R.string.format_sent_road_comment),textCount));
             tvTextComment.setSelected(true);
             lineText.setVisibility(View.VISIBLE);
             tvRoadComment.setSelected(false);
+            tvRoadComment.setText(getString(R.string.sent_road_comment));
             lineRoad.setVisibility(View.GONE);
         } else {
             tvTextComment.setSelected(false);
+            tvTextComment.setText(getString(R.string.sent_text_comment));
             lineText.setVisibility(View.GONE);
             tvRoadComment.setSelected(true);
+            tvRoadComment.setText(String.format(getString(R.string.format_sent_road_comment),roadCount));
             lineRoad.setVisibility(View.VISIBLE);
         }
     }

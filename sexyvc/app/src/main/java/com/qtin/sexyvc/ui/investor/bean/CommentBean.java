@@ -31,45 +31,17 @@ public class CommentBean implements DataTypeInterface, Parcelable {
     private int is_anon;
     private int like;
 
-    public int getLike() {
-        return like;
-    }
+    //路演列表数据
+    private String u_title;
+    private long u_domain;
+    private long u_stage;
+    private String source;
 
-    public void setLike(int like) {
-        this.like = like;
-    }
-
-    public int getU_auth_type() {
-        return u_auth_type;
-    }
-
-    public void setU_auth_type(int u_auth_type) {
-        this.u_auth_type = u_auth_type;
-    }
-
-    public int getU_auth_state() {
-        return u_auth_state;
-    }
-
-    public void setU_auth_state(int u_auth_state) {
-        this.u_auth_state = u_auth_state;
-    }
-
-    public int getIs_anon() {
-        return is_anon;
-    }
-
-    public void setIs_anon(int is_anon) {
-        this.is_anon = is_anon;
-    }
-
-    public long getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(long create_time) {
-        this.create_time = create_time;
-    }
+    private long id;
+    private String investor_avatar;
+    private String investor_title;
+    private String u_domain_name;
+    private String u_stage_name;
 
     public String getDomain_name() {
         return domain_name;
@@ -167,6 +139,118 @@ public class CommentBean implements DataTypeInterface, Parcelable {
         this.has_praise = has_praise;
     }
 
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getU_auth_type() {
+        return u_auth_type;
+    }
+
+    public void setU_auth_type(int u_auth_type) {
+        this.u_auth_type = u_auth_type;
+    }
+
+    public int getU_auth_state() {
+        return u_auth_state;
+    }
+
+    public void setU_auth_state(int u_auth_state) {
+        this.u_auth_state = u_auth_state;
+    }
+
+    public int getIs_anon() {
+        return is_anon;
+    }
+
+    public void setIs_anon(int is_anon) {
+        this.is_anon = is_anon;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public String getU_title() {
+        return u_title;
+    }
+
+    public void setU_title(String u_title) {
+        this.u_title = u_title;
+    }
+
+    public long getU_domain() {
+        return u_domain;
+    }
+
+    public void setU_domain(long u_domain) {
+        this.u_domain = u_domain;
+    }
+
+    public long getU_stage() {
+        return u_stage;
+    }
+
+    public void setU_stage(long u_stage) {
+        this.u_stage = u_stage;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getInvestor_avatar() {
+        return investor_avatar;
+    }
+
+    public void setInvestor_avatar(String investor_avatar) {
+        this.investor_avatar = investor_avatar;
+    }
+
+    public String getInvestor_title() {
+        return investor_title;
+    }
+
+    public void setInvestor_title(String investor_title) {
+        this.investor_title = investor_title;
+    }
+
+    public String getU_domain_name() {
+        return u_domain_name;
+    }
+
+    public void setU_domain_name(String u_domain_name) {
+        this.u_domain_name = u_domain_name;
+    }
+
+    public String getU_stage_name() {
+        return u_stage_name;
+    }
+
+    public void setU_stage_name(String u_stage_name) {
+        this.u_stage_name = u_stage_name;
+    }
+
     @Override
     public int getType() {
         return DataTypeInterface.TYPE_COMMENT;
@@ -197,6 +281,15 @@ public class CommentBean implements DataTypeInterface, Parcelable {
         dest.writeInt(this.u_auth_state);
         dest.writeInt(this.is_anon);
         dest.writeInt(this.like);
+        dest.writeString(this.u_title);
+        dest.writeLong(this.u_domain);
+        dest.writeLong(this.u_stage);
+        dest.writeString(this.source);
+        dest.writeLong(this.id);
+        dest.writeString(this.investor_avatar);
+        dest.writeString(this.investor_title);
+        dest.writeString(this.u_domain_name);
+        dest.writeString(this.u_stage_name);
     }
 
     public CommentBean() {
@@ -220,6 +313,15 @@ public class CommentBean implements DataTypeInterface, Parcelable {
         this.u_auth_state = in.readInt();
         this.is_anon = in.readInt();
         this.like = in.readInt();
+        this.u_title = in.readString();
+        this.u_domain = in.readLong();
+        this.u_stage = in.readLong();
+        this.source = in.readString();
+        this.id = in.readLong();
+        this.investor_avatar = in.readString();
+        this.investor_title = in.readString();
+        this.u_domain_name = in.readString();
+        this.u_stage_name = in.readString();
     }
 
     public static final Creator<CommentBean> CREATOR = new Creator<CommentBean>() {

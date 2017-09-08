@@ -7,12 +7,26 @@
     android:paddingLeft="16dp"
     android:paddingTop="10dp">
 
-    <ImageView
-        android:id="@+id/ivAvatar"
+    <FrameLayout
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/avatar_blank" />
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/avatar_blank" />
+
+        <ImageView
+            android:id="@+id/ivIdentityStatus"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/logo_approve_vc"
+            android:visibility="visible" />
+    </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,15 +50,6 @@
                 android:text="一萌逼逼的用户名"
                 android:textColor="@color/black90"
                 android:textSize="12sp" />
-
-            <ImageView
-                android:id="@+id/ivIdentityStatus"
-                android:layout_width="16dp"
-                android:layout_height="14dp"
-                android:visibility="gone"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/logo_approve_vc" />
 
             <TextView
                 android:id="@+id/tvTime"

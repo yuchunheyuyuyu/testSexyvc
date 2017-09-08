@@ -24,7 +24,7 @@ import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.investor.bean.InvestorBean;
 import com.qtin.sexyvc.ui.rate.RateActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
-import com.qtin.sexyvc.ui.road.RoadCommentActivity;
+import com.qtin.sexyvc.ui.road.action.RoadCommentActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
 import java.util.List;

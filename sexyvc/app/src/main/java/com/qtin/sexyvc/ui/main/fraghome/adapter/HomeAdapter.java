@@ -2,7 +2,6 @@ package com.qtin.sexyvc.ui.main.fraghome.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.widget.imageloader.ImageLoader;
@@ -25,6 +25,7 @@ import com.qtin.sexyvc.ui.bean.SubjectEntity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.comment.list.CommentActivity;
 import com.qtin.sexyvc.ui.flash.FlashActivity;
+import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemBannerEntity;
 import com.qtin.sexyvc.ui.main.fraghome.entity.ItemInvestorEntity;
@@ -33,12 +34,16 @@ import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
 import com.qtin.sexyvc.ui.subject.list.SubjectListActivity;
 import com.qtin.sexyvc.ui.widget.AutoTextView;
 import com.qtin.sexyvc.ui.widget.BannerView;
+import com.qtin.sexyvc.ui.widget.InvestorView;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 import com.qtin.sexyvc.utils.SpaceItemDecoration;
 import com.zhy.autolayout.utils.AutoUtils;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -201,41 +206,47 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.topicContainer.setVisibility(View.GONE);
         }
 
-        if(entity.isLast()){
-            holder.marginLine.setVisibility(View.GONE);
-            holder.wholeLine.setVisibility(View.VISIBLE);
+        if(entity.getComment_id()== ConstantUtil.DEFALUT_ID){
+            holder.llCommentContent.setVisibility(View.GONE);
         }else{
-            holder.marginLine.setVisibility(View.VISIBLE);
-            holder.wholeLine.setVisibility(View.GONE);
-        }
-        if(StringUtil.isBlank(entity.getDomain_name())){
-            holder.tvCommentTag.setVisibility(View.GONE);
-        }else{
-            holder.tvCommentTag.setVisibility(View.VISIBLE);
-            holder.tvCommentTag.setText(entity.getDomain_name());
-        }
+            holder.llCommentContent.setVisibility(View.VISIBLE);
 
-        //holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
-        String name=entity.getInvestor_name()+"@"+entity.getFund_name();
-        holder.tvTarget.setText(AppStringUtil.getLimitString(name));
+            if(entity.isLast()){
+                holder.marginLine.setVisibility(View.GONE);
+                holder.wholeLine.setVisibility(View.VISIBLE);
+            }else{
+                holder.marginLine.setVisibility(View.VISIBLE);
+                holder.wholeLine.setVisibility(View.GONE);
+            }
+            if(StringUtil.isBlank(entity.getDomain_name())){
+                holder.tvCommentTag.setVisibility(View.GONE);
+            }else{
+                holder.tvCommentTag.setVisibility(View.VISIBLE);
+                holder.tvCommentTag.setText(entity.getDomain_name());
+            }
 
-        holder.ratingScore.setRating(entity.getScore());
-        holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
-        holder.tvComentContent.setText(StringUtil.formatString(entity.getContent()));
-        holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.gotoActivity(CommentActivity.class);
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle=new Bundle();
-                bundle.putLong("comment_id",entity.getComment_id());
-                activity.gotoActivity(CommentDetailActivity.class,bundle);
-            }
-        });
+            //holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
+            String name=entity.getInvestor_name()+"@"+entity.getFund_name();
+            holder.tvTarget.setText(AppStringUtil.getLimitString(name));
+
+            holder.ratingScore.setRating(entity.getScore());
+            holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
+            holder.tvComentContent.setText(StringUtil.formatString(entity.getContent()));
+            holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.gotoActivity(CommentActivity.class);
+                }
+            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putLong("comment_id",entity.getComment_id());
+                    activity.gotoActivity(CommentDetailActivity.class,bundle);
+                }
+            });
+        }
     }
 
     /**
@@ -243,26 +254,23 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param holder
      * @param position
      */
-    private void dealInvestor(InvestorHolder holder,int position){
-        ItemInvestorEntity entity= (ItemInvestorEntity) data.get(position);
-        holder.investorRecyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
-
-        //holder.investorRecyclerView.removeItemDecoration(decoration);
-        //holder.investorRecyclerView.addItemDecoration(decoration);
-
-        //GalleryLayoutManager galleryLayoutManager = new GalleryLayoutManager(GalleryLayoutManager.HORIZONTAL);
-        //galleryLayoutManager.attach(holder.investorRecyclerView, 0);
-        //galleryLayoutManager.setItemTransformer(new ScaleTransformer());
-
-        HomeInvestorAdapter adapter=new HomeInvestorAdapter(context,entity.getList());
-        holder.investorRecyclerView.setAdapter(adapter);
-
-        holder.moreInvestorContainer.setOnClickListener(new View.OnClickListener() {
+    private void dealInvestor(final InvestorHolder holder, int position){
+        final ItemInvestorEntity entity= (ItemInvestorEntity) data.get(position);
+        holder.investorView.setData(entity.getList());
+        holder.tvInvestorCount.setText("/"+entity.getList().size());
+        holder.investorView.setOnItemClickListener(new InvestorView.OnInvestorItemClickListener() {
             @Override
-            public void onClick(View v) {
-                if(onClickMoreInvestorListener!=null){
-                    //onClickMoreInvestorListener.onClick();
-                }
+            public void onInvestorClickItem(int position) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("investor_id", entity.getList().get(position).getInvestor_id());
+                bundle.putBoolean("isFromFund", false);
+                activity.gotoActivity(InvestorDetailActivity.class, bundle);
+            }
+        });
+        holder.investorView.setOnInvestorChangeListener(new InvestorView.onInvestorChangeListener() {
+            @Override
+            public void onPageChange(int position) {
+                holder.tvInvestorIndex.setText(""+(position+1));
             }
         });
     }
@@ -302,10 +310,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static class InvestorHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.moreInvestorContainer)
         LinearLayout moreInvestorContainer;
-        @BindView(R.id.investorRecyclerView)
-        RecyclerView investorRecyclerView;
+        @BindView(R.id.investorView)
+        InvestorView investorView;
         @BindView(R.id.tvInvestorIndex)
         TextView tvInvestorIndex;
+        @BindView(R.id.tvInvestorCount)
+        TextView tvInvestorCount;
 
         InvestorHolder(View view) {
             super(view);
@@ -339,6 +349,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView tvTopicTitle;
         @BindView(R.id.tvTopicSummary)
         TextView tvTopicSummary;
+        @BindView(R.id.llCommentContent)
+        View llCommentContent;
 
         CommentHolder(View view) {
             super(view);

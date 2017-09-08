@@ -33,7 +33,7 @@ public class CommentChosenModel extends BaseModel<ServiceManager,CacheManager> i
     }
 
     @Override
-    public Observable<BaseEntity<ListBean<TopicBean>>> queryTopics(String keyword, int page, int page_size) {
-        return mServiceManager.getCommonService().queryTopics(keyword,page,page_size);
+    public Observable<BaseEntity<ListBean<TopicBean>>> queryTopics(String keyword, long last_id, int page_size) {
+        return mServiceManager.getCommonService().queryTopics(keyword,last_id,page_size);
     }
 }

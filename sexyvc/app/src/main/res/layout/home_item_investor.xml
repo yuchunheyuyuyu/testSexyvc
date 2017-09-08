@@ -32,11 +32,12 @@
             android:id="@+id/tvInvestorIndex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
+            android:text="1"
             android:textColor="@color/slate"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tvInvestorCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/4"
@@ -45,11 +46,11 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/investorRecyclerView"
+    <com.qtin.sexyvc.ui.widget.InvestorView
+        android:id="@+id/investorView"
+        android:paddingTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="188dp" />
-
     <View
         style="@style/line_style"
         android:layout_marginTop="19dp" />

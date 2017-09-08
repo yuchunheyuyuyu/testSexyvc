@@ -34,7 +34,7 @@ import com.qtin.sexyvc.ui.investor.bean.RoadShowItemBean;
 import com.qtin.sexyvc.ui.rate.RateActivity;
 import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
-import com.qtin.sexyvc.ui.road.RoadCommentActivity;
+import com.qtin.sexyvc.ui.road.action.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.modify.ModifyActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;

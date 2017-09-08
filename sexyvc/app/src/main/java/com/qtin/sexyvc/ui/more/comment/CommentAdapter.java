@@ -14,6 +14,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
+import com.qtin.sexyvc.ui.more.UnAuthCommentActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
@@ -97,17 +98,105 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     Bundle bundle = new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, type);
                     bundle.putLong(ConstantUtil.INTENT_ID, contentId);
-                    bundle.putInt("auth_state", 0);
                     bundle.putString(ConstantUtil.INTENT_TITLE, String.format(context.getString(R.string.format_unauth_count), unauth_count));
-                    activity.gotoActivity(MoreCommentActivity.class, bundle);
+                    activity.gotoActivity(UnAuthCommentActivity.class, bundle);
                 }
             });
         }else if(viewHolder instanceof FundRoadHolder){
-
-
+            dealFundRoad(data.get(position), (FundRoadHolder) viewHolder);
         }else if(viewHolder instanceof InvestorRoadHolder){
+            dealInvestorRoad(data.get(position), (InvestorRoadHolder) viewHolder);
+        }
+    }
 
+    private void dealInvestorRoad(final CommentBean bean,InvestorRoadHolder holder){
+        holder.ratingScore.setRating(bean.getScore());
+        if(StringUtil.isBlank(bean.getU_stage_name())){
+            holder.tvStageTag.setVisibility(View.GONE);
+        }else{
+            holder.tvStageTag.setVisibility(View.VISIBLE);
+            holder.tvStageTag.setText(bean.getU_stage_name());
+        }
 
+        if(StringUtil.isBlank(bean.getU_domain_name())){
+            holder.tvDomainTag.setVisibility(View.GONE);
+        }else{
+            holder.tvDomainTag.setVisibility(View.VISIBLE);
+            holder.tvDomainTag.setText(bean.getU_domain_name());
+        }
+        if(bean.getIs_anon()==0){
+            holder.tvFrom.setSelected(true);
+        }else{
+            holder.tvFrom.setSelected(false);
+        }
+
+        holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
+        //加v的图标
+        if (AppStringUtil.isShowVStatus(bean.getIs_anon(), bean.getU_auth_type(), bean.getU_auth_state())) {
+            holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+            holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(bean.getU_auth_type()));
+        } else {
+            holder.ivIdentityStatus.setVisibility(View.GONE);
+        }
+        //holder.tvTo.setText(StringUtil.formatString(bean.getInvestor_name()));
+        if(StringUtil.isBlank(bean.getSource())){
+            holder.tvSource.setText(context.getString(R.string.from_sexyvc));
+        }else{
+            holder.tvSource.setText(bean.getSource());
+        }
+
+        holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
+
+        holder.tvPraiseNum.setText("" + bean.getLike());
+        if (bean.getHas_praise() == 0) {
+            holder.ivPraise.setSelected(false);
+        } else {
+            holder.ivPraise.setSelected(true);
+        }
+    }
+
+    private void dealFundRoad(final CommentBean bean,FundRoadHolder holder){
+        holder.ratingScore.setRating(bean.getScore());
+        if(StringUtil.isBlank(bean.getU_stage_name())){
+            holder.tvStageTag.setVisibility(View.GONE);
+        }else{
+            holder.tvStageTag.setVisibility(View.VISIBLE);
+            holder.tvStageTag.setText(bean.getU_stage_name());
+        }
+
+        if(StringUtil.isBlank(bean.getU_domain_name())){
+            holder.tvDomainTag.setVisibility(View.GONE);
+        }else{
+            holder.tvDomainTag.setVisibility(View.VISIBLE);
+            holder.tvDomainTag.setText(bean.getU_domain_name());
+        }
+        if(bean.getIs_anon()==0){
+            holder.tvFrom.setSelected(true);
+        }else{
+            holder.tvFrom.setSelected(false);
+        }
+
+        holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
+        //加v的图标
+        if (AppStringUtil.isShowVStatus(bean.getIs_anon(), bean.getU_auth_type(), bean.getU_auth_state())) {
+            holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+            holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(bean.getU_auth_type()));
+        } else {
+            holder.ivIdentityStatus.setVisibility(View.GONE);
+        }
+        holder.tvTo.setText(StringUtil.formatString(bean.getInvestor_name()));
+        holder.tvTime.setText(DateUtil.getSpecialDate(bean.getCreate_time()));
+        if(StringUtil.isBlank(bean.getSource())){
+            holder.tvSource.setText(context.getString(R.string.from_sexyvc));
+        }else{
+            holder.tvSource.setText(bean.getSource());
+        }
+
+        holder.tvPraiseNum.setText("" + bean.getLike());
+        if (bean.getHas_praise() == 0) {
+            holder.ivPraise.setSelected(false);
+        } else {
+            holder.ivPraise.setSelected(true);
         }
     }
 
@@ -147,6 +236,12 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             holder.ivPraise.setSelected(true);
         }
+
+        if(bean.getIs_anon()==0){
+            holder.tvFrom.setSelected(true);
+        }else{
+            holder.tvFrom.setSelected(false);
+        }
     }
 
     private void dealInvestorComment(final CommentBean bean, InvestorHolder holder) {
@@ -183,6 +278,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.ivPraise.setSelected(false);
         } else {
             holder.ivPraise.setSelected(true);
+        }
+        if(bean.getIs_anon()==0){
+            holder.tvFrom.setSelected(true);
+        }else{
+            holder.tvFrom.setSelected(false);
         }
     }
 

@@ -93,6 +93,7 @@ public class ConstantUtil {
     public static final String ROAD_SUCCESS = "road_comment_success";
     public static final String SCORE_SUCCESS = "score_success";
     public static final String COMMENT_SUCCESS = "comment_success";
+    public static final String QUERY_SUCCESS = "query_success";
 
 
     public static final String INTENT_CREATE_INVESTOR_TYPE="INTENT_CREATE_INVESTOR";

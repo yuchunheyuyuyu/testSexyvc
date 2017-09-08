@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="某CEO"
-            android:textColor="@color/black50_slate"
+            android:textColor="@color/black70_dusk_color"
             android:textSize="12sp" />
 
         <ImageView

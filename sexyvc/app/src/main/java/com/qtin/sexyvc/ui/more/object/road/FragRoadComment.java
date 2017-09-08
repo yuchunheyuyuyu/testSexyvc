@@ -2,6 +2,7 @@ package com.qtin.sexyvc.ui.more.object.road;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +15,14 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseFragment;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
+import com.qtin.sexyvc.ui.investor.bean.CommentListBean;
 import com.qtin.sexyvc.ui.more.comment.CommentAdapter;
+import com.qtin.sexyvc.ui.more.object.activity.CountEvent;
 import com.qtin.sexyvc.ui.more.object.road.di.DaggerFragRoadCommentComponent;
 import com.qtin.sexyvc.ui.more.object.road.di.FragRoadCommentModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
+import org.simple.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -30,6 +35,7 @@ import rx.functions.Action1;
  * Created by ls on 17/4/26.
  */
 public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> implements FragRoadCommentContract.View {
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
@@ -39,9 +45,9 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
     @BindView(R.id.errorLayout)
     LinearLayout errorLayout;
 
-    private boolean isRoadComment;//是否是路演评论
     private int type;//是投资人还是投资机构
     private long contentId;
+    private int auth_state;
 
     private final static int page_size=15;
     private long last_id;
@@ -52,16 +58,32 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
+    private int total;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+
     @Override
     protected void setupFragmentComponent(AppComponent appComponent) {
         DaggerFragRoadCommentComponent.builder().appComponent(appComponent).fragRoadCommentModule(new FragRoadCommentModule(this)).build().inject(this);
     }
 
-    public static FragRoadComment getInstance(int type, long contentId,boolean isRoadComment){
+    public static FragRoadComment getInstance(int type, long contentId,int auth_state){
         Bundle bundle=new Bundle();
         bundle.putInt("type",type);
-        bundle.putBoolean("isRoadComment",isRoadComment);
         bundle.putLong("contentId",contentId);
+        bundle.putInt("auth_state",auth_state);
         FragRoadComment frag = new FragRoadComment();
         frag.setArguments(bundle);
         return frag;
@@ -75,8 +97,8 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
     @Override
     protected void init() {
         type=getArguments().getInt("type");
+        auth_state=getArguments().getInt("auth_state");
         contentId=getArguments().getLong("contentId");
-        isRoadComment=getArguments().getBoolean("isRoadComment");
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -124,15 +146,16 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
 
         String page_type="app";
         String data_type="";
-        if(isRoadComment){
-            data_type="roadshow";
-        }else{
+        if(type == ConstantUtil.TYPE_FUND||type == ConstantUtil.TYPE_INVESTOR){
             data_type="comment";
+        }else{
+            data_type="roadshow";
         }
-        if(type == ConstantUtil.TYPE_FUND){
-            mPresenter.queryFundComment(contentId,data_type, page_type,page_size,last_id);
-        } else if (type == ConstantUtil.TYPE_INVESTOR){
-            mPresenter.queryInvestorComment(contentId, data_type,page_type,page_size,last_id);
+
+        if(type == ConstantUtil.TYPE_FUND||type==ConstantUtil.TYPE_FUND_ROAD){
+            mPresenter.queryFundComment(contentId,data_type, page_type,page_size,last_id,auth_state);
+        } else if (type == ConstantUtil.TYPE_INVESTOR||type==ConstantUtil.TYPE_INVESTOR_ROAD){
+            mPresenter.queryInvestorComment(contentId, data_type,page_type,page_size,last_id,auth_state);
         }
     }
 
@@ -215,5 +238,41 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
     @Override
     public void endLoadMore() {
         isLoadingMore = false;
+    }
+
+    @Override
+    public void querySuccess(CommentListBean commentListBean) {
+        if (last_id == ConstantUtil.DEFALUT_ID) {
+            data.clear();
+            if (commentListBean.getList()!=null&&!commentListBean.getList().isEmpty()) {
+                total=commentListBean.getTotal();
+                showContentView();
+            }else{
+                showEmptyView();
+            }
+
+            CountEvent countEvent=new CountEvent();
+            countEvent.setCount(total);
+            countEvent.setType(type);
+            EventBus.getDefault().post(countEvent,ConstantUtil.QUERY_SUCCESS);
+        }
+
+        if (commentListBean.getList()!=null) {
+            data.addAll(commentListBean.getList());
+        }
+        if (data.size() < total) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
+        }
+
+        if(!data.isEmpty()){
+            last_id=data.get(data.size()-1).getComment_id();
+        }
+        if(auth_state==1){
+            mAdapter.setUnauth_count(commentListBean.getUnauth_count());
+        }
+
+        mAdapter.notifyDataSetChanged();
     }
 }

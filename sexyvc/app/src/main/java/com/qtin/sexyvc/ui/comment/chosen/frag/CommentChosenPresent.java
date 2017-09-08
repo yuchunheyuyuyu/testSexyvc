@@ -11,6 +11,7 @@ import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.TopicBean;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import javax.inject.Inject;
 
@@ -39,15 +40,15 @@ public class CommentChosenPresent extends BasePresenter<CommentChosenContract.Mo
         this.mApplication = mApplication;
     }
 
-    public void queryCommentList(String key_word,final  int page,int page_size){
+    public void queryCommentList(String key_word,final  long last_id,int page_size){
 
-       mModel.queryTopics(key_word,page,page_size)
+       mModel.queryTopics(key_word,last_id,page_size)
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        if (page==1)
+                        if (last_id== ConstantUtil.DEFALUT_ID)
                             mRootView.showLoading();//显示上拉刷新的进度条
                         else
                             mRootView.startLoadMore();//显示下拉加载更多的进度条
@@ -57,7 +58,7 @@ public class CommentChosenPresent extends BasePresenter<CommentChosenContract.Mo
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        if (page==1)
+                        if (last_id==ConstantUtil.DEFALUT_ID)
                             mRootView.hideLoading();//隐藏上拉刷新的进度条
                         else
                             mRootView.endLoadMore();//隐藏下拉加载更多的进度条
@@ -72,7 +73,7 @@ public class CommentChosenPresent extends BasePresenter<CommentChosenContract.Mo
 
                     @Override
                     public void onError(Throwable e) {
-                        if(page== 1){
+                        if(last_id== ConstantUtil.DEFALUT_ID){
                             mRootView.showNetErrorView();
                         }else{
                             UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
@@ -82,12 +83,11 @@ public class CommentChosenPresent extends BasePresenter<CommentChosenContract.Mo
                     @Override
                     public void onNext(BaseEntity<ListBean<TopicBean>> listBeanBaseEntity) {
                         if(listBeanBaseEntity.isSuccess()){
-                            if(page==1&&listBeanBaseEntity.getItems().getList().isEmpty()){
+                            if(last_id==ConstantUtil.DEFALUT_ID&&listBeanBaseEntity.getItems().getList().isEmpty()){
                                 mRootView.showEmptyView();
                             }else{
                                 mRootView.showContentView();
                             }
-
                             mRootView.querySuccess(listBeanBaseEntity.getItems());
                         }
                     }

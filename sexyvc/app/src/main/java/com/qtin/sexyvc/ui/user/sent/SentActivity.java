@@ -19,7 +19,7 @@ import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
-import com.qtin.sexyvc.ui.road.RoadCommentActivity;
+import com.qtin.sexyvc.ui.road.action.RoadCommentActivity;
 import com.qtin.sexyvc.ui.user.sent.bean.OnCommentClickListener;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 import com.qtin.sexyvc.ui.user.sent.di.DaggerSentComponent;

@@ -47,10 +47,10 @@ public class CommentChosenFrag extends MyBaseFragment<CommentChosenPresent> impl
     private Paginate mPaginate;
     private boolean isLoadingMore;
 
-
-    private int page = 1;
+    private long last_id = ConstantUtil.DEFALUT_ID;
     private int page_size = 15;
     private String key_word = "";
+    private int total;
 
     private CommentChosenAdapter mAdapter;
     private ArrayList<TopicBean> data = new ArrayList<>();
@@ -71,12 +71,12 @@ public class CommentChosenFrag extends MyBaseFragment<CommentChosenPresent> impl
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
-                mPresenter.queryCommentList(key_word, page, page_size);
+                last_id = ConstantUtil.DEFALUT_ID;
+                mPresenter.queryCommentList(key_word, last_id, page_size);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mAdapter = new CommentChosenAdapter(mActivity,data);
+        mAdapter = new CommentChosenAdapter(mActivity, data);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -87,7 +87,7 @@ public class CommentChosenFrag extends MyBaseFragment<CommentChosenPresent> impl
             }
         });
         initPaginate();
-        mPresenter.queryCommentList(key_word, page, page_size);
+        mPresenter.queryCommentList(key_word, last_id, page_size);
     }
 
     @Override
@@ -127,8 +127,10 @@ public class CommentChosenFrag extends MyBaseFragment<CommentChosenPresent> impl
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    page++;
-                    mPresenter.queryCommentList(key_word, page, page_size);
+                    if (!data.isEmpty()){
+                        last_id=data.get(data.size()-1).getTopic_id();
+                    }
+                    mPresenter.queryCommentList(key_word, last_id, page_size);
                 }
 
                 @Override
@@ -151,18 +153,19 @@ public class CommentChosenFrag extends MyBaseFragment<CommentChosenPresent> impl
 
     @Override
     public void querySuccess(ListBean<TopicBean> bean) {
-         if (page == 1) {
-         data.clear();
-         }
-         if (bean.getList() != null) {
-         data.addAll(bean.getList());
-         }
-         if (bean.getTotal() > data.size()) {
-         hasLoadedAllItems = false;
-         } else {
-         hasLoadedAllItems = true;
-         }
-         mAdapter.notifyDataSetChanged();
+        if (last_id == ConstantUtil.DEFALUT_ID) {
+            data.clear();
+            total=bean.getTotal();
+        }
+        if (bean.getList() != null) {
+            data.addAll(bean.getList());
+        }
+        if (total > data.size()) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

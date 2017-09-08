@@ -34,7 +34,7 @@ import com.qtin.sexyvc.ui.rate.di.DaggerRateComponent;
 import com.qtin.sexyvc.ui.rate.di.RateModule;
 import com.qtin.sexyvc.ui.request.RateRequest;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
-import com.qtin.sexyvc.ui.road.RoadCommentActivity;
+import com.qtin.sexyvc.ui.road.action.RoadCommentActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;

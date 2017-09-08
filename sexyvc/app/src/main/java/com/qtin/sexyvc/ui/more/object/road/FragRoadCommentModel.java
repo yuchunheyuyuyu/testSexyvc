@@ -26,13 +26,13 @@ public class FragRoadCommentModel extends BaseModel<ServiceManager,CacheManager>
     }
 
     @Override
-    public Observable<BaseEntity<CommentListBean>> queryInvestorComment(String token, long investor_id, String data_type, String page_type, int page_size, long last_id) {
-        return mServiceManager.getCommonService().queryInvestorComment(token,investor_id,data_type,page_type,page_size,last_id);
+    public Observable<BaseEntity<CommentListBean>> queryInvestorComment(String token, long investor_id, String data_type, String page_type, int page_size, long last_id,int auth_state ) {
+        return mServiceManager.getCommonService().queryInvestorComment(token,investor_id,data_type,page_type,page_size,last_id,auth_state);
     }
 
     @Override
-    public Observable<BaseEntity<CommentListBean>> queryFundComment(String token, long fund_id, String data_type, String page_type, int page_size, long last_id) {
-        return mServiceManager.getCommonService().queryFundComment(token,fund_id,data_type,page_type,page_size,last_id);
+    public Observable<BaseEntity<CommentListBean>> queryFundComment(String token, long fund_id, String data_type, String page_type, int page_size, long last_id,int auth_state) {
+        return mServiceManager.getCommonService().queryFundComment(token,fund_id,data_type,page_type,page_size,last_id,auth_state);
     }
 
     @Override

@@ -412,6 +412,8 @@
 
     <string name="sent_road_comment">路演评价</string>
     <string name="sent_text_comment">文字评论</string>
+    <string name="format_sent_road_comment">路演评价 (%d)</string>
+    <string name="format_sent_text_comment">文字评论 (%d)</string>
 
     <string name="never_show">不再提示</string>
     <string name="dialog_identity_title">您还没有进行身份认证</string>
@@ -481,5 +483,7 @@
     <string name="home_whole_focus">舆论聚焦</string>
     <string name="home_feedback_fastest">极速反馈</string>
     <string name="past_hot_comment">往期热评</string>
+
+    <string name="from_sexyvc">来自 SexyVC</string>
 
 </resources>

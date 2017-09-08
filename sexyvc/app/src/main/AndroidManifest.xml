@@ -264,12 +264,12 @@
 
         <!--路演评价-->
         <activity
-            android:name=".ui.road.RoadCommentActivity"
+            android:name=".ui.road.action.RoadCommentActivity"
             android:screenOrientation="portrait" />
 
         <!--路演评价完成-->
         <activity
-            android:name=".ui.road.success.SuccessActivity"
+            android:name=".ui.road.action.success.SuccessActivity"
             android:screenOrientation="portrait" />
         <!--评分-->
         <activity
@@ -324,6 +324,16 @@
         <!--对投资人或者投资机构的评论-->
         <activity
             android:name=".ui.more.object.activity.ObjectCommentActivity"
+            android:screenOrientation="portrait" />
+
+        <!--未认证用户的评论-->
+        <activity
+            android:name=".ui.more.UnAuthCommentActivity"
+            android:screenOrientation="portrait" />
+
+        <!--路演评价详情-->
+        <activity
+            android:name=".ui.road.show.RoadDetailActivity"
             android:screenOrientation="portrait" />
 
 

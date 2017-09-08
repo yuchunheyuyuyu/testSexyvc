@@ -17,7 +17,7 @@ import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.review.di.DaggerReviewComponent;
 import com.qtin.sexyvc.ui.review.di.ReviewModule;
-import com.qtin.sexyvc.ui.road.success.SuccessActivity;
+import com.qtin.sexyvc.ui.road.action.success.SuccessActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.ConstantUtil;
 

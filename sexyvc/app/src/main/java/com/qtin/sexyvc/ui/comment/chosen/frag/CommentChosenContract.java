@@ -24,6 +24,6 @@ public interface CommentChosenContract {
     }
     interface Model extends IModel{
         String getToken();
-        Observable<BaseEntity<ListBean<TopicBean>>> queryTopics(String keyword,int page,int page_size);
+        Observable<BaseEntity<ListBean<TopicBean>>> queryTopics(String keyword,long last_id,int page_size);
     }
 }

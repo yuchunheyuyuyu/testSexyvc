@@ -56,7 +56,7 @@ public class MoreCommentActivity extends MyBaseActivity<MoreCommentPresent> impl
 
     @Override
     protected boolean isContaineFragment() {
-        return false;
+        return true;
     }
 
     @Override

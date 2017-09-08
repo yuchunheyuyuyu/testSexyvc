@@ -48,8 +48,9 @@ import com.qtin.sexyvc.ui.request.FollowRequest;
 import com.qtin.sexyvc.ui.request.InvestorRequest;
 import com.qtin.sexyvc.ui.request.RateRequest;
 import com.qtin.sexyvc.ui.request.UnFollowContactRequest;
-import com.qtin.sexyvc.ui.road.bean.QuestionBean;
-import com.qtin.sexyvc.ui.road.bean.RoadRequest;
+import com.qtin.sexyvc.ui.road.action.bean.QuestionBean;
+import com.qtin.sexyvc.ui.road.action.bean.RoadRequest;
+import com.qtin.sexyvc.ui.road.show.bean.RoadShowBean;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
 import com.qtin.sexyvc.ui.subject.bean.SubjectBean;
 import com.qtin.sexyvc.ui.user.bean.MsgItems;
@@ -907,14 +908,14 @@ public interface CommonService {
     /**
      * 98. 精彩热评列表
      * @param keyword
-     * @param page
+     * @param last_id
      * @param page_size
      * @return
      */
     @FormUrlEncoded
     @POST("api/page/topic/list")
     Observable<BaseEntity<ListBean<TopicBean>>> queryTopics(@Field("keyword")String keyword,
-                                                            @Field("page")int page,
+                                                            @Field("last_id")long last_id,
                                                             @Field("page_size")int page_size);
 
     /**
@@ -948,7 +949,8 @@ public interface CommonService {
                                                                  @Field("data_type")String data_type,
                                                                  @Field("page_type")String page_type,
                                                                  @Field("page_size")int page_size,
-                                                                 @Field("last_id")long last_id);
+                                                                 @Field("last_id")long last_id,
+                                                                 @Field("auth_state")int auth_state);
 
     /**
      * 108. 页面--投资机构评论&路演列表
@@ -967,7 +969,23 @@ public interface CommonService {
                                                              @Field("data_type")String data_type,
                                                              @Field("page_type")String page_type,
                                                              @Field("page_size")int page_size,
-                                                             @Field("last_id")long last_id);
+                                                             @Field("last_id")long last_id,
+                                                             @Field("auth_state")int auth_state);
+
+    /**
+     * 109. 页面--路演详情
+     * @param token
+     * @param id
+     * @param page_size
+     * @param last_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/page/roadshow/detail")
+    Observable<BaseEntity<RoadShowBean>> queryRoadDetail(@Field("token")String token,
+                                                         @Field("id")long id,
+                                                         @Field("page_size")int page_size,
+                                                         @Field("last_id")long last_id);
 
  }
 
