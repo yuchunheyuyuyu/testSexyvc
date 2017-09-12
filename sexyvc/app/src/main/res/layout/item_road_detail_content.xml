@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="2dp"
+    android:paddingTop="18dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tvStageTag"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/black50_shape_5"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="天使轮"
+            android:textColor="@color/black50"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvDomainTag"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/black50_shape_5"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="企业服务"
+            android:textColor="@color/black50"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="某CEO："
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ivIdentityStatus"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/logo_approve_vc"
+            android:visibility="gone" />
+
+        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+            android:id="@+id/ratingScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:emptyDrawable="@drawable/star_l_blank"
+            app:filledDrawable="@drawable/star_l_full"
+            app:isIndicator="true"
+            app:minAllowedStars="0"
+            app:numStarsValue="5"
+            app:ratingValue="3"
+            app:starMargin="0dp"
+            app:starSizeValue="12dp"
+            app:starSpacing="1dp"
+            app:stepSizeValue="1" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvRource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:lineSpacingExtra="6sp"
+        android:text="来自 2017长三角一个名字超长的活动会场"
+        android:textColor="@color/black50"
+        android:textSize="12sp" />
+
+    <com.qtin.sexyvc.ui.widget.RoadView
+        android:id="@+id/roadView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lineSpacingExtra="6sp"
+            android:text="昨天"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/tvPraiseNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:lineSpacingExtra="6sp"
+            android:text="3"
+            android:textColor="@color/black30"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ivPraise"
+            android:layout_width="24dp"
+            android:layout_height="40dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="4dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/good_selector" />
+
+    </LinearLayout>
+    <View style="@style/line_style" />
+
+    <LinearLayout
+        android:id="@+id/investorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <FrameLayout
+            android:layout_width="36dp"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/ivTargetAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/avatar_blank" />
+
+            <ImageView
+                android:id="@+id/ivTargetAnthStatus"
+                android:layout_width="13dp"
+                android:layout_height="11dp"
+                android:layout_gravity="bottom|right"
+                android:src="@drawable/logo_approve_vc"
+                android:visibility="visible" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTargetName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="蒋舜"
+                    android:textColor="@color/black90"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvTargetTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="\@梅花天使创投"
+                    android:textColor="@color/black50"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+                    android:id="@+id/ratingTargetScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:emptyDrawable="@drawable/star_l_blank"
+                    app:filledDrawable="@drawable/star_l_full"
+                    app:isIndicator="true"
+                    app:minAllowedStars="0"
+                    app:numStarsValue="5"
+                    app:ratingValue="3"
+                    app:starMargin="0dp"
+                    app:starSizeValue="12dp"
+                    app:starSpacing="1dp"
+                    app:stepSizeValue="1" />
+
+                <TextView
+                    android:id="@+id/tvTargetRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:lineSpacingExtra="0sp"
+                    android:text="0.0"
+                    android:textColor="@color/barbie_pink_two"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View style="@style/line_style" />
+
+
+    <TextView
+        android:id="@+id/tvCommentCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="13dp"
+        android:lineSpacingExtra="6sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="4 条回复"
+        android:textColor="@color/slate"
+        android:textSize="12sp" />
+
+</LinearLayout>
