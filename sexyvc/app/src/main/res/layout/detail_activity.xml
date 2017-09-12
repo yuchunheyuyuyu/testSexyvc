@@ -38,13 +38,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_centerVertical="true"
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:singleLine="true"
             android:textColor="@color/slate"
             android:textSize="16sp" />
@@ -114,4 +114,15 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/viewLine">
+
+        <include layout="@layout/layout_empty_view" />
+
+        <include layout="@layout/layout_error_view" />
+
+
+    </FrameLayout>
 </RelativeLayout>

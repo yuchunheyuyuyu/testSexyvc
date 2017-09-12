@@ -14,6 +14,8 @@ import com.qtin.sexyvc.ui.bean.ContactBean;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.DeleteCaseRequest;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
+import com.qtin.sexyvc.ui.bean.FundFollowRequest;
+import com.qtin.sexyvc.ui.bean.FundUnFollowRequest;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.HomeCommentBean;
 import com.qtin.sexyvc.ui.bean.IdBean;
@@ -327,6 +329,21 @@ public interface CommonService {
                                                            @Field("page_size")int page_size);
 
     /**
+     * 115. 页面--我的关注分组列表
+     * @param token
+     * @param object_type
+     * @param page
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/follow/group/list")
+    Observable<BaseEntity<GroupEntity>> queryFundGroup(@Field("token")String token,
+                                                           @Field("object_type")int object_type,
+                                                           @Field("page")int page,
+                                                           @Field("page_size")int page_size);
+
+    /**
      * 创建投资人分组
      * @param token
      * @param group_name
@@ -336,6 +353,19 @@ public interface CommonService {
     @POST("api/user/contact/group/add")
     Observable<BaseEntity<CreateGroupEntity>> addInvestorGroup(@Field("token")String token,
                                                                @Field("group_name")String group_name);
+
+    /**
+     * 111. 操作--添加关注分组
+     * @param token
+     * @param group_name
+     * @param object_type,分组类型，投资机构：1
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/follow/group/add")
+    Observable<BaseEntity<CreateGroupEntity>> addFundGroup(@Field("token")String token,
+                                                           @Field("group_name")String group_name,
+                                                           @Field("object_type")int object_type);
 
     /**
      * 编辑投资人分组
@@ -351,6 +381,23 @@ public interface CommonService {
                                                @Field("group_id")long group_id,
                                                @Field("group_name")String group_name,
                                                @Field("status")int status);
+
+    /**
+     * 112. 操作--编辑关注分组
+     * @param token
+     * @param group_id
+     * @param group_name
+     * @param status
+     * @param object_type 分组类型，投资机构：1
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/follow/group/edit")
+    Observable<CodeEntity> updateFundGroup(@Field("token")String token,
+                                               @Field("group_id")long group_id,
+                                               @Field("group_name")String group_name,
+                                               @Field("status")int status,
+                                               @Field("object_type")int object_type);
 
     /**
      * 投资人分组详情
@@ -391,6 +438,22 @@ public interface CommonService {
      */
     @POST("api/user/contact/investor/import")
     Observable<CodeEntity> followInvestor(@Body FollowRequest entity);
+
+    /**
+     * 113. 操作--批量关注
+     * @param entity
+     * @return
+     */
+    @POST("api/user/follow/group/import")
+    Observable<CodeEntity> followFund(@Body FundFollowRequest entity);
+
+    /**
+     * 114. 操作--取消关注
+     * @param entity
+     * @return
+     */
+    @POST("api/user/follow/group/remove")
+    Observable<CodeEntity> unFollowFund(@Body FundUnFollowRequest entity);
 
     /**
      * 取消关注投资人
@@ -577,7 +640,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/page/investor/detail")
+    @POST("api/page/investor/detail/v2")
     Observable<BaseEntity<CallBackBean>> queryInvestorDetail(@Field("token")String token,
                                                              @Field("investor_id")long investor_id,
                                                              @Field("comment_id")long comment_id,
@@ -603,7 +666,7 @@ public interface CommonService {
      * @return
      */
     @FormUrlEncoded
-    @POST("api/page/fund/detail")
+    @POST("api/page/fund/detail/v2")
     Observable<BaseEntity<FundDetailBackBean>> queryFundDetail(@Field("token")String token,
                                                                @Field("fund_id")long fund_id,
                                                                @Field("comment_id")long comment_id,

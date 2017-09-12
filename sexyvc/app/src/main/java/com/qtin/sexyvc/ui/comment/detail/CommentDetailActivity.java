@@ -276,31 +276,6 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                             }
                         }
                     });
-                    /**new ShareAction(this)
-                            .withMedia(web)
-                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
-                            .setCallback(new UMShareListener() {
-                                @Override
-                                public void onStart(SHARE_MEDIA share_media) {
-
-                                }
-
-                                @Override
-                                public void onResult(SHARE_MEDIA share_media) {
-
-                                }
-
-                                @Override
-                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-
-                                }
-
-                                @Override
-                                public void onCancel(SHARE_MEDIA share_media) {
-
-                                }
-                            })
-                            .open();*/
 
                 }
                 break;

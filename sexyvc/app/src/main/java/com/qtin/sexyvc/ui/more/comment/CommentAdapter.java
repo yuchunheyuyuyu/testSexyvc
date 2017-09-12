@@ -15,6 +15,7 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.investor.bean.CommentBean;
 import com.qtin.sexyvc.ui.more.UnAuthCommentActivity;
+import com.qtin.sexyvc.ui.road.show.RoadDetailActivity;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
@@ -153,6 +154,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             holder.ivPraise.setSelected(true);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putLong(ConstantUtil.INTENT_ID,bean.getId());
+                activity.gotoActivity(RoadDetailActivity.class, bundle);
+            }
+        });
     }
 
     private void dealFundRoad(final CommentBean bean,FundRoadHolder holder){
@@ -198,6 +207,15 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             holder.ivPraise.setSelected(true);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putLong(ConstantUtil.INTENT_ID,bean.getId());
+                activity.gotoActivity(RoadDetailActivity.class, bundle);
+            }
+        });
     }
 
     private void dealFundComment(final CommentBean bean, FundHolder holder) {

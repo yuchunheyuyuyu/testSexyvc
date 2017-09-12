@@ -21,6 +21,7 @@
     <string name="title_flash">实时快讯</string>
     <string name="title_subject_list">专栏</string>
     <string name="title_comment_detail">对%s的评论</string>
+    <string name="title_road_detail">对%s的路演评论</string>
     <string name="title_position">身份</string>
     <string name="title_vertify_position">身份认证</string>
     <string name="title_institution">机构职务</string>
@@ -207,6 +208,11 @@
     <string name="edit_group_name">请输入分组的名称</string>
     <string name="edit_group">修改分组</string>
     <string name="add_group">添加分组</string>
+    <string name="add_investor">添加投资人</string>
+    <string name="improve_fund_info">完善机构信息</string>
+    <string name="input_investor_by_hand">手动录入投资人</string>
+    <string name="input_investor_by_hand_warn">通过手动录入，可以关注系统没有收录的投资人。您录入的信息将只对您个人展示，方便记录自己的融资进程。</string>
+
     <string name="add">添加</string>
     <string name="good">好</string>
     <string name="hint_search_concern">搜索我关注的投资人</string>
@@ -242,6 +248,7 @@
 
     <string name="investor">投资人</string>
     <string name="fund">机构</string>
+    <string name="institutional_fund">投资机构</string>
 
     <string name="base_info">基本信息</string>
     <string name="investor_case">投资案例</string>
@@ -440,7 +447,6 @@
     <string name="project_dialog_domain">您所在的行业</string>
     <string name="project_dialog_stage">上轮融资</string>
 
-    <string name="input_investor_by_hand">手动录入投资人</string>
 
     <string name="char_count_limit">请输入8汉字或16字符以内</string>
 
@@ -485,5 +491,17 @@
     <string name="past_hot_comment">往期热评</string>
 
     <string name="from_sexyvc">来自 SexyVC</string>
+    <string name="asked_what_question">TA 提出了什么问题？</string>
 
+    <string name="comfirm_submit">确定提交吗？</string>
+    <string name="submit_by_anoy">匿名提交</string>
+    <string name="road_stage">本次路演的融资阶段</string>
+
+    <string name="claim">认领</string>
+    <string name="un_claim">该投资人尚未认领</string>
+    <string name="claim_hint">在SexyVC完成认领后，可编辑投资人页面中展示的内容，以主人身份对其他用户的评论进行回复。完成投资人身份认证即认领。</string>
+
+    <string name="i_known">我知道了</string>
+    <string name="institution_name">机构名称</string>
+    <string name="hint_institution">请输入机构相关信息，如所在地、投资人、投资案例等</string>
 </resources>

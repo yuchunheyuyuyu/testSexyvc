@@ -7,6 +7,7 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 
 import javax.inject.Inject;
 
@@ -59,6 +60,10 @@ public class PositionPresent extends BasePresenter<PositionContract.Model,Positi
                         }
                     }
                 });
+    }
+
+    public void saveUsrInfo(UserInfoEntity entity){
+        mModel.saveUsrInfo(entity);
     }
 
     @Override

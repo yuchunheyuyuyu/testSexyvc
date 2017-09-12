@@ -7,6 +7,15 @@ package com.qtin.sexyvc.ui.investor.bean;
 public class CallBackBean {
     private InvestorBean investor;
     private CommentListBean comments;
+    private CommentListBean roadshows;
+
+    public CommentListBean getRoadshows() {
+        return roadshows;
+    }
+
+    public void setRoadshows(CommentListBean roadshows) {
+        this.roadshows = roadshows;
+    }
 
     public InvestorBean getInvestor() {
         return investor;

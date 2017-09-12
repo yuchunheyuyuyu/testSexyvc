@@ -11,6 +11,24 @@ public class RoadRequest {
     private long fund_id;
     private long investor_id;
     private String answers;
+    private long stage_id;
+    private int is_anon;
+
+    public long getStage_id() {
+        return stage_id;
+    }
+
+    public void setStage_id(long stage_id) {
+        this.stage_id = stage_id;
+    }
+
+    public int getIs_anon() {
+        return is_anon;
+    }
+
+    public void setIs_anon(int is_anon) {
+        this.is_anon = is_anon;
+    }
 
     public String getAnswers() {
         return answers;

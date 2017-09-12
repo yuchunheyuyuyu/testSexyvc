@@ -17,7 +17,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -27,6 +29,7 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CommentEvent;
 import com.qtin.sexyvc.ui.bean.CommonBean;
+import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
 import com.qtin.sexyvc.ui.bean.TagEntity;
@@ -44,12 +47,17 @@ import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.zhy.autolayout.utils.AutoUtils;
+
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -78,7 +86,16 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     private EditText etInputAnswer;
     private Dialog answerDialog;
 
+    private Dialog submitDialog;
+    private Dialog stageDialog;
+
     private ArrayList<TagEntity> normalQuestions=new ArrayList<>();
+
+
+    protected ArrayList<FilterEntity> stageData = new ArrayList<>();
+    public static final int TYPE_STAGE = 0x002;//阶段
+    private TagAdapter stageAdapter;
+    private FilterEntity filterEntity=new FilterEntity();
 
     @Nullable
     @Override
@@ -134,51 +151,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                     bundle.putParcelableArrayList(ConstantUtil.INTENT_STRING_ARRAY,normalQuestions);
                     gotoActivity(RoadCommentActivity.class,bundle);
                 }else{
-                    //提交题目
-                    //第一层
-                    RoadRequest request=new RoadRequest();
-                    request.setInvestor_id(investorInfoBean.getInvestor_id());
-                    request.setFund_id(investorInfoBean.getFund_id());
-                    ArrayList<RoadRequest.AnswerItem> answers=new ArrayList<RoadRequest.AnswerItem>();
-
-                    //第二层
-                    for(QuestionBean bean:questions){
-                        RoadRequest.AnswerItem item=new RoadRequest.AnswerItem();
-
-                        item.setQuestion_id(bean.getQuestion_id());
-                        //循环搜索被选中的选项
-                        for(OptionFirstBean firstOption:bean.getOptions()){
-                            if(firstOption.isSelected()){
-                                //选项id
-                                item.setOption_id(firstOption.getOption_id());
-                                //自定义的问题
-                                if(firstOption.getAddQuestions()==null){
-                                    item.setAdd_questions(new ArrayList<AddQuestionBean>());
-                                }else{
-                                    item.setAdd_questions(firstOption.getAddQuestions());
-                                }
-                                //二级问题的选项
-                                ArrayList<OptionSecondBean> sub_options=new ArrayList<OptionSecondBean>();
-                                if(firstOption.getLink_question()!=null&&firstOption.getLink_question().getOptions()!=null){
-                                    for(OptionSecondBean secondBean:firstOption.getLink_question().getOptions()){
-                                        if(secondBean.isSelected()){
-                                            sub_options.add(secondBean);
-                                        }
-                                    }
-                                }
-                                item.setSub_options(sub_options);
-                                //二级问题的id
-                                if(firstOption.getLink_question()!=null){
-                                    item.setSub_questionid(firstOption.getLink_question().getQuestion_id());
-                                }
-                                break;
-                            }
-                        }
-                        answers.add(item);
-                    }
-                    String answerJson=new Gson().toJson(answers);
-                    request.setAnswers(answerJson);
-                    mPresenter.uploadAnswers(request);
+                    showSubmitDialog();
                 }
             }
         });
@@ -198,6 +171,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                 showAnswerDialog(optionPosition,addedQuestionPosition);
             }
         });
+        //获取投资阶段
+        mPresenter.getType("common_stage", TYPE_STAGE);
         if(index==0){
             questions=new ArrayList<>();
             mPresenter.queryNormalQuestion();
@@ -214,6 +189,57 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
             mAdapter.setTotal(questions.size());
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void uploadAnswers(long stage_id,int is_anon){
+        //提交题目
+        //第一层
+        RoadRequest request=new RoadRequest();
+        request.setStage_id(stage_id);
+        request.setIs_anon(is_anon);
+
+        request.setInvestor_id(investorInfoBean.getInvestor_id());
+        request.setFund_id(investorInfoBean.getFund_id());
+        ArrayList<RoadRequest.AnswerItem> answers=new ArrayList<RoadRequest.AnswerItem>();
+
+        //第二层
+        for(QuestionBean bean:questions){
+            RoadRequest.AnswerItem item=new RoadRequest.AnswerItem();
+
+            item.setQuestion_id(bean.getQuestion_id());
+            //循环搜索被选中的选项
+            for(OptionFirstBean firstOption:bean.getOptions()){
+                if(firstOption.isSelected()){
+                    //选项id
+                    item.setOption_id(firstOption.getOption_id());
+                    //自定义的问题
+                    if(firstOption.getAddQuestions()==null){
+                        item.setAdd_questions(new ArrayList<AddQuestionBean>());
+                    }else{
+                        item.setAdd_questions(firstOption.getAddQuestions());
+                    }
+                    //二级问题的选项
+                    ArrayList<OptionSecondBean> sub_options=new ArrayList<OptionSecondBean>();
+                    if(firstOption.getLink_question()!=null&&firstOption.getLink_question().getOptions()!=null){
+                        for(OptionSecondBean secondBean:firstOption.getLink_question().getOptions()){
+                            if(secondBean.isSelected()){
+                                sub_options.add(secondBean);
+                            }
+                        }
+                    }
+                    item.setSub_options(sub_options);
+                    //二级问题的id
+                    if(firstOption.getLink_question()!=null){
+                        item.setSub_questionid(firstOption.getLink_question().getQuestion_id());
+                    }
+                    break;
+                }
+            }
+            answers.add(item);
+        }
+        String answerJson=new Gson().toJson(answers);
+        request.setAnswers(answerJson);
+        mPresenter.uploadAnswers(request);
     }
 
     @Override
@@ -307,6 +333,22 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
         }
     }
 
+    @Override
+    public void requestTypeBack(int type, ArrayList<FilterEntity> list) {
+        switch (type) {
+            case TYPE_STAGE:
+                stageData.clear();
+
+                FilterEntity entity=new FilterEntity();
+                entity.setType_id(0);
+                entity.setType_name("未融资");
+
+                stageData.add(entity);
+                stageData.addAll(list);
+                break;
+        }
+    }
+
 
     public void showQuestionDialog(final int position) {
         View view = LayoutInflater.from(this).inflate(R.layout.add_question_dialog, null);
@@ -350,22 +392,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                     return false;
                 }
             });
-
-            /**flowLayout.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
-                @Override
-                public void onSelected(Set<Integer> selectPosSet) {
-                    Iterator<Integer> it=selectPosSet.iterator();
-                    if (it.hasNext()){
-                        String str=normalQuestions.get(it.next()).getTag_name();
-                        etInputQuestion.setText(str);
-                        etInputQuestion.setSelection(str.length());
-                    }
-                }
-            });
-             */
             flowLayout.setMaxSelectCount(1);
             flowLayout.setAdapter(tagAdapter);
-
         }
 
 
@@ -542,5 +570,155 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
                         inputMethodManager.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
                     }
                 });
+    }
+
+    /**
+     * 两个按钮的dialog
+     */
+    protected void showSubmitDialog() {
+        View view = View.inflate(this, R.layout.submit_dialog, null);
+        final TextView tvStage= (TextView) view.findViewById(R.id.tvStage);
+
+        for(FilterEntity entity:stageData){
+            if(entity.getType_id()==filterEntity.getType_id()){
+                tvStage.setText(entity.getType_name());
+                break;
+            }
+        }
+
+        view.findViewById(R.id.btnLeft).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadAnswers(filterEntity.getType_id(),1);
+            }
+        });
+        view.findViewById(R.id.btnRight).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadAnswers(filterEntity.getType_id(),0);
+            }
+        });
+        view.findViewById(R.id.llStage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStageDialog(new OnStageClick() {
+                    @Override
+                    public void onClick() {
+                        tvStage.setText(filterEntity.getType_name());
+                    }
+                });
+            }
+        });
+
+        AutoUtils.autoSize(view);
+        submitDialog = new Dialog(this);
+        submitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        submitDialog.setContentView(view);
+        Window regionWindow = submitDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        submitDialog.setCanceledOnTouchOutside(true);
+        submitDialog.show();
+    }
+
+    public static interface OnStageClick{
+        void onClick();
+    }
+
+    /**
+     * 显示行业的dialog
+     */
+    private void showStageDialog(final OnStageClick onStageClick) {
+        View view = LayoutInflater.from(this).inflate(R.layout.domain_dialog, null);
+        final StageHolder holder = new StageHolder(view);
+        holder.tvDialogTitle.setText(getString(R.string.finance_stage));
+        holder.tvCancleDomain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissStageDialog();
+            }
+        });
+
+        holder.tvComfirmDomain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissStageDialog();
+                onStageClick.onClick();
+            }
+        });
+        stageAdapter = new TagAdapter<FilterEntity>(stageData) {
+            @Override
+            public View getView(FlowLayout parent, int position, FilterEntity o) {
+                View view = LayoutInflater.from(RoadCommentActivity.this).inflate(R.layout.item_filter, holder.flowLayout, false);
+                //AutoUtils.auto(tv);
+                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
+                if(o.isSelected()){
+                    tv.setSelected(true);
+                }else{
+                    tv.setSelected(false);
+                }
+                tv.setText(o.getType_name());
+                return view;
+            }
+        };
+        holder.flowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if(view instanceof LinearLayout){
+                    LinearLayout layout= (LinearLayout) view;
+                    TextView tv= (TextView) layout.getChildAt(0);
+
+                    for(FilterEntity entity:stageData){
+                        entity.setSelected(false);
+                    }
+                    filterEntity=stageData.get(position);
+                    stageData.get(position).setSelected(true);
+                    stageAdapter.notifyDataChanged();
+                }
+                return true;
+            }
+        });
+        for(FilterEntity entity:stageData){
+            if(entity.getType_id()==filterEntity.getType_id()){
+                entity.setSelected(true);
+                break;
+            }
+        }
+
+        holder.flowLayout.setAdapter(stageAdapter);
+        holder.flowLayout.setMaxSelectCount(1);
+        stageDialog = new Dialog(this);
+        stageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        stageDialog.setContentView(view);
+        Window regionWindow = stageDialog.getWindow();
+        regionWindow.setGravity(Gravity.BOTTOM);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.view_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        stageDialog.setCanceledOnTouchOutside(true);
+        stageDialog.show();
+    }
+
+    private void dismissStageDialog() {
+        if (stageDialog != null && stageDialog.isShowing()) {
+            stageDialog.dismiss();
+        }
+    }
+
+    static class StageHolder {
+        @BindView(R.id.tvDialogTitle)
+        TextView tvDialogTitle;
+        @BindView(R.id.flowLayout)
+        TagFlowLayout flowLayout;
+        @BindView(R.id.tvCancleDomain)
+        TextView tvCancleDomain;
+        @BindView(R.id.tvComfirmDomain)
+        TextView tvComfirmDomain;
+
+        StageHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

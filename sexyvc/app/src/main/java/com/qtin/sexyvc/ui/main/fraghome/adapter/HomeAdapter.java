@@ -206,6 +206,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.topicContainer.setVisibility(View.GONE);
         }
 
+        holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.gotoActivity(CommentActivity.class);
+            }
+        });
         if(entity.getComment_id()== ConstantUtil.DEFALUT_ID){
             holder.llCommentContent.setVisibility(View.GONE);
         }else{
@@ -232,12 +238,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.ratingScore.setRating(entity.getScore());
             holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
             holder.tvComentContent.setText(StringUtil.formatString(entity.getContent()));
-            holder.moreCommentContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    activity.gotoActivity(CommentActivity.class);
-                }
-            });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

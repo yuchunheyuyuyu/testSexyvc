@@ -13,6 +13,7 @@ public class ConstantUtil {
     public static final int OBJECT_TYPE_COMMENT=1;
     public static final int OBJECT_TYPE_SUBJECT=2;
     public static final int OBJECT_TYPE_REPLY=3;
+    public static final int OBJECT_TYPE_ROAD=4;//路演
 
     //数据来源，本地or服务器
     public static final String DATA_FROM_TYPE="DATA_FROM_TYPE";
@@ -31,6 +32,8 @@ public class ConstantUtil {
     public static final int TYPE_UNAUTH=3;
     public static final int TYPE_INVESTOR_ROAD=4;
     public static final int TYPE_FUND_ROAD=5;
+
+    public static final int OBJECT_TYPE_FUND=1;
 
     //关键字
     public static final String KEY_WORD_INTENT="key_word";

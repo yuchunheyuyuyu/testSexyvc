@@ -10,6 +10,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommonBean;
+import com.qtin.sexyvc.ui.bean.Typebean;
 import com.qtin.sexyvc.ui.road.action.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.action.bean.RoadRequest;
 
@@ -20,6 +21,7 @@ import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ls on 17/4/26.
@@ -37,6 +39,22 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
         this.mErrorHandler = mErrorHandler;
         this.mAppManager = mAppManager;
         this.mApplication = mApplication;
+    }
+
+    public void getType(String type_key, final int type){
+        mModel.getType(type_key)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3,2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.<Typebean> bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<Typebean>(mErrorHandler) {
+                    @Override
+                    public void onNext(Typebean baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.requestTypeBack(type,baseEntity.getItems());
+                        }
+                    }
+                });
     }
 
     public void queryRoadQuestion(){

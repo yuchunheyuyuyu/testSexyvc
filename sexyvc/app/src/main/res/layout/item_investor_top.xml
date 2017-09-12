@@ -47,9 +47,9 @@
         android:layout_marginTop="12dp"
         android:lineSpacingExtra="8sp"
         android:text="吴世春"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/companyContainer"
@@ -124,9 +124,9 @@
         android:layout_marginRight="24dp"
         android:layout_marginTop="120dp"
         app:cardCornerRadius="0dp"
-        app:contentPaddingTop="16dp"
+        app:cardElevation="5dp"
         app:contentPaddingBottom="20dp"
-        app:cardElevation="5dp">
+        app:contentPaddingTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -151,10 +151,10 @@
                 android:layout_marginTop="4dp"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="0sp"
-                android:textStyle="bold"
                 android:text="7.0"
                 android:textColor="@color/barbie_pink_two"
-                android:textSize="28sp" />
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
                 android:id="@+id/ratingScore"
@@ -194,11 +194,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="17dp"
-            android:textStyle="bold"
             android:lineSpacingExtra="6sp"
             android:text="@string/road_comment"
             android:textColor="@color/black90"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
 
         <LinearLayout
@@ -308,10 +308,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="6sp"
-                android:textStyle="bold"
                 android:text="@string/base_info"
                 android:textColor="@color/black90"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -363,9 +363,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/investor_case"
-                android:textStyle="bold"
                 android:textColor="@color/black90"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvCaseNum"
@@ -402,12 +402,30 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sent_text_comment"
+                android:textColor="@color/black90"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="6dp"
+                android:text="|"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/comment_investor"
-                android:textStyle="bold"
-                android:textColor="@color/black90"
+                android:text="@string/sent_road_comment"
+                android:textColor="@color/black50"
                 android:textSize="16sp" />
 
             <TextView

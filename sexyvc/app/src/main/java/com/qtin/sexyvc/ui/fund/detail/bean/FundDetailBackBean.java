@@ -8,6 +8,15 @@ import com.qtin.sexyvc.ui.investor.bean.CommentListBean;
 public class FundDetailBackBean {
     private FundDetailBean fund;
     private CommentListBean comments;
+    private CommentListBean roadshows;
+
+    public CommentListBean getRoadshows() {
+        return roadshows;
+    }
+
+    public void setRoadshows(CommentListBean roadshows) {
+        this.roadshows = roadshows;
+    }
 
     public FundDetailBean getFund() {
         return fund;

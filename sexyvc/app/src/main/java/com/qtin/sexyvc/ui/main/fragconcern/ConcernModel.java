@@ -50,4 +50,19 @@ public class ConcernModel extends BaseModel<ServiceManager,CacheManager> impleme
     public Observable<CodeEntity> updateInvestorGroup(String token, long group_id, String group_name, int status) {
         return mServiceManager.getCommonService().updateInvestorGroup(token,group_id,group_name,status);
     }
+
+    @Override
+    public Observable<BaseEntity<GroupEntity>> queryFundGroup(String token, int object_type, int page, int page_size) {
+        return mServiceManager.getCommonService().queryFundGroup(token,object_type,page,page_size);
+    }
+
+    @Override
+    public Observable<BaseEntity<CreateGroupEntity>> addFundGroup(String token, String group_name, int object_type) {
+        return mServiceManager.getCommonService().addFundGroup(token,group_name,object_type);
+    }
+
+    @Override
+    public Observable<CodeEntity> updateFundGroup(String token, long group_id, String group_name, int status, int object_type) {
+        return mServiceManager.getCommonService().updateFundGroup(token,group_id,group_name,status,object_type);
+    }
 }

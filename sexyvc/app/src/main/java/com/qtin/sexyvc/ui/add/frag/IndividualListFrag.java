@@ -251,7 +251,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                         }else{
                             String format=getResources().getString(R.string.format_has_road);
                             String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
-                            showComfirmDialog(title, getResources().getString(R.string.comfirm), new ComfirmListerner() {
+                            showComfirmDialog(title,"", getResources().getString(R.string.comfirm), new ComfirmListerner() {
                                 @Override
                                 public void onComfirm() {
                                     dismissComfirmDialog();

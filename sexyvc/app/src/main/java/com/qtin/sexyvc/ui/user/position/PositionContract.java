@@ -3,6 +3,7 @@ package com.qtin.sexyvc.ui.user.position;
 import com.jess.arms.mvp.BaseView;
 import com.jess.arms.mvp.IModel;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import rx.Observable;
 
 /**
@@ -16,5 +17,6 @@ public interface PositionContract {
     interface Model extends IModel{
         String getToken();
         Observable<CodeEntity> editAuthType(String token,int u_auth_type);
+        void saveUsrInfo(UserInfoEntity entity);
     }
 }

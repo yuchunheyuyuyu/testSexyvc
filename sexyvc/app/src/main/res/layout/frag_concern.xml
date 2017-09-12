@@ -10,6 +10,66 @@
         android:layout_height="44dp"
         android:background="@color/white">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/tabContainer1"
+                android:layout_width="76dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tvTab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:text="@string/investor"
+                    android:textColor="@color/home_tab_text_color"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/lineTab1"
+                    android:layout_width="12dp"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/slate_1_shape" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tabContainer2"
+                android:layout_width="76dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tvTab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:text="@string/institutional_fund"
+                    android:textColor="@color/home_tab_text_color"
+                    android:textSize="16sp" />
+
+                <View
+                    android:id="@+id/lineTab2"
+                    android:layout_width="12dp"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/slate_1_shape" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+
         <ImageView
             android:id="@+id/ivAdd"
             android:layout_width="wrap_content"
@@ -20,31 +80,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="8dp"
             android:paddingTop="14dp"
-            android:src="@drawable/plus_pink" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/title_frag_concern"
-            android:textColor="@color/slate"
-            android:textSize="16dp" />
-
-        <TextView
-            android:id="@+id/tvEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="20dp"
-            android:text="@string/edit"
-            android:textColor="@color/barbie_pink_two"
-            android:textSize="14sp"
-            android:visibility="gone" />
+            android:src="@drawable/icon_nav_plus" />
 
     </RelativeLayout>
 

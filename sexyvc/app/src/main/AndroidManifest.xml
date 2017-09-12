@@ -336,6 +336,11 @@
             android:name=".ui.road.show.RoadDetailActivity"
             android:screenOrientation="portrait" />
 
+        <!--完善机构信息-->
+        <activity
+            android:name=".ui.improve.fund.ImproveFundActivity"
+            android:screenOrientation="portrait" />
+
 
         <activity
             android:name=".mvp.test.user.UserActivity"

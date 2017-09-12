@@ -1,12 +1,14 @@
 package com.qtin.sexyvc.ui.road.show.bean;
 
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+
 import java.util.ArrayList;
 
 /**
  * Created by ls on 17/9/8.
  */
 
-public class RoadDetailBean {
+public class RoadDetailBean implements DataTypeInterface{
     private long id;
     private long u_id;
     private long investor_id;
@@ -32,6 +34,61 @@ public class RoadDetailBean {
     private String u_stage_name;
     private int like;
     private ArrayList<AnswerContent> answer_content;
+    private int reply_count;
+    private long investor_uid;
+
+    private int has_praise;
+    private int is_anon;
+    private int u_auth_type;
+    private int u_auth_state;
+
+    public int getU_auth_type() {
+        return u_auth_type;
+    }
+
+    public void setU_auth_type(int u_auth_type) {
+        this.u_auth_type = u_auth_type;
+    }
+
+    public int getU_auth_state() {
+        return u_auth_state;
+    }
+
+    public void setU_auth_state(int u_auth_state) {
+        this.u_auth_state = u_auth_state;
+    }
+
+    public int getIs_anon() {
+        return is_anon;
+    }
+
+    public void setIs_anon(int is_anon) {
+        this.is_anon = is_anon;
+    }
+
+    public int getHas_praise() {
+        return has_praise;
+    }
+
+    public void setHas_praise(int has_praise) {
+        this.has_praise = has_praise;
+    }
+
+    public int getReply_count() {
+        return reply_count;
+    }
+
+    public void setReply_count(int reply_count) {
+        this.reply_count = reply_count;
+    }
+
+    public long getInvestor_uid() {
+        return investor_uid;
+    }
+
+    public void setInvestor_uid(long investor_uid) {
+        this.investor_uid = investor_uid;
+    }
 
     public long getId() {
         return id;
@@ -199,6 +256,11 @@ public class RoadDetailBean {
 
     public void setAnswer_content(ArrayList<AnswerContent> answer_content) {
         this.answer_content = answer_content;
+    }
+
+    @Override
+    public int getType() {
+        return DataTypeInterface.TYPE_CONTENT;
     }
 
     public static class AnswerContent{

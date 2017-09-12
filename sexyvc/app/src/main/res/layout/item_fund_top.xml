@@ -418,12 +418,30 @@
             android:paddingRight="16dp">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sent_text_comment"
+                android:textColor="@color/black90"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="6dp"
+                android:text="|"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="@string/comment_investor"
-                android:textColor="@color/black90"
+                android:text="@string/sent_road_comment"
+                android:textColor="@color/black50"
                 android:textSize="16sp" />
 
             <TextView

@@ -246,9 +246,13 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
             data.clear();
             if (commentListBean.getList()!=null&&!commentListBean.getList().isEmpty()) {
                 total=commentListBean.getTotal();
-                showContentView();
-            }else{
+            }
+
+            if((commentListBean.getList()==null||commentListBean.getList().isEmpty())
+                    &&commentListBean.getUnauth_count()==0){
                 showEmptyView();
+            }else{
+                showContentView();
             }
 
             CountEvent countEvent=new CountEvent();

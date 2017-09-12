@@ -8,11 +8,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jess.arms.base.BaseFragment;
@@ -123,11 +127,18 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
 
 
     private Dialog comfirmDialog;
-    protected void showComfirmDialog(String title,String button,final ComfirmListerner listerner) {
+    protected void showComfirmDialog(String title,String content,String button,final ComfirmListerner listerner) {
 
         View view = View.inflate(mActivity, R.layout.one_button_dialog, null);
         TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
         Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        TextView tvContent= (TextView) view.findViewById(R.id.tvContent);
+        if(StringUtil.isBlank(content)){
+            tvContent.setVisibility(View.GONE);
+        }else{
+            tvContent.setVisibility(View.VISIBLE);
+            tvContent.setText(content);
+        }
 
         tvDialogTitle.setText(title);
         btnRight.setText(button);
@@ -331,6 +342,69 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
     protected void dismissBottomOneButtonDialog(){
         if(oneButtonDialog!=null&&oneButtonDialog.isShowing()){
             oneButtonDialog.dismiss();
+        }
+    }
+
+    public static interface OnListItemClickListener{
+        void onClick(int position);
+    }
+
+    private Dialog listBottomDialog;
+    protected void showListBottomDialog(final String[] strings, final OnListItemClickListener listener) {
+
+        View view = View.inflate(mActivity, R.layout.list_bottom_dialog, null);
+        ListView listView= (ListView) view.findViewById(R.id.listView);
+        listView.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return strings.length;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return strings[position];
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView  textView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_dialog_action,parent,false);
+                textView.setText(strings[position]);
+                return textView;
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                dismissListBottomDialog();
+                listener.onClick(position);
+            }
+        });
+        view.findViewById(R.id.tvCancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissListBottomDialog();
+            }
+        });
+        listBottomDialog = new Dialog(mActivity);
+        listBottomDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        listBottomDialog.setContentView(view);
+        Window regionWindow = listBottomDialog.getWindow();
+        regionWindow.setGravity(Gravity.BOTTOM);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.view_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        listBottomDialog.setCanceledOnTouchOutside(true);
+        listBottomDialog.show();
+    }
+
+    protected void dismissListBottomDialog(){
+        if(listBottomDialog!=null&&listBottomDialog.isShowing()){
+            listBottomDialog.dismiss();
         }
     }
 }

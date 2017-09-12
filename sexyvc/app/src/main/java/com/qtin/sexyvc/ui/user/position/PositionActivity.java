@@ -196,6 +196,7 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
         Intent intent=new Intent();
         intent.putExtra(ConstantUtil.INTENT_PARCELABLE,userInfo);
         setResult(0,intent);
+        mPresenter.saveUsrInfo(userInfo);
         super.finish();
     }
 
