@@ -171,7 +171,12 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
             commentHolder.tvContent.setText(StringUtil.formatString(entity.getReply_content()));
             commentHolder.tvNick.setText(StringUtil.formatString(entity.getU_nickname()));
-            commentHolder.tvPraiseNum.setText("" + entity.getLike());
+            if(entity.getLike()==0){
+                commentHolder.tvPraiseNum.setText("");
+            }else{
+                commentHolder.tvPraiseNum.setText("" + entity.getLike());
+            }
+
 
             commentHolder.tvTime.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
 

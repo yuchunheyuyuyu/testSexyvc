@@ -6,6 +6,7 @@ import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.BindEntity;
 import com.qtin.sexyvc.ui.bean.CaseBean;
+import com.qtin.sexyvc.ui.bean.ChangeFundGroupRequest;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommentIdBean;
 import com.qtin.sexyvc.ui.bean.CommonBean;
@@ -35,6 +36,7 @@ import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.comment.detail.bean.CommentBean;
 import com.qtin.sexyvc.ui.comment.list.frag.bean.CommentItemsBean;
 import com.qtin.sexyvc.ui.flash.bean.FlashBean;
+import com.qtin.sexyvc.ui.follow.list.bean.FollowedFundBean;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CallBackBean;
 import com.qtin.sexyvc.ui.investor.bean.CommentListBean;
@@ -340,6 +342,7 @@ public interface CommonService {
     @POST("api/user/follow/group/list")
     Observable<BaseEntity<GroupEntity>> queryFundGroup(@Field("token")String token,
                                                            @Field("object_type")int object_type,
+                                                           @Field("object_id")long object_id,
                                                            @Field("page")int page,
                                                            @Field("page_size")int page_size);
 
@@ -411,6 +414,22 @@ public interface CommonService {
                                                            @Field("group_id")long group_id,
                                                            @Field("page")int page,
                                                            @Field("page_size")int page_size);
+
+    /**
+     * 116. 页面--我的关注分组详情
+     * @param token
+     * @param group_id
+     * @param page
+     * @param page_size
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/follow/group/detail")
+    Observable<BaseEntity<ListBean<FollowedFundBean>>> queryFundDetail(@Field("token") String token,
+                                                                       @Field("group_id") long group_id,
+                                                                       @Field("page") int page,
+                                                                       @Field("page_size") int page_size,
+                                                                       @Field("object_type")int object_type);
 
     /**
      * 首页信息
@@ -488,6 +507,14 @@ public interface CommonService {
      */
     @POST("api/user/contact/investor/move/group/single")
     Observable<CodeEntity> changeContactGroup(@Body ChangeContactGroupRequest request);
+
+    /**
+     * 118. 操作--设置投资机构分组
+     * @param request
+     * @return
+     */
+    @POST("api/user/follow/group/change")
+    Observable<CodeEntity> changeFundGroup(@Body ChangeFundGroupRequest request);
 
     /**
      * 快讯列表页
@@ -1049,6 +1076,19 @@ public interface CommonService {
                                                          @Field("id")long id,
                                                          @Field("page_size")int page_size,
                                                          @Field("last_id")long last_id);
+
+    /**
+     * 110. 页面--添加机构
+     * @param token
+     * @param supply_name
+     * @param supply_content
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/action/supply/fund")
+    Observable<CodeEntity> addFund(@Field("token")String token,
+                                   @Field("supply_name")String supply_name,
+                                   @Field("supply_content")String supply_content);
 
  }
 

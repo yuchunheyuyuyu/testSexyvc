@@ -122,7 +122,7 @@ public class RoadDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             long time = bean.getCreate_time();
             holder.tvDate.setText(DateUtil.getSpecialDate(time));
             if (bean.getReply_count() == 0) {
-                holder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_comment));
+                holder.tvCommentCount.setText(context.getResources().getString(R.string.has_no_reply));
             } else {
                 holder.tvCommentCount.setText(bean.getReply_count() + context.getResources().getString(R.string.reply_count));
             }
@@ -183,7 +183,12 @@ public class RoadDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             commentHolder.tvContent.setText(StringUtil.formatString(entity.getReply_content()));
             commentHolder.tvNick.setText(StringUtil.formatString(entity.getU_nickname()));
-            commentHolder.tvPraiseNum.setText("" + entity.getLike());
+
+            if(entity.getLike()==0){
+                commentHolder.tvPraiseNum.setText("");
+            }else{
+                commentHolder.tvPraiseNum.setText("" + entity.getLike());
+            }
 
             commentHolder.tvTime.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
 

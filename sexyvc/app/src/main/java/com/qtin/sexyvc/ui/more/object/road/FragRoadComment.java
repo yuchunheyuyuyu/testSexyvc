@@ -256,7 +256,7 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
             }
 
             CountEvent countEvent=new CountEvent();
-            countEvent.setCount(total);
+            countEvent.setCount(total+commentListBean.getUnauth_count());
             countEvent.setType(type);
             EventBus.getDefault().post(countEvent,ConstantUtil.QUERY_SUCCESS);
         }

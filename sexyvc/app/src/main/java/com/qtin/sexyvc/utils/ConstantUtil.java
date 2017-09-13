@@ -111,6 +111,7 @@ public class ConstantUtil {
     public static final String INTENT_TYPE_SET_GROUP="set_group";
     public static final int TYPE_SET_GROUP_INVESTOR=1;
     public static final int TYPE_SET_GROUP_CONTACT=2;
+    public static final int TYPE_SET_GROUP_FUND=3;
 
     //0代表进入路演评价，1代表进入文字评价
     public static int INTENT_ROAD_COMMENT=0;

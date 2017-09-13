@@ -85,6 +85,7 @@ public class AddCaseActivity extends MyBaseActivity<AddCasePresent> implements A
     @Override
     protected void initData() {
         tvRight.setVisibility(View.VISIBLE);
+        tvTitle.setText(getString(R.string.title_add_case));
         tvRight.setText(getString(R.string.commit));
     }
 

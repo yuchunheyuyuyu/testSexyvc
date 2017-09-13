@@ -5,6 +5,9 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.FundFollowRequest;
+import com.qtin.sexyvc.ui.bean.FundUnFollowRequest;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
@@ -44,5 +47,15 @@ public class FundDetailModel extends BaseModel<ServiceManager,CacheManager> impl
             return list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public Observable<CodeEntity> followFund(FundFollowRequest entity) {
+        return mServiceManager.getCommonService().followFund(entity);
+    }
+
+    @Override
+    public Observable<CodeEntity> unFollowFund(FundUnFollowRequest entity) {
+        return mServiceManager.getCommonService().unFollowFund(entity);
     }
 }

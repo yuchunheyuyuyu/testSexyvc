@@ -35,6 +35,7 @@
     <string name="title_service_agreement">服务协议</string>
     <string name="title_recommend">您可能感兴趣</string>
     <string name="title_influency">我的影响值</string>
+    <string name="title_add_case">添加投资案例</string>
 
 
 
@@ -235,6 +236,8 @@
 
     <string name="reply_comment">回应评论</string>
     <string name="has_no_comment">还没有人评论，来抢沙发吧</string>
+    <string name="has_no_reply">还没有人回应，来抢沙发吧</string>
+
     <string name="reply_count">条回应</string>
     <string name="comment_count">条评论</string>
     <string name="additional">追评：</string>
@@ -503,5 +506,11 @@
 
     <string name="i_known">我知道了</string>
     <string name="institution_name">机构名称</string>
+    <string name="institution_name_not_null">机构名称不能为空</string>
     <string name="hint_institution">请输入机构相关信息，如所在地、投资人、投资案例等</string>
+    <string name="institution_info_not_null">机构相关信息不能为空</string>
+
+    <string name="now_no_person_rate">暂无评分</string>
+
+
 </resources>

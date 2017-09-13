@@ -337,13 +337,13 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
         this.url=url;
         setResultBack();
         setText();
-        showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
+        /**showComfirmDialog("已完成提交", "我们的工作人员将在 3 个工作日内审核", "好", new ComfirmListerner() {
             @Override
             public void onComfirm() {
                 dismissComfirmDialog();
                 finish();
             }
-        });
+        });*/
     }
 
     @Override

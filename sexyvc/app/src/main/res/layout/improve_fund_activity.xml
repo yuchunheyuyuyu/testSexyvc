@@ -23,31 +23,64 @@
             android:layout_marginRight="16dp"
             android:background="@null"
             android:hint="@string/institution_name"
+            android:maxLength="30"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/black30"
             android:textSize="14sp" />
 
-        <View
-            style="@style/line_style"
-            android:layout_marginLeft="16dp" />
-
-        <com.qtin.sexyvc.ui.widget.ClearableEditText
-            android:id="@+id/etContent"
+        <RelativeLayout
+            android:id="@+id/introduceContainer"
             android:layout_width="match_parent"
-            android:layout_height="148dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@null"
-            android:gravity="top"
-            android:hint="@string/hint_institution"
-            android:paddingBottom="14dp"
-            android:paddingTop="14dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black30"
-            android:textSize="14sp" />
+            android:layout_height="180dp"
+            android:background="@color/white"
+            android:visibility="visible">
 
-        <View style="@style/line_style" />
+            <View
+                android:id="@+id/topLine2"
+                style="@style/line_style"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="16dp" />
+
+            <View
+                android:id="@+id/BottomLine2"
+                style="@style/line_style"
+                android:layout_alignParentBottom="true" />
+
+            <TextView
+                android:id="@+id/tvCountDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="end"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/input_count"
+                android:textColor="@color/black30"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/etContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tvCountDown"
+                android:layout_below="@+id/topLine2"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="14dp"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/hint_institution"
+                android:lineSpacingExtra="6sp"
+                android:maxLength="140"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black30"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
 
     </LinearLayout>
 

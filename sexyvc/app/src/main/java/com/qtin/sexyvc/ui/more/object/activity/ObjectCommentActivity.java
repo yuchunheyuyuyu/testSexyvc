@@ -133,7 +133,7 @@ public class ObjectCommentActivity extends MyBaseActivity<ObjectCommentPresent> 
 
     private void setSelectStatus(int currentItem) {
         if (currentItem == 0) {
-            tvTextComment.setText(String.format(getString(R.string.format_sent_road_comment),textCount));
+            tvTextComment.setText(String.format(getString(R.string.format_sent_text_comment),textCount));
             tvTextComment.setSelected(true);
             lineText.setVisibility(View.VISIBLE);
             tvRoadComment.setSelected(false);

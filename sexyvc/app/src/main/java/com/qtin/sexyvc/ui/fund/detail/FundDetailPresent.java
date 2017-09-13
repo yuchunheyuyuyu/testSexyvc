@@ -1,17 +1,17 @@
 package com.qtin.sexyvc.ui.fund.detail;
 
 import android.app.Application;
-
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.CodeEntity;
+import com.qtin.sexyvc.ui.bean.FundFollowRequest;
+import com.qtin.sexyvc.ui.bean.FundUnFollowRequest;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
-
 import javax.inject.Inject;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
@@ -60,8 +60,64 @@ public class FundDetailPresent extends BasePresenter<FundDetailContract.Model,Fu
                     public void onNext(BaseEntity<FundDetailBackBean> baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
+                        }
+                    }
+                });
+    }
+
+    public void cancleFollow(FundUnFollowRequest entity){
+        entity.setToken(mModel.getToken());
+        mModel.unFollowFund(entity)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("处理中...");//显示上拉刷新的进度条
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();//隐藏上拉刷新的进度条
+                    }
+                })
+                .compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.cancleSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void followFund(FundFollowRequest entity){
+        entity.setToken(mModel.getToken());
+        mModel.followFund(entity)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("处理中...");//显示上拉刷新的进度条
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();//隐藏上拉刷新的进度条
+                    }
+                })
+                .compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.followSuccess();
                         }
                     }
                 });

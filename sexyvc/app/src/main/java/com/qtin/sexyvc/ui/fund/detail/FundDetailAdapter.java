@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.jess.arms.utils.UiUtils.getString;
 
 /**
  * Created by ls on 17/7/6.
@@ -156,7 +159,13 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         holder.tvName.setText(StringUtil.formatString(bean.getFund_name()));
         holder.ratingScore.setRating(bean.getScore());
-        holder.tvRating.setText("" + bean.getScore());
+        if(bean.getScore_count()==0){
+            holder.tvRating.setText(getString(R.string.now_no_person_rate));
+            holder.tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        }else{
+            holder.tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP,28);
+            holder.tvRating.setText("" + bean.getScore());
+        }
         holder.tvRateNum.setText(bean.getScore_count()+" 人");
         holder.tvLocation.setText(StringUtil.formatString(bean.getLocation()));
 
@@ -274,7 +283,7 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Bundle bundle=new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_FUND);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getFund_id());
-                    bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getFund_name()+"的评论"+"（"+bean.getComment_number()+"条）");
+                    bundle.putString(ConstantUtil.INTENT_TITLE,"关于"+bean.getFund_name()+"的评论");
                     bundle.putInt("auth_state",1);
                     activity.gotoActivity(ObjectCommentActivity.class,bundle);
                 }

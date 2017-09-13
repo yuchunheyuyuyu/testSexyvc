@@ -10,6 +10,7 @@ import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.ui.bean.ChangeFundGroupRequest;
 import com.qtin.sexyvc.ui.bean.ConcernGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
@@ -97,10 +98,13 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                                             }
                                         }
                                     }
-
-
                                     dismissInputDialog();
-                                    mPresenter.add(content);
+
+                                    if(type==ConstantUtil.TYPE_SET_GROUP_FUND){
+                                        mPresenter.addFundGroup(content);
+                                    }else{
+                                        mPresenter.add(content);
+                                    }
                                 }
 
                                 @Override
@@ -117,6 +121,8 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
         });
         if(type==ConstantUtil.TYPE_SET_GROUP_INVESTOR){
             mPresenter.query(id,ConstantUtil.DEFALUT_ID);
+        }else if(type==ConstantUtil.TYPE_SET_GROUP_FUND){
+            mPresenter.queryFundGroup(id);
         }else {
             mPresenter.query(ConstantUtil.DEFALUT_ID,id);
         }
@@ -169,6 +175,12 @@ public class SetGroupActivity extends MyBaseActivity<SetGroupPresent> implements
                     request.setInvestor_id(id);
                     request.setGroup_ids(group_ids);
                     mPresenter.changeGroup(request);
+                }else if(type==ConstantUtil.TYPE_SET_GROUP_FUND){
+                    ChangeFundGroupRequest request=new ChangeFundGroupRequest();
+                    request.setObject_type(ConstantUtil.OBJECT_TYPE_FUND);
+                    request.setObject_id(id);
+                    request.setGroup_ids(group_ids);
+                    mPresenter.changeFundGroup(request);
                 }else{
                     ChangeContactGroupRequest request=new ChangeContactGroupRequest();
                     request.setContact_id(id);

@@ -179,7 +179,7 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
                 setAuthState();
                 break;
             case ModifyActivity.MODIFY_TITLE:
-                String u_title=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE2));
+                String u_title=StringUtil.formatString(data.getExtras().getString(ModifyActivity.MODIFY_INTENT_VALUE1));
                 userInfo.setU_title(u_title);
                 setPosition();
                 break;
@@ -209,9 +209,19 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
                 break;
             case R.id.tvRight:
                 if (userInfo.getU_auth_type() == 0) {
-                    showMessage("请选择身份");
+                    showMessage("请选择身份类型");
                     return;
                 }
+                if(StringUtil.isBlank(userInfo.getU_company())){
+                    showMessage("请填写所在机构");
+                    return;
+                }
+
+                if(StringUtil.isBlank(userInfo.getU_title())){
+                    showMessage("请填写担任职务");
+                    return;
+                }
+
                 mPresenter.editAuthType(userInfo.getU_auth_type());
                 break;
             case R.id.authTypeContainer:

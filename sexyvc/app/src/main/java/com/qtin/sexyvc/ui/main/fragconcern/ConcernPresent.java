@@ -179,7 +179,7 @@ public class ConcernPresent extends BasePresenter<ConcernContract.Model,ConcernC
     }
 
     public void queryFund(int page,int page_size){
-        mModel.queryFundGroup(mModel.getToken(),ConstantUtil.OBJECT_TYPE_FUND,page,page_size)
+        mModel.queryFundGroup(mModel.getToken(),ConstantUtil.OBJECT_TYPE_FUND,ConstantUtil.DEFALUT_ID,page,page_size)
                 .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override

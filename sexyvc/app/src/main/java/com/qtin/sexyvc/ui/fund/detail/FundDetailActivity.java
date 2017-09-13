@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,7 +22,10 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.add.CommentObjectActivity;
 import com.qtin.sexyvc.ui.bean.DialogType;
+import com.qtin.sexyvc.ui.bean.FundFollowRequest;
+import com.qtin.sexyvc.ui.bean.FundUnFollowRequest;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
+import com.qtin.sexyvc.ui.follow.set.SetGroupActivity;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBackBean;
 import com.qtin.sexyvc.ui.fund.detail.bean.FundDetailBean;
 import com.qtin.sexyvc.ui.fund.detail.di.DaggerFundDetailComponent;
@@ -62,6 +66,12 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     RelativeLayout headContainer;
     @BindView(R.id.ivShare)
     ImageView ivShare;
+    @BindView(R.id.ivConcern)
+    ImageView ivConcern;
+    @BindView(R.id.tvConcern)
+    TextView tvConcern;
+    @BindView(R.id.concernContainer)
+    LinearLayout concernContainer;
     private ArrayList<DataTypeInterface> data = new ArrayList<>();
     private FundDetailAdapter mAdapter;
 
@@ -186,10 +196,10 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                 finish();
                 break;
             case R.id.ivShare:
-                if(fundDetailBean!=null){
-                    final UMWeb web = new UMWeb(Api.SHARE_FUND+fundDetailBean.getFund_id());
-                    web.setTitle("【SexyVC】"+fundDetailBean.getFund_name());//标题
-                    web.setDescription("对于"+fundDetailBean.getFund_name()+"，创业者们是这样评价的...");
+                if (fundDetailBean != null) {
+                    final UMWeb web = new UMWeb(Api.SHARE_FUND + fundDetailBean.getFund_id());
+                    web.setTitle("【SexyVC】" + fundDetailBean.getFund_name());//标题
+                    web.setDescription("对于" + fundDetailBean.getFund_name() + "，创业者们是这样评价的...");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(fundDetailBean.getFund_logo())));  //缩略图
 
                     showShareDialog(new onShareClick() {
@@ -197,7 +207,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                         public void onClickShare(int platForm) {
 
                             dismissShareDialog();
-                            switch(platForm){
+                            switch (platForm) {
                                 case ConstantUtil.SHARE_WECHAT:
                                     new ShareAction(FundDetailActivity.this)
                                             .withMedia(web)
@@ -225,32 +235,6 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                             }
                         }
                     });
-
-                    /**new ShareAction(this)
-                            .withMedia(web)
-                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
-                            .setCallback(new UMShareListener() {
-                                @Override
-                                public void onStart(SHARE_MEDIA share_media) {
-
-                                }
-
-                                @Override
-                                public void onResult(SHARE_MEDIA share_media) {
-
-                                }
-
-                                @Override
-                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-
-                                }
-
-                                @Override
-                                public void onCancel(SHARE_MEDIA share_media) {
-
-                                }
-                            })
-                            .open();*/
                 }
                 break;
         }
@@ -261,13 +245,13 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
         if (isFirstLoadData) {
             UserInfoEntity entity = mPresenter.getUserInfo();
             if (entity != null) {
-                if (entity.getHas_project() == 1&&entity.getHas_comment()==0&&entity.getHas_roadshow()==0) {
+                if (entity.getHas_project() == 1 && entity.getHas_comment() == 0 && entity.getHas_roadshow() == 0) {
                     int currentScore = DataHelper.getIntergerSF(this, "read_score");
                     currentScore += 20;
                     if (currentScore >= 100) {
                         //清空分数
                         DataHelper.SetIntergerSF(this, "read_score", 0);
-                        showHintDialog(entity.getU_phone(),DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                        showHintDialog(entity.getU_phone(), DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
                                 Bundle bundle = new Bundle();
@@ -285,7 +269,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
         }
         data.clear();
         if (bean.getFund() != null) {
-            fundDetailBean=bean.getFund();
+            fundDetailBean = bean.getFund();
             data.add(bean.getFund());
             tvTitle.setText(StringUtil.formatString(bean.getFund().getFund_name()));
         }
@@ -294,18 +278,68 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
             data.addAll(bean.getComments().getList());
         }
         //计算评论总数
-        int commentNumber=0;
-        if(bean.getComments() != null ){
-            commentNumber+=bean.getComments().getTotal()+bean.getComments().getUnauth_count();
+        int commentNumber = 0;
+        if (bean.getComments() != null) {
+            commentNumber += bean.getComments().getTotal() + bean.getComments().getUnauth_count();
         }
-        if(bean.getRoadshows() != null ){
-            commentNumber+=bean.getRoadshows().getTotal()+bean.getRoadshows().getUnauth_count();
+        if (bean.getRoadshows() != null) {
+            commentNumber += bean.getRoadshows().getTotal() + bean.getRoadshows().getUnauth_count();
         }
         fundDetailBean.setComment_number(commentNumber);
+
         mAdapter.notifyDataSetChanged();
+        //关注
+        setConcernStatus();
     }
 
-    private UMShareListener shareListener=new UMShareListener() {
+    @Override
+    public void startRefresh(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void endRefresh() {
+        dialogDismiss();
+    }
+
+    @Override
+    public void followSuccess() {
+        if(fundDetailBean!=null){
+            fundDetailBean.setHas_follow(1);
+        }
+        setConcernStatus();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ConstantUtil.INTENT_TYPE_SET_GROUP, ConstantUtil.TYPE_SET_GROUP_FUND);
+        bundle.putLong(ConstantUtil.INTENT_ID, fund_id);
+        gotoActivity(SetGroupActivity.class, bundle);
+    }
+
+    @Override
+    public void cancleSuccess() {
+        if(fundDetailBean!=null){
+            fundDetailBean.setHas_follow(0);
+        }
+        setConcernStatus();
+    }
+
+    private void setConcernStatus() {
+        if (fundDetailBean == null) {
+            concernContainer.setVisibility(View.GONE);
+        }else{
+            concernContainer.setVisibility(View.VISIBLE);
+            if (fundDetailBean.getHas_follow() == 0) {
+                ivConcern.setImageResource(R.drawable.icon_bottom_follow);
+                tvConcern.setTextColor(getResources().getColor(R.color.barbie_pink_two));
+                tvConcern.setText(getResources().getString(R.string.concern));
+            } else {
+                ivConcern.setImageResource(R.drawable.icon_bottom_menu_copy_2);
+                tvConcern.setTextColor(getResources().getColor(R.color.black50));
+                tvConcern.setText(getResources().getString(R.string.has_concern));
+            }
+        }
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
         }
@@ -323,4 +357,52 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
         }
     };
+
+    @OnClick(R.id.concernContainer)
+    public void onClick() {
+        if(fundDetailBean!=null){
+            if(fundDetailBean.getHas_follow()==0){
+                FundFollowRequest request=new FundFollowRequest();
+                request.setObject_type(ConstantUtil.OBJECT_TYPE_FUND);
+                ArrayList<Long> group_ids=new ArrayList<>();
+                ArrayList<Long> object_ids=new ArrayList<>();
+                object_ids.add(fundDetailBean.getFund_id());
+                request.setGroup_ids(group_ids);
+                request.setObject_ids(object_ids);
+                mPresenter.followFund(request);
+            }else{
+                showBottomDialog("#fe3824", getResources().getString(R.string.set_group),
+                        getResources().getString(R.string.cancle_concern),
+                        getResources().getString(R.string.cancle),
+                        new SelecteListerner() {
+                            @Override
+                            public void onFirstClick() {
+                                dismissBottomDialog();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong(ConstantUtil.INTENT_ID, fund_id);
+                                bundle.putInt(ConstantUtil.INTENT_TYPE_SET_GROUP, ConstantUtil.TYPE_SET_GROUP_FUND);
+                                gotoActivity(SetGroupActivity.class, bundle);
+                            }
+
+                            @Override
+                            public void onSecondClick() {
+                                dismissBottomDialog();
+                                FundUnFollowRequest request=new FundUnFollowRequest();
+                                request.setObject_type(ConstantUtil.OBJECT_TYPE_FUND);
+                                ArrayList<Long> group_ids=new ArrayList<Long>();
+                                ArrayList<Long> object_ids=new ArrayList<Long>();
+                                object_ids.add(fundDetailBean.getFund_id());
+                                request.setGroup_ids(group_ids);
+                                request.setObject_ids(object_ids);
+                                mPresenter.cancleFollow(request);
+                            }
+
+                            @Override
+                            public void onCancle() {
+                                dismissBottomDialog();
+                            }
+                        });
+            }
+        }
+    }
 }

@@ -6,11 +6,14 @@ import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.ChangeFundGroupRequest;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.request.ChangeContactGroupRequest;
 import com.qtin.sexyvc.ui.request.ChangeInvestorGroupRequest;
+import com.qtin.sexyvc.utils.ConstantUtil;
+
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
@@ -57,11 +60,35 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 .subscribe(new ErrorHandleSubscriber<BaseEntity<CreateGroupEntity>>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity<CreateGroupEntity> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.addSuccess(baseEntity.getItems().getGroup_id(),group_name);
+                        }
+                    }
+                });
+    }
+
+    public void addFundGroup(final String group_name){
+        mModel.addFundGroup(mModel.getToken(),group_name, ConstantUtil.OBJECT_TYPE_FUND)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("处理中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+                    }
+                }).compose(RxUtils.<BaseEntity<CreateGroupEntity>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<CreateGroupEntity>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<CreateGroupEntity> baseEntity) {
 
                         if(baseEntity.isSuccess()){
                             mRootView.addSuccess(baseEntity.getItems().getGroup_id(),group_name);
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
@@ -87,7 +114,33 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        //mRootView.showMessage(baseEntity.getErrMsg());
+                        if(baseEntity.isSuccess()){
+                            mRootView.changeSuccess();
+                        }
+                    }
+                });
+    }
+
+    public void changeFundGroup(ChangeFundGroupRequest request){
+        request.setToken(mModel.getToken());
+        mModel.changeFundGroup(request)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("处理中");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.changeSuccess();
                         }
@@ -115,7 +168,6 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                 .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
                     @Override
                     public void onNext(CodeEntity baseEntity) {
-                        //mRootView.showMessage(baseEntity.getErrMsg());
                         if(baseEntity.isSuccess()){
                             mRootView.changeSuccess();
                         }
@@ -147,8 +199,35 @@ public class SetGroupPresent extends BasePresenter<SetGroupContract.Model,SetGro
                             if(groupEntity!=null){
                                 mRootView.querySuccess(groupEntity);
                             }
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
+                        }
+                    }
+                });
+    }
+
+    public void queryFundGroup(long object_id){
+        mModel.queryFundGroup(mModel.getToken(),ConstantUtil.OBJECT_TYPE_FUND,object_id,page,page_size)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("获取数据");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+                    }
+                }).compose(RxUtils.<BaseEntity<GroupEntity>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<GroupEntity>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<GroupEntity> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            GroupEntity groupEntity=baseEntity.getItems();
+                            if(groupEntity!=null){
+                                mRootView.querySuccess(groupEntity);
+                            }
                         }
                     }
                 });

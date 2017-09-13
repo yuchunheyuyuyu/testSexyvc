@@ -9,6 +9,7 @@ public class GroupEntity {
     private int total;
     private int contact_count;
     private ArrayList<Long> join_groups;
+    private ArrayList<ConcernGroupEntity>list;
 
     public int getContact_count() {
         return contact_count;
@@ -25,8 +26,6 @@ public class GroupEntity {
     public void setJoin_groups(ArrayList<Long> join_groups) {
         this.join_groups = join_groups;
     }
-
-    private ArrayList<ConcernGroupEntity>list;
 
     public int getTotal() {
         return total;

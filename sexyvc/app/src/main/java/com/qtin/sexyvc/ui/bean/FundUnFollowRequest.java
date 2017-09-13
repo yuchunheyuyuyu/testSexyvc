@@ -9,7 +9,7 @@ public class FundUnFollowRequest {
 
     private String token;
     private ArrayList<Long> group_ids;
-    private ArrayList<Long> ids;
+    private ArrayList<Long> object_ids;
     private int object_type;
 
     public String getToken() {
@@ -28,12 +28,12 @@ public class FundUnFollowRequest {
         this.group_ids = group_ids;
     }
 
-    public ArrayList<Long> getIds() {
-        return ids;
+    public ArrayList<Long> getObject_ids() {
+        return object_ids;
     }
 
-    public void setIds(ArrayList<Long> ids) {
-        this.ids = ids;
+    public void setObject_ids(ArrayList<Long> object_ids) {
+        this.object_ids = object_ids;
     }
 
     public int getObject_type() {

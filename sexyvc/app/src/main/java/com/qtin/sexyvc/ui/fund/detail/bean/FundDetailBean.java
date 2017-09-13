@@ -33,6 +33,15 @@ public class FundDetailBean implements DataTypeInterface{
     private String location;
     private int score_count;
 
+    private int has_follow;
+    public int getHas_follow() {
+        return has_follow;
+    }
+
+    public void setHas_follow(int has_follow) {
+        this.has_follow = has_follow;
+    }
+
     public int getScore_count() {
         return score_count;
     }

@@ -1,5 +1,7 @@
 package com.qtin.sexyvc.ui.bean;
 
+import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
@@ -9,7 +11,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 
 @Entity
-public class ConcernListEntity {
+public class ConcernListEntity implements DataTypeInterface{
 
     @Id
     private long contact_id;
@@ -176,5 +178,10 @@ public class ConcernListEntity {
 
     public void setLocalTime(long localTime) {
         this.localTime = localTime;
+    }
+
+    @Override
+    public int getType() {
+        return DataTypeInterface.TYPE_INVESTOR;
     }
 }

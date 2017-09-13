@@ -29,7 +29,7 @@ public interface ConcernContract {
         Observable<BaseEntity<CreateGroupEntity>> addInvestorGroup(String token,String group_name);
         Observable<CodeEntity> updateInvestorGroup(String token,long group_id,String group_name,int status);
         //关于投资机构
-        Observable<BaseEntity<GroupEntity>> queryFundGroup(String token,int object_type,int page,int page_size);
+        Observable<BaseEntity<GroupEntity>> queryFundGroup(String token,int object_type,long object_id,int page,int page_size);
         Observable<BaseEntity<CreateGroupEntity>> addFundGroup(String token,String group_name,int object_type);
         Observable<CodeEntity> updateFundGroup(String token,long group_id,String group_name,int status,int object_type);
     }

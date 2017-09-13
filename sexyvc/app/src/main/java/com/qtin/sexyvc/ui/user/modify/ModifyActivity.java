@@ -218,7 +218,7 @@ public class ModifyActivity extends MyBaseActivity<ModifyPresent> implements Mod
             }else if(modifyType==MODIFY_COMPANY){
                 etContent.setHint(getResources().getString(R.string.input_institution));
                 tvTitle.setText(getResources().getString(R.string.fund_name));
-                InputFilter[] filters = { new NameLengthFilter(16) };
+                InputFilter[] filters = { new NameLengthFilter(60) };
                 etContent.setFilters(filters);
             }else if(modifyType==MODIFY_TITLE){
                 etContent.setHint(getResources().getString(R.string.input_position));

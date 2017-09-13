@@ -8,6 +8,9 @@ import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
+import com.qtin.sexyvc.ui.bean.ListBean;
+import com.qtin.sexyvc.ui.follow.list.bean.FollowedFundBean;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import javax.inject.Inject;
 
@@ -64,8 +67,40 @@ public class ConcernListPresent extends BasePresenter<ConcernListContract.Model,
                     public void onNext(BaseEntity<ConcernEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
+                        }
+                    }
+                });
+    }
+
+    public void queryFundDetail(long group_id, final int page, int page_size){
+        mModel.queryFundDetail(mModel.getToken(),group_id,page,page_size, ConstantUtil.OBJECT_TYPE_FUND)
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        if(page==1){
+                            mRootView.showLoading();
                         }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
+                            mRootView.startLoadMore();
+                        }
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        if(page==1){
+                            mRootView.hideLoading();
+                        }else{
+                            mRootView.endLoadMore();
+                        }
+                    }
+                }).compose(RxUtils.<BaseEntity<ListBean<FollowedFundBean>>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<ListBean<FollowedFundBean>>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<ListBean<FollowedFundBean>> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.queryFundSuccess(baseEntity.getItems());
                         }
                     }
                 });

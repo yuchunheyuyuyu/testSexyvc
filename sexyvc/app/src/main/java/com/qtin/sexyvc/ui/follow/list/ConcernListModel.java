@@ -6,7 +6,9 @@ import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
+import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
+import com.qtin.sexyvc.ui.follow.list.bean.FollowedFundBean;
 
 import java.util.List;
 
@@ -28,6 +30,11 @@ public class ConcernListModel extends BaseModel<ServiceManager,CacheManager> imp
     @Override
     public Observable<BaseEntity<ConcernEntity>> queryGroupDetail(String token, long group_id, int page, int page_size) {
         return mServiceManager.getCommonService().queryGroupDetail(token,group_id,page,page_size);
+    }
+
+    @Override
+    public Observable<BaseEntity<ListBean<FollowedFundBean>>> queryFundDetail(String token, long group_id, int page, int page_size, int object_type) {
+        return mServiceManager.getCommonService().queryFundDetail(token,group_id,page,page_size,object_type);
     }
 
     @Override

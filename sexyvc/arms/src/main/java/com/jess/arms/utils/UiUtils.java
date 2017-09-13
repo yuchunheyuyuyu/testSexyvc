@@ -44,6 +44,10 @@ public class UiUtils {
         Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
     }
 
+    public static void showToastShort(String msg){
+        Toast.makeText(getContext(),msg,Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * 设置hint大小
      *

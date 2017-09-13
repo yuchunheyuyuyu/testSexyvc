@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -336,10 +337,17 @@ public class ConcernDetailActivity extends AddProjectBaseActivity<ConcernDetailP
     }
 
     private void setScore(){
-        tvRating.setText("" + contactBean.getScore());
         ratingScore.setRating(contactBean.getScore());
         //缺少参数
         tvRateNum.setText(contactBean.getScore_count() + " 人");
+
+        if(contactBean.getScore_count()==0){
+            tvRating.setText(getString(R.string.now_no_person_rate));
+            tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        }else{
+            tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP,28);
+            tvRating.setText("" + contactBean.getScore());
+        }
     }
 
     private int countRoadPercent(RoadShowItemBean itemBean) {

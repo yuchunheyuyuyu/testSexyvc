@@ -5,6 +5,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.ChangeFundGroupRequest;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CreateGroupEntity;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
@@ -53,5 +54,20 @@ public class SetGroupModel extends BaseModel<ServiceManager,CacheManager> implem
     @Override
     public Observable<BaseEntity<GroupEntity>> queryInvestorGroup(String token, long investor_id,long contact_id, int page, int page_size) {
         return mServiceManager.getCommonService().queryInvestorGroup(token,investor_id,contact_id,page,page_size);
+    }
+
+    @Override
+    public Observable<BaseEntity<GroupEntity>> queryFundGroup(String token, int object_type,long object_id, int page, int page_size) {
+        return mServiceManager.getCommonService().queryFundGroup(token,object_type,object_id,page,page_size);
+    }
+
+    @Override
+    public Observable<BaseEntity<CreateGroupEntity>> addFundGroup(String token, String group_name, int object_type) {
+        return mServiceManager.getCommonService().addFundGroup(token,group_name,object_type);
+    }
+
+    @Override
+    public Observable<CodeEntity> changeFundGroup(ChangeFundGroupRequest request) {
+        return mServiceManager.getCommonService().changeFundGroup(request);
     }
 }

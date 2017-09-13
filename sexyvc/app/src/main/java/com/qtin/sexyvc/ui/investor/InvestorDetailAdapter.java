@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.jess.arms.utils.UiUtils.getString;
 
 /**
  * Created by ls on 17/7/3.
@@ -184,7 +187,14 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         //评分
         holder.tvRateNum.setText(bean.getScore_count() + " 人");
-        holder.tvRating.setText(""+bean.getScore());
+
+        if(bean.getScore_count()==0){
+            holder.tvRating.setText(getString(R.string.now_no_person_rate));
+            holder.tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        }else{
+            holder.tvRating.setTextSize(TypedValue.COMPLEX_UNIT_SP,28);
+            holder.tvRating.setText("" + bean.getScore());
+        }
         holder.ratingScore.setRating(bean.getScore());
         //路演评价
         if (bean.getRoad_show() != null) {

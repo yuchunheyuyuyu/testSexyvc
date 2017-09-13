@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -26,9 +25,7 @@ import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernGroupAdapter;
 import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernModule;
 import com.qtin.sexyvc.ui.main.fragconcern.di.DaggerConcernComponent;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -101,6 +98,7 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                 Bundle bundle = new Bundle();
                 bundle.putString("group_name", data.get(position).getGroup_name());
                 bundle.putLong("group_id", data.get(position).getGroup_id());
+                bundle.putInt("type",type);
                 gotoActivity(ConcernListActivity.class, bundle);
             }
         });
@@ -306,6 +304,7 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                                     new ComfirmListerner() {
                                         @Override
                                         public void onComfirm() {
+                                            dismissComfirmDialog();
                                             gotoActivity(CreateInvestorActivity.class);
                                         }
                                     });
@@ -359,13 +358,17 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
         if (list != null) {
             if(type==ConstantUtil.TYPE_INVESTOR){
                 investorData.addAll(list);
-                data.clear();
-                data.addAll(investorData);
             }else{
                 fundData.addAll(list);
-                data.clear();
-                data.addAll(fundData);
             }
+        }
+
+        if(this.type==ConstantUtil.TYPE_INVESTOR){
+            data.clear();
+            data.addAll(investorData);
+        }else{
+            data.clear();
+            data.addAll(fundData);
         }
         adapter.notifyDataSetChanged();
     }
