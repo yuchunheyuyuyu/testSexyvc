@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvHot"
+    android:layout_width="match_parent"
+    android:layout_height="36dp"
+    android:gravity="center_horizontal"
+    android:paddingTop="16dp"
+    android:singleLine="true"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:text="红杉资本"
+    android:textColor="@color/barbie_pink_two"
+    android:textSize="14sp">
+
+</TextView>
