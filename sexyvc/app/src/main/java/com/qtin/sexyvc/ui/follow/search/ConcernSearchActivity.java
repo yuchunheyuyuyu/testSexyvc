@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -23,8 +24,10 @@ import com.qtin.sexyvc.ui.follow.search.di.DaggerConcernSearchComponent;
 import com.qtin.sexyvc.ui.search.result.SearchResultActivity;
 import com.qtin.sexyvc.ui.widget.ClearableEditText;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -43,6 +46,8 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
     private List<ConcernListEntity> data=new ArrayList<>();
     private ConcernListAdapter mAdapter;
     private String keyWord;
+
+    private boolean isFromLocal=true;//是否是本地数据
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -76,13 +81,20 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
                     gotoActivity(SearchResultActivity.class,bundle);
                 }else{
-                    //先保存
-                    mPresenter.insertConcern(data.get(position));
-                    //再跳转
-                    Bundle bundle=new Bundle();
-                    bundle.putLong("contact_id",data.get(position).getContact_id());
-                    bundle.putLong("investor_id",data.get(position).getInvestor_id());
-                    gotoActivityForResult(ConcernDetailActivity.class,bundle,ConstantUtil.REQUEST_CODE_ID);
+                    if(isFromLocal){
+                        keyWord=StringUtil.formatString(data.get(position).getInvestor_name());
+                        etSearch.setText(keyWord);
+                        etSearch.setSelection(keyWord.length());
+                        search(keyWord);
+                    }else{
+                        //先保存
+                        mPresenter.insertConcern(data.get(position));
+                        //再跳转
+                        Bundle bundle=new Bundle();
+                        bundle.putLong("contact_id",data.get(position).getContact_id());
+                        bundle.putLong("investor_id",data.get(position).getInvestor_id());
+                        gotoActivityForResult(ConcernDetailActivity.class,bundle,ConstantUtil.REQUEST_CODE_ID);
+                    }
                 }
             }
         });
@@ -95,8 +107,8 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
                     ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(ConcernSearchActivity.this.getCurrentFocus()
                                     .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                    search();
+                    keyWord=etSearch.getText().toString();
+                    search(keyWord);
                     return true;
                 }
                 return false;
@@ -135,8 +147,7 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
         }
     }
 
-    private void search(){
-        keyWord=etSearch.getText().toString();
+    private void search(String keyWord){
         if(StringUtil.isBlank(keyWord)){
             showMessage("关键词不能为空");
             return;
@@ -177,6 +188,7 @@ public class ConcernSearchActivity extends MyBaseActivity<ConcernSearchPresent> 
 
     @Override
     public void searchSuccess(ConcernEntity entity) {
+        isFromLocal=false;
         data.clear();
         if(entity.getList()!=null){
             data.addAll(entity.getList());

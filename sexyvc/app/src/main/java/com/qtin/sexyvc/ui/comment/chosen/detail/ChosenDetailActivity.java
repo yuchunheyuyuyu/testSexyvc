@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -16,10 +17,13 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.HomeCommentBean;
 import com.qtin.sexyvc.ui.comment.chosen.detail.di.ChosenDetailModule;
 import com.qtin.sexyvc.ui.comment.chosen.detail.di.DaggerChosenDetailComponent;
+import com.qtin.sexyvc.ui.comment.list.CommentActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -53,6 +57,8 @@ public class ChosenDetailActivity extends MyBaseActivity<ChosenDetailPresent> im
     private boolean isLoadingMore;
     private boolean hasLoadedAllItems;
 
+    private boolean isFromChosenList;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerChosenDetailComponent.builder().appComponent(appComponent).chosenDetailModule(new ChosenDetailModule(this)).build().inject(this);
@@ -70,6 +76,7 @@ public class ChosenDetailActivity extends MyBaseActivity<ChosenDetailPresent> im
 
     @Override
     protected void initData() {
+        isFromChosenList=getIntent().getExtras().getBoolean("isFromChosenList");
         topic_id = getIntent().getExtras().getLong(ConstantUtil.INTENT_ID);
         tvRight.setText(getString(R.string.past_hot_comment));
         tvRight.setVisibility(View.VISIBLE);
@@ -155,6 +162,11 @@ public class ChosenDetailActivity extends MyBaseActivity<ChosenDetailPresent> im
                 finish();
                 break;
             case R.id.tvRight:
+                if(isFromChosenList){
+                    finish();
+                }else{
+                    gotoActivity(CommentActivity.class);
+                }
                 break;
         }
     }

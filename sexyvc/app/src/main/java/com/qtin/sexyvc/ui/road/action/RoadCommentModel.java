@@ -13,6 +13,7 @@ import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.road.action.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.action.bean.RoadRequest;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 
 import java.util.List;
 
@@ -77,5 +78,19 @@ public class RoadCommentModel extends BaseModel<ServiceManager,CacheManager> imp
                         return Observable.just(typebeanReply.getData());
                     }
                 });
+    }
+
+    @Override
+    public Observable<BaseEntity<ProjectEntity>> queryMyProject(String token) {
+        return mServiceManager.getCommonService().queryMyProject(token);
+    }
+
+    @Override
+    public UserInfoEntity getUserInfo() {
+        List<UserInfoEntity> list=mCacheManager.getDaoSession().getUserInfoEntityDao().queryBuilder().build().list();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 }

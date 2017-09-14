@@ -75,7 +75,7 @@
                 android:gravity="top"
                 android:hint="@string/hint_institution"
                 android:lineSpacingExtra="6sp"
-                android:maxLength="140"
+                android:maxLength="300"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black30"
                 android:textSize="14sp" />

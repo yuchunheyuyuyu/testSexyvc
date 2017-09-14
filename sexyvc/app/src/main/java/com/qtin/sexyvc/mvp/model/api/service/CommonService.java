@@ -19,6 +19,7 @@ import com.qtin.sexyvc.ui.bean.FundFollowRequest;
 import com.qtin.sexyvc.ui.bean.FundUnFollowRequest;
 import com.qtin.sexyvc.ui.bean.GroupEntity;
 import com.qtin.sexyvc.ui.bean.HomeCommentBean;
+import com.qtin.sexyvc.ui.bean.HotSearchBean;
 import com.qtin.sexyvc.ui.bean.IdBean;
 import com.qtin.sexyvc.ui.bean.InfluencyBean;
 import com.qtin.sexyvc.ui.bean.ListBean;
@@ -1089,6 +1090,13 @@ public interface CommonService {
     Observable<CodeEntity> addFund(@Field("token")String token,
                                    @Field("supply_name")String supply_name,
                                    @Field("supply_content")String supply_content);
+
+    /**
+     * 119. 页面--热搜
+     * @return
+     */
+    @POST("api/user/investor/search/hot")
+    Observable<BaseEntity<HotSearchBean>> queryHotSearch();
 
  }
 

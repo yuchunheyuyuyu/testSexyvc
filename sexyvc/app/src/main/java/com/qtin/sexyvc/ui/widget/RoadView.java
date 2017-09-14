@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.road.show.bean.RoadDetailBean;
 import com.qtin.sexyvc.ui.road.show.bean.RoadDetailBean.AnswerContent;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -79,6 +82,10 @@ public class RoadView extends LinearLayout {
                 holder.llAddQuestions.removeAllViews();
 
                 for(RoadDetailBean.AddQuestion option:bean.getAdd_questions()){
+                    if(StringUtil.isBlank(option.getAnswer())){
+                        continue;
+                    }
+
                     TextView tvTitle=new TextView(getContext());
                     tvTitle.setText("- "+option.getTitle());
                     tvTitle.setTextColor(getResources().getColor(R.color.black90));

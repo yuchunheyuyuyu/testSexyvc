@@ -511,6 +511,7 @@
     <string name="institution_info_not_null">机构相关信息不能为空</string>
 
     <string name="now_no_person_rate">暂无评分</string>
+    <string name="hot_search">热门搜索</string>
 
 
 </resources>

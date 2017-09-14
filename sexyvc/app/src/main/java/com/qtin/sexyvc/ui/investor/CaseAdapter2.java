@@ -16,6 +16,7 @@ import com.qtin.sexyvc.common.CustomApplication;
 import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.ui.bean.CaseBean;
 import com.qtin.sexyvc.utils.CommonUtil;
+import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
 
@@ -34,19 +35,22 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private MyBaseActivity activity;
     private OnDeleteCaseListener onDeleteCaseListener;
+    private OnAddProjectListener onAddProjectListener;
+
+    public void setOnAddProjectListener(OnAddProjectListener onAddProjectListener) {
+        this.onAddProjectListener = onAddProjectListener;
+    }
 
     public void setOnDeleteCaseListener(OnDeleteCaseListener onDeleteCaseListener) {
         this.onDeleteCaseListener = onDeleteCaseListener;
     }
 
-    public static interface OnDeleteCaseListener{
-        void onClickDelete(int position);
+    public static interface OnAddProjectListener{
+        void onClick();
     }
 
-    private boolean isNeedAdd;//是否显示添加选项
-
-    public void setNeedAdd(boolean needAdd) {
-        isNeedAdd = needAdd;
+    public static interface OnDeleteCaseListener{
+        void onClickDelete(int position);
     }
 
     private boolean isShowDelete;//是否显示删除
@@ -73,8 +77,10 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+
+        CaseBean bean=data.get(position);
         ViewHolder holder= (ViewHolder) viewHolder;
-        if(position==data.size()){
+        if(bean.getCase_id()== ConstantUtil.DEFALUT_ID){
             holder.ivAddCase.setVisibility(View.VISIBLE);
             holder.ivLogo.setVisibility(View.GONE);
             holder.ivDelete.setVisibility(View.GONE);
@@ -83,8 +89,8 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(onDeleteCaseListener!=null){
-                        onDeleteCaseListener.onClickDelete(position);
+                    if(onAddProjectListener!=null){
+                        onAddProjectListener.onClick();
                     }
                 }
             });
@@ -92,7 +98,6 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }else{
             holder.ivAddCase.setVisibility(View.GONE);
             holder.ivLogo.setVisibility(View.VISIBLE);
-            CaseBean bean=data.get(position);
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
                     //.transformation(new RoundedCornersTransformation(context,0,0))
@@ -117,21 +122,19 @@ public class CaseAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }else{
                 holder.ivDelete.setVisibility(View.GONE);
             }
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             holder.tvName.setTextColor(context.getResources().getColor(R.color.black90));
         }
     }
 
     @Override
     public int getItemCount() {
-        if(isNeedAdd){
-            if(isShowDelete){
-                return data == null ? 0 : data.size();
-            }else{
-                return data == null ? 1 : data.size()+1;
-            }
-        }else{
-            return data == null ? 0 : data.size();
-        }
+        return data == null ? 0 : data.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

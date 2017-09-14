@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -32,6 +31,7 @@ import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.InvestorInfoBean;
 import com.qtin.sexyvc.ui.bean.OnSpecialClickListener;
+import com.qtin.sexyvc.ui.bean.ProjectBean;
 import com.qtin.sexyvc.ui.bean.TagEntity;
 import com.qtin.sexyvc.ui.road.action.bean.AddQuestionBean;
 import com.qtin.sexyvc.ui.road.action.bean.OnOptionClickListener;
@@ -43,19 +43,17 @@ import com.qtin.sexyvc.ui.road.action.di.DaggerRoadCommentComponent;
 import com.qtin.sexyvc.ui.road.action.di.RoadCommentModule;
 import com.qtin.sexyvc.ui.road.action.success.SuccessActivity;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import com.zhy.autolayout.utils.AutoUtils;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -96,6 +94,7 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
     public static final int TYPE_STAGE = 0x002;//阶段
     private TagAdapter stageAdapter;
     private FilterEntity filterEntity=new FilterEntity();
+    private boolean isHasComfirm=false;
 
     @Nullable
     @Override
@@ -133,6 +132,10 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
 
     @Override
     protected void initData() {
+        //初始化轮次数据
+        filterEntity.setType_id(28);
+        filterEntity.setType_name("种子轮");
+
         investorInfoBean = getIntent().getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
         index = getIntent().getExtras().getInt(ConstantUtil.INTENT_INDEX);
 
@@ -188,6 +191,11 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
             mAdapter.setIndex(index);
             mAdapter.setTotal(questions.size());
             mAdapter.notifyDataSetChanged();
+        }
+
+        if(mPresenter.getUserInfo()!=null&&mPresenter.getUserInfo().getU_auth_type()==ConstantUtil.AUTH_TYPE_FOUNDER
+                &&index==questions.size()-1){
+            mPresenter.queryMyProject();
         }
     }
 
@@ -338,14 +346,18 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
         switch (type) {
             case TYPE_STAGE:
                 stageData.clear();
-
-                FilterEntity entity=new FilterEntity();
-                entity.setType_id(0);
-                entity.setType_name("未融资");
-
-                stageData.add(entity);
                 stageData.addAll(list);
                 break;
+        }
+    }
+
+    @Override
+    public void queryProjectSuccess(ProjectEntity entity) {
+        if(entity!=null&&entity.getList()!=null&&!entity.getList().isEmpty()){
+            ProjectBean bean=entity.getList().get(0);
+            if(!isHasComfirm&&bean.getLast_stage_id()!=0){
+                filterEntity.setType_id(bean.getLast_stage_id());
+            }
         }
     }
 
@@ -576,6 +588,8 @@ public class RoadCommentActivity extends MyBaseActivity<RoadCommentPresent> impl
      * 两个按钮的dialog
      */
     protected void showSubmitDialog() {
+        isHasComfirm=true;
+
         View view = View.inflate(this, R.layout.submit_dialog, null);
         final TextView tvStage= (TextView) view.findViewById(R.id.tvStage);
 

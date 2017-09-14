@@ -11,8 +11,10 @@ import com.qtin.sexyvc.ui.bean.BaseListEntity;
 import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.Typebean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.road.action.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.action.bean.RoadRequest;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 
 import javax.inject.Inject;
 
@@ -63,7 +65,7 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.startLoad("获取数据中");
+                        mRootView.startLoad("获取数据");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,7 +121,7 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.startLoad("提交答案中");
+                        mRootView.startLoad("正在提交");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -139,6 +141,36 @@ public class RoadCommentPresent extends BasePresenter<RoadCommentContract.Model,
                     }
                 });
     }
+
+    public void queryMyProject(){
+        mModel.queryMyProject(mModel.getToken())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();
+                    }
+                }).compose(RxUtils.<BaseEntity<ProjectEntity>>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<BaseEntity<ProjectEntity>>(mErrorHandler) {
+                    @Override
+                    public void onNext(BaseEntity<ProjectEntity> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.queryProjectSuccess(baseEntity.getItems());
+                        }
+                    }
+                });
+    }
+
+    public UserInfoEntity getUserInfo(){
+        return mModel.getUserInfo();
+    };
 
     public void changeRoadStatus(){
         mModel.changeRoadStatus();

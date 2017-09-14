@@ -102,7 +102,7 @@ public class ConcernListActivity extends MyBaseActivity<ConcernListPresent> impl
                     Bundle bundle = new Bundle();
                     FollowedFundBean bean= (FollowedFundBean) data.get(position);
                     bundle.putLong("fund_id", bean.getFund_id());
-                    gotoActivity(FundDetailActivity.class, bundle);
+                    gotoActivityForResult(FundDetailActivity.class, bundle,ConstantUtil.REQUEST_CODE_ID);
                 }
             }
         });
@@ -130,6 +130,15 @@ public class ConcernListActivity extends MyBaseActivity<ConcernListPresent> impl
                             for(DataTypeInterface typeInterface:this.data){
                                 ConcernListEntity entity= (ConcernListEntity) typeInterface;
                                 if(entity.getContact_id()==contact_id){
+                                    this.data.remove(entity);
+                                    mAdapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                        }else if(type== ConstantUtil.TYPE_FUND){
+                            for(DataTypeInterface typeInterface:this.data){
+                                FollowedFundBean entity= (FollowedFundBean) typeInterface;
+                                if(entity.getFund_id()==contact_id){
                                     this.data.remove(entity);
                                     mAdapter.notifyDataSetChanged();
                                     break;

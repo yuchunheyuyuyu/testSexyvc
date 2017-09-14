@@ -168,14 +168,14 @@ public class InfluencyActivity extends MyBaseActivity<InfluencyPresent> implemen
     @Override
     public void queryInfluencySuccess(InfluencyBean influencyBean) {
         int influencyScore=0;
-        if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
-            influencyScore+=100;
+        if(influencyBean.getAuth_passed()==1){
+            influencyScore+=200;
         }
-        if(userInfo.getHas_project()==1){
-            influencyScore+=100;
+        if(influencyBean.getHas_project()==1){
+            influencyScore+=200;
         }
-        influencyScore+=(20*influencyBean.getComment_number()+20*influencyBean.getRoadshow_number());
-        influencyScore+=(5*influencyBean.getComment_praised_number());
+        influencyScore+=(100*influencyBean.getComment_number()+100*influencyBean.getRoadshow_number());
+        influencyScore+=(10*influencyBean.getComment_praised_number());
 
         tvInfluencyNum.setText(""+influencyScore);
     }

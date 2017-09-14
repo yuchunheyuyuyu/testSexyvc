@@ -8,8 +8,10 @@ import com.qtin.sexyvc.ui.bean.CodeEntity;
 import com.qtin.sexyvc.ui.bean.CommonBean;
 import com.qtin.sexyvc.ui.bean.FilterEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
+import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.road.action.bean.QuestionBean;
 import com.qtin.sexyvc.ui.road.action.bean.RoadRequest;
+import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 import java.util.ArrayList;
 import rx.Observable;
 
@@ -27,6 +29,8 @@ public interface RoadCommentContract {
         void queryNormalQuestionsSuccess(CommonBean commonBean);
 
         void requestTypeBack(int type,ArrayList<FilterEntity> list);
+
+        void queryProjectSuccess(ProjectEntity entity);
     }
     interface Model extends IModel{
         Observable<BaseListEntity<QuestionBean>> queryRoadQuestion(String token);
@@ -36,5 +40,7 @@ public interface RoadCommentContract {
 
         void changeRoadStatus();
         Observable<Typebean> getType(String type_key);
+        Observable<BaseEntity<ProjectEntity>> queryMyProject(String token);
+        UserInfoEntity getUserInfo();
     }
 }

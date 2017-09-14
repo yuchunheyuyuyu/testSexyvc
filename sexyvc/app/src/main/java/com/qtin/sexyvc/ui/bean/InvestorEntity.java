@@ -29,6 +29,16 @@ public class InvestorEntity implements DataTypeInterface, Parcelable {
     private int feedback_against;
     private ArrayList<TagEntity> tags;
 
+    private boolean isFirst;
+
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(boolean first) {
+        isFirst = first;
+    }
+
     public long getInvestor_id() {
         return investor_id;
     }

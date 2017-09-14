@@ -14,6 +14,7 @@ public interface DataTypeInterface {
     public static final int TYPE_TO_ENTERING=7;//去录入投资人
 
 
+
     public static final int TYPE_QUESTION=5;//题目
     public static final int TYPE_OPTION=6;//选项
 
@@ -21,5 +22,6 @@ public interface DataTypeInterface {
     public static final int TYPE_TOPIC_COMMENT=0x00b;//选项
 
     public static final int TYPE_FOOTER=11;//投资机构
+    public static final int TYPE_HOT_SEARCH=0x101;//热门搜索
 
 }

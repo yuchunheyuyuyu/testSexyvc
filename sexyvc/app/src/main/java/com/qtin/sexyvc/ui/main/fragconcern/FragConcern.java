@@ -375,6 +375,11 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
 
     @Override
     public void deleteSuccess(int type,int position) {
+        if (type == ConstantUtil.TYPE_INVESTOR) {
+            investorData.remove(position);
+        }else{
+            fundData.remove(position);
+        }
         data.remove(position);
         adapter.notifyDataSetChanged();
     }

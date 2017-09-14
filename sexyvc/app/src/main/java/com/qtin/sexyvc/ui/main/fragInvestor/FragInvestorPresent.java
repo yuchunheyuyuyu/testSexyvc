@@ -6,6 +6,7 @@ import com.jess.arms.di.scope.FragmentScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.HotSearchBean;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
@@ -43,20 +44,18 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        if (page==1)
-                            mRootView.showLoading();//显示上拉刷新的进度条
-                        else
-                            mRootView.startLoadMore();//显示下拉加载更多的进度条
+                        if (page==1){
+
+                        }
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        if (page==1)
-                            mRootView.hideLoading();//隐藏上拉刷新的进度条
-                        else
-                            mRootView.endLoadMore();//隐藏下拉加载更多的进度条
+                        if (page==1){
+
+                        }
                     }
                 })
                 .compose(RxUtils.<BaseEntity<InvestorBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
@@ -75,6 +74,45 @@ public class FragInvestorPresent extends BasePresenter<FragInvestorContract.Mode
                     public void onNext(BaseEntity<InvestorBean> baseEntity) {
                         if(baseEntity.isSuccess()){
                             mRootView.querySuccess(baseEntity.getItems());
+                        }
+                    }
+                });
+    }
+
+    public void queryHotSearch(){
+
+        mModel.queryHotSearch()
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.showLoading();//显示上拉刷新的进度条
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.hideLoading();//隐藏上拉刷新的进度条
+                    }
+                })
+                .compose(RxUtils.<BaseEntity<HotSearchBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new Subscriber<BaseEntity<HotSearchBean>>() {
+                    @Override
+                    public void onCompleted() {
+                        mRootView.showContentView();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseEntity<HotSearchBean> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.queryHotSuccess(baseEntity.getItems());
                         }
                     }
                 });

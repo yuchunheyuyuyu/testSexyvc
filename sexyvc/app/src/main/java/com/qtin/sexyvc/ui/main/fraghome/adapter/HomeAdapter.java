@@ -22,6 +22,7 @@ import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
 import com.qtin.sexyvc.ui.bean.OnBannerItemClickListener;
 import com.qtin.sexyvc.ui.bean.OnClickMoreInvestorListener;
 import com.qtin.sexyvc.ui.bean.SubjectEntity;
+import com.qtin.sexyvc.ui.comment.chosen.detail.ChosenDetailActivity;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
 import com.qtin.sexyvc.ui.comment.list.CommentActivity;
 import com.qtin.sexyvc.ui.flash.FlashActivity;
@@ -201,6 +202,16 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .build());
             holder.tvTopicTitle.setText(StringUtil.formatString(entity.getHomeInfoBean().getTitle()));
             holder.tvTopicSummary.setText(StringUtil.formatString(entity.getHomeInfoBean().getSummary()));
+            holder.ivTopic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(ConstantUtil.INTENT_ID, entity.getHomeInfoBean().getTopic_id());
+                    bundle.putBoolean("isFromChosenList",false);
+                    activity.gotoActivity(ChosenDetailActivity.class, bundle);
+                }
+            });
+
         }else{
             holder.moreCommentContainer.setVisibility(View.GONE);
             holder.topicContainer.setVisibility(View.GONE);

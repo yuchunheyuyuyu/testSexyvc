@@ -82,18 +82,20 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
 
         recyclerView.setLayoutManager(new GridLayoutManager(this,4));
         mAdapter=new CaseAdapter2(this,data);
+        mAdapter.setOnAddProjectListener(new CaseAdapter2.OnAddProjectListener() {
+            @Override
+            public void onClick() {
+                gotoActivityForResult(AddCaseActivity.class,REQUEST_CODE_ADD_CASE);
+            }
+        });
         mAdapter.setOnDeleteCaseListener(new CaseAdapter2.OnDeleteCaseListener() {
             @Override
             public void onClickDelete(int position) {
-                if(position==data.size()){
-                    gotoActivityForResult(AddCaseActivity.class,REQUEST_CODE_ADD_CASE);
-                }else{
-                    DeleteCaseRequest request=new DeleteCaseRequest();
-                    ArrayList<Long> case_ids=new ArrayList<Long>();
-                    case_ids.add(data.get(position).getCase_id());
-                    request.setCase_ids(case_ids);
-                    mPresenter.deleteCase(request);
-                }
+                DeleteCaseRequest request=new DeleteCaseRequest();
+                ArrayList<Long> case_ids=new ArrayList<Long>();
+                case_ids.add(data.get(position).getCase_id());
+                request.setCase_ids(case_ids);
+                mPresenter.deleteCase(request);
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -110,7 +112,9 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
             case REQUEST_CODE_ADD_CASE:
                 CaseBean bean=data.getExtras().getParcelable(ConstantUtil.INTENT_PARCELABLE);
                 if(bean!=null){
+                    addLastData(false);
                     this.data.add(bean);
+                    addLastData(true);
                     mAdapter.notifyDataSetChanged();
                 }
                 break;
@@ -177,8 +181,23 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
     public void querySuccess(ListBean<CaseBean> listBean) {
         data.clear();
         data.addAll(listBean.getList());
-        mAdapter.setNeedAdd(true);
+        addLastData(true);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void addLastData(boolean isAdd){
+        //先删除添加项目的选项
+        for(CaseBean bean:data){
+            if(bean.getCase_id()==ConstantUtil.DEFALUT_ID){
+                data.remove(bean);
+            }
+        }
+
+        if(isAdd){
+            CaseBean bean=new CaseBean();
+            bean.setCase_id(ConstantUtil.DEFALUT_ID);
+            data.add(bean);
+        }
     }
 
     @Override
@@ -231,10 +250,12 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
                     tvRight.setSelected(false);
                     tvRight.setText(getString(R.string.edit));
                     mAdapter.setShowDelete(false);
+                    addLastData(true);
                 }else{
                     tvRight.setSelected(true);
                     tvRight.setText(getString(R.string.complete));
                     mAdapter.setShowDelete(true);
+                    addLastData(false);
                 }
                 break;
             case R.id.ivErrorStatus:

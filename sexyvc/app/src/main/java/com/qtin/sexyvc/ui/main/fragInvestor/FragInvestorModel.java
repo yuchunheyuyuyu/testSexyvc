@@ -5,6 +5,7 @@ import com.jess.arms.mvp.BaseModel;
 import com.qtin.sexyvc.mvp.model.api.cache.CacheManager;
 import com.qtin.sexyvc.mvp.model.api.service.ServiceManager;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
+import com.qtin.sexyvc.ui.bean.HotSearchBean;
 import com.qtin.sexyvc.ui.bean.UserEntity;
 import com.qtin.sexyvc.ui.main.fragInvestor.bean.InvestorBean;
 
@@ -37,5 +38,10 @@ public class FragInvestorModel extends BaseModel<ServiceManager,CacheManager> im
     @Override
     public Observable<BaseEntity<InvestorBean>> querySelectedInvestor(String token, int page, int page_size) {
         return mServiceManager.getCommonService().querySelectedInvestor(token,page,page_size);
+    }
+
+    @Override
+    public Observable<BaseEntity<HotSearchBean>> queryHotSearch() {
+        return mServiceManager.getCommonService().queryHotSearch();
     }
 }

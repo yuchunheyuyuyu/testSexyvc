@@ -489,7 +489,8 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
             return;
         }
         if (mPresenter.getUserInfo() != null) {
-            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                    ||mPresenter.getUserInfo().getU_auth_type()==ConstantUtil.AUTH_TYPE_FA) {
                 if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
                     ivComent.setVisibility(View.GONE);
                     tvComment.setText("已评价(" + investorBean.getScore_value() / 2 + "星)");

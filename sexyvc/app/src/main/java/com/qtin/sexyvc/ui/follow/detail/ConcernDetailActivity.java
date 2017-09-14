@@ -222,7 +222,8 @@ public class ConcernDetailActivity extends AddProjectBaseActivity<ConcernDetailP
 
     private void setCommentStatus(){
         if (mPresenter.getUserInfo() != null) {
-            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER) {
+            if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
+                    ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
                 if (contactBean.getHas_comment() == 1 && contactBean.getHas_roadshow() == 1) {
                     ivComent.setVisibility(View.GONE);
                     tvComment.setText("已评价(" + contactBean.getScore_value()/2 + "星)");
@@ -322,7 +323,7 @@ public class ConcernDetailActivity extends AddProjectBaseActivity<ConcernDetailP
         }
 
         //路演评价
-        if (contactBean.getRoad_show() != null) {
+        if (contactBean.getRoad_show() != null&&contactBean.getInvestor_id() != 0) {
             pbProfessionalQualities.setProgress(countRoadPercent(contactBean.getRoad_show().getProfessional()));
             pbRoadEfficiency.setProgress(countRoadPercent(contactBean.getRoad_show().getEfficiency()));
             pbFeedbackSpeed.setProgress(countRoadPercent(contactBean.getRoad_show().getFeedback()));

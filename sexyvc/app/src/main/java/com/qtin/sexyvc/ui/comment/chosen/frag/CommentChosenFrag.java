@@ -83,6 +83,7 @@ public class CommentChosenFrag extends MyBaseFragment<CommentChosenPresent> impl
             public void onClickItem(int position) {
                 Bundle bundle = new Bundle();
                 bundle.putLong(ConstantUtil.INTENT_ID, data.get(position).getTopic_id());
+                bundle.putBoolean("isFromChosenList",true);
                 gotoActivity(ChosenDetailActivity.class, bundle);
             }
         });
