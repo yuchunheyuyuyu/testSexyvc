@@ -63,6 +63,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
+        android:rotation="45"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:padding="6dp"

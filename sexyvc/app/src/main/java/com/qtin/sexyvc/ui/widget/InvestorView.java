@@ -286,7 +286,7 @@ public class InvestorView extends FrameLayout {
                 .imageView(holder.ivAvatar)
                 .build());
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
-        holder.tvFundName.setText(StringUtil.formatString(entity.getInvestor_title()));
+        holder.tvFundName.setText(StringUtil.formatString(entity.getFund_name()));
         holder.tvInvestorTitle.setText(StringUtil.formatString(entity.getInvestor_title()));
         if (entity.getInvestor_uid() > 0) {
             holder.ivAnthStatus.setVisibility(View.VISIBLE);

@@ -18,6 +18,24 @@ public class SentBean {
     private long comment_id;
     private int has_roadshow;
     private String comment_title;
+    private long roadshow_id;
+    private long record_id;
+
+    public long getRecord_id() {
+        return record_id;
+    }
+
+    public void setRecord_id(long record_id) {
+        this.record_id = record_id;
+    }
+
+    public long getRoadshow_id() {
+        return roadshow_id;
+    }
+
+    public void setRoadshow_id(long roadshow_id) {
+        this.roadshow_id = roadshow_id;
+    }
 
     public String getComment_title() {
         return comment_title;

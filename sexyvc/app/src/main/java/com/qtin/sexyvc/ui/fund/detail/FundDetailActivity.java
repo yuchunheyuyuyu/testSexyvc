@@ -271,7 +271,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
         if (bean.getFund() != null) {
             fundDetailBean = bean.getFund();
             data.add(bean.getFund());
-            tvTitle.setText(StringUtil.formatString(bean.getFund().getFund_name()));
+            tvTitle.setText(StringUtil.formatString(bean.getFund().getFund_name()) + " (" + bean.getFund().getScore() + ")");
         }
 
         if (bean.getComments() != null && bean.getComments().getList() != null) {

@@ -47,4 +47,9 @@ public class PositionModel extends BaseModel<ServiceManager,CacheManager> implem
         }
         mCacheManager.getDaoSession().getUserInfoEntityDao().insert(entity);
     }
+
+    @Override
+    public Observable<CodeEntity> cancelAuth(String token) {
+        return mServiceManager.getCommonService().cancelAuth(token);
+    }
 }

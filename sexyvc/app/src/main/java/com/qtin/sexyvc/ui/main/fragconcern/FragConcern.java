@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
@@ -25,7 +27,9 @@ import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernGroupAdapter;
 import com.qtin.sexyvc.ui.main.fragconcern.di.ConcernModule;
 import com.qtin.sexyvc.ui.main.fragconcern.di.DaggerConcernComponent;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -58,7 +62,7 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     private int page = 1;
     private int page_size = Integer.MAX_VALUE;
 
-    private int type= ConstantUtil.TYPE_INVESTOR;
+    private int type = ConstantUtil.TYPE_INVESTOR;
 
 
     @Override
@@ -75,7 +79,6 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     protected void init() {
         initView();
     }
-
 
 
     private void initView() {
@@ -98,7 +101,7 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                 Bundle bundle = new Bundle();
                 bundle.putString("group_name", data.get(position).getGroup_name());
                 bundle.putLong("group_id", data.get(position).getGroup_id());
-                bundle.putInt("type",type);
+                bundle.putInt("type", type);
                 gotoActivity(ConcernListActivity.class, bundle);
             }
         });
@@ -124,10 +127,10 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                                                 dismissInputDialog();
                                                 ConcernGroupEntity group = data.get(position);
 
-                                                if(type==ConstantUtil.TYPE_INVESTOR){
+                                                if (type == ConstantUtil.TYPE_INVESTOR) {
                                                     mPresenter.edit(position, group.getGroup_id(), content, 1);
-                                                }else{
-                                                    mPresenter.editFund(position,group.getGroup_id(),content,1);
+                                                } else {
+                                                    mPresenter.editFund(position, group.getGroup_id(), content, 1);
                                                 }
                                             }
 
@@ -155,18 +158,18 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
 
-        queryAll();
     }
+
     //获取数据
-    private void queryGroups(){
-        if(type==ConstantUtil.TYPE_INVESTOR){
+    private void queryGroups() {
+        if (type == ConstantUtil.TYPE_INVESTOR) {
             mPresenter.query(page, page_size);
-        }else{
+        } else {
             mPresenter.queryFund(page, page_size);
         }
     }
 
-    private void queryAll(){
+    private void queryAll() {
         mPresenter.query(page, page_size);
         mPresenter.queryFund(page, page_size);
     }
@@ -185,9 +188,9 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                     public void rightClick() {
                         dismissTwoButtonDialog();
                         ConcernGroupEntity group = data.get(position);
-                        if(type==ConstantUtil.TYPE_INVESTOR){
+                        if (type == ConstantUtil.TYPE_INVESTOR) {
                             mPresenter.edit(position, group.getGroup_id(), group.getGroup_name(), 0);
-                        }else{
+                        } else {
                             mPresenter.editFund(position, group.getGroup_id(), group.getGroup_name(), 0);
                         }
                     }
@@ -223,11 +226,11 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
 
     }
 
-    @OnClick({R.id.ivAdd, R.id.searchContainer,R.id.tabContainer1,R.id.tabContainer2})
+    @OnClick({R.id.ivAdd, R.id.searchContainer, R.id.tabContainer1, R.id.tabContainer2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tabContainer1:
-                type=ConstantUtil.TYPE_INVESTOR;
+                type = ConstantUtil.TYPE_INVESTOR;
                 setTabStatus();
 
                 data.clear();
@@ -235,7 +238,7 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.tabContainer2:
-                type=ConstantUtil.TYPE_FUND;
+                type = ConstantUtil.TYPE_FUND;
                 setTabStatus();
 
                 data.clear();
@@ -243,14 +246,14 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.ivAdd:
-                String[] strings=new String[]{getString(R.string.add_group),
+                String[] strings = new String[]{getString(R.string.add_group),
                         getString(R.string.add_investor),
                         getString(R.string.improve_fund_info),
                         getString(R.string.input_investor_by_hand)};
                 showListBottomDialog(strings, new OnListItemClickListener() {
                     @Override
                     public void onClick(int position) {
-                        if(position==0){
+                        if (position == 0) {
                             showInput(getResources().getString(R.string.add_group),
                                     getResources().getString(R.string.input_new_group_name),
                                     getResources().getString(R.string.cancle),
@@ -262,14 +265,14 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                                                 showMessage("该组已存在");
                                                 return;
                                             }
-                                            if(type==ConstantUtil.TYPE_INVESTOR){
+                                            if (type == ConstantUtil.TYPE_INVESTOR) {
                                                 for (ConcernGroupEntity entity : data) {
                                                     if (content.trim().equals(entity.getGroup_name())) {
                                                         showMessage("该组已存在");
                                                         return;
                                                     }
                                                 }
-                                            }else{
+                                            } else {
                                                 for (ConcernGroupEntity entity : fundData) {
                                                     if (content.trim().equals(entity.getGroup_name())) {
                                                         showMessage("该组已存在");
@@ -279,9 +282,9 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                                             }
                                             dismissInputDialog();
 
-                                            if(type==ConstantUtil.TYPE_INVESTOR){
+                                            if (type == ConstantUtil.TYPE_INVESTOR) {
                                                 mPresenter.add(content);
-                                            }else{
+                                            } else {
                                                 mPresenter.addFund(content);
                                             }
                                         }
@@ -292,22 +295,28 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
                                         }
                                     }
                             );
-                        }else if(position==1){
-                            MainActivity activity= (MainActivity) mActivity;
+                        } else if (position == 1) {
+                            MainActivity activity = (MainActivity) mActivity;
                             activity.gotoInvestor();
-                        }else if(position==2){
+                        } else if (position == 2) {
                             gotoActivity(ImproveFundActivity.class);
-                        }else{
-                            showComfirmDialog(getString(R.string.input_investor_by_hand),
-                                    getString(R.string.input_investor_by_hand_warn),
-                                    getString(R.string.i_known),
-                                    new ComfirmListerner() {
-                                        @Override
-                                        public void onComfirm() {
-                                            dismissComfirmDialog();
-                                            gotoActivity(CreateInvestorActivity.class);
-                                        }
-                                    });
+                        } else {
+                            int hasShow = DataHelper.getIntergerSF(mActivity, "has_show_create_investor");
+                            DataHelper.SetIntergerSF(mActivity,"has_show_create_investor",1);
+                            if (hasShow == 0) {
+                                showComfirmDialog(getString(R.string.input_investor_by_hand),
+                                        getString(R.string.input_investor_by_hand_warn),
+                                        getString(R.string.i_known),
+                                        new ComfirmListerner() {
+                                            @Override
+                                            public void onComfirm() {
+                                                dismissComfirmDialog();
+                                                gotoActivity(CreateInvestorActivity.class);
+                                            }
+                                        });
+                            }else{
+                                gotoActivity(CreateInvestorActivity.class);
+                            }
                         }
                     }
                 });
@@ -318,13 +327,13 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
         }
     }
 
-    private void setTabStatus(){
-        if(type==ConstantUtil.TYPE_FUND){
-            StringUtil.setTextStyle(tvTab1,lineTab1,false);
-            StringUtil.setTextStyle(tvTab2,lineTab2,true);
-        }else{
-            StringUtil.setTextStyle(tvTab1,lineTab1,true);
-            StringUtil.setTextStyle(tvTab2,lineTab2,false);
+    private void setTabStatus() {
+        if (type == ConstantUtil.TYPE_FUND) {
+            StringUtil.setTextStyle(tvTab1, lineTab1, false);
+            StringUtil.setTextStyle(tvTab2, lineTab2, true);
+        } else {
+            StringUtil.setTextStyle(tvTab1, lineTab1, true);
+            StringUtil.setTextStyle(tvTab2, lineTab2, false);
         }
     }
 
@@ -337,36 +346,37 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     @Override
     public void onResume() {
         super.onResume();
+        queryAll();
     }
 
     @Override
-    public void querySuccess(int type,GroupEntity groupEntity) {
+    public void querySuccess(int type, GroupEntity groupEntity) {
 
         if (page == 1) {
             ConcernGroupEntity entity = new ConcernGroupEntity();
             entity.setGroup_name("全部关注");
             entity.setMember_count(groupEntity.getContact_count());
-            if(type==ConstantUtil.TYPE_INVESTOR){
+            if (type == ConstantUtil.TYPE_INVESTOR) {
                 investorData.clear();
                 investorData.add(0, entity);
-            }else{
+            } else {
                 fundData.clear();
                 fundData.add(0, entity);
             }
         }
         ArrayList<ConcernGroupEntity> list = groupEntity.getList();
         if (list != null) {
-            if(type==ConstantUtil.TYPE_INVESTOR){
+            if (type == ConstantUtil.TYPE_INVESTOR) {
                 investorData.addAll(list);
-            }else{
+            } else {
                 fundData.addAll(list);
             }
         }
 
-        if(this.type==ConstantUtil.TYPE_INVESTOR){
+        if (this.type == ConstantUtil.TYPE_INVESTOR) {
             data.clear();
             data.addAll(investorData);
-        }else{
+        } else {
             data.clear();
             data.addAll(fundData);
         }
@@ -374,10 +384,10 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     }
 
     @Override
-    public void deleteSuccess(int type,int position) {
+    public void deleteSuccess(int type, int position) {
         if (type == ConstantUtil.TYPE_INVESTOR) {
             investorData.remove(position);
-        }else{
+        } else {
             fundData.remove(position);
         }
         data.remove(position);
@@ -385,11 +395,11 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     }
 
     @Override
-    public void editSuccess(int type,int position, String group_name) {
+    public void editSuccess(int type, int position, String group_name) {
         ConcernGroupEntity group = data.get(position);
-        if(type==ConstantUtil.TYPE_INVESTOR){
+        if (type == ConstantUtil.TYPE_INVESTOR) {
             investorData.get(position).setGroup_name(group_name);
-        }else{
+        } else {
             fundData.get(position).setGroup_name(group_name);
         }
         group.setGroup_name(group_name);
@@ -397,13 +407,13 @@ public class FragConcern extends MyBaseFragment<ConcernPresent> implements Conce
     }
 
     @Override
-    public void addSuccess(int type,long group_id, String group_name) {
+    public void addSuccess(int type, long group_id, String group_name) {
         ConcernGroupEntity group = new ConcernGroupEntity();
         group.setGroup_id(group_id);
         group.setGroup_name(group_name);
-        if(type==ConstantUtil.TYPE_INVESTOR){
+        if (type == ConstantUtil.TYPE_INVESTOR) {
             investorData.add(group);
-        }else{
+        } else {
             fundData.add(group);
         }
         data.add(group);

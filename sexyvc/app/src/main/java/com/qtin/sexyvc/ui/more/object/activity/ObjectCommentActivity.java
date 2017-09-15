@@ -97,8 +97,8 @@ public class ObjectCommentActivity extends MyBaseActivity<ObjectCommentPresent> 
 
         String title = getIntent().getExtras().getString(ConstantUtil.INTENT_TITLE);
         tvTitle.setText(title);
-        ivRight.setVisibility(View.VISIBLE);
-        ivRight.setImageResource(R.drawable.icon_nav_comment);
+        //ivRight.setVisibility(View.VISIBLE);
+        //ivRight.setImageResource(R.drawable.icon_nav_comment);
         viewLine.setVisibility(View.GONE);
 
         ArrayList<Fragment> frags = new ArrayList<>();

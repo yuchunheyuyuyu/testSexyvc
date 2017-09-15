@@ -283,7 +283,10 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Bundle bundle=new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_FUND);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getFund_id());
-                    bundle.putString(ConstantUtil.INTENT_TITLE,"关于"+bean.getFund_name()+"的评论");
+
+                    String format=getString(R.string.format_to_investor_comment);
+                    String title=String.format(format,bean.getFund_name());
+                    bundle.putString(ConstantUtil.INTENT_TITLE,title);
                     bundle.putInt("auth_state",1);
                     activity.gotoActivity(ObjectCommentActivity.class,bundle);
                 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -22,8 +23,10 @@ import com.qtin.sexyvc.ui.bean.FundEntity;
 import com.qtin.sexyvc.ui.bean.InvestorEntity;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.bean.ToEnteringBean;
+import com.qtin.sexyvc.ui.bean.ToImproveBean;
 import com.qtin.sexyvc.ui.create.investor.CreateInvestorActivity;
 import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
+import com.qtin.sexyvc.ui.improve.fund.ImproveFundActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.fragInvestor.EfficiencyAdapter;
 import com.qtin.sexyvc.ui.main.fragInvestor.InvestorAdapter;
@@ -305,6 +308,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;
+            data.add(new ToImproveBean());
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -335,6 +339,8 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             @Override
             public void onClick(View v) {
                 domainAdapter.setSelectedList();
+                page=1;
+                search();
             }
         });
 
@@ -388,6 +394,8 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             @Override
             public void onClick(View v) {
                 stageAdapter.setSelectedList();
+                page=1;
+                search();
             }
         });
 
@@ -478,6 +486,23 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                     gotoActivity(FundDetailActivity.class, bundle);
                 }else if(data.get(position) instanceof ToEnteringBean ){
                     gotoActivity(CreateInvestorActivity.class);
+                }else if(data.get(position) instanceof ToImproveBean){
+                    int hasShow=DataHelper.getIntergerSF(SearchResultActivity.this,"has_search_fund_improve");
+                    if(hasShow==0){
+                        DataHelper.SetIntergerSF(SearchResultActivity.this,"has_search_fund_improve",1);
+                        showComfirmDialog(getString(R.string.help_us_improve_title),
+                                getString(R.string.help_us_improve_hint),
+                                getString(R.string.i_known),
+                                new ComfirmListerner() {
+                                    @Override
+                                    public void onComfirm() {
+                                        dismissComfirmDialog();
+                                        gotoActivity(ImproveFundActivity.class);
+                                    }
+                                });
+                    }else{
+                        gotoActivity(ImproveFundActivity.class);
+                    }
                 }
             }
         });

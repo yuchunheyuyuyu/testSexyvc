@@ -29,7 +29,6 @@ import com.qtin.sexyvc.common.MyBaseActivity;
 import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
-import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.subject.SubjectDetailAdapter;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.ui.subject.bean.DetailBean;
@@ -371,6 +370,9 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         ReplyBean entity = new ReplyBean();
         entity.setLike(0);
         entity.setHas_praise(0);
+        entity.setIs_anon(is_anon);
+        entity.setU_auth_state(mPresenter.getUserInfo().getU_auth_state());
+        entity.setU_auth_type(mPresenter.getUserInfo().getU_auth_type());
         entity.setCreate_time(System.currentTimeMillis() / 1000);
         entity.setReply_id(reply_id);
         if (mPresenter.getUserInfo() != null) {

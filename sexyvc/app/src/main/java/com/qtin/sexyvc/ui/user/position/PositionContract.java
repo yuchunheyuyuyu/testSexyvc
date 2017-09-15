@@ -13,10 +13,15 @@ import rx.Observable;
 public interface PositionContract {
     interface View extends BaseView{
         void editAuthTypeSuccess(int u_auth_type);
+        void cancleAuthSuccess();
+
+        void startRefresh(String msg);
+        void endRefresh();
     }
     interface Model extends IModel{
         String getToken();
         Observable<CodeEntity> editAuthType(String token,int u_auth_type);
         void saveUsrInfo(UserInfoEntity entity);
+        Observable<CodeEntity> cancelAuth(String token);
     }
 }

@@ -183,8 +183,8 @@ public abstract class MyBaseActivity<P extends Presenter> extends BaseActivity<P
 
         View view = View.inflate(this, R.layout.two_button_dialog, null);
         TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
-        Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
-        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        TextView btnLeft= (TextView) view.findViewById(R.id.btnLeft);
+        TextView btnRight= (TextView) view.findViewById(R.id.btnRight);
 
         tvDialogTitle.setText(title);
         btnLeft.setText(stringLeft);

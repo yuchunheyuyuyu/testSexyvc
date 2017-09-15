@@ -54,6 +54,8 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
     private Dialog dialog;
     public static final int INDENTITY_VERTIFY_CODE = 0x01a;
 
+    private Dialog warnDialog;
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerPositionComponent.builder().appComponent(appComponent).positionModule(new PositionModule(this)).build().inject(this);
@@ -225,26 +227,47 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
                 mPresenter.editAuthType(userInfo.getU_auth_type());
                 break;
             case R.id.authTypeContainer:
-                chooseTypeDialog();
+                if(checkAuthStatus()){
+                    chooseTypeDialog();
+                }
+
                 break;
             case R.id.institutionContainer:
-                Bundle institution = new Bundle();
-                institution.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_COMPANY);
-                institution.putString(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_company());
-                gotoActivityForResult(ModifyActivity.class, institution, ModifyActivity.MODIFY_COMPANY);
+                if(checkAuthStatus()){
+                    Bundle institution = new Bundle();
+                    institution.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_COMPANY);
+                    institution.putString(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_company());
+                    gotoActivityForResult(ModifyActivity.class, institution, ModifyActivity.MODIFY_COMPANY);
+                }
+
                 break;
             case R.id.dutiesContainer:
-                Bundle duties = new Bundle();
-                duties.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_TITLE);
-                duties.putString(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_title());
-                gotoActivityForResult(ModifyActivity.class, duties, ModifyActivity.MODIFY_TITLE);
+                if(checkAuthStatus()){
+                    Bundle duties = new Bundle();
+                    duties.putInt(ModifyActivity.MODIFY_INTENT, ModifyActivity.MODIFY_TITLE);
+                    duties.putString(ModifyActivity.MODIFY_INTENT_VALUE1, userInfo.getU_title());
+                    gotoActivityForResult(ModifyActivity.class, duties, ModifyActivity.MODIFY_TITLE);
+                }
                 break;
             case R.id.identifyContainer:
-                Bundle identify = new Bundle();
-                identify.putString(ConstantUtil.INTENT_URL, userInfo.getBusiness_card());
-                identify.putInt("u_auth_state", userInfo.getU_auth_state());
-                gotoActivityForResult(PhotoActivity.class, identify, INDENTITY_VERTIFY_CODE);
+                gotoIdentify();
                 break;
+        }
+    }
+
+    private void gotoIdentify(){
+        Bundle identify = new Bundle();
+        identify.putString(ConstantUtil.INTENT_URL, userInfo.getBusiness_card());
+        identify.putInt("u_auth_state", userInfo.getU_auth_state());
+        gotoActivityForResult(PhotoActivity.class, identify, INDENTITY_VERTIFY_CODE);
+    }
+
+    private boolean checkAuthStatus(){
+        if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_UNPASS){
+            return true;
+        }else{
+            showCancleDialog();
+            return false;
         }
     }
 
@@ -268,6 +291,24 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
         }
         });*/
     }
+
+    @Override
+    public void cancleAuthSuccess() {
+        userInfo.setU_auth_state(ConstantUtil.AUTH_STATE_UNPASS);
+        userInfo.setBusiness_card("");
+        setAuthState();
+    }
+
+    @Override
+    public void startRefresh(String msg) {
+        showDialog(msg);
+    }
+
+    @Override
+    public void endRefresh() {
+        dialogDismiss();
+    }
+
     /**
      * 性别
      */
@@ -324,5 +365,50 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
         regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    /**
+     * 取消认证diglog
+     */
+    protected void showCancleDialog() {
+
+        View view = View.inflate(this, R.layout.warn_dialog, null);
+        TextView tvContent = (TextView) view.findViewById(R.id.tvContent);
+        TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
+        TextView tvCancle= (TextView) view.findViewById(R.id.tvCancle);
+
+        tvDialogTitle.setText(getString(R.string.can_not_modify));
+        tvContent.setText(getString(R.string.can_not_modify_reason));
+        tvCancle.setText(getString(R.string.i_known));
+
+        view.findViewById(R.id.tvCancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (warnDialog != null && warnDialog.isShowing()) {
+                    warnDialog.dismiss();
+                }
+            }
+        });
+
+        view.findViewById(R.id.tvComfirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (warnDialog != null && warnDialog.isShowing()) {
+                    warnDialog.dismiss();
+                }
+                //mPresenter.cancelAuth();
+                gotoIdentify();
+            }
+        });
+        warnDialog = new Dialog(this);
+        warnDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        warnDialog.setContentView(view);
+        Window regionWindow = warnDialog.getWindow();
+        regionWindow.setGravity(Gravity.CENTER);
+        regionWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        regionWindow.setWindowAnimations(R.style.dialog_fade_animation);
+        regionWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        warnDialog.setCanceledOnTouchOutside(true);
+        warnDialog.show();
     }
 }

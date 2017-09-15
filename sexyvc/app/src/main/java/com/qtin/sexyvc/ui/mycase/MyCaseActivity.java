@@ -68,7 +68,9 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
 
     @Override
     protected void initData() {
-        tvTitle.setText("我的投资案例");
+        String title=getIntent().getExtras().getString(ConstantUtil.INTENT_TITLE);
+        tvTitle.setText(title);
+
         tvRight.setSelected(false);
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getString(R.string.edit));

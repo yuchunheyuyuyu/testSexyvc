@@ -305,7 +305,10 @@ public class InvestorDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     Bundle bundle=new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,ConstantUtil.TYPE_INVESTOR);
                     bundle.putLong(ConstantUtil.INTENT_ID,bean.getInvestor_id());
-                    bundle.putString(ConstantUtil.INTENT_TITLE,"对"+bean.getInvestor_name()+"的评论");
+
+                    String format=getString(R.string.format_to_investor_comment);
+                    String title=String.format(format,bean.getInvestor_name());
+                    bundle.putString(ConstantUtil.INTENT_TITLE,title);
                     bundle.putInt("auth_state",auth_state);
                     activity.gotoActivity(ObjectCommentActivity.class,bundle);
                 }

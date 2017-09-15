@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:lineSpacingExtra="6sp"
         android:text="没有找到？试试"
         android:textColor="@color/slate"
         android:textSize="12sp" />
@@ -19,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:lineSpacingExtra="6sp"
         android:text="手动录入"
         android:textColor="@color/barbie_pink_two"
         android:textSize="12sp" />

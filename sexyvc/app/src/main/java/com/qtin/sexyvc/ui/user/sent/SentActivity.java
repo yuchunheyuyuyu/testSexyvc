@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
-
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
@@ -20,18 +19,16 @@ import com.qtin.sexyvc.ui.bean.OnItemClickListener;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.action.RoadCommentActivity;
+import com.qtin.sexyvc.ui.road.show.RoadDetailActivity;
 import com.qtin.sexyvc.ui.user.sent.bean.OnCommentClickListener;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 import com.qtin.sexyvc.ui.user.sent.di.DaggerSentComponent;
 import com.qtin.sexyvc.ui.user.sent.di.SentModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -59,6 +56,7 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
 
     private boolean isNeedRefresh=false;
     private int u_auth_type;
+    private int total;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -141,7 +139,9 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
                 if(data.get(position).getHas_roadshow()==0){
                     gotoRoad(position);
                 }else{
-                    showMessage("已经进行过路演评价");
+                    Bundle bundle=new Bundle();
+                    bundle.putLong(ConstantUtil.INTENT_ID,data.get(position).getRoadshow_id());
+                    gotoActivity(RoadDetailActivity.class, bundle);
                 }
             }
 
@@ -278,6 +278,7 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
     @Override
     public void querySuccess(long record_id, ListBean<SentBean> listBean) {
         if (record_id == ConstantUtil.DEFALUT_ID) {
+            total=listBean.getTotal();
             data.clear();
             if(listBean.getList()==null||listBean.getList().isEmpty()){
                 showEmptyView();
@@ -290,12 +291,20 @@ public class SentActivity extends MyBaseActivity<SentPresent> implements SentCon
 
         if (listBean.getList() != null) {
             data.addAll(listBean.getList());
+            if(listBean.getList().size()<page_size){
+                hasLoadedAllItems = true;
+            }else{
+                hasLoadedAllItems = false;
+            }
         }
-        if (listBean.getTotal() > page_size) {
+        if(!data.isEmpty()){
+            this.record_id=data.get(data.size()-1).getRecord_id();
+        }
+        /**if (total > data.size()) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;
-        }
+        }*/
         adapter.notifyDataSetChanged();
     }
 

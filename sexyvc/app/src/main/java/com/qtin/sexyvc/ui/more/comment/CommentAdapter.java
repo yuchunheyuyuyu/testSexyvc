@@ -91,7 +91,12 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             dealFundComment(data.get(position), (FundHolder) viewHolder);
         } else if (viewHolder instanceof UnAuthHolder) {
             UnAuthHolder holder = (UnAuthHolder) viewHolder;
-            String format = context.getString(R.string.format_unauth_count);
+            String format="";
+            if(type == ConstantUtil.TYPE_FUND||type == ConstantUtil.TYPE_INVESTOR){
+                format = context.getString(R.string.format_unauth_count);
+            }else{
+                format = context.getString(R.string.format_unauth_count_evaluate);
+            }
             holder.tvUnauthCount.setText(String.format(format, unauth_count));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,7 +104,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     Bundle bundle = new Bundle();
                     bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, type);
                     bundle.putLong(ConstantUtil.INTENT_ID, contentId);
-                    bundle.putString(ConstantUtil.INTENT_TITLE, String.format(context.getString(R.string.format_unauth_count), unauth_count));
+
+                    String format="";
+                    if(type == ConstantUtil.TYPE_FUND||type == ConstantUtil.TYPE_INVESTOR){
+                        format = context.getString(R.string.format_unauth_count);
+                    }else{
+                        format = context.getString(R.string.format_unauth_count_evaluate);
+                    }
+                    bundle.putString(ConstantUtil.INTENT_TITLE, String.format(format, unauth_count));
                     activity.gotoActivity(UnAuthCommentActivity.class, bundle);
                 }
             });

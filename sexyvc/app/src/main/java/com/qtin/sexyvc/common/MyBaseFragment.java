@@ -91,8 +91,8 @@ public abstract class MyBaseFragment<P extends Presenter> extends BaseFragment<P
 
         View view = View.inflate(mActivity, R.layout.two_button_dialog, null);
         TextView tvDialogTitle= (TextView) view.findViewById(R.id.tvDialogTitle);
-        Button btnLeft= (Button) view.findViewById(R.id.btnLeft);
-        Button btnRight= (Button) view.findViewById(R.id.btnRight);
+        TextView btnLeft= (TextView) view.findViewById(R.id.btnLeft);
+        TextView btnRight= (TextView) view.findViewById(R.id.btnRight);
 
         tvDialogTitle.setText(title);
         btnLeft.setText(stringLeft);

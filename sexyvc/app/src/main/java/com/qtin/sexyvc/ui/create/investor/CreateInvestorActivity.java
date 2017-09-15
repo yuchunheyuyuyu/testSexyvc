@@ -75,6 +75,9 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
     TextView tvEmail;
     @BindView(R.id.tvRemark)
     TextView tvRemark;
+    @BindView(R.id.ivAnonymous)
+    ImageView ivAnonymous;
+
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private CreateInvestorRequest request=new CreateInvestorRequest();
 
@@ -87,6 +90,7 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
     private String cropedPhoto;
     // 拍照地址
     private String path;
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -284,9 +288,18 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
         }
     }
 
-    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.avatarContainer, R.id.nameContainer, R.id.fundContainer, R.id.titleContainer, R.id.phoneContainer, R.id.emailContainer, R.id.remarkContainer})
+    @OnClick({R.id.ivLeft, R.id.tvRight, R.id.avatarContainer, R.id.nameContainer,
+              R.id.fundContainer, R.id.titleContainer, R.id.phoneContainer,
+              R.id.emailContainer, R.id.remarkContainer,R.id.ivAnonymous})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ivAnonymous:
+                if(ivAnonymous.isSelected()){
+                    ivAnonymous.setSelected(false);
+                }else{
+                    ivAnonymous.setSelected(true);
+                }
+                break;
             case R.id.ivLeft:
                 finish();
                 break;

@@ -1,6 +1,7 @@
 package com.qtin.sexyvc.ui.user.sent;
 
 import android.app.Application;
+
 import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
@@ -12,14 +13,15 @@ import com.qtin.sexyvc.ui.bean.ListBean;
 import com.qtin.sexyvc.ui.bean.UserInfoEntity;
 import com.qtin.sexyvc.ui.user.sent.bean.SentBean;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import javax.inject.Inject;
+
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
-import static android.R.attr.id;
 
 /**
  * Created by ls on 17/4/26.
@@ -47,7 +49,7 @@ public class SentPresent extends BasePresenter<SentContract.Model,SentContract.V
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        if (record_id==0)
+                        if (record_id==ConstantUtil.DEFALUT_ID)
                             mRootView.showLoading();//显示上拉刷新的进度条
                         else
                             mRootView.startLoadMore();//显示下拉加载更多的进度条
@@ -57,7 +59,7 @@ public class SentPresent extends BasePresenter<SentContract.Model,SentContract.V
                 .doAfterTerminate(new Action0() {
                     @Override
                     public void call() {
-                        if (record_id==0)
+                        if (record_id==ConstantUtil.DEFALUT_ID)
                             mRootView.hideLoading();//隐藏上拉刷新的进度条
                         else
                             mRootView.endLoadMore();//隐藏下拉加载更多的进度条

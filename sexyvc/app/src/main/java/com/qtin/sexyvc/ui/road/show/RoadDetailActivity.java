@@ -336,6 +336,9 @@ public class RoadDetailActivity extends MyBaseActivity<RoadDetailPresent> implem
 
         ReplyBean entity = new ReplyBean();
         entity.setLike(0);
+        entity.setIs_anon(is_anon);
+        entity.setU_auth_state(mPresenter.getUserInfo().getU_auth_state());
+        entity.setU_auth_type(mPresenter.getUserInfo().getU_auth_type());
         entity.setHas_praise(0);
         entity.setCreate_time(System.currentTimeMillis() / 1000);
         entity.setReply_id(reply_id);

@@ -62,6 +62,34 @@ public class PositionPresent extends BasePresenter<PositionContract.Model,Positi
                 });
     }
 
+    //取消认证
+    public void cancelAuth(){
+        mModel.cancelAuth(mModel.getToken())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.startRefresh("正在取消");
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        mRootView.endRefresh();
+                    }
+                }).compose(RxUtils.<CodeEntity>bindToLifecycle(mRootView))
+                .subscribe(new ErrorHandleSubscriber<CodeEntity>(mErrorHandler) {
+                    @Override
+                    public void onNext(CodeEntity codeEntity) {
+                        if(codeEntity.isSuccess()){
+                            mRootView.cancleAuthSuccess();
+                        }
+                    }
+                });
+    }
+
+
     public void saveUsrInfo(UserInfoEntity entity){
         mModel.saveUsrInfo(entity);
     }

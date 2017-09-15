@@ -63,12 +63,10 @@ public class InfluencyActivity extends MyBaseActivity<InfluencyPresent> implemen
     }
 
     private void setStatus(){
-        if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_UNPASS){
-            tvIdentityStatus.setText(getString(R.string.not_complete));
-        }else if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_COMMITING){
-            tvIdentityStatus.setText(getString(R.string.now_completing));
-        }else if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
+        if(userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
             tvIdentityStatus.setText(getString(R.string.has_complete));
+        }else {
+            tvIdentityStatus.setText(getString(R.string.not_complete));
         }
 
         if(userInfo.getHas_project()==0){

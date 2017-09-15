@@ -24,4 +24,6 @@ public interface DataTypeInterface {
     public static final int TYPE_FOOTER=11;//投资机构
     public static final int TYPE_HOT_SEARCH=0x101;//热门搜索
 
+    public static final int TYPE_TO_IMPROVE=0x103;//完善机构
+
 }

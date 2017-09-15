@@ -255,10 +255,12 @@ public class FragRoadComment extends MyBaseFragment<FragRoadCommentPresent> impl
                 showContentView();
             }
 
-            CountEvent countEvent=new CountEvent();
-            countEvent.setCount(total+commentListBean.getUnauth_count());
-            countEvent.setType(type);
-            EventBus.getDefault().post(countEvent,ConstantUtil.QUERY_SUCCESS);
+            if(auth_state==1){
+                CountEvent countEvent=new CountEvent();
+                countEvent.setCount(total+commentListBean.getUnauth_count());
+                countEvent.setType(type);
+                EventBus.getDefault().post(countEvent,ConstantUtil.QUERY_SUCCESS);
+            }
         }
 
         if (commentListBean.getList()!=null) {

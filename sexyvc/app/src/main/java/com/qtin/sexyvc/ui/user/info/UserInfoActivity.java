@@ -161,7 +161,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
     private void setInvestorInfo(UserInfoEntity entity){
         if(userInfo.getU_auth_type()== ConstantUtil.AUTH_TYPE_INVESTOR
-                &&userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS){
+                &&userInfo.getU_auth_state()==ConstantUtil.AUTH_STATE_PASS
+                &&entity.getInvestor_id()!=0){
             investorInfoContainer.setVisibility(View.VISIBLE);
             tvDomainNum.setText(""+entity.getDomain_list().size());
             tvStageNum.setText(""+entity.getStage_list().size());
@@ -315,7 +316,11 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                 showStageDialog();
                 break;
             case R.id.caseContainer:
-                gotoActivityForResult(MyCaseActivity.class,REQUEST_CODE_CASE);
+                String format=getString(R.string.format_someones_case);
+                String title=String.format(format,userInfo.getInvestor_name());
+                Bundle caseBundle=new Bundle();
+                caseBundle.putString(ConstantUtil.INTENT_TITLE,title);
+                gotoActivityForResult(MyCaseActivity.class,caseBundle,REQUEST_CODE_CASE);
                 break;
         }
     }

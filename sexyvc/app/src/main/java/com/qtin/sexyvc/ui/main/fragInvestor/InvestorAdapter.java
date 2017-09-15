@@ -67,6 +67,9 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (viewType == DataTypeInterface.TYPE_TO_ENTERING) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_entering, parent, false);
             return new EnteringHolder(view);
+        } else if (viewType == DataTypeInterface.TYPE_TO_IMPROVE) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_improve, parent, false);
+            return new ImproveHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fund, parent, false);
             return new FundHolder(view);
@@ -81,7 +84,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             FundEntity entity = (FundEntity) data.get(position);
 
             dealFund(position, entity, holder);
-        }else if(viewHolder instanceof EnteringHolder){
+        } else if (viewHolder instanceof EnteringHolder) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,7 +93,16 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
             });
-        }else {
+        } else if(viewHolder instanceof ImproveHolder){
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null) {
+                        itemClickListener.onClickItem(position);
+                    }
+                }
+            });
+        } else {
             InvestorHolder holder = (InvestorHolder) viewHolder;
             InvestorEntity entity = (InvestorEntity) data.get(position);
 
@@ -105,7 +117,7 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         //评分
         holder.ratingScore.setRating(entity.getScore());
-        holder.tvScore.setText(""+entity.getScore());
+        holder.tvScore.setText("" + entity.getScore());
         //标签
         if (entity.getTags() == null || entity.getTags().isEmpty()) {
             holder.flowLayout.setVisibility(View.GONE);
@@ -145,8 +157,8 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void dealInvestor(final int position, InvestorEntity entity, InvestorHolder holder) {
         holder.tvName.setText(StringUtil.formatString(entity.getInvestor_name()));
 
-        StringBuilder sb=new StringBuilder();
-        if(!StringUtil.isBlank(entity.getFund_name())){
+        StringBuilder sb = new StringBuilder();
+        if (!StringUtil.isBlank(entity.getFund_name())) {
             sb.append(StringUtil.formatString(entity.getFund_name()));
             sb.append("  ");
         }
@@ -251,11 +263,21 @@ public class InvestorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    static class EnteringHolder extends RecyclerView.ViewHolder{
+    static class EnteringHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv)
         TextView tv;
 
         EnteringHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ImproveHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tv)
+        TextView tv;
+
+        ImproveHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
