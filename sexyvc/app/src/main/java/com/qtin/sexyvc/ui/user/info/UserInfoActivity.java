@@ -167,8 +167,11 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
             tvDomainNum.setText(""+entity.getDomain_list().size());
             tvStageNum.setText(""+entity.getStage_list().size());
             tvCaseNum.setText(""+entity.getCase_number());
+
+            tvRight.setVisibility(View.VISIBLE);
         }else{
             investorInfoContainer.setVisibility(View.GONE);
+            tvRight.setVisibility(View.GONE);
         }
     }
 
@@ -707,7 +710,6 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
             @Override
             public void onClick(View v) {
-                dismissDomainDialog();
                 //构建请求数据
                 EditTypeRequest request=new EditTypeRequest();
                 request.setType_key(ConstantUtil.TYPE_KEY_DOMAIN);
@@ -717,8 +719,13 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                         type_ids.add(entity.getType_id());
                     }
                 }
+                if(type_ids.isEmpty()){
+                    showMessage("请选择行业");
+                    return;
+                }
                 request.setType_ids(type_ids);
                 mPresenter.editType(request);
+                dismissDomainDialog();
             }
         });
         domainAdapter = new TagAdapter<FilterEntity>(domainData) {
@@ -831,7 +838,6 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         holder.tvComfirmDomain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismissStageDialog();
                 //构建请求数据
                 EditTypeRequest request=new EditTypeRequest();
                 request.setType_key(ConstantUtil.TYPE_KEY_STAGE);
@@ -841,8 +847,13 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                         type_ids.add(entity.getType_id());
                     }
                 }
+                if(type_ids.isEmpty()){
+                    showMessage("请选择轮次");
+                    return;
+                }
                 request.setType_ids(type_ids);
                 mPresenter.editType(request);
+                dismissStageDialog();
             }
         });
         stageAdapter = new TagAdapter<FilterEntity>(stageData) {

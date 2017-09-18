@@ -485,7 +485,23 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                     bundle.putLong("fund_id", ((FundEntity)data.get(position)).getFund_id());
                     gotoActivity(FundDetailActivity.class, bundle);
                 }else if(data.get(position) instanceof ToEnteringBean ){
-                    gotoActivity(CreateInvestorActivity.class);
+                    int hasShow = DataHelper.getIntergerSF(SearchResultActivity.this, "has_show_create_investor");
+                    DataHelper.SetIntergerSF(SearchResultActivity.this,"has_show_create_investor",1);
+
+                    if (hasShow == 0) {
+                        showComfirmDialog(getString(R.string.input_investor_by_hand),
+                                getString(R.string.input_investor_by_hand_warn),
+                                getString(R.string.i_known),
+                                new ComfirmListerner() {
+                                    @Override
+                                    public void onComfirm() {
+                                        dismissComfirmDialog();
+                                        gotoActivity(CreateInvestorActivity.class);
+                                    }
+                                });
+                    }else{
+                        gotoActivity(CreateInvestorActivity.class);
+                    }
                 }else if(data.get(position) instanceof ToImproveBean){
                     int hasShow=DataHelper.getIntergerSF(SearchResultActivity.this,"has_search_fund_improve");
                     if(hasShow==0){

@@ -360,9 +360,11 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @Override
     public void finish() {
-        Intent intent = new Intent();
-        intent.putExtra(ConstantUtil.INTENT_ID, fund_id);
-        setResult(0, intent);
+        if(fundDetailBean!=null&&fundDetailBean.getHas_follow()==0){
+            Intent intent = new Intent();
+            intent.putExtra(ConstantUtil.INTENT_ID, fund_id);
+            setResult(0, intent);
+        }
         super.finish();
     }
 

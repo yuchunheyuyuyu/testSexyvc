@@ -148,12 +148,12 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
 
             //加v的图标
-            /**if(AppStringUtil.isShowVStatus(bean.getIs_anon(),bean.getU_auth_type(),bean.getU_auth_state())){
+            if(AppStringUtil.isShowVStatus(bean.getIs_anon(),bean.getU_auth_type(),bean.getU_auth_state())){
                 holder.ivIdentityStatus.setVisibility(View.VISIBLE);
                 holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(bean.getU_auth_type()));
             }else{
                 holder.ivIdentityStatus.setVisibility(View.GONE);
-            }*/
+            }
 
             holder.tvTitle.setText(StringUtil.formatString(bean.getTitle()));
             holder.tvContent.setText(StringUtil.formatString(bean.getContent()));

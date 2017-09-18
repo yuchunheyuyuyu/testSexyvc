@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -19,9 +19,7 @@ import com.qtin.sexyvc.ui.mycase.add.AddCaseActivity;
 import com.qtin.sexyvc.ui.mycase.di.DaggerMyCaseComponent;
 import com.qtin.sexyvc.ui.mycase.di.MyCaseModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -92,12 +90,25 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
         });
         mAdapter.setOnDeleteCaseListener(new CaseAdapter2.OnDeleteCaseListener() {
             @Override
-            public void onClickDelete(int position) {
-                DeleteCaseRequest request=new DeleteCaseRequest();
-                ArrayList<Long> case_ids=new ArrayList<Long>();
-                case_ids.add(data.get(position).getCase_id());
-                request.setCase_ids(case_ids);
-                mPresenter.deleteCase(request);
+            public void onClickDelete(final int position) {
+                showTwoButtonDialog(getString(R.string.comfirm_delete_case),
+                        getString(R.string.cancle), getString(R.string.delete), new TwoButtonListerner() {
+                            @Override
+                            public void leftClick() {
+                                dismissTwoButtonDialog();
+                            }
+
+                            @Override
+                            public void rightClick() {
+                                dismissTwoButtonDialog();
+                                DeleteCaseRequest request=new DeleteCaseRequest();
+                                ArrayList<Long> case_ids=new ArrayList<Long>();
+                                case_ids.add(data.get(position).getCase_id());
+                                request.setCase_ids(case_ids);
+                                mPresenter.deleteCase(request);
+                            }
+                        });
+
             }
         });
         recyclerView.setAdapter(mAdapter);
@@ -142,7 +153,7 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
 
     @Override
     public void showMessage(String message) {
-
+        UiUtils.showToastShort(message);
     }
 
     @Override
@@ -171,10 +182,22 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
         super.onPause();
     }
 
+    private int getCaseNum(){
+        int num=0;
+        if(data!=null&&!data.isEmpty()){
+            for(CaseBean bean:data){
+                if(bean.getCase_id()!=ConstantUtil.DEFALUT_ID){
+                    num++;
+                }
+            }
+        }
+        return num;
+    }
+
     @Override
     public void finish() {
         Intent intent=new Intent();
-        intent.putExtra(ConstantUtil.INTENT_NUM,data.size());
+        intent.putExtra(ConstantUtil.INTENT_NUM,getCaseNum());
         setResult(0,intent);
         super.finish();
     }
@@ -200,6 +223,21 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
             bean.setCase_id(ConstantUtil.DEFALUT_ID);
             data.add(bean);
         }
+    }
+
+    /**
+     * 是否存在案例
+     * @return
+     */
+    private boolean isExistCase(){
+        boolean isExist=false;
+        for(CaseBean bean:data){
+            if(bean.getCase_id()!=ConstantUtil.DEFALUT_ID){
+                isExist=true;
+                break;
+            }
+        }
+        return isExist;
     }
 
     @Override
@@ -254,10 +292,14 @@ public class MyCaseActivity extends MyBaseActivity<MyCasePresent> implements MyC
                     mAdapter.setShowDelete(false);
                     addLastData(true);
                 }else{
-                    tvRight.setSelected(true);
-                    tvRight.setText(getString(R.string.complete));
-                    mAdapter.setShowDelete(true);
-                    addLastData(false);
+                    if(isExistCase()){
+                        tvRight.setSelected(true);
+                        tvRight.setText(getString(R.string.complete));
+                        mAdapter.setShowDelete(true);
+                        addLastData(false);
+                    }else{
+                        showMessage(getString(R.string.no_case_please_add));
+                    }
                 }
                 break;
             case R.id.ivErrorStatus:

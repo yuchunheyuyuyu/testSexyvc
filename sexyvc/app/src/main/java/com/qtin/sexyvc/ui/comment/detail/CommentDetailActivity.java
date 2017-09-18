@@ -285,7 +285,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             case R.id.ivAddComment:
                 InvestorInfoBean investorInfoBean=new InvestorInfoBean();
                 investorInfoBean.setHas_score(1);
-                investorInfoBean.setScore_value(detailBean.getInvestor_score());
+                investorInfoBean.setScore_value(detailBean.getScore());
                 investorInfoBean.setHas_comment(1);
                 investorInfoBean.setComment_title(detailBean.getTitle());
 

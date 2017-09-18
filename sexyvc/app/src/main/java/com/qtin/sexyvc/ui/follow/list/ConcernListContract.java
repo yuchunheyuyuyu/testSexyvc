@@ -18,6 +18,10 @@ public interface ConcernListContract {
         void endLoadMore();
         void querySuccess(ConcernEntity entity);
         void queryFundSuccess(ListBean<FollowedFundBean> listBean);
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<ConcernEntity>> queryGroupDetail(String token, long group_id, int page, int page_size);

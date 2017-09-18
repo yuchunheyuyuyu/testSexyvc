@@ -103,7 +103,7 @@ public class AppStringUtil {
     public static int getVStatusResourceId(int u_auth_type){
         if(u_auth_type==ConstantUtil.AUTH_TYPE_FOUNDER){
             return R.drawable.logo_approve_fc;
-        }else if(u_auth_type==ConstantUtil.AUTH_TYPE_FOUNDER){
+        }else if(u_auth_type==ConstantUtil.AUTH_TYPE_INVESTOR){
             return R.drawable.logo_approve_vc;
         }else{
             return R.drawable.logo_approve_fa;

@@ -6,6 +6,8 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.jess.arms.utils.UiUtils;
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.ConcernEntity;
 import com.qtin.sexyvc.ui.bean.ListBean;
@@ -17,6 +19,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 
@@ -62,7 +65,21 @@ public class ConcernListPresent extends BasePresenter<ConcernListContract.Model,
                         }
                     }
                 }).compose(RxUtils.<BaseEntity<ConcernEntity>>bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<ConcernEntity>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<ConcernEntity>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if(page==1){
+                            mRootView.showNetErrorView();
+                        }else{
+                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        }
+                    }
+
                     @Override
                     public void onNext(BaseEntity<ConcernEntity> baseEntity) {
                         if(baseEntity.isSuccess()){

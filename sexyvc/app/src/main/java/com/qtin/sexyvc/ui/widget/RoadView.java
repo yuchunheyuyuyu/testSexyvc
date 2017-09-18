@@ -82,24 +82,22 @@ public class RoadView extends LinearLayout {
                 holder.llAddQuestions.removeAllViews();
 
                 for(RoadDetailBean.AddQuestion option:bean.getAdd_questions()){
-                    if(StringUtil.isBlank(option.getAnswer())){
-                        continue;
+                    if(!StringUtil.isBlank(option.getAnswer())){
+                        TextView tvTitle=new TextView(getContext());
+                        tvTitle.setText("- "+option.getTitle());
+                        tvTitle.setTextColor(getResources().getColor(R.color.black90));
+                        tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+                        tvTitle.setLineSpacing(DeviceUtils.dip2px(getContext(),6),1.0f);
+
+                        TextView tvAnswer=new TextView(getContext());
+                        tvAnswer.setText("答："+(StringUtil.isBlank(option.getAnswer())?"无":option.getAnswer()));
+                        tvAnswer.setTextColor(getResources().getColor(R.color.black90));
+                        tvAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+                        tvAnswer.setLineSpacing(DeviceUtils.dip2px(getContext(),6),1.0f);
+
+                        holder.llAddQuestions.addView(tvTitle);
+                        holder.llAddQuestions.addView(tvAnswer);
                     }
-
-                    TextView tvTitle=new TextView(getContext());
-                    tvTitle.setText("- "+option.getTitle());
-                    tvTitle.setTextColor(getResources().getColor(R.color.black90));
-                    tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
-                    tvTitle.setLineSpacing(DeviceUtils.dip2px(getContext(),6),1.0f);
-
-                    TextView tvAnswer=new TextView(getContext());
-                    tvAnswer.setText("答："+(StringUtil.isBlank(option.getAnswer())?"无":option.getAnswer()));
-                    tvAnswer.setTextColor(getResources().getColor(R.color.black90));
-                    tvAnswer.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
-                    tvAnswer.setLineSpacing(DeviceUtils.dip2px(getContext(),6),1.0f);
-
-                    holder.llAddQuestions.addView(tvTitle);
-                    holder.llAddQuestions.addView(tvAnswer);
                 }
             }
             addView(view);

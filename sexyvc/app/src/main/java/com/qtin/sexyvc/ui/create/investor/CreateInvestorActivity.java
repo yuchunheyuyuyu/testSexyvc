@@ -113,7 +113,7 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.create_and_concern));
         mImageLoader = customApplication.getAppComponent().imageLoader();
-
+        ivAnonymous.setSelected(true);
     }
 
     @Override

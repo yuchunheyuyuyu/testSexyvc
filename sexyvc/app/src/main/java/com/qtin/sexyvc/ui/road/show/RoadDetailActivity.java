@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -35,8 +36,12 @@ import com.qtin.sexyvc.ui.road.show.di.DaggerRoadDetailComponent;
 import com.qtin.sexyvc.ui.road.show.di.RoadDetailModule;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -220,6 +225,7 @@ public class RoadDetailActivity extends MyBaseActivity<RoadDetailPresent> implem
                 finish();
                 break;
             case R.id.ivShare:
+
                 break;
             case R.id.actionContainer:
                 showReplyDialog(-1, DEFALUT_REPLY_ID, "回应评论");
@@ -440,4 +446,23 @@ public class RoadDetailActivity extends MyBaseActivity<RoadDetailPresent> implem
     public void dialogWaitDismiss() {
         dialogDismiss();
     }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+
+        }
+    };
 }
