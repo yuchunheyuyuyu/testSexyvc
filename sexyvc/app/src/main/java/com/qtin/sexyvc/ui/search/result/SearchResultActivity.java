@@ -64,6 +64,8 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     TextView tvChangeHint;
     @BindView(R.id.dropDownMenu)
     DropDownMenu dropDownMenu;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
 
     private List<View> popupViews = new ArrayList<>();
     private String headers[] = {"评分", "行业", "轮次"};
@@ -77,7 +79,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     public static final int TYPE_DOMAIN = 0x001;//行业
     public static final int TYPE_STAGE = 0x002;//阶段
     public static final int TYPE_RATE = 0x003;//评分
-    private String [] rateStrs={"综合评分","行业理解","路演效率","反馈速度","经验分享","评论数"};
+    private String[] rateStrs = {"综合评分", "行业理解", "路演效率", "反馈速度", "经验分享", "评论数"};
 
     private TagAdapter domainAdapter;
     private TagAdapter stageAdapter;
@@ -95,7 +97,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     private ContentViewHolder contentViewHolder;
     private String keyWord;
 
-    private static final int REQUEST_CODE_SEARCH=0x001;
+    private static final int REQUEST_CODE_SEARCH = 0x001;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -114,13 +116,13 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
 
     @Override
     protected void initData() {
-        searchType=getIntent().getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
-        keyWord=getIntent().getExtras().getString(ConstantUtil.KEY_WORD_INTENT);
+        searchType = getIntent().getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
+        keyWord = getIntent().getExtras().getString(ConstantUtil.KEY_WORD_INTENT);
         tvChangeHint.setText(keyWord);
 
-        if(searchType==ConstantUtil.TYPE_FUND){
+        if (searchType == ConstantUtil.TYPE_FUND) {
             tvChange.setText(getResources().getString(R.string.fund));
-        }else{
+        } else {
             tvChange.setText(getResources().getString(R.string.investor));
         }
 
@@ -137,12 +139,12 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         //获取投资阶段
         mPresenter.getType("common_stage", TYPE_STAGE);
         //评分
-        for(int i=0;i<rateStrs.length;i++){
-            FilterEntity entity=new FilterEntity();
+        for (int i = 0; i < rateStrs.length; i++) {
+            FilterEntity entity = new FilterEntity();
             entity.setType_name(rateStrs[i]);
-            entity.setKey_id(i+1);
-            entity.setType_id(i+1);
-            if(i==0){
+            entity.setKey_id(i + 1);
+            entity.setType_id(i + 1);
+            if (i == 0) {
                 entity.setSelected(true);
             }
             efficiencyData.add(entity);
@@ -152,33 +154,33 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         search();
     }
 
-    private void search(){
-        InvestorRequest request=new InvestorRequest();
+    private void search() {
+        InvestorRequest request = new InvestorRequest();
         request.setPage(page);
         request.setPage_size(page_size);
 
         //行业
-        ArrayList<Long> domains=new ArrayList<>();
-        Set<Integer> domainsSet=domainFlowLayout.getSelectedList();
-        if(domainsSet!=null&&!domainsSet.isEmpty()){
-            Iterator<Integer> it=domainsSet.iterator();
-            while (it.hasNext()){
+        ArrayList<Long> domains = new ArrayList<>();
+        Set<Integer> domainsSet = domainFlowLayout.getSelectedList();
+        if (domainsSet != null && !domainsSet.isEmpty()) {
+            Iterator<Integer> it = domainsSet.iterator();
+            while (it.hasNext()) {
                 domains.add(industryData.get(it.next()).getType_id());
             }
         }
 
         //阶段
-        ArrayList<Long> stages=new ArrayList<>();
-        Set<Integer> stageSet=stageFlowLayout.getSelectedList();
-        if(stageSet!=null&&!stageSet.isEmpty()){
-            Iterator<Integer> it=stageSet.iterator();
-            while (it.hasNext()){
+        ArrayList<Long> stages = new ArrayList<>();
+        Set<Integer> stageSet = stageFlowLayout.getSelectedList();
+        if (stageSet != null && !stageSet.isEmpty()) {
+            Iterator<Integer> it = stageSet.iterator();
+            while (it.hasNext()) {
                 stages.add(turnData.get(it.next()).getType_id());
             }
         }
 
-        for(FilterEntity entity:efficiencyData){
-            if(entity.isSelected()){
+        for (FilterEntity entity : efficiencyData) {
+            if (entity.isSelected()) {
                 request.setSort((int) entity.getType_id());
                 break;
             }
@@ -187,9 +189,9 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         request.setDomains(domains);
         request.setStages(stages);
         request.setKeyword(keyWord);
-        if(searchType==ConstantUtil.TYPE_FUND){
+        if (searchType == ConstantUtil.TYPE_FUND) {
             mPresenter.queryFunds(request);
-        }else{
+        } else {
             mPresenter.queryInvestors(request);
         }
     }
@@ -206,7 +208,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
 
     @Override
     public void showMessage(String message) {
-        UiUtils.showToastShort(this,message);
+        UiUtils.showToastShort(this, message);
     }
 
     @Override
@@ -226,11 +228,11 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                 finish();
                 break;
             case R.id.changeContainer:
-                Bundle bundle=new Bundle();
-                bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT,true);
-                bundle.putString(ConstantUtil.KEY_WORD_INTENT,keyWord);
-                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT,searchType);
-                gotoActivityFadeForResult(SearchActionActivity.class,bundle,REQUEST_CODE_SEARCH);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ConstantUtil.INTENT_IS_FOR_RESULT, true);
+                bundle.putString(ConstantUtil.KEY_WORD_INTENT, keyWord);
+                bundle.putInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT, searchType);
+                gotoActivityFadeForResult(SearchActionActivity.class, bundle, REQUEST_CODE_SEARCH);
                 break;
         }
     }
@@ -238,27 +240,27 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if (data == null) {
             return;
         }
-        switch(requestCode){
+        switch (requestCode) {
             case REQUEST_CODE_SEARCH:
-                searchType=data.getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
-                keyWord=data.getExtras().getString(ConstantUtil.KEY_WORD_INTENT);
+                searchType = data.getExtras().getInt(ConstantUtil.TYPE_INVESTOR_FUND_INTENT);
+                keyWord = data.getExtras().getString(ConstantUtil.KEY_WORD_INTENT);
                 tvChangeHint.setText(keyWord);
 
                 domainAdapter.setSelectedList();
 
 
-                if(searchType==ConstantUtil.TYPE_FUND){
+                if (searchType == ConstantUtil.TYPE_FUND) {
                     tvChange.setText(getResources().getString(R.string.fund));
-                }else{
+                } else {
                     tvChange.setText(getResources().getString(R.string.investor));
                 }
                 //重新进入到页面的处理
                 domainAdapter.setSelectedList();
                 stageAdapter.setSelectedList();
-                page=1;
+                page = 1;
                 search();
 
                 break;
@@ -288,12 +290,12 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
 
     @Override
     public void startLoadMore() {
-        isLoadingMore=true;
+        isLoadingMore = true;
     }
 
     @Override
     public void endLoadMore() {
-        isLoadingMore=false;
+        isLoadingMore = false;
     }
 
     @Override
@@ -332,6 +334,16 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showNetErrorView() {
+        errorLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showContentView() {
+        errorLayout.setVisibility(View.GONE);
+    }
+
     private void addIndustry() {
         View view = LayoutInflater.from(this).inflate(R.layout.filter_flow, null);
         domainFlowLayout = (TagFlowLayout) view.findViewById(R.id.flowLayout);
@@ -339,7 +351,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             @Override
             public void onClick(View v) {
                 domainAdapter.setSelectedList();
-                page=1;
+                page = 1;
                 search();
             }
         });
@@ -348,7 +360,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             @Override
             public void onClick(View v) {
                 dropDownMenu.closeMenu();
-                page=1;
+                page = 1;
                 search();
             }
         });
@@ -357,7 +369,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             public View getView(FlowLayout parent, int position, FilterEntity o) {
                 View view = LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter, stageFlowLayout, false);
                 //AutoUtils.auto(tv);
-                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
+                TextView tv = (TextView) view.findViewById(R.id.tvFilter);
                 tv.setText(o.getType_name());
                 return view;
             }
@@ -366,13 +378,13 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         domainFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                if(view instanceof LinearLayout){
-                    LinearLayout layout= (LinearLayout) view;
-                    TextView tv= (TextView) layout.getChildAt(0);
-                    if(industryData.get(position).isSelected()){
+                if (view instanceof LinearLayout) {
+                    LinearLayout layout = (LinearLayout) view;
+                    TextView tv = (TextView) layout.getChildAt(0);
+                    if (industryData.get(position).isSelected()) {
                         industryData.get(position).setSelected(false);
                         tv.setSelected(false);
-                    }else{
+                    } else {
                         industryData.get(position).setSelected(true);
                         tv.setSelected(true);
                     }
@@ -394,7 +406,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             @Override
             public void onClick(View v) {
                 stageAdapter.setSelectedList();
-                page=1;
+                page = 1;
                 search();
             }
         });
@@ -403,7 +415,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             @Override
             public void onClick(View v) {
                 dropDownMenu.closeMenu();
-                page=1;
+                page = 1;
                 search();
             }
         });
@@ -412,7 +424,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
             public View getView(FlowLayout parent, int position, FilterEntity o) {
                 View view = LayoutInflater.from(SearchResultActivity.this).inflate(R.layout.item_filter, stageFlowLayout, false);
                 //AutoUtils.auto(tv);
-                TextView tv= (TextView) view.findViewById(R.id.tvFilter);
+                TextView tv = (TextView) view.findViewById(R.id.tvFilter);
                 tv.setText(o.getType_name());
                 return view;
             }
@@ -421,13 +433,13 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         stageFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                if(view instanceof LinearLayout){
-                    LinearLayout layout= (LinearLayout) view;
-                    TextView tv= (TextView) layout.getChildAt(0);
-                    if(turnData.get(position).isSelected()){
+                if (view instanceof LinearLayout) {
+                    LinearLayout layout = (LinearLayout) view;
+                    TextView tv = (TextView) layout.getChildAt(0);
+                    if (turnData.get(position).isSelected()) {
                         turnData.get(position).setSelected(false);
                         tv.setSelected(false);
-                    }else{
+                    } else {
                         turnData.get(position).setSelected(true);
                         tv.setSelected(true);
                     }
@@ -450,15 +462,15 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         ratingAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                FilterEntity entity=efficiencyData.get(position);
-                if(!entity.isSelected()){
-                    for(FilterEntity filterEntity:efficiencyData){
+                FilterEntity entity = efficiencyData.get(position);
+                if (!entity.isSelected()) {
+                    for (FilterEntity filterEntity : efficiencyData) {
                         filterEntity.setSelected(false);
                     }
                     entity.setSelected(true);
                     ratingAdapter.notifyDataSetChanged();
                     dropDownMenu.closeMenu();
-                    page=1;
+                    page = 1;
                     search();
                 }
             }
@@ -475,18 +487,18 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
         mAdapter.setItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                if(data.get(position) instanceof InvestorEntity){
+                if (data.get(position) instanceof InvestorEntity) {
                     Bundle bundle = new Bundle();
-                    bundle.putLong("investor_id", ((InvestorEntity)data.get(position)).getInvestor_id());
+                    bundle.putLong("investor_id", ((InvestorEntity) data.get(position)).getInvestor_id());
                     gotoActivity(InvestorDetailActivity.class, bundle);
 
-                }else if(data.get(position) instanceof FundEntity){
+                } else if (data.get(position) instanceof FundEntity) {
                     Bundle bundle = new Bundle();
-                    bundle.putLong("fund_id", ((FundEntity)data.get(position)).getFund_id());
+                    bundle.putLong("fund_id", ((FundEntity) data.get(position)).getFund_id());
                     gotoActivity(FundDetailActivity.class, bundle);
-                }else if(data.get(position) instanceof ToEnteringBean ){
+                } else if (data.get(position) instanceof ToEnteringBean) {
                     int hasShow = DataHelper.getIntergerSF(SearchResultActivity.this, "has_show_create_investor");
-                    DataHelper.SetIntergerSF(SearchResultActivity.this,"has_show_create_investor",1);
+                    DataHelper.SetIntergerSF(SearchResultActivity.this, "has_show_create_investor", 1);
 
                     if (hasShow == 0) {
                         showComfirmDialog(getString(R.string.input_investor_by_hand),
@@ -499,13 +511,13 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                                         gotoActivity(CreateInvestorActivity.class);
                                     }
                                 });
-                    }else{
+                    } else {
                         gotoActivity(CreateInvestorActivity.class);
                     }
-                }else if(data.get(position) instanceof ToImproveBean){
-                    int hasShow=DataHelper.getIntergerSF(SearchResultActivity.this,"has_search_fund_improve");
-                    if(hasShow==0){
-                        DataHelper.SetIntergerSF(SearchResultActivity.this,"has_search_fund_improve",1);
+                } else if (data.get(position) instanceof ToImproveBean) {
+                    int hasShow = DataHelper.getIntergerSF(SearchResultActivity.this, "has_search_fund_improve");
+                    if (hasShow == 0) {
+                        DataHelper.SetIntergerSF(SearchResultActivity.this, "has_search_fund_improve", 1);
                         showComfirmDialog(getString(R.string.help_us_improve_title),
                                 getString(R.string.help_us_improve_hint),
                                 getString(R.string.i_known),
@@ -516,7 +528,7 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                                         gotoActivity(ImproveFundActivity.class);
                                     }
                                 });
-                    }else{
+                    } else {
                         gotoActivity(ImproveFundActivity.class);
                     }
                 }
@@ -550,6 +562,12 @@ public class SearchResultActivity extends MyBaseActivity<SearchResultPresent> im
                     .build();
             mPaginate.setHasMoreDataToLoad(false);
         }
+    }
+
+    @OnClick(R.id.ivErrorStatus)
+    public void onClick() {
+        page = 1;
+        search();
     }
 
     static class ContentViewHolder {

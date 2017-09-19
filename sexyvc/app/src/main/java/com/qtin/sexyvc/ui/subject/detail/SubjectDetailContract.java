@@ -24,6 +24,9 @@ public interface SubjectDetailContract {
         void dialogWaitDismiss();
 
         void showNotExistDialog();
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         String getToken();

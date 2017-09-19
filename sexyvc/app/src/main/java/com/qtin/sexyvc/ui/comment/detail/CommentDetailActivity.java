@@ -18,8 +18,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
@@ -75,6 +75,10 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     ImageView ivLeft2;
     @BindView(R.id.ivAddComment)
     ImageView ivAddComment;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private CommentContentBean detailBean;
 
     private long comment_id;
@@ -92,7 +96,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
     private final static long DEFALUT_REPLY_ID = 0;
 
-    private int page_size=15;
+    private int page_size = 15;
 
     private boolean isFirstLoadData = true;//是不是本页面第一次加载数据
 
@@ -119,7 +123,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(comment_id, DEFALUT_REPLY_ID,page_size);
+                mPresenter.query(comment_id, DEFALUT_REPLY_ID, page_size);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -169,7 +173,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         });
         recyclerView.setAdapter(mAdapter);
         initPaginate();
-        mPresenter.query(comment_id, DEFALUT_REPLY_ID,page_size);
+        mPresenter.query(comment_id, DEFALUT_REPLY_ID, page_size);
     }
 
     private void initPaginate() {
@@ -177,7 +181,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.query(comment_id, reply_id,page_size);
+                    mPresenter.query(comment_id, reply_id, page_size);
                 }
 
                 @Override
@@ -230,17 +234,23 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         finish();
     }
 
-    @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer,R.id.ivAddComment})
+    @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer, R.id.ivAddComment,R.id.ivEmptyStatus,R.id.ivErrorStatus})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ivEmptyStatus:
+
+                break;
+            case R.id.ivErrorStatus:
+                mPresenter.query(comment_id, DEFALUT_REPLY_ID, page_size);
+                break;
             case R.id.ivLeft:
                 finish();
                 break;
             case R.id.ivShare:
-                if(detailBean!=null){
-                    final UMWeb web = new UMWeb(Api.SHARE_COMMENT+detailBean.getComment_id());
+                if (detailBean != null) {
+                    final UMWeb web = new UMWeb(Api.SHARE_COMMENT + detailBean.getComment_id());
                     web.setTitle(detailBean.getTitle());//标题
-                    web.setDescription(detailBean.getInvestor_name()+"是被人这样评价的…");
+                    web.setDescription(detailBean.getInvestor_name() + "是被人这样评价的…");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(detailBean.getInvestor_avatar())));  //缩略图
 
                     showShareDialog(new onShareClick() {
@@ -248,7 +258,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                         public void onClickShare(int platForm) {
 
                             dismissShareDialog();
-                            switch(platForm){
+                            switch (platForm) {
                                 case ConstantUtil.SHARE_WECHAT:
                                     new ShareAction(CommentDetailActivity.this)
                                             .withMedia(web)
@@ -283,7 +293,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                 showReplyDialog(-1, DEFALUT_REPLY_ID, "回应评论");
                 break;
             case R.id.ivAddComment:
-                InvestorInfoBean investorInfoBean=new InvestorInfoBean();
+                InvestorInfoBean investorInfoBean = new InvestorInfoBean();
                 investorInfoBean.setHas_score(1);
                 investorInfoBean.setScore_value(detailBean.getScore());
                 investorInfoBean.setHas_comment(1);
@@ -294,9 +304,9 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                 investorInfoBean.setInvestor_uid(detailBean.getInvestor_uid());
                 investorInfoBean.setFund_id(detailBean.getFund_id());
                 investorInfoBean.setComment_id(detailBean.getComment_id());
-                Bundle bundle=new Bundle();
-                bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,investorInfoBean);
-                gotoActivity(ReviewActivity.class,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE, investorInfoBean);
+                gotoActivity(ReviewActivity.class, bundle);
                 break;
         }
     }
@@ -328,13 +338,13 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                int is_anon=0;
-                if(ivAnonymous.isSelected()){
-                    is_anon=1;
-                }else{
-                    is_anon=0;
+                int is_anon = 0;
+                if (ivAnonymous.isSelected()) {
+                    is_anon = 1;
+                } else {
+                    is_anon = 0;
                 }
-                mPresenter.reply(position, comment_id, reply_id, content,is_anon);
+                mPresenter.reply(position, comment_id, reply_id, content, is_anon);
             }
         });
         replyDialog = new Dialog(this);
@@ -391,7 +401,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
     }
 
     @Override
-    public void replySuccess(int position, long reply_id, String content,int is_anon) {
+    public void replySuccess(int position, long reply_id, String content, int is_anon) {
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
         }
@@ -406,9 +416,9 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         entity.setReply_id(reply_id);
 
         if (mPresenter.getUserInfo() != null) {
-            if(is_anon==0){
+            if (is_anon == 0) {
                 entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
-            }else{
+            } else {
                 entity.setU_nickname(getString(R.string.defalut_nick));
             }
             entity.setU_avatar(mPresenter.getUserInfo().getU_avatar());
@@ -444,13 +454,13 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
         if (isFirstLoadData) {
             UserInfoEntity entity = mPresenter.getUserInfo();
             if (entity != null) {
-                if (entity.getHas_project() == 1&&entity.getHas_comment()==0&&entity.getHas_roadshow()==0) {
+                if (entity.getHas_project() == 1 && entity.getHas_comment() == 0 && entity.getHas_roadshow() == 0) {
                     int currentScore = DataHelper.getIntergerSF(this, "read_score");
                     currentScore += 10;
                     if (currentScore >= 100) {
                         //清空分数
                         DataHelper.SetIntergerSF(this, "read_score", 0);
-                        showHintDialog(entity.getU_phone(),DialogType.TYPE_COMMENT, new ComfirmListerner() {
+                        showHintDialog(entity.getU_phone(), DialogType.TYPE_COMMENT, new ComfirmListerner() {
                             @Override
                             public void onComfirm() {
                                 Bundle bundle = new Bundle();
@@ -520,7 +530,8 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
             }
         });
     }
-    private UMShareListener shareListener=new UMShareListener() {
+
+    private UMShareListener shareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
         }
@@ -538,4 +549,43 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
 
         }
     };
+
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
 }

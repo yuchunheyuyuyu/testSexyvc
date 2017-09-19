@@ -79,7 +79,7 @@ public class SuccessActivity extends MyBaseActivity<RoadSuccessPresent> implemen
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText(getResources().getString(R.string.complete));
 
-        tvName.setText(String.format(getResources().getString(R.string.format_road_success),""+investorInfoBean.getInvestor_name()));
+        //tvName.setText(String.format(getResources().getString(R.string.format_road_success),""+investorInfoBean.getInvestor_name()));
     }
 
     @Override

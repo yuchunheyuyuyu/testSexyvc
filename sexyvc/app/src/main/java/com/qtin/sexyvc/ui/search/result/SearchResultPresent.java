@@ -6,6 +6,8 @@ import com.jess.arms.base.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.RxUtils;
+import com.jess.arms.utils.UiUtils;
+import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.BaseEntity;
 import com.qtin.sexyvc.ui.bean.FundBackEntity;
 import com.qtin.sexyvc.ui.bean.Typebean;
@@ -17,6 +19,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -80,13 +83,26 @@ public class SearchResultPresent extends BasePresenter<SearchResultContract.Mode
                     }
                 })
                 .compose(RxUtils.<BaseEntity<FundBackEntity>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<FundBackEntity>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<FundBackEntity>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (request.getPage()==1){
+                            mRootView.showNetErrorView();
+                        }else{
+                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        }
+                    }
+
                     @Override
                     public void onNext(BaseEntity<FundBackEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
+                            mRootView.showContentView();
                             mRootView.queryFundSuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });
@@ -117,13 +133,26 @@ public class SearchResultPresent extends BasePresenter<SearchResultContract.Mode
                     }
                 })
                 .compose(RxUtils.<BaseEntity<InvestorBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<InvestorBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<InvestorBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (request.getPage()==1){
+                            mRootView.showNetErrorView();
+                        }else{
+                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        }
+                    }
+
                     @Override
                     public void onNext(BaseEntity<InvestorBean> baseEntity) {
                         if(baseEntity.isSuccess()){
+                            mRootView.showContentView();
                             mRootView.queryInvestorSuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

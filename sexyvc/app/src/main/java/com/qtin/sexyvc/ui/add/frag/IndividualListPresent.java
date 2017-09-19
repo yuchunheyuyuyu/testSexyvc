@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -69,13 +70,28 @@ public class IndividualListPresent extends BasePresenter<IndividualListContract.
                         }
                     }
                 }).compose(RxUtils.<BaseEntity<ConcernEntity>>bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<ConcernEntity>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<ConcernEntity>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<ConcernEntity> baseEntity) {
                         if(baseEntity.isSuccess()){
+                            if(baseEntity.getItems()==null||
+                                    baseEntity.getItems().getList()==null||
+                                    baseEntity.getItems().getList().isEmpty()){
+                                mRootView.showEmptyView();
+                            }else{
+                                mRootView.showContentView();
+                            }
                             mRootView.querySuccess(baseEntity.getItems());
-                        }else{
-                            //mRootView.showMessage(baseEntity.getErrMsg());
                         }
                     }
                 });

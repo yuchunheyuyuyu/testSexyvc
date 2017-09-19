@@ -106,6 +106,10 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
     View lineClaim;
     @BindView(R.id.claimContainer)
     LinearLayout claimContainer;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
     private long investor_id;
 
     private InvestorDetailAdapter mAdapter;
@@ -197,6 +201,8 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
 
     @Override
     protected void initData() {
+        ivLeft.setSelected(true);
+
         mImageLoader = customApplication.getAppComponent().imageLoader();
         investor_id = getIntent().getExtras().getLong("investor_id");
         try {
@@ -316,6 +322,9 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
     @Override
     public void querySuccess(CallBackBean backBean) {
         if (isFirstLoadData) {
+            //设置导航栏颜色
+            ivLeft.setSelected(false);
+
             UserInfoEntity entity = mPresenter.getUserInfo();
             if (entity != null) {
                 if (entity.getHas_project() == 1 && entity.getHas_comment() == 0 && entity.getHas_roadshow() == 0) {
@@ -369,19 +378,19 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
     /**
      * 设置认证的状态
      */
-    private void setClaimStatus(){
-        if(investorBean!=null){
+    private void setClaimStatus() {
+        if (investorBean != null) {
             UserInfoEntity entity = mPresenter.getUserInfo();
-            if(investorBean.getInvestor_uid()==0
-                    &&entity.getU_auth_type()==ConstantUtil.AUTH_TYPE_INVESTOR
-                    &&entity.getU_auth_state()==ConstantUtil.AUTH_STATE_UNPASS){
+            if (investorBean.getInvestor_uid() == 0
+                    && entity.getU_auth_type() == ConstantUtil.AUTH_TYPE_INVESTOR
+                    && entity.getU_auth_state() == ConstantUtil.AUTH_STATE_UNPASS) {
                 claimContainer.setVisibility(View.VISIBLE);
                 lineClaim.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 claimContainer.setVisibility(View.GONE);
                 lineClaim.setVisibility(View.GONE);
             }
-        }else{
+        } else {
             claimContainer.setVisibility(View.GONE);
             lineClaim.setVisibility(View.GONE);
         }
@@ -461,9 +470,52 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
 
     }
 
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setValue() {
         if (investorBean != null) {
-            tvTitle.setText(StringUtil.formatString(investorBean.getInvestor_name()) + " (" + investorBean.getScore() + ")");
+            if(investorBean.getScore_count()==0){
+                tvTitle.setText(StringUtil.formatString(investorBean.getInvestor_name()));
+            }else{
+                tvTitle.setText(StringUtil.formatString(investorBean.getInvestor_name()) + " (" + investorBean.getScore() + ")");
+            }
             setConcernStatus();
             setCommentStatus();
         }
@@ -490,7 +542,7 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
         }
         if (mPresenter.getUserInfo() != null) {
             if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
-                    ||mPresenter.getUserInfo().getU_auth_type()==ConstantUtil.AUTH_TYPE_FA) {
+                    || mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
                 if (investorBean.getHas_comment() == 1 && investorBean.getHas_roadshow() == 1) {
                     ivComent.setVisibility(View.GONE);
                     tvComment.setText("已评价(" + investorBean.getScore_value() / 2 + "星)");
@@ -522,9 +574,16 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
         }
     }
 
-    @OnClick({R.id.concernContainer, R.id.commentContainer, R.id.ivLeft, R.id.ivShare,R.id.claimContainer})
+    @OnClick({R.id.concernContainer, R.id.commentContainer, R.id.ivLeft, R.id.ivShare, R.id.claimContainer,
+            R.id.ivErrorStatus,R.id.ivEmptyStatus})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ivErrorStatus:
+                mPresenter.query(investor_id, ConstantUtil.DEFALUT_ID, page_size, auth_state);
+                break;
+            case R.id.ivEmptyStatus:
+
+                break;
             case R.id.claimContainer:
                 showHintDialog();
                 break;
@@ -820,8 +879,9 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
     };
 
     private Dialog claimDialog;
-    protected void showHintDialog(){
-        if(investorBean==null){
+
+    protected void showHintDialog() {
+        if (investorBean == null) {
             return;
         }
         View view = View.inflate(this, R.layout.app_claim_dialog, null);
@@ -831,8 +891,8 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
                 dissmissClaimDialog();
             }
         });
-        ImageView ivAvatar= (ImageView) view.findViewById(R.id.ivAvatar);
-        TextView tvName= (TextView) view.findViewById(R.id.tvName);
+        ImageView ivAvatar = (ImageView) view.findViewById(R.id.ivAvatar);
+        TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(StringUtil.formatString(investorBean.getInvestor_name()));
         //头像
         mImageLoader.loadImage(customApplication, GlideImageConfig
@@ -867,10 +927,10 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
         claimDialog.show();
     }
 
-    private void dissmissClaimDialog(){
-        if(claimDialog!=null&&claimDialog.isShowing()){
+    private void dissmissClaimDialog() {
+        if (claimDialog != null && claimDialog.isShowing()) {
             claimDialog.dismiss();
-            claimDialog=null;
+            claimDialog = null;
         }
     }
 }

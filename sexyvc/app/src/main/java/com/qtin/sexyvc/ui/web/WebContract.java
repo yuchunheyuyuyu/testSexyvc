@@ -14,6 +14,9 @@ public interface WebContract {
         void querySuccess(PageBean pageBean);
         void startRefresh(String msg);
         void endRefresh();
+
+        void showNetErrorView();
+        void showContentView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<PageBean>> queryPage(String alias_name);

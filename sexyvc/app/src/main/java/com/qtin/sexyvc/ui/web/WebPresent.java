@@ -12,8 +12,8 @@ import com.qtin.sexyvc.ui.bean.PageBean;
 import javax.inject.Inject;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 
@@ -41,7 +41,7 @@ public class WebPresent extends BasePresenter<WebContract.Model,WebContract.View
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        mRootView.startRefresh("获取数据中");
+                        mRootView.startRefresh("获取数据");
                     }
                 }).subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,14 +51,22 @@ public class WebPresent extends BasePresenter<WebContract.Model,WebContract.View
                         mRootView.endRefresh();
                     }
                 }).compose(RxUtils.<BaseEntity<PageBean>>bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<PageBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<PageBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<PageBean> baseEntity) {
-
                         if(baseEntity.isSuccess()){
+                            mRootView.showContentView();
                             mRootView.querySuccess(baseEntity.getItems());
-                        }else{
-                            mRootView.showMessage("数据加载失败");
                         }
                     }
                 });

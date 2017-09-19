@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -40,7 +41,7 @@ public class FundDetailPresent extends BasePresenter<FundDetailContract.Model,Fu
     public void query(long fund_id,long comment_id){
         mModel.queryFundDetail(mModel.getToken(),fund_id,comment_id,3,1)
                 .subscribeOn(Schedulers.io())
-                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .retryWhen(new RetryWithDelay(2, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
@@ -55,11 +56,24 @@ public class FundDetailPresent extends BasePresenter<FundDetailContract.Model,Fu
                     }
                 })
                 .compose(RxUtils.<BaseEntity<FundDetailBackBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<FundDetailBackBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<FundDetailBackBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<FundDetailBackBean> baseEntity) {
                         if(baseEntity.isSuccess()){
+                            mRootView.showContentView();
                             mRootView.querySuccess(baseEntity.getItems());
+                        }else if(baseEntity.getErrCode()==30025){
+                            mRootView.showEmptyView();
                         }
                     }
                 });

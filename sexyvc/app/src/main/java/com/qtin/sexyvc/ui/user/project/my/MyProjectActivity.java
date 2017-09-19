@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
@@ -21,9 +20,7 @@ import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 import com.qtin.sexyvc.ui.user.project.my.di.DaggerMyProjectComponent;
 import com.qtin.sexyvc.ui.user.project.my.di.MyProjectModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;

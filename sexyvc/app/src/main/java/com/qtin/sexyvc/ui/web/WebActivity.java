@@ -1,8 +1,11 @@
 package com.qtin.sexyvc.ui.web;
 
 import android.content.Intent;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -12,6 +15,7 @@ import com.qtin.sexyvc.ui.web.di.DaggerWebComponent;
 import com.qtin.sexyvc.ui.web.di.WebModule;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -25,6 +29,8 @@ public class WebActivity extends MyBaseActivity<WebPresent> implements WebContra
     TextView tvTitle;
     @BindView(R.id.webView)
     WebView webView;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private String alias_name;
 
     @Override
@@ -45,7 +51,7 @@ public class WebActivity extends MyBaseActivity<WebPresent> implements WebContra
     @Override
     protected void initData() {
         tvTitle.setText("");
-        alias_name=getIntent().getExtras().getString(ConstantUtil.INTENT_URL);
+        alias_name = getIntent().getExtras().getString(ConstantUtil.INTENT_URL);
         mPresenter.queryPage(alias_name);
     }
 
@@ -90,8 +96,25 @@ public class WebActivity extends MyBaseActivity<WebPresent> implements WebContra
         dialogDismiss();
     }
 
-    @OnClick(R.id.ivLeft)
-    public void onClick() {
-        finish();
+    @Override
+    public void showNetErrorView() {
+        errorLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showContentView() {
+        errorLayout.setVisibility(View.GONE);
+    }
+
+    @OnClick({R.id.ivLeft, R.id.ivErrorStatus})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ivLeft:
+                finish();
+                break;
+            case R.id.ivErrorStatus:
+                mPresenter.queryPage(alias_name);
+                break;
+        }
     }
 }

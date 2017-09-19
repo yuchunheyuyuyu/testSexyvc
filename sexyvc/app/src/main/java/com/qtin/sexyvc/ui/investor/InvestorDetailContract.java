@@ -29,6 +29,10 @@ public interface InvestorDetailContract {
 
         void requestTypeBack(int type,ArrayList<FilterEntity> list);
         void onCreateSuccess(ProjectBean bean);
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         Observable<CodeEntity> unFollowInvestor(String token,long investor_id);

@@ -120,8 +120,8 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
     public static final int TYPE_DOMAIN = 0x001;//行业
     public static final int TYPE_STAGE = 0x002;//阶段
 
-    private final static int MAX_DOMAIN_NUM=100;
-    private final static int MAX_STAGE_NUM=100;
+    private final static int MAX_DOMAIN_NUM=5;
+    private final static int MAX_STAGE_NUM=5;
 
     private final static int REQUEST_CODE_CASE=0x11c;
 

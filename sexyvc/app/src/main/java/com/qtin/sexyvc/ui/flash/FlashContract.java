@@ -16,6 +16,10 @@ public interface FlashContract {
         void querySuccess(boolean pullToRefresh,FlashBean bean);
         void startLoadMore();
         void endLoadMore();
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<FlashBean>> queryFlashList(long flash_id,int page_size);

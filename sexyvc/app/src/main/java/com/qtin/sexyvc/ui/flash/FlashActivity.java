@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -18,6 +21,7 @@ import com.qtin.sexyvc.ui.flash.di.FlashModule;
 import com.qtin.sexyvc.utils.ConstantUtil;
 
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -36,8 +40,12 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private FlashAdapter mAdapter;
-    private ArrayList<FlashEntity> data=new ArrayList<>();
+    private ArrayList<FlashEntity> data = new ArrayList<>();
 
     private boolean hasLoadedAllItems;
     private Paginate mPaginate;
@@ -67,16 +75,16 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                flash_id=ConstantUtil.DEFALUT_ID;
-                mPresenter.query(flash_id,true);
+                flash_id = ConstantUtil.DEFALUT_ID;
+                mPresenter.query(flash_id, true);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter=new FlashAdapter(data);
+        mAdapter = new FlashAdapter(data);
         recyclerView.setAdapter(mAdapter);
 
         initPaginate();
-        mPresenter.query(ConstantUtil.DEFALUT_ID,true);
+        mPresenter.query(ConstantUtil.DEFALUT_ID, true);
     }
 
     private void initPaginate() {
@@ -84,7 +92,7 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.query(flash_id,false);
+                    mPresenter.query(flash_id, false);
                 }
 
                 @Override
@@ -144,36 +152,74 @@ public class FlashActivity extends MyBaseActivity<FlashPresent> implements Flash
     }
 
     @Override
-    public void querySuccess(boolean pullToRefresh,FlashBean bean) {
-        if(pullToRefresh){
+    public void querySuccess(boolean pullToRefresh, FlashBean bean) {
+        if (pullToRefresh) {
             data.clear();
-            total=bean.getTotal();
+            total = bean.getTotal();
         }
-        if(bean.getList()!=null){
+        if (bean.getList() != null) {
             data.addAll(bean.getList());
         }
-        if(data.size()<total){
-            hasLoadedAllItems=false;
-        }else{
-            hasLoadedAllItems=true;
+        if (data.size() < total) {
+            hasLoadedAllItems = false;
+        } else {
+            hasLoadedAllItems = true;
         }
-        if(bean.getList()==null&&bean.getList().isEmpty()){
-            hasLoadedAllItems=true;
+        if (bean.getList() == null && bean.getList().isEmpty()) {
+            hasLoadedAllItems = true;
         }
 
-        if(data.size()>0){
-            flash_id=data.get(data.size()-1).getId();
+        if (data.size() > 0) {
+            flash_id = data.get(data.size() - 1).getId();
         }
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void startLoadMore() {
-        isLoadingMore=true;
+        isLoadingMore = true;
     }
 
     @Override
     public void endLoadMore() {
-        isLoadingMore=false;
+        isLoadingMore = false;
+    }
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
     }
 }

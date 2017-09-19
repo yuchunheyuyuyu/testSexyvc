@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/headContainer"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:gravity="center_vertical"
@@ -16,9 +17,9 @@
             android:id="@+id/ivBack"
             android:layout_width="32dp"
             android:layout_height="match_parent"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
             android:paddingBottom="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:paddingTop="14dp"
             android:src="@drawable/arrow_back" />
 
@@ -28,10 +29,10 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginRight="8dp"
-            android:paddingLeft="12dp"
             android:background="@drawable/search_shape"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="12dp">
 
             <TextView
                 android:id="@+id/tvChange"
@@ -52,11 +53,11 @@
                 android:id="@+id/tvChangeHint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:imeOptions="actionSearch"
-                android:gravity="center_vertical"
                 android:layout_marginRight="8dp"
                 android:background="@null"
+                android:gravity="center_vertical"
                 android:hint="@string/hint_search_investor"
+                android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black30"
@@ -66,10 +67,16 @@
 
     </LinearLayout>
 
+    <View
+        style="@style/line_style"
+        android:id="@+id/line2"
+        android:layout_below="@+id/headContainer" />
+
     <com.qtin.sexyvc.ui.widget.DropDownMenu
         android:id="@+id/dropDownMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/headContainer"
         app:dddividerColor="@color/silver_two"
         app:ddmaskColor="#66000000"
         app:ddmenuBackgroundColor="@color/white"
@@ -81,4 +88,34 @@
         app:ddtextUnselectedColor="@color/black50"
         app:ddunderlineColor="@color/silver_two" />
 
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/errorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/line2"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <ImageView
+            android:id="@+id/ivErrorStatus"
+            android:layout_width="156dp"
+            android:layout_height="156dp"
+            android:src="@drawable/icon_net_error" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/net_error"
+            android:textColor="@color/black30"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

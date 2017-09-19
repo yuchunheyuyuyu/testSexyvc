@@ -26,6 +26,9 @@ public interface SearchResultContract {
 
         void queryFundSuccess(FundBackEntity backEntity);
         void queryInvestorSuccess(InvestorBean bean);
+
+        void showNetErrorView();
+        void showContentView();
     }
     interface Model extends IModel{
 

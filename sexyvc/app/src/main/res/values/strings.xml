@@ -294,6 +294,7 @@
     <string name="please_complete_project">请先完善您的项目信息</string>
 
     <string name="format_road_success">您的评价已计入%s的分数</string>
+    <string name="your_comment_has_commit">您的评论已提交</string>
 
     <string name="investor_name">投资人姓名</string>
     <string name="fund_name">所在机构</string>

@@ -22,6 +22,10 @@ public interface SearchObjectContract {
         void queryDetailSuccess(CallBackBean backBean);
         void startRefresh(String msg);
         void endRefresh();
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
     interface Model extends IModel{
         Observable<BaseEntity<InvestorBean>> queryInvestors(InvestorRequest request);

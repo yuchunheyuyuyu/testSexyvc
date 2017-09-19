@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.DataHelper;
 import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.utils.StringUtil;
@@ -38,9 +37,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -72,6 +69,10 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     TextView tvConcern;
     @BindView(R.id.concernContainer)
     LinearLayout concernContainer;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
     private ArrayList<DataTypeInterface> data = new ArrayList<>();
     private FundDetailAdapter mAdapter;
 
@@ -105,7 +106,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @Override
     protected void initData() {
-
+        ivLeft.setSelected(true);
         fund_id = getIntent().getExtras().getLong("fund_id");
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -243,6 +244,8 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     @Override
     public void querySuccess(FundDetailBackBean bean) {
         if (isFirstLoadData) {
+            ivLeft.setSelected(false);
+
             UserInfoEntity entity = mPresenter.getUserInfo();
             if (entity != null) {
                 if (entity.getHas_project() == 1 && entity.getHas_comment() == 0 && entity.getHas_roadshow() == 0) {
@@ -304,7 +307,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @Override
     public void followSuccess() {
-        if(fundDetailBean!=null){
+        if (fundDetailBean != null) {
             fundDetailBean.setHas_follow(1);
         }
         setConcernStatus();
@@ -316,7 +319,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @Override
     public void cancleSuccess() {
-        if(fundDetailBean!=null){
+        if (fundDetailBean != null) {
             fundDetailBean.setHas_follow(0);
         }
         setConcernStatus();
@@ -325,7 +328,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
     private void setConcernStatus() {
         if (fundDetailBean == null) {
             concernContainer.setVisibility(View.GONE);
-        }else{
+        } else {
             concernContainer.setVisibility(View.VISIBLE);
             if (fundDetailBean.getHas_follow() == 0) {
                 ivConcern.setImageResource(R.drawable.icon_bottom_follow);
@@ -360,7 +363,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @Override
     public void finish() {
-        if(fundDetailBean!=null&&fundDetailBean.getHas_follow()==0){
+        if (fundDetailBean != null && fundDetailBean.getHas_follow() == 0) {
             Intent intent = new Intent();
             intent.putExtra(ConstantUtil.INTENT_ID, fund_id);
             setResult(0, intent);
@@ -370,17 +373,17 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
 
     @OnClick(R.id.concernContainer)
     public void onClick() {
-        if(fundDetailBean!=null){
-            if(fundDetailBean.getHas_follow()==0){
-                FundFollowRequest request=new FundFollowRequest();
+        if (fundDetailBean != null) {
+            if (fundDetailBean.getHas_follow() == 0) {
+                FundFollowRequest request = new FundFollowRequest();
                 request.setObject_type(ConstantUtil.OBJECT_TYPE_FUND);
-                ArrayList<Long> group_ids=new ArrayList<>();
-                ArrayList<Long> object_ids=new ArrayList<>();
+                ArrayList<Long> group_ids = new ArrayList<>();
+                ArrayList<Long> object_ids = new ArrayList<>();
                 object_ids.add(fundDetailBean.getFund_id());
                 request.setGroup_ids(group_ids);
                 request.setObject_ids(object_ids);
                 mPresenter.followFund(request);
-            }else{
+            } else {
                 showBottomDialog("#fe3824", getResources().getString(R.string.set_group),
                         getResources().getString(R.string.cancle_concern),
                         getResources().getString(R.string.cancle),
@@ -397,10 +400,10 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                             @Override
                             public void onSecondClick() {
                                 dismissBottomDialog();
-                                FundUnFollowRequest request=new FundUnFollowRequest();
+                                FundUnFollowRequest request = new FundUnFollowRequest();
                                 request.setObject_type(ConstantUtil.OBJECT_TYPE_FUND);
-                                ArrayList<Long> group_ids=new ArrayList<Long>();
-                                ArrayList<Long> object_ids=new ArrayList<Long>();
+                                ArrayList<Long> group_ids = new ArrayList<Long>();
+                                ArrayList<Long> object_ids = new ArrayList<Long>();
                                 object_ids.add(fundDetailBean.getFund_id());
                                 request.setGroup_ids(group_ids);
                                 request.setObject_ids(object_ids);
@@ -413,6 +416,45 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                             }
                         });
             }
+        }
+    }
+
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
         }
     }
 }

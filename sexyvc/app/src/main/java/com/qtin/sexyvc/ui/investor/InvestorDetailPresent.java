@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
@@ -122,11 +123,24 @@ public class InvestorDetailPresent extends BasePresenter<InvestorDetailContract.
                     }
                 })
                 .compose(RxUtils.<BaseEntity<CallBackBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
-                .subscribe(new ErrorHandleSubscriber<BaseEntity<CallBackBean>>(mErrorHandler) {
+                .subscribe(new Subscriber<BaseEntity<CallBackBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
                     @Override
                     public void onNext(BaseEntity<CallBackBean> baseEntity) {
                         if(baseEntity.isSuccess()){
+                            mRootView.showContentView();
                             mRootView.querySuccess(baseEntity.getItems());
+                        }else if(baseEntity.getErrCode()==30015){
+                            mRootView.showEmptyView();
                         }
                     }
                 });

@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -42,9 +41,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -64,6 +61,10 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
     private long subject_id;
 
     private boolean hasLoadedAllItems;
@@ -80,7 +81,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
 
     private final static long DEFALUT_REPLY_ID = 0;
 
-    private int page_size=15;
+    private int page_size = 15;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -106,7 +107,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.query(subject_id, DEFALUT_REPLY_ID,page_size);
+                mPresenter.query(subject_id, DEFALUT_REPLY_ID, page_size);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -155,7 +156,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         recyclerView.setAdapter(mAdapter);
         initPaginate();
 
-        mPresenter.query(subject_id, DEFALUT_REPLY_ID,page_size);
+        mPresenter.query(subject_id, DEFALUT_REPLY_ID, page_size);
     }
 
     private void initPaginate() {
@@ -163,7 +164,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             Paginate.Callbacks callbacks = new Paginate.Callbacks() {
                 @Override
                 public void onLoadMore() {
-                    mPresenter.query(subject_id, reply_id,page_size);
+                    mPresenter.query(subject_id, reply_id, page_size);
                 }
 
                 @Override
@@ -216,19 +217,25 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         finish();
     }
 
-    @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer})
+    @OnClick({R.id.ivLeft, R.id.ivShare, R.id.actionContainer,R.id.ivEmptyStatus,R.id.ivErrorStatus})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.ivEmptyStatus:
+                break;
+            case R.id.ivErrorStatus:
+                reply_id=ConstantUtil.DEFALUT_ID;
+                mPresenter.query(subject_id,reply_id,page_size);
+                break;
             case R.id.ivLeft:
                 finish();
                 break;
             case R.id.ivShare:
-                if(mDetailBean!=null){
-                    final UMWeb web = new UMWeb(Api.SHARE_SUBJECT+mDetailBean.getSubject_id());
+                if (mDetailBean != null) {
+                    final UMWeb web = new UMWeb(Api.SHARE_SUBJECT + mDetailBean.getSubject_id());
                     web.setTitle(mDetailBean.getTitle());//标题
-                    if(StringUtil.isBlank(mDetailBean.getSummary())){
+                    if (StringUtil.isBlank(mDetailBean.getSummary())) {
                         web.setDescription("点此查看");
-                    }else{
+                    } else {
                         web.setDescription(mDetailBean.getSummary());
                     }
 
@@ -238,7 +245,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                         public void onClickShare(int platForm) {
 
                             dismissShareDialog();
-                            switch(platForm){
+                            switch (platForm) {
                                 case ConstantUtil.SHARE_WECHAT:
                                     new ShareAction(SubjectDetailActivity.this)
                                             .withMedia(web)
@@ -267,30 +274,26 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                         }
                     });
                     /**new ShareAction(this)
-                            .withMedia(web)
-                            .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
-                            .setCallback(new UMShareListener() {
-                                @Override
-                                public void onStart(SHARE_MEDIA share_media) {
+                     .withMedia(web)
+                     .setDisplayList(SHARE_MEDIA.WEIXIN,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,SHARE_MEDIA.QQ)
+                     .setCallback(new UMShareListener() {
+                    @Override public void onStart(SHARE_MEDIA share_media) {
 
-                                }
+                    }
 
-                                @Override
-                                public void onResult(SHARE_MEDIA share_media) {
+                    @Override public void onResult(SHARE_MEDIA share_media) {
 
-                                }
+                    }
 
-                                @Override
-                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+                    @Override public void onError(SHARE_MEDIA share_media, Throwable throwable) {
 
-                                }
+                    }
 
-                                @Override
-                                public void onCancel(SHARE_MEDIA share_media) {
+                    @Override public void onCancel(SHARE_MEDIA share_media) {
 
-                                }
-                            })
-                            .open();*/
+                    }
+                    })
+                     .open();*/
                 }
                 break;
             case R.id.actionContainer:
@@ -327,7 +330,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             }
         }
 
-        if (detailBean.getReplies().getTotal()>page_size ) {
+        if (detailBean.getReplies().getTotal() > page_size) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;
@@ -361,7 +364,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
     }
 
     @Override
-    public void replySuccess(int position, long reply_id, String content,int is_anon) {
+    public void replySuccess(int position, long reply_id, String content, int is_anon) {
 
         if (replyDialog != null && replyDialog.isShowing()) {
             replyDialog.dismiss();
@@ -377,9 +380,9 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         entity.setReply_id(reply_id);
         if (mPresenter.getUserInfo() != null) {
 
-            if(is_anon==0){
+            if (is_anon == 0) {
                 entity.setU_nickname(mPresenter.getUserInfo().getU_nickname());
-            }else{
+            } else {
                 entity.setU_nickname(getString(R.string.defalut_nick));
             }
 
@@ -422,21 +425,60 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
         });
     }
 
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void showReplyDialog(final int position, final long reply_id, String hint) {
         View view = LayoutInflater.from(this).inflate(R.layout.reply_dialog, null);
         etInputComment = (EditText) view.findViewById(R.id.etInputComment);
         etInputComment.setHint(hint);
         View tvPublishComment = view.findViewById(R.id.tvPublishComment);
 
-        View anonymousContainer=view.findViewById(R.id.anonymousContainer);
-        final ImageView ivAnonymous= (ImageView) view.findViewById(R.id.ivAnonymous);
+        View anonymousContainer = view.findViewById(R.id.anonymousContainer);
+        final ImageView ivAnonymous = (ImageView) view.findViewById(R.id.ivAnonymous);
 
         anonymousContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ivAnonymous.isSelected()){
+                if (ivAnonymous.isSelected()) {
                     ivAnonymous.setSelected(false);
-                }else{
+                } else {
                     ivAnonymous.setSelected(true);
                 }
             }
@@ -450,13 +492,13 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                     showMessage("评论内容不能为空");
                     return;
                 }
-                int is_anon=0;
-                if(ivAnonymous.isSelected()){
-                    is_anon=1;
-                }else{
-                    is_anon=0;
+                int is_anon = 0;
+                if (ivAnonymous.isSelected()) {
+                    is_anon = 1;
+                } else {
+                    is_anon = 0;
                 }
-                mPresenter.reply(position, subject_id, reply_id, content,is_anon);
+                mPresenter.reply(position, subject_id, reply_id, content, is_anon);
             }
         });
         replyDialog = new Dialog(this);
@@ -487,7 +529,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 });
     }
 
-    private UMShareListener shareListener=new UMShareListener() {
+    private UMShareListener shareListener = new UMShareListener() {
         @Override
         public void onStart(SHARE_MEDIA share_media) {
         }

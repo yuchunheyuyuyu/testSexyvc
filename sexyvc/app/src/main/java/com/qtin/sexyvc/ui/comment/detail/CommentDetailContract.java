@@ -24,6 +24,10 @@ public interface CommentDetailContract {
         void startLoadMore();
         void endLoadMore();
         void showNotExistDialog();
+
+        void showNetErrorView();
+        void showContentView();
+        void showEmptyView();
     }
 
     interface Model extends IModel{

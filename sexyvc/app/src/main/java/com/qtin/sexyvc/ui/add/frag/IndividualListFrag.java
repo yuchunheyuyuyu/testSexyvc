@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.paginate.Paginate;
@@ -26,9 +29,12 @@ import com.qtin.sexyvc.ui.rate.RateActivity;
 import com.qtin.sexyvc.ui.review.ReviewActivity;
 import com.qtin.sexyvc.ui.road.action.RoadCommentActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -43,6 +49,10 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.emptyLayout)
+    LinearLayout emptyLayout;
+    @BindView(R.id.errorLayout)
+    LinearLayout errorLayout;
 
     private ArrayList<ConcernListEntity> data = new ArrayList<>();
     private ConcernListAdapter mAdapter;
@@ -53,10 +63,10 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     private Paginate mPaginate;
     private boolean isLoadingMore;
 
-    private int page=1;
-    private int page_size=30;
+    private int page = 1;
+    private int page_size = 30;
 
-    private long DEFALUT_GROUP_ID=0;
+    private long DEFALUT_GROUP_ID = 0;
     private InvestorBean investorBean;
     private int typeComment;
 
@@ -68,15 +78,15 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dataSourceType=getArguments().getInt(ConstantUtil.DATA_FROM_TYPE);
-        typeComment=getArguments().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
+        dataSourceType = getArguments().getInt(ConstantUtil.DATA_FROM_TYPE);
+        typeComment = getArguments().getInt(ConstantUtil.COMMENT_TYPE_INTENT);
     }
 
-    public static IndividualListFrag getInstance(int type,int typeComment){
-        IndividualListFrag frag=new IndividualListFrag();
-        Bundle bundle=new Bundle();
-        bundle.putInt(ConstantUtil.DATA_FROM_TYPE,type);
-        bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT,typeComment);
+    public static IndividualListFrag getInstance(int type, int typeComment) {
+        IndividualListFrag frag = new IndividualListFrag();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ConstantUtil.DATA_FROM_TYPE, type);
+        bundle.putInt(ConstantUtil.COMMENT_TYPE_INTENT, typeComment);
         frag.setArguments(bundle);
         return frag;
     }
@@ -96,27 +106,27 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mAdapter=new ConcernListAdapter(mActivity,data);
+        mAdapter = new ConcernListAdapter(mActivity, data);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClickItem(int position) {
-                mPresenter.queryDetail(data.get(position).getInvestor_id(),ConstantUtil.DEFALUT_ID,1);
+                mPresenter.queryDetail(data.get(position).getInvestor_id(), ConstantUtil.DEFALUT_ID, 1);
             }
         });
         loadData();
 
     }
 
-    private void loadData(){
+    private void loadData() {
         //本地不分页,服务端都不分页
-        if(dataSourceType==ConstantUtil.DATA_FROM_LOCAL){
-            hasLoadedAllItems=true;
-            List<LastBrowerBean> list=mPresenter.queryLastBrowers();
+        if (dataSourceType == ConstantUtil.DATA_FROM_LOCAL) {
+            hasLoadedAllItems = true;
+            List<LastBrowerBean> list = mPresenter.queryLastBrowers();
             data.clear();
-            if(list!=null){
-                for(LastBrowerBean bean:list){
-                    ConcernListEntity entity=new ConcernListEntity();
+            if (list != null) {
+                for (LastBrowerBean bean : list) {
+                    ConcernListEntity entity = new ConcernListEntity();
                     entity.setTitle(bean.getTitle());
                     entity.setFund_name(bean.getFund_name());
                     entity.setInvestor_avatar(bean.getInvestor_avatar());
@@ -126,10 +136,15 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                     entity.setLocalTime(bean.getLocalTime());
                     entity.setInvestor_uid(bean.getInvestor_uid());
                     data.add(entity);
-                    if(data.size()>=10){
+                    if (data.size() >= 10) {
                         break;
                     }
                 }
+            }
+            if(data.isEmpty()){
+                showEmptyView();
+            }else{
+                showContentView();
             }
             mAdapter.notifyDataSetChanged();
             Observable.just(1)
@@ -141,8 +156,8 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                         }
                     });
 
-        }else{
-            mPresenter.query(DEFALUT_GROUP_ID,page,page_size);
+        } else {
+            mPresenter.query(DEFALUT_GROUP_ID, page, page_size);
         }
     }
 
@@ -152,7 +167,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                 @Override
                 public void onLoadMore() {
                     page++;
-                    mPresenter.query(DEFALUT_GROUP_ID,page,page_size);
+                    mPresenter.query(DEFALUT_GROUP_ID, page, page_size);
                 }
 
                 @Override
@@ -192,7 +207,7 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
 
     @Override
     public void showMessage(String message) {
-        UiUtils.showToastShort(mActivity,message);
+        UiUtils.showToastShort(mActivity, message);
     }
 
     @Override
@@ -208,24 +223,24 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
 
     @Override
     public void startLoadMore() {
-        isLoadingMore=true;
+        isLoadingMore = true;
     }
 
     @Override
     public void endLoadMore() {
-        isLoadingMore=false;
+        isLoadingMore = false;
     }
 
     @Override
     public void querySuccess(ConcernEntity entity) {
-        if(page==1){
+        if (page == 1) {
             data.clear();
         }
-        if(entity.getList()!=null){
-            for(ConcernListEntity listEntity:entity.getList()){
-                if(listEntity.getInvestor_id()!=0){
+        if (entity.getList() != null) {
+            for (ConcernListEntity listEntity : entity.getList()) {
+                if (listEntity.getInvestor_id() != 0) {
                     data.add(listEntity);
-                    if(data.size()>=10){
+                    if (data.size() >= 10) {
                         break;
                     }
                 }
@@ -233,61 +248,62 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         }
         mAdapter.notifyDataSetChanged();
     }
+
     @Override
     public void queryDetailSuccess(CallBackBean backBean) {
         if (backBean.getInvestor() != null) {
-            investorBean=backBean.getInvestor();
+            investorBean = backBean.getInvestor();
             if (mPresenter.getUserInfo() != null) {
                 //创始人逻辑或FA
                 if (mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FOUNDER
-                       ||mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA ) {
-                    if(typeComment==ConstantUtil.COMMENT_TYPE_ROAD){
-                        if(investorBean.getHas_roadshow()==0){
-                            if(investorBean.getHas_score()==0){
+                        || mPresenter.getUserInfo().getU_auth_type() == ConstantUtil.AUTH_TYPE_FA) {
+                    if (typeComment == ConstantUtil.COMMENT_TYPE_ROAD) {
+                        if (investorBean.getHas_roadshow() == 0) {
+                            if (investorBean.getHas_score() == 0) {
                                 gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
-                            }else{
+                            } else {
                                 gotoRoad();
                             }
-                        }else{
-                            String format=getResources().getString(R.string.format_has_road);
-                            String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
-                            showComfirmDialog(title,"", getResources().getString(R.string.comfirm), new ComfirmListerner() {
+                        } else {
+                            String format = getResources().getString(R.string.format_has_road);
+                            String title = String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
+                            showComfirmDialog(title, "", getResources().getString(R.string.comfirm), new ComfirmListerner() {
                                 @Override
                                 public void onComfirm() {
                                     dismissComfirmDialog();
                                 }
                             });
                         }
-                    }else if(typeComment==ConstantUtil.COMMENT_TYPE_EDIT){
-                        if(investorBean.getHas_score()==0){
+                    } else if (typeComment == ConstantUtil.COMMENT_TYPE_EDIT) {
+                        if (investorBean.getHas_score() == 0) {
                             gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                        }else{
+                        } else {
                             gotoComment();
                         }
-                    }else if(typeComment==ConstantUtil.COMMENT_TYPE_NONE){
+                    } else if (typeComment == ConstantUtil.COMMENT_TYPE_NONE) {
                         showBottomDialog(getString(R.string.sent_road_comment), getString(R.string.sent_text_comment), getString(R.string.cancle), new SelecteListerner() {
                             @Override
                             public void onFirstClick() {
                                 dismissBottomDialog();
-                                if(investorBean.getHas_roadshow()==0){
-                                    if(investorBean.getHas_score()==0){
+                                if (investorBean.getHas_roadshow() == 0) {
+                                    if (investorBean.getHas_score() == 0) {
                                         gotoScore(ConstantUtil.INTENT_ROAD_COMMENT);
-                                    }else{
+                                    } else {
                                         gotoRoad();
                                     }
-                                }else{
-                                    String format=getResources().getString(R.string.format_has_road);
-                                    String title=String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
-                                    UiUtils.showToastShort(mActivity,title);
+                                } else {
+                                    String format = getResources().getString(R.string.format_has_road);
+                                    String title = String.format(format, StringUtil.formatString(investorBean.getInvestor_name()));
+                                    UiUtils.showToastShort(mActivity, title);
                                 }
                             }
 
                             @Override
                             public void onSecondClick() {
                                 dismissBottomDialog();
-                                if(investorBean.getHas_score()==0){
+                                if (investorBean.getHas_score() == 0) {
                                     gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                                }else{
+                                } else {
                                     gotoComment();
                                 }
                             }
@@ -300,9 +316,9 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
                         });
                     }
                 } else {
-                    if(investorBean.getHas_score()==0){
+                    if (investorBean.getHas_score() == 0) {
                         gotoScore(ConstantUtil.INTENT_TEXT_COMMENT);
-                    }else{
+                    } else {
                         gotoComment();
                     }
                 }
@@ -323,29 +339,29 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
     /**
      * 进入评分
      */
-    private void gotoScore(int intent){
-        gotoActivity(RateActivity.class,getBundle(intent));
+    private void gotoScore(int intent) {
+        gotoActivity(RateActivity.class, getBundle(intent));
     }
 
     /**
      * 进入评论或者追评
      */
-    private void gotoComment(){
-        gotoActivity(ReviewActivity.class,getBundle(ConstantUtil.INTENT_TEXT_COMMENT));
+    private void gotoComment() {
+        gotoActivity(ReviewActivity.class, getBundle(ConstantUtil.INTENT_TEXT_COMMENT));
     }
 
     /**
      * 进入路演评价
      */
     private void gotoRoad() {
-        Bundle bundle=getBundle(ConstantUtil.INTENT_ROAD_COMMENT);
-        bundle.putInt(ConstantUtil.INTENT_INDEX,0);
+        Bundle bundle = getBundle(ConstantUtil.INTENT_ROAD_COMMENT);
+        bundle.putInt(ConstantUtil.INTENT_INDEX, 0);
         gotoActivity(RoadCommentActivity.class, bundle);
     }
 
-    private Bundle getBundle(int intent){
-        Bundle bundle=new Bundle();
-        InvestorInfoBean infoBean=new InvestorInfoBean();
+    private Bundle getBundle(int intent) {
+        Bundle bundle = new Bundle();
+        InvestorInfoBean infoBean = new InvestorInfoBean();
         infoBean.setIntent(intent);
         infoBean.setInvestor_id(investorBean.getInvestor_id());
         infoBean.setFund_id(investorBean.getFund_id());
@@ -361,7 +377,55 @@ public class IndividualListFrag extends MyBaseFragment<IndividualListPresent> im
         infoBean.setScore_value(investorBean.getScore_value());
         infoBean.setComment_id(investorBean.getComment_id());
         infoBean.setComment_title(investorBean.getComment_title());
-        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE,infoBean);
+        bundle.putParcelable(ConstantUtil.INTENT_PARCELABLE, infoBean);
         return bundle;
+    }
+
+    @OnClick({R.id.ivEmptyStatus, R.id.ivErrorStatus})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ivEmptyStatus:
+                break;
+            case R.id.ivErrorStatus:
+                break;
+        }
+    }
+    @Override
+    public void showNetErrorView() {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showContentView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.GONE) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyLayout.getVisibility() == View.VISIBLE) {
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmptyView() {
+        if (errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
+        if (recyclerView.getVisibility() == View.VISIBLE) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyLayout.getVisibility() == View.GONE) {
+            emptyLayout.setVisibility(View.VISIBLE);
+        }
     }
 }
