@@ -104,8 +104,6 @@ public class ChosenDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             TopicHolder holder= (TopicHolder) viewHolder;
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
-                    .placeholder(R.drawable.logo_blank)
-                    .errorPic(R.drawable.logo_blank)
                     .url(CommonUtil.getAbsolutePath(homeInfoBean.getCover_pic()))
                     .imageView(holder.ivTopic)
                     .build());

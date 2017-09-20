@@ -76,7 +76,7 @@ public class CommentLastFrag extends MyBaseFragment<CommentLastPresent> implemen
 
     @Override
     protected int setContentViewId() {
-        return R.layout.swipe_recycleview;
+        return R.layout.swipe_recycleview_white;
     }
 
     @Override

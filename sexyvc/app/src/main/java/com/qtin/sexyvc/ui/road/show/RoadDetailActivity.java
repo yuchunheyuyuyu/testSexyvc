@@ -27,6 +27,7 @@ import com.paginate.Paginate;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
 import com.qtin.sexyvc.common.MyBaseActivity;
+import com.qtin.sexyvc.mvp.model.api.Api;
 import com.qtin.sexyvc.ui.bean.DetailClickListener;
 import com.qtin.sexyvc.ui.bean.ReplyBean;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
@@ -35,9 +36,13 @@ import com.qtin.sexyvc.ui.road.show.bean.RoadShowBean;
 import com.qtin.sexyvc.ui.road.show.di.DaggerRoadDetailComponent;
 import com.qtin.sexyvc.ui.road.show.di.RoadDetailModule;
 import com.qtin.sexyvc.ui.subject.bean.DataTypeInterface;
+import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
+import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +230,46 @@ public class RoadDetailActivity extends MyBaseActivity<RoadDetailPresent> implem
                 finish();
                 break;
             case R.id.ivShare:
+                if (detailBean != null) {
+                    final UMWeb web = new UMWeb(Api.SHARE_BASE_URL+Api.SHARE_ROAD + roadId);
+                    web.setTitle("对" + detailBean.getInvestor_name()+"路演的评价");//标题
+                    web.setDescription(detailBean.getInvestor_name() + "的路演是被人这样评价的…");
+                    web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(detailBean.getInvestor_avatar())));  //缩略图
 
+                    showShareDialog(new onShareClick() {
+                        @Override
+                        public void onClickShare(int platForm) {
+
+                            dismissShareDialog();
+                            switch (platForm) {
+                                case ConstantUtil.SHARE_WECHAT:
+                                    new ShareAction(RoadDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_WX_CIRCLE:
+                                    new ShareAction(RoadDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_QQ:
+                                    new ShareAction(RoadDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.QQ)
+                                            .setCallback(shareListener).share();
+                                    break;
+                                case ConstantUtil.SHARE_SINA:
+                                    new ShareAction(RoadDetailActivity.this)
+                                            .withMedia(web)
+                                            .setPlatform(SHARE_MEDIA.SINA)
+                                            .setCallback(shareListener).share();
+                                    break;
+                            }
+                        }
+                    });
+                }
                 break;
             case R.id.actionContainer:
                 showReplyDialog(-1, DEFALUT_REPLY_ID, "回应评论");

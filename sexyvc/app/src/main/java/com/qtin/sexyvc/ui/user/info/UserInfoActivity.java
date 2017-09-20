@@ -710,6 +710,18 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
 
             @Override
             public void onClick(View v) {
+
+                int num=0;
+                for(FilterEntity entity:domainData){
+                    if(entity.isSelected()){
+                        num++;
+                    }
+                }
+                if(num>MAX_DOMAIN_NUM){
+                    showMessage("最多只能选择"+MAX_DOMAIN_NUM+"个行业");
+                    return;
+                }
+
                 //构建请求数据
                 EditTypeRequest request=new EditTypeRequest();
                 request.setType_key(ConstantUtil.TYPE_KEY_DOMAIN);
@@ -752,17 +764,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                     if(domainData.get(position).isSelected()){
                         domainData.get(position).setSelected(false);
                     }else{
-                        int num=0;
-                        for(FilterEntity entity:domainData){
-                            if(entity.isSelected()){
-                                num++;
-                            }
-                        }
-                        if(num>=MAX_DOMAIN_NUM){
-                            showMessage("最多只能选择"+MAX_DOMAIN_NUM+"个行业");
-                        }else{
-                            domainData.get(position).setSelected(true);
-                        }
+                        domainData.get(position).setSelected(true);
                     }
                     domainAdapter.notifyDataChanged();
                 }
@@ -838,6 +840,18 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
         holder.tvComfirmDomain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int num=0;
+                for(FilterEntity entity:stageData){
+                    if(entity.isSelected()){
+                        num++;
+                    }
+                }
+                if(num>MAX_STAGE_NUM){
+                    showMessage("最多只能选择"+MAX_STAGE_NUM+"个轮次");
+                    return;
+                }
+
                 //构建请求数据
                 EditTypeRequest request=new EditTypeRequest();
                 request.setType_key(ConstantUtil.TYPE_KEY_STAGE);
@@ -880,17 +894,7 @@ public class UserInfoActivity extends MyBaseActivity<UserInfoPresent> implements
                     if(stageData.get(position).isSelected()){
                         stageData.get(position).setSelected(false);
                     }else{
-                        int num=0;
-                        for(FilterEntity entity:stageData){
-                            if(entity.isSelected()){
-                                num++;
-                            }
-                        }
-                        if(num>=MAX_STAGE_NUM){
-                            showMessage("最多只能选择"+MAX_STAGE_NUM+"个轮次");
-                        }else{
-                            stageData.get(position).setSelected(true);
-                        }
+                        stageData.get(position).setSelected(true);
                     }
                     stageAdapter.notifyDataChanged();
                 }

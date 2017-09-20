@@ -77,6 +77,8 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
     TextView tvRemark;
     @BindView(R.id.ivAnonymous)
     ImageView ivAnonymous;
+    @BindView(R.id.tvWechat)
+    TextView tvWechat;
 
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
     private CreateInvestorRequest request=new CreateInvestorRequest();
@@ -277,6 +279,13 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
                     tvEmail.setText(StringUtil.formatString(email));
                 }
                 break;
+            case ConstantUtil.TYPE_CREATE_INVESTOR_WECHAT:
+                if(data!=null){
+                    String wechat=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
+                    request.setWechat(wechat);
+                    tvWechat.setText(StringUtil.formatString(wechat));
+                }
+                break;
             case ConstantUtil.TYPE_CREATE_INVESTOR_REMARK:
                 if(data!=null){
                     String remark=data.getExtras().getString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE);
@@ -290,7 +299,7 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
 
     @OnClick({R.id.ivLeft, R.id.tvRight, R.id.avatarContainer, R.id.nameContainer,
               R.id.fundContainer, R.id.titleContainer, R.id.phoneContainer,
-              R.id.emailContainer, R.id.remarkContainer,R.id.ivAnonymous})
+              R.id.emailContainer, R.id.remarkContainer,R.id.ivAnonymous,R.id.wechatContainer})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivAnonymous:
@@ -351,6 +360,12 @@ public class CreateInvestorActivity extends MyBaseActivity<CreateInvestorPresent
                 email.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_EMAIL);
                 email.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getEmail()));
                 gotoActivityForResult(CreateInvestorInfoActivity.class,email,ConstantUtil.TYPE_CREATE_INVESTOR_EMAIL);
+                break;
+            case R.id.wechatContainer:
+                Bundle wechat=new Bundle();
+                wechat.putInt(ConstantUtil.INTENT_CREATE_INVESTOR_TYPE,ConstantUtil.TYPE_CREATE_INVESTOR_WECHAT);
+                wechat.putString(ConstantUtil.INTENT_CREATE_INVESTOR_OLD_VALUE, StringUtil.formatString(request.getWechat()));
+                gotoActivityForResult(CreateInvestorInfoActivity.class,wechat,ConstantUtil.TYPE_CREATE_INVESTOR_WECHAT);
                 break;
             case R.id.remarkContainer:
                 Bundle remark=new Bundle();

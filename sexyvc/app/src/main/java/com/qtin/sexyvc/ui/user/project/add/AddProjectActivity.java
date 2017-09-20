@@ -43,6 +43,7 @@ import com.qtin.sexyvc.ui.user.project.add.di.DaggerAddProjectComponent;
 import com.qtin.sexyvc.ui.widget.tagview.FlowLayout;
 import com.qtin.sexyvc.ui.widget.tagview.TagAdapter;
 import com.qtin.sexyvc.ui.widget.tagview.TagFlowLayout;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.CashierInputFilter;
 import com.qtin.sexyvc.utils.CommonUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
@@ -658,9 +659,16 @@ public class AddProjectActivity extends MyBaseActivity<AddProjectPresent> implem
             StringBuilder sb=new StringBuilder();
             sb.append(stage);
             sb.append("  ");
-            String moneyValue=money/10000f+"";
-            sb.append(moneyValue);
-            sb.append("万");
+
+            if(money>100000000){
+                float yValue=money/100000000f;
+                sb.append(AppStringUtil.subZeroAndDot(""+yValue));
+                sb.append("亿");
+            }else{
+                float wValue=money/10000f;
+                sb.append(AppStringUtil.subZeroAndDot(""+wValue));
+                sb.append("万");
+            }
             if(projectBean.getLast_currency()==0){
                 sb.append(getResources().getString(R.string.dollar));
             }else{

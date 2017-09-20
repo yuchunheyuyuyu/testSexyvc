@@ -76,8 +76,6 @@ public class CommentChosenAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.tvTopicSummary.setText(StringUtil.formatString(entity.getSummary()));
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
-                .placeholder(R.drawable.logo_blank)
-                .errorPic(R.drawable.logo_blank)
                 .url(CommonUtil.getAbsolutePath(entity.getCover_pic()))
                 .imageView(holder.ivTopic)
                 .build());

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.utils.StringUtil;
@@ -52,6 +53,10 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
     ImageView ivSwitch;
     @BindView(R.id.tvAgreement)
     TextView tvAgreement;
+    @BindView(R.id.llAnonymity)
+    LinearLayout llAnonymity;
+    @BindView(R.id.lineAnonymity)
+    View lineAnonymity;
 
     private InvestorInfoBean investorInfoBean;
 
@@ -92,10 +97,14 @@ public class ReviewActivity extends MyBaseActivity<ReviewPresent> implements Rev
             etCommentTitle.setVisibility(View.GONE);
             tvCommentTitle.setText(StringUtil.formatString(investorInfoBean.getComment_title()));
             etCommentContent.setHint(getResources().getString(R.string.hint_review_comment_plus));
+            llAnonymity.setVisibility(View.GONE);
+            lineAnonymity.setVisibility(View.GONE);
         }else{
             tvCommentTitle.setVisibility(View.GONE);
             etCommentTitle.setVisibility(View.VISIBLE);
             etCommentContent.setHint(getResources().getString(R.string.hint_review_content));
+            llAnonymity.setVisibility(View.VISIBLE);
+            lineAnonymity.setVisibility(View.VISIBLE);
         }
 
         ratingScore.setRating(investorInfoBean.getScore_value());

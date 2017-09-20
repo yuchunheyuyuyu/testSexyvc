@@ -147,6 +147,9 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void dealContent(final FundDetailBean bean, ContentHolder holder) {
+
+        holder.tvHasInvestorNum.setText("收录投资人 "+bean.getInvestor_number());
+
         mImageLoader.loadImage(mApplication, GlideImageConfig
                 .builder()
                 .isFitCenter(true)
@@ -428,6 +431,8 @@ public class FundDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         LinearLayout caseContainer;
         @BindView(R.id.commentContainer)
         LinearLayout commentContainer;
+        @BindView(R.id.tvHasInvestorNum)
+        TextView tvHasInvestorNum;
 
         ContentHolder(View view) {
             super(view);

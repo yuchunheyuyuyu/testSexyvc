@@ -54,11 +54,13 @@
     <LinearLayout
         android:id="@+id/companyContainer"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
         android:layout_below="@+id/tvName"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="140dp"
         android:layout_marginTop="6dp"
-        android:gravity="center_vertical"
+        android:gravity="top"
         android:orientation="horizontal">
 
         <ImageView
@@ -71,9 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:ellipsize="end"
             android:gravity="center_vertical"
-            android:maxLines="1"
             android:text="梅花天使创投"
             android:textColor="@color/black50"
             android:textSize="12sp" />
@@ -82,10 +82,12 @@
     <LinearLayout
         android:id="@+id/positionContainer"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
+        android:layout_marginRight="140dp"
         android:layout_below="@+id/companyContainer"
         android:layout_marginLeft="16dp"
-        android:gravity="center_vertical"
+        android:gravity="top"
         android:orientation="horizontal">
 
         <ImageView
@@ -98,8 +100,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
             android:text="创始合伙人"
             android:textColor="@color/black50"
             android:textSize="12sp" />

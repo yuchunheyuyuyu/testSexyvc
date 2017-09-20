@@ -250,6 +250,19 @@ public class PositionActivity extends MyBaseActivity<PositionPresent> implements
                 }
                 break;
             case R.id.identifyContainer:
+                if (userInfo.getU_auth_type() == 0) {
+                    showMessage("请选择身份类型");
+                    return;
+                }
+                if(StringUtil.isBlank(userInfo.getU_company())){
+                    showMessage("请填写所在机构");
+                    return;
+                }
+
+                if(StringUtil.isBlank(userInfo.getU_title())){
+                    showMessage("请填写担任职务");
+                    return;
+                }
                 gotoIdentify();
                 break;
         }

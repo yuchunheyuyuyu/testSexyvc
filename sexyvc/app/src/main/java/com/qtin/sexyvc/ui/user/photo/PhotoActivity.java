@@ -100,7 +100,7 @@ public class PhotoActivity extends MyBaseActivity<PhotoPresent> implements Photo
         boolean isBold = false;
         if (u_auth_state == ConstantUtil.AUTH_STATE_PASS) {
             tvStatus.setText(getString(R.string.status_pass));
-            tvStatus.setTextColor(getResources().getColor(R.color.dusk90));
+            tvStatus.setTextColor(getResources().getColor(R.color.dusk50));
             tvStatusHint.setText("");
             tvRight.setVisibility(View.VISIBLE);
 

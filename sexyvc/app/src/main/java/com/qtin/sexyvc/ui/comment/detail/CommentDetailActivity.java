@@ -248,7 +248,7 @@ public class CommentDetailActivity extends MyBaseActivity<CommentDetailPresent> 
                 break;
             case R.id.ivShare:
                 if (detailBean != null) {
-                    final UMWeb web = new UMWeb(Api.SHARE_COMMENT + detailBean.getComment_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_BASE_URL+Api.SHARE_COMMENT + detailBean.getComment_id());
                     web.setTitle(detailBean.getTitle());//标题
                     web.setDescription(detailBean.getInvestor_name() + "是被人这样评价的…");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(detailBean.getInvestor_avatar())));  //缩略图

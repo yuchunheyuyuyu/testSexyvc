@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/tvStageTag"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="22dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/black50_shape_5"
             android:gravity="center"
@@ -27,12 +27,12 @@
             android:paddingRight="6dp"
             android:text="天使轮"
             android:textColor="@color/black50"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvDomainTag"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="22dp"
             android:layout_marginRight="6dp"
             android:background="@drawable/black50_shape_5"
             android:gravity="center"
@@ -41,7 +41,7 @@
             android:paddingRight="6dp"
             android:text="企业服务"
             android:textColor="@color/black50"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tvFrom"

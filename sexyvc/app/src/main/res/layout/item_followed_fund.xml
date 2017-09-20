@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingTop="18dp">
+    android:paddingLeft="16dp"
+    android:paddingTop="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +47,6 @@
                 android:id="@+id/tvInvestorNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="6sp"
                 android:text="收录投资人 5"
                 android:textColor="@color/black50"
                 android:textSize="12sp" />
@@ -61,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="52dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:background="@color/silver_two" />
 
 </LinearLayout>

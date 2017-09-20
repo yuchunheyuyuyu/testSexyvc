@@ -231,7 +231,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
                 break;
             case R.id.ivShare:
                 if (mDetailBean != null) {
-                    final UMWeb web = new UMWeb(Api.SHARE_SUBJECT + mDetailBean.getSubject_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_BASE_URL+Api.SHARE_SUBJECT + mDetailBean.getSubject_id());
                     web.setTitle(mDetailBean.getTitle());//标题
                     if (StringUtil.isBlank(mDetailBean.getSummary())) {
                         web.setDescription("点此查看");

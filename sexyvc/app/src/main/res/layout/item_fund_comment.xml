@@ -101,7 +101,7 @@
         android:ellipsize="end"
         android:paddingRight="16dp"
         android:lineSpacingExtra="6sp"
-        android:maxLines="3"
+        android:maxLines="2"
         android:text="很直接，反应很快，不先入为主，为创业者着想，很喜欢与这类投资人交流。聊的过程中他比较认真快速的记录，而且很明显是提前看过BP，因为项目的很多细节他都记住了，给人感觉比较…"
         android:textColor="@color/black50"
         android:textSize="12sp" />

@@ -39,14 +39,14 @@
         android:layout_marginRight="130dp"
         android:layout_marginTop="12dp"
         android:lineSpacingExtra="8sp"
-        android:text="KPCB凯鹏华盈KPCB凯鹏华盈KPCB凯鹏华盈KPCB凯鹏华盈"
+        android:text="KPCB凯鹏华盈"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
     <LinearLayout
         android:id="@+id/locationContainer"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="22dp"
         android:layout_below="@+id/tvName"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
@@ -62,7 +62,7 @@
             android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="2dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="上海"
@@ -70,11 +70,37 @@
             android:textSize="12sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/hasInvestorsNumContainer"
+        android:layout_width="match_parent"
+        android:layout_height="22dp"
+        android:layout_below="@+id/locationContainer"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_title" />
+
+        <TextView
+            android:id="@+id/tvHasInvestorNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="收录投资人 52"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
+    </LinearLayout>
+
     <View
         android:id="@+id/baseLine"
         style="@style/line_style"
-        android:layout_below="@+id/locationContainer"
-        android:layout_marginTop="20dp" />
+        android:layout_below="@+id/hasInvestorsNumContainer" />
 
 
     <android.support.v7.widget.CardView
@@ -83,6 +109,7 @@
         android:layout_above="@+id/baseLine"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="24dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="24dp"
         app:cardElevation="5dp">
@@ -112,9 +139,9 @@
                 android:gravity="center"
                 android:lineSpacingExtra="0sp"
                 android:text="7.0"
-                android:textStyle="bold"
                 android:textColor="@color/barbie_pink_two"
-                android:textSize="28sp" />
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
                 android:id="@+id/ratingScore"
@@ -149,10 +176,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="17dp"
-            android:textStyle="bold"
             android:text="@string/road_comment"
             android:textColor="@color/black90"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
 
         <LinearLayout
@@ -262,9 +289,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/base_info"
-                android:textStyle="bold"
                 android:textColor="@color/black90"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -314,10 +341,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textStyle="bold"
                 android:text="@string/investor"
                 android:textColor="@color/black90"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvInvestorNum"
@@ -376,9 +403,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/investor_case"
-                android:textStyle="bold"
                 android:textColor="@color/black90"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvCaseNum"
@@ -426,8 +453,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
                 android:layout_marginBottom="2dp"
+                android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:text="|"
                 android:textColor="@color/black"

@@ -638,7 +638,7 @@ public class InvestorDetailActivity extends AddProjectBaseActivity<InvestorDetai
                 break;
             case R.id.ivShare:
                 if (investorBean != null) {
-                    final UMWeb web = new UMWeb(Api.SHARE_INVESTOR + investorBean.getInvestor_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_BASE_URL+Api.SHARE_INVESTOR + investorBean.getInvestor_id());
                     web.setTitle("【SexyVC】" + investorBean.getInvestor_name());//标题
                     web.setDescription("对于" + investorBean.getInvestor_name() + "，创业者们是这样评价的...");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(investorBean.getInvestor_avatar())));  //缩略图

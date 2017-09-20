@@ -117,6 +117,7 @@
                 <View style="@style/line_style" />
 
                 <LinearLayout
+                    android:id="@+id/llAnonymity"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
@@ -143,7 +144,9 @@
 
                 </LinearLayout>
 
-                <View style="@style/line_style" />
+                <View
+                    android:id="@+id/lineAnonymity"
+                    style="@style/line_style" />
             </LinearLayout>
 
             <LinearLayout

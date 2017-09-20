@@ -46,6 +46,8 @@
             android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:text="徐瑞芬"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -53,10 +55,12 @@
             android:id="@+id/tvFundName"
             android:layout_width="wrap_content"
             android:layout_height="15dp"
-            android:gravity="center_horizontal"
-            android:text="棕泉资本"
-            android:singleLine="true"
             android:ellipsize="end"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center_horizontal"
+            android:singleLine="true"
+            android:text="棕泉资本"
             android:textColor="@color/black50"
             android:textSize="10sp" />
 

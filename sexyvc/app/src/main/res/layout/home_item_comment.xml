@@ -69,18 +69,24 @@
             android:scaleType="centerCrop"
             android:src="@drawable/banner_loading"
             app:riv_border_width="0dp"
-            app:riv_corner_radius="4dp" />
+            app:riv_corner_radius="2dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/black50_shape_2" />
 
         <TextView
             android:id="@+id/tvTopicTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:lineSpacingExtra="6sp"
             android:maxLines="2"
-            android:text="约见投资圈名人是一种什么体验？"
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -91,11 +97,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvTopicTitle"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:lineSpacingExtra="6sp"
-            android:maxLength="2"
-            android:text="和大佬谈融资的正确姿势"
+            android:maxLines="1"
             android:textColor="#ffffff"
             android:textSize="12sp" />
 
@@ -120,6 +126,7 @@
                 android:id="@+id/tvCommentTag"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
+                android:layout_marginRight="7dp"
                 android:background="@drawable/tag_shape_selector"
                 android:gravity="center"
                 android:lineSpacingExtra="0sp"
@@ -127,13 +134,13 @@
                 android:paddingRight="6dp"
                 android:text="本地生活"
                 android:textColor="@color/black30"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tvTarget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
                 android:text="刘昊@Korea Investment Part…"
                 android:textColor="@color/dusk"
                 android:textSize="12sp" />
@@ -202,7 +209,7 @@
         <View
             android:id="@+id/wholeLine"
             style="@style/line_style"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="17dp"
             android:visibility="gone" />
 
     </LinearLayout>

@@ -71,7 +71,7 @@ public class ChosenDetailActivity extends MyBaseActivity<ChosenDetailPresent> im
 
     @Override
     protected int setContentViewId() {
-        return R.layout.common_refresh_list_activity;
+        return R.layout.common_refresh_list_white_activity;
     }
 
     @Override

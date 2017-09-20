@@ -152,4 +152,12 @@ public class AppStringUtil {
             return string.substring(0,index-1)+"...";
         }
     }
+    //去掉数字末尾无意义的0
+    public static String subZeroAndDot(String s){
+        if(s.indexOf(".") > 0){
+            s = s.replaceAll("0+?$", "");//去掉多余的0
+            s = s.replaceAll("[.]$", "");//如最后一位是.则去掉
+        }
+        return s;
+    }
 }

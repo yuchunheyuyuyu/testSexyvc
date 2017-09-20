@@ -191,7 +191,9 @@ public class RoadDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             commentHolder.tvTime.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
-
+            if(entity.getIs_anon()==1){
+                entity.setU_avatar("");
+            }
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
                     .placeholder(R.drawable.avatar_blank)

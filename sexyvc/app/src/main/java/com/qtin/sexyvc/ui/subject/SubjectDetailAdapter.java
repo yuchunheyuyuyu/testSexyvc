@@ -180,6 +180,10 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             commentHolder.tvTime.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
 
+            if(entity.getIs_anon()==1){
+                entity.setU_avatar("");
+            }
+
             mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
                     .placeholder(R.drawable.avatar_blank)

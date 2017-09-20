@@ -15,6 +15,16 @@ public class CreateInvestorRequest {
     private String email;
 
     private String remark;
+    private String wechat;
+
+
+    public String getWechat() {
+        return wechat;
+    }
+
+    public void setWechat(String wechat) {
+        this.wechat = wechat;
+    }
 
     public String getToken() {
         return token;

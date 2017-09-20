@@ -29,7 +29,13 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/banner_loading"
                 app:riv_border_width="0dp"
-                app:riv_corner_radius="4dp" />
+                app:riv_corner_radius="2dp" />
+
+            <View
+                android:layout_marginTop="4dp"
+                android:background="@drawable/black50_shape_2"
+                android:layout_width="match_parent"
+                android:layout_height="98dp"/>
 
             <TextView
                 android:id="@+id/tvTopicTitle"
@@ -38,9 +44,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:ellipsize="end"
+                android:layout_marginRight="20dp"
                 android:lineSpacingExtra="6sp"
                 android:maxLines="2"
-                android:text="约见投资圈名人是一种什么体验？"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -53,9 +59,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
+                android:layout_marginRight="20dp"
                 android:lineSpacingExtra="6sp"
-                android:maxLength="2"
-                android:text="和大佬谈融资的正确姿势"
+                android:maxLines="1"
                 android:textColor="#ffffff"
                 android:textSize="12sp" />
 

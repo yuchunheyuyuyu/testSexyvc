@@ -198,7 +198,7 @@ public class FundDetailActivity extends MyBaseActivity<FundDetailPresent> implem
                 break;
             case R.id.ivShare:
                 if (fundDetailBean != null) {
-                    final UMWeb web = new UMWeb(Api.SHARE_FUND + fundDetailBean.getFund_id());
+                    final UMWeb web = new UMWeb(Api.SHARE_BASE_URL+Api.SHARE_FUND + fundDetailBean.getFund_id());
                     web.setTitle("【SexyVC】" + fundDetailBean.getFund_name());//标题
                     web.setDescription("对于" + fundDetailBean.getFund_name() + "，创业者们是这样评价的...");
                     web.setThumb(new UMImage(this, CommonUtil.getAbsolutePath(fundDetailBean.getFund_logo())));  //缩略图

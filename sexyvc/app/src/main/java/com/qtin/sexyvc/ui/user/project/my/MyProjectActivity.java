@@ -19,6 +19,7 @@ import com.qtin.sexyvc.ui.user.project.my.bean.ProjectAdapter;
 import com.qtin.sexyvc.ui.user.project.my.bean.ProjectEntity;
 import com.qtin.sexyvc.ui.user.project.my.di.DaggerMyProjectComponent;
 import com.qtin.sexyvc.ui.user.project.my.di.MyProjectModule;
+import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.ConstantUtil;
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -210,9 +211,16 @@ public class MyProjectActivity extends MyBaseActivity<MyProjectPresent> implemen
         if(data.get(position).getLast_financial_amount()>0){
             sb.append("(");
 
-            String moneyValue=data.get(position).getLast_financial_amount()/10000f+"";
-            sb.append(moneyValue);
-            sb.append("万");
+            long money=data.get(position).getLast_financial_amount();
+            if(money>100000000){
+                float yValue=money/100000000f;
+                sb.append(AppStringUtil.subZeroAndDot(""+yValue));
+                sb.append("亿");
+            }else{
+                float wValue=money/10000f;
+                sb.append(AppStringUtil.subZeroAndDot(""+wValue));
+                sb.append("万");
+            }
             sb.append(unit);
             sb.append(")");
         }

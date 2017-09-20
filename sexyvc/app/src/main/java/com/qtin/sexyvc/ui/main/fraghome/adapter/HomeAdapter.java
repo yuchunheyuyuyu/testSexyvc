@@ -194,8 +194,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
            mImageLoader.loadImage(mApplication, GlideImageConfig
                     .builder()
-                    .placeholder(R.drawable.logo_blank)
-                    .errorPic(R.drawable.logo_blank)
                     .url(CommonUtil.getAbsolutePath(entity.getHomeInfoBean().getCover_pic()))
                     //.transformation(new RoundedCornersTransformation(context, 40, 0))
                     .imageView(holder.ivTopic)

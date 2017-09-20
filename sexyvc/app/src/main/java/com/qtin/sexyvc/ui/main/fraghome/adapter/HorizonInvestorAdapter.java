@@ -37,6 +37,9 @@ public class HorizonInvestorAdapter extends RecyclerView.Adapter<HorizonInvestor
     private MyBaseActivity activity;
     private boolean isFromFund;
 
+    public static final int TYPE_TWO_SPAC=0;
+    public static final int TYPE_ONE_SPAC=1;
+
     public void setFromFund(boolean fromFund) {
         isFromFund = fromFund;
     }
@@ -54,6 +57,10 @@ public class HorizonInvestorAdapter extends RecyclerView.Adapter<HorizonInvestor
         activity= (MyBaseActivity) context;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

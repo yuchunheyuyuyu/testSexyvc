@@ -16,11 +16,13 @@ public interface Api {
     String QINIU_TOKEN="http://192.168.0.55:9099/admin/qiniu/token";
     String BASE_URL="http://192.168.0.55:9099/";
 
+    String SHARE_BASE_URL="http://192.168.0.55:93";
     //分享相关
-    String SHARE_COMMENT="http://vc.sexyvc.com/comment/";// 评论
-    String SHARE_SUBJECT="http://vc.sexyvc.com/subject/";// 专题
-    String SHARE_FUND="http://vc.sexyvc.com/fund/";// 机构
-    String SHARE_INVESTOR="http://vc.sexyvc.com/investor/";// 投资人
+    String SHARE_COMMENT="/comment/detail/";// 评论
+    String SHARE_SUBJECT="/subject/detail/";// 专题
+    String SHARE_FUND="/organ/detail/";// 机构
+    String SHARE_INVESTOR="/investor/detail/";// 投资人
+    String SHARE_ROAD="/road/detail/";//路演评价
 
     String SUBJECT_URL="http://vc.sexyvc.com/static/";
 

@@ -137,6 +137,12 @@ public class CreateInvestorInfoActivity extends MyBaseActivity {
                 etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 etContent.setInputType(InputType.TYPE_CLASS_TEXT);
 
+            } else if(type==ConstantUtil.TYPE_CREATE_INVESTOR_WECHAT){
+                etContent.setHint(getResources().getString(R.string.hint_we_chat));
+                tvTitle.setText(getResources().getString(R.string.we_chat));
+                etContent.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
+                etContent.setInputType(InputType.TYPE_CLASS_TEXT);
+
             } else {
                 etContent.setHint(getResources().getString(R.string.email));
                 tvTitle.setText(getResources().getString(R.string.email));
