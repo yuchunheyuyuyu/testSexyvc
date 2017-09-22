@@ -144,6 +144,11 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.ivPraise.setSelected(true);
             }
             holder.tvPraiseNum.setText("" + bean.getPraise_count());
+            if(bean.getIs_anon()==0){
+                holder.tvFrom.setSelected(true);
+            }else{
+                holder.tvFrom.setSelected(false);
+            }
 
             holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
 

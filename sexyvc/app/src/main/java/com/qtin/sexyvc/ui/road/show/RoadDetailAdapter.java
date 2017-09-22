@@ -110,6 +110,11 @@ public class RoadDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.tvPraiseNum.setText("" + bean.getLike());
 
             holder.tvFrom.setText(StringUtil.formatString(bean.getU_nickname()));
+            if(bean.getIs_anon()==0){
+                holder.tvFrom.setSelected(true);
+            }else{
+                holder.tvFrom.setSelected(false);
+            }
 
             //加v的图标
             if (AppStringUtil.isShowVStatus(bean.getIs_anon(), bean.getU_auth_type(), bean.getU_auth_state())) {

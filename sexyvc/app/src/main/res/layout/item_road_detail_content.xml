@@ -47,18 +47,26 @@
             android:id="@+id/tvFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="某CEO："
-            android:textColor="@color/black50"
-            android:textSize="12sp" />
+            android:text="某CEO"
+            android:textColor="@color/black70_dusk_color"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/ivIdentityStatus"
             android:layout_width="16dp"
             android:layout_height="14dp"
             android:layout_marginLeft="4dp"
-            android:layout_marginRight="6dp"
             android:src="@drawable/logo_approve_vc"
             android:visibility="gone" />
+
+        <TextView
+            android:layout_width="12dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:layout_marginLeft="2dp"
+            android:text=":"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
 
         <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
             android:id="@+id/ratingScore"
@@ -136,6 +144,7 @@
             android:src="@drawable/good_selector" />
 
     </LinearLayout>
+
     <View style="@style/line_style" />
 
     <LinearLayout

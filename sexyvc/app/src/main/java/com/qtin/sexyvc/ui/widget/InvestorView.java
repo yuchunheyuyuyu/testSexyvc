@@ -63,7 +63,7 @@ public class InvestorView extends FrameLayout {
         this.onInvestorChangeListener = onInvestorChangeListener;
     }
 
-    private ViewPager mViewPager;
+    private DecoratorViewPager mViewPager;
     private Context context;
     private List<View> views = new ArrayList<>();//每一页的内容
     private ImageLoader mImageLoader;//用于加载图片的管理类,默认使用glide,使用策略模式,可替换框架
@@ -112,7 +112,8 @@ public class InvestorView extends FrameLayout {
 
         //添加viewPager
         View view = LayoutInflater.from(context).inflate(R.layout.item_viewpager, null);
-        mViewPager = (ViewPager) view.findViewById(R.id.investorViewPager);
+        mViewPager = (DecoratorViewPager) view.findViewById(R.id.investorViewPager);
+        mViewPager.setNestedpParent((ViewGroup) mViewPager.getParent());
         addView(view);
         setViewPagerScrollSpeed();
     }

@@ -296,9 +296,14 @@
             android:name=".ui.add.search.SearchObjectActivity"
             android:screenOrientation="portrait" />
 
-        <!--webView-->
+        <!--webView加载data数据-->
         <activity
             android:name=".ui.web.WebActivity"
+            android:screenOrientation="portrait" />
+
+        <!--webView加载url-->
+        <activity
+            android:name=".ui.web.SimpleWebActivity"
             android:screenOrientation="portrait" />
 
         <!--我的案例-->

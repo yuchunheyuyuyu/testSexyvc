@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="某 CEO 评论了"
-            android:textColor="@color/black50"
+            android:textColor="@color/black70_dusk_color"
             android:textSize="12sp" />
 
         <ImageView
@@ -43,8 +43,15 @@
             android:layout_height="14dp"
             android:visibility="gone"
             android:layout_marginLeft="4dp"
-            android:layout_marginRight="6dp"
             android:src="@drawable/logo_approve_vc" />
+
+        <TextView
+            android:layout_width="12dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:text=":"
+            android:textColor="@color/black50"
+            android:textSize="12sp" />
 
         <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
             android:id="@+id/ratingScore"

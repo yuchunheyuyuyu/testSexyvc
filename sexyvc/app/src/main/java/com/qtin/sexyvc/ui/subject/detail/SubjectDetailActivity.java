@@ -330,7 +330,7 @@ public class SubjectDetailActivity extends MyBaseActivity<SubjectDetailPresent> 
             }
         }
 
-        if (detailBean.getReplies().getTotal() > page_size) {
+        if (detailBean.getReplies().getTotal() >= page_size) {
             hasLoadedAllItems = false;
         } else {
             hasLoadedAllItems = true;

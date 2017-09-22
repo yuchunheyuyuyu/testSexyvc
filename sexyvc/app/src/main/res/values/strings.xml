@@ -316,6 +316,9 @@
     <string name="code_10000">IP超过单位时间内请求次数限制，IP将被屏蔽10分钟</string>
     <string name="code_10001">请求404错误</string>
     <string name="code_10002">缺少请求参数</string>
+    <string name="code_10003">Token无效</string>
+    <string name="code_10004">获取微信分享配置文件失败</string>
+
     <string name="code_20001">手机格式错误</string>
     <string name="code_20002">验证码类型无效</string>
     <string name="code_20003">手机号请求验证码超过次数限制</string>
@@ -392,12 +395,16 @@
     <string name="code_30039">认领投资人更新行业阶段失败</string>
     <string name="code_30040">认领投资人已添加同名项目</string>
 
+    <string name="code_30041">路演记录不存在</string>
+    <string name="code_30042">关注失败</string>
+    <string name="code_30043">取消关注失败</string>
+    <string name="code_30044">未关注该机构</string>
+    <string name="code_30045">设置机构关注分组失败</string>
+
     <string name="code_40001">评论不存在</string>
     <string name="code_40002">专栏不存在</string>
     <string name="code_40003">回复失败</string>
     <string name="code_40004">点赞失败</string>
-
-
     <string name="code_40005">操作类型失败</string>
     <string name="code_40006">发布评论失败</string>
     <string name="code_40007">追评失败</string>
@@ -408,6 +415,7 @@
     <string name="code_40012">已对该投资人路演过</string>
     <string name="code_40013">已对该投资人评分过</string>
     <string name="code_40014">已对该投资人评论过</string>
+    <string name="code_40015">提供投资机构失败</string>
 
     <string name="system_download_component_disable">下载服务不可用,请您启用</string>
     <string name="system_download_description">版本更新</string>

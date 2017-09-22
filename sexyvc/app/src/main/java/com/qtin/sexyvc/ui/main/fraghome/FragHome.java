@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
 import com.jess.arms.utils.DeviceUtils;
+import com.jess.arms.utils.StringUtil;
 import com.jess.arms.utils.UiUtils;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.common.AppComponent;
@@ -22,6 +24,7 @@ import com.qtin.sexyvc.ui.bean.BannerEntity;
 import com.qtin.sexyvc.ui.bean.OnBannerClickListener;
 import com.qtin.sexyvc.ui.bean.OnClickMoreInvestorListener;
 import com.qtin.sexyvc.ui.comment.detail.CommentDetailActivity;
+import com.qtin.sexyvc.ui.comment.list.CommentActivity;
 import com.qtin.sexyvc.ui.fund.detail.FundDetailActivity;
 import com.qtin.sexyvc.ui.investor.InvestorDetailActivity;
 import com.qtin.sexyvc.ui.main.MainActivity;
@@ -31,8 +34,12 @@ import com.qtin.sexyvc.ui.main.fraghome.di.FragHomeModule;
 import com.qtin.sexyvc.ui.main.fraghome.entity.HomeInterface;
 import com.qtin.sexyvc.ui.search.action.SearchActionActivity;
 import com.qtin.sexyvc.ui.subject.detail.SubjectDetailActivity;
+import com.qtin.sexyvc.ui.subject.list.SubjectListActivity;
+import com.qtin.sexyvc.ui.web.SimpleWebActivity;
 import com.qtin.sexyvc.utils.ConstantUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Observable;
@@ -92,28 +99,40 @@ public class FragHome extends MyBaseFragment<FragHomePresent> implements FragHom
         mAdapter.setOnBannerClickItem(new OnBannerClickListener() {
             @Override
             public void onBannerClickItem(BannerEntity bean) {
+                long id=0;
                 try {
-                    long id = Long.parseLong(bean.getAction_value());
-                    Bundle bundle = new Bundle();
-                    if ("investor_detail".equals(bean.getAction_type())) {
-                        bundle.putLong("investor_id", id);
-                        gotoActivity(InvestorDetailActivity.class, bundle);
-
-                    } else if ("fund_detail".equals(bean.getAction_type())) {
-                        bundle.putLong("fund_id", id);
-                        gotoActivity(FundDetailActivity.class, bundle);
-
-                    } else if ("comment_detail".equals(bean.getAction_type())) {
-                        bundle.putLong("comment_id", id);
-                        gotoActivity(CommentDetailActivity.class, bundle);
-
-                    } else if ("subject_detail".equals(bean.getAction_type())) {
-                        bundle.putLong("subject_id", id);
-                        gotoActivity(SubjectDetailActivity.class, bundle);
-
-                    }
+                    id = Long.parseLong(bean.getAction_value());
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                Bundle bundle = new Bundle();
+                if(StringUtil.isBlank(bean.getAction_type())){
+                    if(!StringUtil.isBlank(bean.getLink_url())){
+                        bundle.putString(ConstantUtil.INTENT_URL,bean.getLink_url());
+                        gotoActivity(SimpleWebActivity.class,bundle);
+                    }
+                }else if("investor".equals(bean.getAction_type())){
+                    MainActivity mainActivity= (MainActivity) mActivity;
+                    mainActivity.gotoInvestor();
+                }else if ("investor_detail".equals(bean.getAction_type())) {
+                    bundle.putLong("investor_id", id);
+                    gotoActivity(InvestorDetailActivity.class, bundle);
+                } else if("fund".equals(bean.getAction_type())){
+                    MainActivity mainActivity= (MainActivity) mActivity;
+                    mainActivity.gotoInvestor();
+                }else if ("fund_detail".equals(bean.getAction_type())) {
+                    bundle.putLong("fund_id", id);
+                    gotoActivity(FundDetailActivity.class, bundle);
+                } else if("comment".equals(bean.getAction_type())){
+                    gotoActivity(CommentActivity.class);
+                } else if ("comment_detail".equals(bean.getAction_type())) {
+                    bundle.putLong("comment_id", id);
+                    gotoActivity(CommentDetailActivity.class, bundle);
+                } else if("subject".equals(bean.getAction_type())){
+                    gotoActivity(SubjectListActivity.class);
+                } else if ("subject_detail".equals(bean.getAction_type())) {
+                    bundle.putLong("subject_id", id);
+                    gotoActivity(SubjectDetailActivity.class, bundle);
                 }
             }
         });

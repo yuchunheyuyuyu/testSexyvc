@@ -76,6 +76,13 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (holder instanceof WebHolder) {
             SubjectContentEntity subjectDetailEntity = (SubjectContentEntity) data.get(position);
             final WebHolder webHolder = (WebHolder) holder;
+
+            WebSettings webSettings = webHolder.webViewContent.getSettings();
+            //如果访问的页面中要与Javascript交互，则webview必须设置支持Javascript
+            //webSettings.setJavaScriptEnabled(true);
+            //设置自适应屏幕，两者合用
+            webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+            webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
             webHolder.webViewContent.loadData(CommonUtil.getHtmlData(subjectDetailEntity.getContent()), "text/html; charset=UTF-8", "utf-8");
 
             /**webHolder.webViewContent.loadUrl(Api.SUBJECT_URL+subjectDetailEntity.getSubject_id());
