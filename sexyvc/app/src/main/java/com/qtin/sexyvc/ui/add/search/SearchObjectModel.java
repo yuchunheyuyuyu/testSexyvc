@@ -52,4 +52,9 @@ public class SearchObjectModel extends BaseModel<ServiceManager,CacheManager> im
         }
         return null;
     }
+
+    @Override
+    public Observable<BaseEntity<InvestorBean>> queryCommentObjects(String token, String keyword) {
+        return mServiceManager.getCommonService().queryCommentObjects(token,keyword);
+    }
 }

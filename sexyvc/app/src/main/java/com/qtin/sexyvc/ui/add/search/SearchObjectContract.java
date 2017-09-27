@@ -33,5 +33,7 @@ public interface SearchObjectContract {
         String getToken();
         Observable<BaseEntity<CallBackBean>> queryInvestorDetail(String token, long investor_id, long comment_id,int page_size,int auth_state);
         UserInfoEntity getUserInfo();
+
+        Observable<BaseEntity<InvestorBean>> queryCommentObjects(String token,String keyword);
     }
 }

@@ -99,6 +99,20 @@ public class ChosenDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             holder.tvDate.setText(DateUtil.getSpecialDate(entity.getCreate_time()));
 
+            if(entity.getIs_anon()==0){
+                holder.tvFrom.setSelected(true);
+            }else{
+                holder.tvFrom.setSelected(false);
+            }
+            holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname()));
+            //加v的图标
+            if (AppStringUtil.isShowVStatus(entity.getIs_anon(), entity.getU_auth_type(), entity.getU_auth_state())) {
+                holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+                holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(entity.getU_auth_type()));
+            } else {
+                holder.ivIdentityStatus.setVisibility(View.GONE);
+            }
+
         }else if(viewHolder instanceof TopicHolder){
             HomeInfoBean homeInfoBean= (HomeInfoBean) data.get(position);
             TopicHolder holder= (TopicHolder) viewHolder;
@@ -140,6 +154,10 @@ public class ChosenDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView tvPraiseNum;
         @BindView(R.id.ivPraise)
         ImageView ivPraise;
+        @BindView(R.id.tvFrom)
+        TextView tvFrom;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         CommentHolder(View view) {
             super(view);

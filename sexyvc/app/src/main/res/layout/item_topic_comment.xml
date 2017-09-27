@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,6 +19,7 @@
             android:id="@+id/tvCommentTag"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
+            android:layout_marginRight="7dp"
             android:background="@drawable/tag_shape_selector"
             android:gravity="center"
             android:lineSpacingExtra="0sp"
@@ -29,40 +30,58 @@
             android:textSize="10sp" />
 
         <TextView
-            android:id="@+id/tvTarget"
+            android:id="@+id/tvFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:text="刘昊@Korea Investment Part…"
-            android:textColor="@color/dusk"
+            android:text="某CEO"
+            android:textColor="@color/black70_dusk_color"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/ivIdentityStatus"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/logo_approve_vc"
+            android:visibility="visible" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
-            android:text="@string/join_acquire_comment"
+            android:layout_marginRight="6dp"
+            android:text="@string/has_comment"
             android:textColor="@color/black50"
             android:textSize="12sp" />
 
-        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
-            android:id="@+id/ratingScore"
+        <TextView
+            android:id="@+id/tvTarget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="2dp"
-            app:emptyDrawable="@drawable/star_l_blank"
-            app:filledDrawable="@drawable/star_l_full"
-            app:isIndicator="true"
-            app:minAllowedStars="0"
-            app:numStarsValue="5"
-            app:ratingValue="3"
-            app:starMargin="0dp"
-            app:starSizeValue="10dp"
-            app:starSpacing="1dp"
-            app:stepSizeValue="1" />
+            android:text="刘昊@Korea Investment Part…"
+            android:textColor="@color/dusk"
+            android:textSize="12sp" />
+
 
     </LinearLayout>
+
+    <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+        android:id="@+id/ratingScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        app:emptyDrawable="@drawable/star_l_blank"
+        app:filledDrawable="@drawable/star_l_full"
+        app:isIndicator="true"
+        app:minAllowedStars="0"
+        app:numStarsValue="5"
+        app:ratingValue="3"
+        app:starMargin="0dp"
+        app:starSizeValue="10dp"
+        app:starSpacing="1dp"
+        app:stepSizeValue="1" />
 
     <TextView
         android:id="@+id/tvCommentTitle"

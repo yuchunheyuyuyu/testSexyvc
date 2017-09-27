@@ -88,7 +88,7 @@ public class SearchObjectActivity extends MyBaseActivity<SearchObjectPresent> im
             }
         });
 
-        initPaginate();
+        //initPaginate();
 
         etSearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -146,7 +146,9 @@ public class SearchObjectActivity extends MyBaseActivity<SearchObjectPresent> im
         String keyWord = etSearch.getText().toString().trim();
         request.setKeyword(keyWord);
         request.setSort(0);
-        mPresenter.queryInvestors(request);
+        //mPresenter.queryInvestors(request);
+
+        mPresenter.queryObjects(keyWord);
     }
 
     @Override

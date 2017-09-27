@@ -10,13 +10,14 @@ public interface Api {
     String APP_DOMAIN = "https://api.github.com/users";
 
 
-    //String QINIU_TOKEN="http://demo.api.sexyvc.com/admin/qiniu/token";
-    //String BASE_URL="http://demo.api.sexyvc.com/";
+    String QINIU_TOKEN="http://demo.api.sexyvc.com/admin/qiniu/token";
+    String BASE_URL="http://demo.api.sexyvc.com/";
 
-    String QINIU_TOKEN="http://192.168.0.55:9099/admin/qiniu/token";
-    String BASE_URL="http://192.168.0.55:9099/";
+    //String QINIU_TOKEN="http://192.168.0.55:9099/admin/qiniu/token";
+    //String BASE_URL="http://192.168.0.55:9099/";
 
-    String SHARE_BASE_URL="http://192.168.0.55:93";
+    String SHARE_BASE_URL="http://www.sexyvc.com";
+    //String SHARE_BASE_URL="http://192.168.0.55:93";
     //分享相关
     String SHARE_COMMENT="/comment/detail/";// 评论
     String SHARE_SUBJECT="/subject/detail/";// 专题

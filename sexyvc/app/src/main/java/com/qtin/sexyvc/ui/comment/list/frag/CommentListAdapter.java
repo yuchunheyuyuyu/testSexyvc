@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.jess.arms.utils.StringUtil;
 import com.qtin.sexyvc.R;
 import com.qtin.sexyvc.ui.bean.OnItemClickListener;
@@ -13,7 +14,9 @@ import com.qtin.sexyvc.ui.investor.bean.CommentBean;
 import com.qtin.sexyvc.ui.widget.ratingbar.RatingBar;
 import com.qtin.sexyvc.utils.AppStringUtil;
 import com.qtin.sexyvc.utils.DateUtil;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -54,7 +57,20 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         String name=entity.getInvestor_name()+"@"+entity.getFund_name();
-        holder.tvTarget.setText(AppStringUtil.getLimitString(name));
+        holder.tvTarget.setText(StringUtil.formatString(name));
+        if(entity.getIs_anon()==0){
+            holder.tvFrom.setSelected(true);
+        }else{
+            holder.tvFrom.setSelected(false);
+        }
+        holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname()));
+        //加v的图标
+        if (AppStringUtil.isShowVStatus(entity.getIs_anon(), entity.getU_auth_type(), entity.getU_auth_state())) {
+            holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+            holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(entity.getU_auth_type()));
+        } else {
+            holder.ivIdentityStatus.setVisibility(View.GONE);
+        }
 
         holder.ratingScore.setRating(entity.getScore());
         holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
@@ -98,6 +114,10 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView tvPraiseNum;
         @BindView(R.id.ivPraise)
         ImageView ivPraise;
+        @BindView(R.id.tvFrom)
+        TextView tvFrom;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         ViewHolder(View view) {
             super(view);

@@ -716,6 +716,15 @@ public interface CommonService {
     Observable<BaseEntity<InvestorBean>> queryInvestors(@Body InvestorRequest request);
 
     /**
+     * 18. 投资人搜索(搜索你要评价谁)
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("api/user/investor/search")
+    Observable<BaseEntity<InvestorBean>> queryCommentObjects(@Field("token")String token,
+                                                             @Field("keyword")String keyword);
+
+    /**
      * 73. 用户——提交认证
      * @param token
      * @param img_url

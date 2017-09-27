@@ -95,6 +95,44 @@ public class SearchObjectPresent extends BasePresenter<SearchObjectContract.Mode
                 });
     }
 
+    public void queryObjects(String keyword){
+        mModel.queryCommentObjects(mModel.getToken(),keyword)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryWithDelay(3, 2))//遇到错误时重试,第一个参数为重试几次,第二个参数为重试的间隔
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+
+                    }
+                }).subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+
+                    }
+                })
+                .compose(RxUtils.<BaseEntity<InvestorBean>>bindToLifecycle(mRootView))//使用RXlifecycle,使subscription和activity一起销毁
+                .subscribe(new Subscriber<BaseEntity<InvestorBean>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mRootView.showNetErrorView();
+                    }
+
+                    @Override
+                    public void onNext(BaseEntity<InvestorBean> baseEntity) {
+                        if(baseEntity.isSuccess()){
+                            mRootView.queryInvestorSuccess(baseEntity.getItems());
+                        }
+                    }
+                });
+    }
+
     public void queryDetail(long investor_id,long comment_id,int page_size,int auth_state){
         mModel.queryInvestorDetail(mModel.getToken(),investor_id,comment_id,page_size,auth_state)
                 .subscribeOn(Schedulers.io())

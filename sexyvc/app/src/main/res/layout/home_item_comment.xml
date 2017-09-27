@@ -135,42 +135,64 @@
                 android:text="本地生活"
                 android:textColor="@color/black30"
                 android:textSize="10sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <TextView
-                android:id="@+id/tvTarget"
+                android:id="@+id/tvFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="刘昊@Korea Investment Part…"
-                android:textColor="@color/dusk"
+                android:text="某CEO"
+                android:textColor="@color/black70_dusk_color"
                 android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/ivIdentityStatus"
+                android:layout_width="16dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/logo_approve_vc"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
-                android:text="@string/join_acquire_comment"
+                android:layout_marginRight="6dp"
+                android:text="@string/has_comment"
                 android:textColor="@color/black50"
                 android:textSize="12sp" />
 
-            <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
-                android:id="@+id/ratingScore"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvTarget"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="2dp"
-                app:emptyDrawable="@drawable/star_l_blank"
-                app:filledDrawable="@drawable/star_l_full"
-                app:isIndicator="true"
-                app:minAllowedStars="0"
-                app:numStarsValue="5"
-                app:ratingValue="3"
-                app:starMargin="0dp"
-                app:starSizeValue="10dp"
-                app:starSpacing="1dp"
-                app:stepSizeValue="1" />
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="刘昊@Korea Investment Part…"
+                android:textColor="@color/dusk"
+                android:textSize="12sp" />
+
 
         </LinearLayout>
+
+        <com.qtin.sexyvc.ui.widget.ratingbar.RatingBar
+            android:id="@+id/ratingScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            app:emptyDrawable="@drawable/star_l_blank"
+            app:filledDrawable="@drawable/star_l_full"
+            app:isIndicator="true"
+            app:minAllowedStars="0"
+            app:numStarsValue="5"
+            app:ratingValue="3"
+            app:starMargin="0dp"
+            app:starSizeValue="10dp"
+            app:starSpacing="1dp"
+            app:stepSizeValue="1" />
 
         <TextView
             android:id="@+id/tvCommentTitle"

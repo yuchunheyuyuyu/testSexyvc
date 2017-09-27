@@ -33,7 +33,7 @@ android {
         applicationId "com.qtin.sexyvc"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 4
+        versionCode 6
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         signingConfig signingConfigs.release

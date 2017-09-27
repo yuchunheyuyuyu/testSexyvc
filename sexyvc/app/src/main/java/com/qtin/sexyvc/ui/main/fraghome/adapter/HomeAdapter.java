@@ -239,10 +239,21 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.tvCommentTag.setVisibility(View.VISIBLE);
                 holder.tvCommentTag.setText(entity.getDomain_name());
             }
-
-            //holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname())+" 评论了");
+            if(entity.getIs_anon()==0){
+                holder.tvFrom.setSelected(true);
+            }else{
+                holder.tvFrom.setSelected(false);
+            }
+            holder.tvFrom.setText(StringUtil.formatString(entity.getU_nickname()));
             String name=entity.getInvestor_name()+"@"+entity.getFund_name();
-            holder.tvTarget.setText(AppStringUtil.getLimitString(name));
+            holder.tvTarget.setText(StringUtil.formatString(name));
+            //加v的图标
+           if (AppStringUtil.isShowVStatus(entity.getIs_anon(), entity.getU_auth_type(), entity.getU_auth_state())) {
+                holder.ivIdentityStatus.setVisibility(View.VISIBLE);
+                holder.ivIdentityStatus.setImageResource(AppStringUtil.getVStatusResourceId(entity.getU_auth_type()));
+            } else {
+                holder.ivIdentityStatus.setVisibility(View.GONE);
+            }
 
             holder.ratingScore.setRating(entity.getScore());
             holder.tvCommentTitle.setText(StringUtil.formatString(entity.getTitle()));
@@ -360,6 +371,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView tvTopicSummary;
         @BindView(R.id.llCommentContent)
         View llCommentContent;
+        @BindView(R.id.tvFrom)
+        TextView tvFrom;
+        @BindView(R.id.ivIdentityStatus)
+        ImageView ivIdentityStatus;
 
         CommentHolder(View view) {
             super(view);

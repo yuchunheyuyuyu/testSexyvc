@@ -64,7 +64,8 @@ public class ConcernListPresent extends BasePresenter<ConcernListContract.Model,
                             mRootView.endLoadMore();
                         }
                     }
-                }).compose(RxUtils.<BaseEntity<ConcernEntity>>bindToLifecycle(mRootView))
+                })
+                //.compose(RxUtils.<BaseEntity<ConcernEntity>>bindToLifecycle(mRootView))
                 .subscribe(new Subscriber<BaseEntity<ConcernEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -73,10 +74,12 @@ public class ConcernListPresent extends BasePresenter<ConcernListContract.Model,
 
                     @Override
                     public void onError(Throwable e) {
-                        if(page==1){
-                            mRootView.showNetErrorView();
-                        }else{
-                            UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                        if(mRootView!=null){
+                            if(page==1){
+                                mRootView.showNetErrorView();
+                            }else{
+                                UiUtils.SnackbarText(UiUtils.getString(R.string.net_error_hint));
+                            }
                         }
                     }
 

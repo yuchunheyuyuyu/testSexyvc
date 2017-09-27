@@ -70,7 +70,7 @@
     <string name="reset">重置</string>
     <string name="news">快讯 |</string>
     <string name="more">更多</string>
-    <string name="week_investor">本周头牌</string>
+    <string name="week_investor">本周Sexy</string>
     <string name="last_comment">| 最新评论</string>
     <string name="selected_comment">精选热评</string>
     <string name="subject_string">专栏文章</string>
@@ -471,7 +471,7 @@
     <string name="finance_stage">融资阶段</string>
     <string name="cancle_identity">取消认证</string>
 
-    <string name="status_no_pass">您尚未认证</string>
+    <string name="status_no_pass">请上传您的身份证明（如名片、工牌等）</string>
     <string name="status_no_pass_hint">认证后将获得「V」标识及更多认证用户特权。</string>
 
     <string name="status_commiting_pass">审核中</string>

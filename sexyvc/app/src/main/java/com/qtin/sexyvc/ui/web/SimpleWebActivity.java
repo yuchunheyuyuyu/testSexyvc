@@ -136,7 +136,9 @@ public class SimpleWebActivity extends MyBaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 //设定加载结束的操作
-                ivRight.setVisibility(View.VISIBLE);
+                if(ivRight!=null){
+                    ivRight.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -151,10 +153,14 @@ public class SimpleWebActivity extends MyBaseActivity {
                 ivRight.setVisibility(View.GONE);
                 switch (errorCode){
                     case HttpStatus.SC_NOT_FOUND:
-                        errorLayout.setVisibility(View.VISIBLE);
+                        if(errorLayout!=null){
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
                         break;
                     default:
-                        errorLayout.setVisibility(View.VISIBLE);
+                        if(errorLayout!=null){
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
                         break;
                 }
             }
@@ -229,7 +235,6 @@ public class SimpleWebActivity extends MyBaseActivity {
 
                 break;
             case R.id.ivLeft:
-                finish();
                 if(webView.canGoBack()){
                     webView.goBack();
                 }else{
@@ -243,7 +248,8 @@ public class SimpleWebActivity extends MyBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KEYCODE_BACK) && webView.canGoBack()) {
+
+        if (webView!=null&&(keyCode == KEYCODE_BACK) && webView.canGoBack()) {
             webView.goBack();
             return true;
         }

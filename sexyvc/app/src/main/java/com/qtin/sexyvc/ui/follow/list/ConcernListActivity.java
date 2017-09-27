@@ -76,6 +76,12 @@ public class ConcernListActivity extends MyBaseActivity<ConcernListPresent> impl
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        //isLoadingMore=false;
+    }
+
+    @Override
     protected int setContentViewId() {
         return R.layout.common_refresh_list_white_activity;
     }
